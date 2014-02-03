@@ -1738,15 +1738,14 @@ void cmTarget::SetProperty(const std::string& prop, const char* value)
     this->Makefile->IssueMessage(cmake::FATAL_ERROR, e.str());
     return;
     }
-
-  if (prop == "NAME")
+  else if (prop == "NAME")
     {
     cmOStringStream e;
     e << "NAME property is read-only\n";
     this->Makefile->IssueMessage(cmake::FATAL_ERROR, e.str());
     return;
     }
-  if(prop == "INCLUDE_DIRECTORIES")
+  else if(prop == "INCLUDE_DIRECTORIES")
     {
     cmListFileBacktrace lfbt = this->Makefile->GetBacktrace();
     cmGeneratorExpression ge(&lfbt);
@@ -1754,9 +1753,8 @@ void cmTarget::SetProperty(const std::string& prop, const char* value)
     cmsys::auto_ptr<cmCompiledGeneratorExpression> cge = ge.Parse(value);
     this->Internal->IncludeDirectoriesEntries.push_back(
                           new cmTargetInternals::TargetPropertyEntry(cge));
-    return;
     }
-  if(prop == "COMPILE_OPTIONS")
+  else if(prop == "COMPILE_OPTIONS")
     {
     cmListFileBacktrace lfbt = this->Makefile->GetBacktrace();
     cmGeneratorExpression ge(&lfbt);
@@ -1764,9 +1762,8 @@ void cmTarget::SetProperty(const std::string& prop, const char* value)
     cmsys::auto_ptr<cmCompiledGeneratorExpression> cge = ge.Parse(value);
     this->Internal->CompileOptionsEntries.push_back(
                           new cmTargetInternals::TargetPropertyEntry(cge));
-    return;
     }
-  if(prop == "COMPILE_FEATURES")
+  else if(prop == "COMPILE_FEATURES")
     {
     cmListFileBacktrace lfbt = this->Makefile->GetBacktrace();
     cmGeneratorExpression ge(&lfbt);
@@ -1774,9 +1771,8 @@ void cmTarget::SetProperty(const std::string& prop, const char* value)
     cmsys::auto_ptr<cmCompiledGeneratorExpression> cge = ge.Parse(value);
     this->Internal->CompileFeaturesEntries.push_back(
                           new cmTargetInternals::TargetPropertyEntry(cge));
-    return;
     }
-  if(prop == "COMPILE_DEFINITIONS")
+  else if(prop == "COMPILE_DEFINITIONS")
     {
     cmListFileBacktrace lfbt = this->Makefile->GetBacktrace();
     cmGeneratorExpression ge(&lfbt);
@@ -1784,25 +1780,22 @@ void cmTarget::SetProperty(const std::string& prop, const char* value)
     cmsys::auto_ptr<cmCompiledGeneratorExpression> cge = ge.Parse(value);
     this->Internal->CompileDefinitionsEntries.push_back(
                           new cmTargetInternals::TargetPropertyEntry(cge));
-    return;
     }
-  if(prop == "EXPORT_NAME" && this->IsImported())
+  else if(prop == "EXPORT_NAME" && this->IsImported())
     {
     cmOStringStream e;
     e << "EXPORT_NAME property can't be set on imported targets (\""
           << this->Name << "\")\n";
     this->Makefile->IssueMessage(cmake::FATAL_ERROR, e.str());
-    return;
     }
-  if (prop == "LINK_LIBRARIES")
+  else if (prop == "LINK_LIBRARIES")
     {
     this->Internal->LinkImplementationPropertyEntries.clear();
     cmListFileBacktrace lfbt = this->Makefile->GetBacktrace();
     cmValueWithOrigin entry(value, lfbt);
     this->Internal->LinkImplementationPropertyEntries.push_back(entry);
-    return;
     }
-  if (prop == "SOURCES")
+  else if (prop == "SOURCES")
     {
     if(this->IsImported())
       {
@@ -1819,10 +1812,12 @@ void cmTarget::SetProperty(const std::string& prop, const char* value)
     cmsys::auto_ptr<cmCompiledGeneratorExpression> cge = ge.Parse(value);
     this->Internal->SourceEntries.push_back(
                           new cmTargetInternals::TargetPropertyEntry(cge));
-    return;
     }
-  this->Properties.SetProperty(prop, value, cmProperty::TARGET);
-  this->MaybeInvalidatePropertyCache(prop);
+  else
+    {
+    this->Properties.SetProperty(prop, value, cmProperty::TARGET);
+    this->MaybeInvalidatePropertyCache(prop);
+    }
 }
 
 //----------------------------------------------------------------------------
@@ -1838,61 +1833,55 @@ void cmTarget::AppendProperty(const std::string& prop, const char* value,
     this->Makefile->IssueMessage(cmake::FATAL_ERROR, e.str());
     return;
     }
-  if (prop == "NAME")
+  else if (prop == "NAME")
     {
     cmOStringStream e;
     e << "NAME property is read-only\n";
     this->Makefile->IssueMessage(cmake::FATAL_ERROR, e.str());
     return;
     }
-  if(prop == "INCLUDE_DIRECTORIES")
+  else if(prop == "INCLUDE_DIRECTORIES")
     {
     cmListFileBacktrace lfbt = this->Makefile->GetBacktrace();
     cmGeneratorExpression ge(&lfbt);
     this->Internal->IncludeDirectoriesEntries.push_back(
               new cmTargetInternals::TargetPropertyEntry(ge.Parse(value)));
-    return;
     }
-  if(prop == "COMPILE_OPTIONS")
+  else if(prop == "COMPILE_OPTIONS")
     {
     cmListFileBacktrace lfbt = this->Makefile->GetBacktrace();
     cmGeneratorExpression ge(&lfbt);
     this->Internal->CompileOptionsEntries.push_back(
               new cmTargetInternals::TargetPropertyEntry(ge.Parse(value)));
-    return;
     }
-  if(prop == "COMPILE_FEATURES")
+  else if(prop == "COMPILE_FEATURES")
     {
     cmListFileBacktrace lfbt = this->Makefile->GetBacktrace();
     cmGeneratorExpression ge(&lfbt);
     this->Internal->CompileFeaturesEntries.push_back(
               new cmTargetInternals::TargetPropertyEntry(ge.Parse(value)));
-    return;
     }
-  if(prop == "COMPILE_DEFINITIONS")
+  else if(prop == "COMPILE_DEFINITIONS")
     {
     cmListFileBacktrace lfbt = this->Makefile->GetBacktrace();
     cmGeneratorExpression ge(&lfbt);
     this->Internal->CompileDefinitionsEntries.push_back(
               new cmTargetInternals::TargetPropertyEntry(ge.Parse(value)));
-    return;
     }
-  if(prop == "EXPORT_NAME" && this->IsImported())
+  else if(prop == "EXPORT_NAME" && this->IsImported())
     {
     cmOStringStream e;
     e << "EXPORT_NAME property can't be set on imported targets (\""
           << this->Name << "\")\n";
     this->Makefile->IssueMessage(cmake::FATAL_ERROR, e.str());
-    return;
     }
-  if (prop == "LINK_LIBRARIES")
+  else if (prop == "LINK_LIBRARIES")
     {
     cmListFileBacktrace lfbt = this->Makefile->GetBacktrace();
     cmValueWithOrigin entry(value, lfbt);
     this->Internal->LinkImplementationPropertyEntries.push_back(entry);
-    return;
     }
-  if (prop == "SOURCES")
+  else if (prop == "SOURCES")
     {
     if(this->IsImported())
       {
@@ -1908,10 +1897,12 @@ void cmTarget::AppendProperty(const std::string& prop, const char* value,
       cmsys::auto_ptr<cmCompiledGeneratorExpression> cge = ge.Parse(value);
       this->Internal->SourceEntries.push_back(
                             new cmTargetInternals::TargetPropertyEntry(cge));
-    return;
     }
-  this->Properties.AppendProperty(prop, value, cmProperty::TARGET, asString);
-  this->MaybeInvalidatePropertyCache(prop);
+  else
+    {
+    this->Properties.AppendProperty(prop, value, cmProperty::TARGET, asString);
+    this->MaybeInvalidatePropertyCache(prop);
+    }
 }
 
 //----------------------------------------------------------------------------
@@ -3010,11 +3001,6 @@ const char *cmTarget::GetProperty(const std::string& prop,
     return 0;
     }
 
-  if (prop == "NAME")
-    {
-    return this->GetName().c_str();
-    }
-
   // Watch for special "computed" properties that are dependent on
   // other properties or variables.  Always recompute them.
   if(this->GetType() == cmTarget::EXECUTABLE ||
@@ -3094,7 +3080,7 @@ const char *cmTarget::GetProperty(const std::string& prop,
       }
     return output.c_str();
     }
-  if(prop == "COMPILE_OPTIONS")
+  else if(prop == "COMPILE_OPTIONS")
     {
     if (this->Internal->CompileOptionsEntries.empty())
       {
@@ -3117,7 +3103,7 @@ const char *cmTarget::GetProperty(const std::string& prop,
       }
     return output.c_str();
     }
-  if(prop == "COMPILE_FEATURES")
+  else if(prop == "COMPILE_FEATURES")
     {
     if (this->Internal->CompileFeaturesEntries.empty())
       {
@@ -3140,7 +3126,7 @@ const char *cmTarget::GetProperty(const std::string& prop,
       }
     return output.c_str();
     }
-  if(prop == "COMPILE_DEFINITIONS")
+  else if(prop == "COMPILE_DEFINITIONS")
     {
     if (this->Internal->CompileDefinitionsEntries.empty())
       {
@@ -3163,7 +3149,7 @@ const char *cmTarget::GetProperty(const std::string& prop,
       }
     return output.c_str();
     }
-  if(prop == "LINK_LIBRARIES")
+  else if(prop == "LINK_LIBRARIES")
     {
     if (this->Internal->LinkImplementationPropertyEntries.empty())
       {
@@ -3184,13 +3170,15 @@ const char *cmTarget::GetProperty(const std::string& prop,
       }
     return output.c_str();
     }
-
-  if (prop == "IMPORTED")
+  else if (prop == "IMPORTED")
     {
     return this->IsImported()?"TRUE":"FALSE";
     }
-
-  if(prop == "SOURCES")
+  else if (prop == "NAME")
+    {
+    return this->GetName().c_str();
+    }
+  else if(prop == "SOURCES")
     {
     if (this->Internal->SourceEntries.empty())
       {
@@ -3287,12 +3275,12 @@ const char *cmTarget::GetProperty(const std::string& prop,
     this->Properties.SetProperty("SOURCES", ss.str().c_str(),
                                  cmProperty::TARGET);
     }
-
   // the type property returns what type the target is
-  if (prop == "TYPE")
+  else if (prop == "TYPE")
     {
     return cmTarget::GetTargetTypeName(this->GetType());
     }
+
   bool chain = false;
   const char *retVal =
     this->Properties.GetPropertyValue(prop, cmProperty::TARGET, chain);

@@ -48,6 +48,7 @@ cmScriptGenerator
 static void cmScriptGeneratorEncodeConfig(const std::string& config,
                                           std::string& result)
 {
+  // TODO: Remove char-by-char string building.
   for(const char* c = config.c_str(); *c; ++c)
     {
     if(*c >= 'a' && *c <= 'z')

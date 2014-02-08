@@ -3280,150 +3280,166 @@ const char *cmTarget::GetProperty(const std::string& prop,
         }
       }
     }
-  if(prop == "INCLUDE_DIRECTORIES")
+  static std::set<std::string> specialProps;
+  if(specialProps.empty())
     {
-    static std::string output;
-    MakePropertyList(output, this->Internal->IncludeDirectoriesEntries);
-    return output.c_str();
+    specialProps.insert("INCLUDE_DIRECTORIES");
+    specialProps.insert("COMPILE_FEATURES");
+    specialProps.insert("COMPILE_OPTIONS");
+    specialProps.insert("COMPILE_DEFINITIONS");
+    specialProps.insert("LINK_LIBRARIES");
+    specialProps.insert("IMPORTED");
+    specialProps.insert("NAME");
+    specialProps.insert("SOURCES");
+    specialProps.insert("TYPE");
     }
-  else if(prop == "COMPILE_OPTIONS")
+  if(specialProps.count(prop))
     {
-    static std::string output;
-    MakePropertyList(output, this->Internal->CompileOptionsEntries);
-    return output.c_str();
-    }
-  else if(prop == "COMPILE_FEATURES")
-    {
-    static std::string output;
-    MakePropertyList(output, this->Internal->CompileFeaturesEntries);
-    return output.c_str();
-    }
-  else if(prop == "COMPILE_DEFINITIONS")
-    {
-    static std::string output;
-    MakePropertyList(output, this->Internal->CompileDefinitionsEntries);
-    return output.c_str();
-    }
-  else if(prop == "LINK_LIBRARIES")
-    {
-    static std::string output;
-    output = "";
-    std::string sep;
-    for (std::vector<cmValueWithOrigin>::const_iterator
-        it = this->Internal->LinkImplementationPropertyEntries.begin(),
-        end = this->Internal->LinkImplementationPropertyEntries.end();
-        it != end; ++it)
+    if(prop == "INCLUDE_DIRECTORIES")
       {
-      output += sep;
-      output += it->Value;
-      sep = ";";
+      static std::string output;
+      MakePropertyList(output, this->Internal->IncludeDirectoriesEntries);
+      return output.c_str();
       }
-    return output.c_str();
-    }
-  else if (prop == "IMPORTED")
-    {
-    return this->IsImported()?"TRUE":"FALSE";
-    }
-  else if (prop == "NAME")
-    {
-    return this->GetName().c_str();
-    }
-  else if(prop == "SOURCES")
-    {
-    cmOStringStream ss;
-    const char* sep = "";
-    typedef cmTargetInternals::TargetPropertyEntry
-                                TargetPropertyEntry;
-    for(std::vector<TargetPropertyEntry*>::const_iterator
-          i = this->Internal->SourceEntries.begin();
-        i != this->Internal->SourceEntries.end(); ++i)
+    else if(prop == "COMPILE_OPTIONS")
       {
-      std::string entry = (*i)->ge->GetInput();
-
-      std::vector<std::string> files;
-      cmSystemTools::ExpandListArgument(entry, files);
-      for (std::vector<std::string>::const_iterator
-          li = files.begin(); li != files.end(); ++li)
+      static std::string output;
+      MakePropertyList(output, this->Internal->CompileOptionsEntries);
+      return output.c_str();
+      }
+    else if(prop == "COMPILE_FEATURES")
+      {
+      static std::string output;
+      MakePropertyList(output, this->Internal->CompileFeaturesEntries);
+      return output.c_str();
+      }
+    else if(prop == "COMPILE_DEFINITIONS")
+      {
+      static std::string output;
+      MakePropertyList(output, this->Internal->CompileDefinitionsEntries);
+      return output.c_str();
+      }
+    else if(prop == "LINK_LIBRARIES")
+      {
+      static std::string output;
+      output = "";
+      std::string sep;
+      for (std::vector<cmValueWithOrigin>::const_iterator
+          it = this->Internal->LinkImplementationPropertyEntries.begin(),
+          end = this->Internal->LinkImplementationPropertyEntries.end();
+          it != end; ++it)
         {
-        if(cmHasLiteralPrefix(*li, "$<TARGET_OBJECTS:") &&
-            (*li)[li->size() - 1] == '>')
-          {
-          std::string objLibName = li->substr(17, li->size()-18);
+        output += sep;
+        output += it->Value;
+        sep = ";";
+        }
+      return output.c_str();
+      }
+    else if (prop == "IMPORTED")
+      {
+      return this->IsImported()?"TRUE":"FALSE";
+      }
+    else if (prop == "NAME")
+      {
+      return this->GetName().c_str();
+      }
+    else if(prop == "SOURCES")
+      {
+      cmOStringStream ss;
+      const char* sep = "";
+      typedef cmTargetInternals::TargetPropertyEntry
+                                  TargetPropertyEntry;
+      for(std::vector<TargetPropertyEntry*>::const_iterator
+            i = this->Internal->SourceEntries.begin();
+          i != this->Internal->SourceEntries.end(); ++i)
+        {
+        std::string entry = (*i)->ge->GetInput();
 
-          if (cmGeneratorExpression::Find(objLibName) != std::string::npos)
+        std::vector<std::string> files;
+        cmSystemTools::ExpandListArgument(entry, files);
+        for (std::vector<std::string>::const_iterator
+            li = files.begin(); li != files.end(); ++li)
+          {
+          if(cmHasLiteralPrefix(*li, "$<TARGET_OBJECTS:") &&
+              (*li)[li->size() - 1] == '>')
+            {
+            std::string objLibName = li->substr(17, li->size()-18);
+
+            if (cmGeneratorExpression::Find(objLibName) != std::string::npos)
+              {
+              ss << sep;
+              sep = ";";
+              ss << *li;
+              continue;
+              }
+
+            bool addContent = false;
+            bool noMessage = true;
+            cmOStringStream e;
+            cmake::MessageType messageType = cmake::AUTHOR_WARNING;
+            switch(context->GetPolicyStatus(cmPolicies::CMP0051))
+              {
+              case cmPolicies::WARN:
+                e << (this->Makefile->GetPolicies()
+                      ->GetPolicyWarning(cmPolicies::CMP0051)) << "\n";
+                noMessage = false;
+              case cmPolicies::OLD:
+                break;
+              case cmPolicies::REQUIRED_ALWAYS:
+              case cmPolicies::REQUIRED_IF_USED:
+              case cmPolicies::NEW:
+                addContent = true;
+              }
+            if (!noMessage)
+              {
+              e << "Target \"" << this->Name << "\" contains $<TARGET_OBJECTS> "
+              "generator expression in its sources list.  This content was not "
+              "previously part of the SOURCES property when that property was "
+              "read at configure time.  Code reading that property needs to be "
+              "adapted to ignore the generator expression using the "
+              "string(GENEX_STRIP) command.";
+              context->IssueMessage(messageType, e.str());
+              }
+            if (addContent)
+              {
+              ss << sep;
+              sep = ";";
+              ss << *li;
+              }
+            }
+          else if (cmGeneratorExpression::Find(*li) == std::string::npos)
             {
             ss << sep;
             sep = ";";
             ss << *li;
-            continue;
             }
+          else
+            {
+            cmSourceFile *sf = this->Makefile->GetOrCreateSource(*li);
+            // Construct what is known about this source file location.
+            cmSourceFileLocation const& location = sf->GetLocation();
+            std::string sname = location.GetDirectory();
+            if(!sname.empty())
+              {
+              sname += "/";
+              }
+            sname += location.GetName();
 
-          bool addContent = false;
-          bool noMessage = true;
-          cmOStringStream e;
-          cmake::MessageType messageType = cmake::AUTHOR_WARNING;
-          switch(context->GetPolicyStatus(cmPolicies::CMP0051))
-            {
-            case cmPolicies::WARN:
-              e << (this->Makefile->GetPolicies()
-                    ->GetPolicyWarning(cmPolicies::CMP0051)) << "\n";
-              noMessage = false;
-            case cmPolicies::OLD:
-              break;
-            case cmPolicies::REQUIRED_ALWAYS:
-            case cmPolicies::REQUIRED_IF_USED:
-            case cmPolicies::NEW:
-              addContent = true;
-            }
-          if (!noMessage)
-            {
-            e << "Target \"" << this->Name << "\" contains $<TARGET_OBJECTS> "
-            "generator expression in its sources list.  This content was not "
-            "previously part of the SOURCES property when that property was "
-            "read at configure time.  Code reading that property needs to be "
-            "adapted to ignore the generator expression using the "
-            "string(GENEX_STRIP) command.";
-            context->IssueMessage(messageType, e.str());
-            }
-          if (addContent)
-            {
             ss << sep;
             sep = ";";
-            ss << *li;
+            // Append this list entry.
+            ss << sname;
             }
-          }
-        else if (cmGeneratorExpression::Find(*li) == std::string::npos)
-          {
-          ss << sep;
-          sep = ";";
-          ss << *li;
-          }
-        else
-          {
-          cmSourceFile *sf = this->Makefile->GetOrCreateSource(*li);
-          // Construct what is known about this source file location.
-          cmSourceFileLocation const& location = sf->GetLocation();
-          std::string sname = location.GetDirectory();
-          if(!sname.empty())
-            {
-            sname += "/";
-            }
-          sname += location.GetName();
-
-          ss << sep;
-          sep = ";";
-          // Append this list entry.
-          ss << sname;
           }
         }
+      this->Properties.SetProperty("SOURCES", ss.str().c_str(),
+                                   cmProperty::TARGET);
       }
-    this->Properties.SetProperty("SOURCES", ss.str().c_str(),
-                                 cmProperty::TARGET);
-    }
-  // the type property returns what type the target is
-  else if (prop == "TYPE")
-    {
-    return cmTarget::GetTargetTypeName(this->GetType());
+    // the type property returns what type the target is
+    else if (prop == "TYPE")
+      {
+      return cmTarget::GetTargetTypeName(this->GetType());
+      }
     }
 
   bool chain = false;

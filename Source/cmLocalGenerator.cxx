@@ -3359,6 +3359,7 @@ cmLocalGenerator
 std::string cmLocalGenerator::EscapeForShellOldStyle(const std::string& str)
 {
   std::string result;
+  result.reserve(str.size());
 #if defined(_WIN32) && !defined(__CYGWIN__)
   // if there are spaces
   std::string temp = str;
@@ -3476,6 +3477,7 @@ std::string cmLocalGenerator::EscapeForCMake(const std::string& str)
 {
   // Always double-quote the argument to take care of most escapes.
   std::string result = "\"";
+  result.reserve(str.size());
   for(const char* c = str.c_str(); *c; ++c)
     {
     if(*c == '"')

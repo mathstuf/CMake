@@ -3088,51 +3088,7 @@ const char *cmTarget::GetProperty(const std::string& prop,
     }
   if(specialProps.count(prop))
     {
-    if(prop == "INCLUDE_DIRECTORIES")
-      {
-      if (this->Internal->IncludeDirectoriesEntries.empty())
-        {
-        return 0;
-        }
-
-      static std::string output;
-      MakePropertyList(output, this->Internal->IncludeDirectoriesEntries);
-      return output.c_str();
-      }
-    else if(prop == "COMPILE_OPTIONS")
-      {
-      if (this->Internal->CompileOptionsEntries.empty())
-        {
-        return 0;
-        }
-
-      static std::string output;
-      MakePropertyList(output, this->Internal->CompileOptionsEntries);
-      return output.c_str();
-      }
-    else if(prop == "COMPILE_FEATURES")
-      {
-      if (this->Internal->CompileFeaturesEntries.empty())
-        {
-        return 0;
-        }
-
-      static std::string output;
-      MakePropertyList(output, this->Internal->CompileFeaturesEntries);
-      return output.c_str();
-      }
-    else if(prop == "COMPILE_DEFINITIONS")
-      {
-      if (this->Internal->CompileDefinitionsEntries.empty())
-        {
-        return 0;
-        }
-
-      static std::string output;
-      MakePropertyList(output, this->Internal->CompileDefinitionsEntries);
-      return output.c_str();
-      }
-    else if(prop == "LINK_LIBRARIES")
+    if(prop == "LINK_LIBRARIES")
       {
       if (this->Internal->LinkImplementationPropertyEntries.empty())
         {
@@ -3151,6 +3107,55 @@ const char *cmTarget::GetProperty(const std::string& prop,
         output += it->Value;
         sep = ";";
         }
+      return output.c_str();
+      }
+    // the type property returns what type the target is
+    else if (prop == "TYPE")
+      {
+      return cmTarget::GetTargetTypeName(this->GetType());
+      }
+    else if(prop == "INCLUDE_DIRECTORIES")
+      {
+      if (this->Internal->IncludeDirectoriesEntries.empty())
+        {
+        return 0;
+        }
+
+      static std::string output;
+      MakePropertyList(output, this->Internal->IncludeDirectoriesEntries);
+      return output.c_str();
+      }
+    else if(prop == "COMPILE_FEATURES")
+      {
+      if (this->Internal->CompileFeaturesEntries.empty())
+        {
+        return 0;
+        }
+
+      static std::string output;
+      MakePropertyList(output, this->Internal->CompileFeaturesEntries);
+      return output.c_str();
+      }
+    else if(prop == "COMPILE_OPTIONS")
+      {
+      if (this->Internal->CompileOptionsEntries.empty())
+        {
+        return 0;
+        }
+
+      static std::string output;
+      MakePropertyList(output, this->Internal->CompileOptionsEntries);
+      return output.c_str();
+      }
+    else if(prop == "COMPILE_DEFINITIONS")
+      {
+      if (this->Internal->CompileDefinitionsEntries.empty())
+        {
+        return 0;
+        }
+
+      static std::string output;
+      MakePropertyList(output, this->Internal->CompileDefinitionsEntries);
       return output.c_str();
       }
     else if (prop == "IMPORTED")
@@ -3257,11 +3262,6 @@ const char *cmTarget::GetProperty(const std::string& prop,
         }
       this->Properties.SetProperty("SOURCES", ss.str().c_str(),
                                    cmProperty::TARGET);
-      }
-    // the type property returns what type the target is
-    else if (prop == "TYPE")
-      {
-      return cmTarget::GetTargetTypeName(this->GetType());
       }
     }
 

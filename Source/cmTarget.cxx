@@ -2982,6 +2982,22 @@ bool cmTarget::HandleLocationPropertyPolicy(cmMakefile* context) const
 }
 
 //----------------------------------------------------------------------------
+static void MakePropertyList(std::string& output,
+    std::vector<cmTargetInternals::TargetPropertyEntry*> const& values)
+{
+  output = "";
+  std::string sep;
+  for (std::vector<cmTargetInternals::TargetPropertyEntry*>::const_iterator
+       it = values.begin(), end = values.end();
+       it != end; ++it)
+    {
+    output += sep;
+    output += (*it)->ge->GetInput();
+    sep = ";";
+    }
+}
+
+//----------------------------------------------------------------------------
 const char *cmTarget::GetProperty(const std::string& prop) const
 {
   return this->GetProperty(prop, this->Makefile);
@@ -3065,19 +3081,7 @@ const char *cmTarget::GetProperty(const std::string& prop,
       }
 
     static std::string output;
-    output = "";
-    std::string sep;
-    typedef cmTargetInternals::TargetPropertyEntry
-                                TargetPropertyEntry;
-    for (std::vector<TargetPropertyEntry*>::const_iterator
-        it = this->Internal->IncludeDirectoriesEntries.begin(),
-        end = this->Internal->IncludeDirectoriesEntries.end();
-        it != end; ++it)
-      {
-      output += sep;
-      output += (*it)->ge->GetInput();
-      sep = ";";
-      }
+    MakePropertyList(output, this->Internal->IncludeDirectoriesEntries);
     return output.c_str();
     }
   else if(prop == "COMPILE_OPTIONS")
@@ -3088,19 +3092,7 @@ const char *cmTarget::GetProperty(const std::string& prop,
       }
 
     static std::string output;
-    output = "";
-    std::string sep;
-    typedef cmTargetInternals::TargetPropertyEntry
-                                TargetPropertyEntry;
-    for (std::vector<TargetPropertyEntry*>::const_iterator
-        it = this->Internal->CompileOptionsEntries.begin(),
-        end = this->Internal->CompileOptionsEntries.end();
-        it != end; ++it)
-      {
-      output += sep;
-      output += (*it)->ge->GetInput();
-      sep = ";";
-      }
+    MakePropertyList(output, this->Internal->CompileOptionsEntries);
     return output.c_str();
     }
   else if(prop == "COMPILE_FEATURES")
@@ -3111,19 +3103,7 @@ const char *cmTarget::GetProperty(const std::string& prop,
       }
 
     static std::string output;
-    output = "";
-    std::string sep;
-    typedef cmTargetInternals::TargetPropertyEntry
-                                TargetPropertyEntry;
-    for (std::vector<TargetPropertyEntry*>::const_iterator
-        it = this->Internal->CompileFeaturesEntries.begin(),
-        end = this->Internal->CompileFeaturesEntries.end();
-        it != end; ++it)
-      {
-      output += sep;
-      output += (*it)->ge->GetInput();
-      sep = ";";
-      }
+    MakePropertyList(output, this->Internal->CompileFeaturesEntries);
     return output.c_str();
     }
   else if(prop == "COMPILE_DEFINITIONS")
@@ -3134,19 +3114,7 @@ const char *cmTarget::GetProperty(const std::string& prop,
       }
 
     static std::string output;
-    output = "";
-    std::string sep;
-    typedef cmTargetInternals::TargetPropertyEntry
-                                TargetPropertyEntry;
-    for (std::vector<TargetPropertyEntry*>::const_iterator
-        it = this->Internal->CompileDefinitionsEntries.begin(),
-        end = this->Internal->CompileDefinitionsEntries.end();
-        it != end; ++it)
-      {
-      output += sep;
-      output += (*it)->ge->GetInput();
-      sep = ";";
-      }
+    MakePropertyList(output, this->Internal->CompileDefinitionsEntries);
     return output.c_str();
     }
   else if(prop == "LINK_LIBRARIES")

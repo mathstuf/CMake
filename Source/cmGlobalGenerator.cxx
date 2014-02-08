@@ -2941,6 +2941,7 @@ void cmGlobalGenerator::WriteSummary(cmTarget* target)
 // static
 std::string cmGlobalGenerator::EscapeJSON(const std::string& s) {
   std::string result;
+  result.reserve(s.size());
   for (std::string::size_type i = 0; i < s.size(); ++i) {
     if (s[i] == '"' || s[i] == '\\') {
       result += '\\';

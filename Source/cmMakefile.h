@@ -201,8 +201,8 @@ public:
    * Add a define flag to the build.
    */
   void AddDefineFlag(const char* definition);
-  void RemoveDefineFlag(const char* definition);
-  void AddCompileOption(const char* option);
+  void RemoveDefineFlag(const std::string& definition);
+  void AddCompileOption(const std::string& option);
 
   /** Create a new imported target with the name and type given.  */
   cmTarget* AddImportedTarget(const std::string& name,
@@ -484,7 +484,7 @@ public:
    * Set a regular expression that include files must match
    * in order to be considered as part of the depend information.
    */
-  void SetIncludeRegularExpression(const char* regex)
+  void SetIncludeRegularExpression(const std::string& regex)
     {
       this->IncludeFileRegularExpression = regex;
     }
@@ -807,11 +807,11 @@ public:
 
   ///! Set/Get a property of this directory
   void SetProperty(const std::string& prop, const char *value);
-  void AppendProperty(const std::string& prop, const char *value,
-                      bool asString=false);
+  void SetProperty(const std::string& prop, const std::string& value);
+  void AppendProperty(const std::string& prop, const char *value,bool asString=false);
+  void AppendProperty(const std::string& prop, const std::string& value,bool asString=false);
   const char *GetProperty(const std::string& prop) const;
-  const char *GetProperty(const std::string& prop,
-                          cmProperty::ScopeType scope) const;
+  const char *GetProperty(const std::string& prop, cmProperty::ScopeType scope) const;
   bool GetPropertyAsBool(const std::string& prop) const;
 
   const char* GetFeature(const std::string& feature,
@@ -965,7 +965,7 @@ protected:
 
   // Track the value of the computed DEFINITIONS property.
   void AddDefineFlag(const char*, std::string&);
-  void RemoveDefineFlag(const char*, std::string::size_type, std::string&);
+  void RemoveDefineFlag(const std::string&, std::string::size_type, std::string&);
   std::string DefineFlagsOrig;
 
 #if defined(CMAKE_BUILD_WITH_CMAKE)

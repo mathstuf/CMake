@@ -299,6 +299,20 @@ bool cmSourceFile::Matches(cmSourceFileLocation const& loc)
 //----------------------------------------------------------------------------
 void cmSourceFile::SetProperty(const std::string& prop, const char* value)
 {
+  if(!value)
+    {
+    this->Properties.SetProperty(prop, 0, cmProperty::SOURCE_FILE);
+    }
+  else
+    {
+    this->SetProperty(prop, std::string(value));
+    }
+}
+
+//----------------------------------------------------------------------------
+void cmSourceFile::SetProperty(const std::string& prop,
+                               const std::string& value)
+{
   this->Properties.SetProperty(prop, value, cmProperty::SOURCE_FILE);
 
   if (this->IsUiFile)
@@ -313,6 +327,15 @@ void cmSourceFile::SetProperty(const std::string& prop, const char* value)
 
 //----------------------------------------------------------------------------
 void cmSourceFile::AppendProperty(const std::string& prop, const char* value,
+                                  bool asString)
+{
+  this->Properties.AppendProperty(prop, value, cmProperty::SOURCE_FILE,
+                                  asString);
+}
+
+//----------------------------------------------------------------------------
+void cmSourceFile::AppendProperty(const std::string& prop,
+                                  const std::string& value,
                                   bool asString)
 {
   this->Properties.AppendProperty(prop, value, cmProperty::SOURCE_FILE,

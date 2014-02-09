@@ -226,7 +226,7 @@ cmOSXBundleGenerator::InitMacOSXContentDirectory(const char* pkgloc)
   // directory is needed.
   {
   std::string loc = pkgloc;
-  loc = loc.substr(0, loc.find('/'));
+  loc.resize(loc.find('/'));
   this->MacContentFolders->insert(loc);
   }
 

@@ -297,7 +297,7 @@ void cmGlobalGenerator::FindMakeProgram(cmMakefile* mf)
     // untill no text file busy errors occur.
     std::string cmakexbuild =
       this->CMakeInstance->GetCacheManager()->GetCacheValue("CMAKE_COMMAND");
-    cmakexbuild = cmakexbuild.substr(0, cmakexbuild.length()-5);
+    cmakexbuild.resize(cmakexbuild.length()-5);
     cmakexbuild += "cmakexbuild";
 
     mf->AddCacheDefinition("CMAKE_MAKE_PROGRAM",

@@ -333,7 +333,7 @@ void cmFindCommon::AddPathSuffix(std::string const& arg)
     }
   if(*suffix.rbegin() == '/')
     {
-    suffix = suffix.substr(0, suffix.size()-1);
+    suffix.resize(suffix.size()-1);
     }
   if(suffix.empty())
     {

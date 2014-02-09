@@ -258,7 +258,7 @@ bool cmCacheManager::LoadCache(const std::string& path,
         continue;
         }
       }
-    e.SetProperty("HELPSTRING", helpString.c_str());
+    e.SetProperty("HELPSTRING", helpString);
     if(cmCacheManager::ParseEntry(realbuffer, entryKey, e.Value, e.Type))
       {
       if ( excludes.find(entryKey) == excludes.end() )
@@ -282,7 +282,7 @@ bool cmCacheManager::LoadCache(const std::string& path,
               "To change this value edit this file: ";
             helpString += path;
             helpString += "/CMakeCache.txt"   ;
-            e.SetProperty("HELPSTRING", helpString.c_str());
+            e.SetProperty("HELPSTRING", helpString);
             }
           if(!this->ReadPropertyEntry(entryKey, e))
             {
@@ -385,12 +385,12 @@ bool cmCacheManager::ReadPropertyEntry(std::string const& entryKey,
         CacheEntry& ne = this->Cache[key];
         ne.Properties.SetCMakeInstance(this->CMakeInstance);
         ne.Type = cmCacheManager::UNINITIALIZED;
-        ne.SetProperty(*p, e.Value.c_str());
+        ne.SetProperty(*p, e.Value);
         }
       else
         {
         // Store this property on its entry.
-        it.SetProperty(*p, e.Value.c_str());
+        it.SetProperty(*p, e.Value);
         }
       return true;
       }

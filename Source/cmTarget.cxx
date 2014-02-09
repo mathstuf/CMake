@@ -3375,7 +3375,7 @@ const char *cmTarget::GetProperty(const std::string& prop,
             }
           }
         }
-      this->Properties.SetProperty("SOURCES", ss.str().c_str(),
+      this->Properties.SetProperty("SOURCES", ss.str(),
                                    cmProperty::TARGET);
       }
     }

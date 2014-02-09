@@ -1977,7 +1977,7 @@ cmLocalVisualStudio6Generator
   std::string config = configuration;
   std::string::size_type pos = config.find_last_of(" ");
   config = config.substr(pos+1, std::string::npos);
-  config = config.substr(0, config.size()-1);
+  config.resize(config.size()-1);
   return config;
 }
 

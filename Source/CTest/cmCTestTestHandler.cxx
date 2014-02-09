@@ -2096,7 +2096,7 @@ bool cmCTestTestHandler::CleanTestOutput(std::string& output, size_t length)
       ++current;
       }
     }
-  output = output.substr(0, current - begin);
+  output.resize(current - begin);
 
   // Append truncation message.
   cmOStringStream msg;

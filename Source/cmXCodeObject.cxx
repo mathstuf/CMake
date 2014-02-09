@@ -66,7 +66,7 @@ cmXCodeObject::cmXCodeObject(PBXType ptype, Type type)
   cmSystemTools::ReplaceString(this->Id, "-", "");
   if(this->Id.size() > 24)
     {
-    this->Id = this->Id.substr(0, 24);
+    this->Id.resize(24);
     }
 
   this->TypeValue = type;

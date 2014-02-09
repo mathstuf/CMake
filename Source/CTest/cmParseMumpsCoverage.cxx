@@ -129,7 +129,8 @@ bool cmParseMumpsCoverage::LoadPackages(const char* d)
         ++ fileIt )
     {
     std::string name = cmSystemTools::GetFilenameName(*fileIt);
-    this->RoutineToDirectory[name.substr(0, name.size()-2)] = *fileIt;
+    name.resize(name.size() - 2);
+    this->RoutineToDirectory[name] = *fileIt;
     // initialze each file, this is left out until CDash is fixed
     // to handle large numbers of files
     this->InitializeMumpsFile(*fileIt);

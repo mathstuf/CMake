@@ -218,7 +218,7 @@ static int process( const std::string& srcfilename,
     if (startsWith(line, prefix)) {
       std::string inc = trimLeadingSpace(line.substr(prefix.size()).c_str());
       if (*inc.rbegin() == '\r') // blech, stupid \r\n
-        inc = inc.substr(0, inc.size() - 1);
+        inc.resize(inc.size() - 1);
       includes.push_back(inc);
     } else {
       if (!isFirstLine || !startsWith(line, srcfilename)) {

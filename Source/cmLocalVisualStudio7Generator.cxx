@@ -1357,7 +1357,7 @@ cmLocalVisualStudio7Generator
     std::string dir = *d;
     if(*dir.rbegin() == '/')
       {
-      dir = dir.substr(0, dir.size()-1);
+      dir.resize(dir.size()-1);
       }
     if(dir.empty())
       {

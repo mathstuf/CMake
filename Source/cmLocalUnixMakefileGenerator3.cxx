@@ -1433,11 +1433,11 @@ cmLocalUnixMakefileGenerator3
     // keep no more than 24 characters from the second string
     if(static_cast<int>(str2.size()) > keep)
       {
-      str2 = str2.substr(0, keep);
+      str2.resize(keep);
       }
     if(static_cast<int>(str1.size()) + static_cast<int>(str2.size()) > size)
       {
-      str1 = str1.substr(0, size - str2.size());
+      str1.resize(size - str2.size());
       }
     char buffer[5];
     int ni = 0;
@@ -1558,7 +1558,7 @@ bool cmLocalUnixMakefileGenerator3::UpdateDependencies(const char* tgtInfo,
     {
     // The dependencies must be regenerated.
     std::string targetName = cmSystemTools::GetFilenameName(dir);
-    targetName = targetName.substr(0, targetName.length()-4);
+    targetName.resize(targetName.length()-4);
     std::string message = "Scanning dependencies of target ";
     message += targetName;
 #ifdef CMAKE_BUILD_WITH_CMAKE

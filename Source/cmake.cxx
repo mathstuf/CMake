@@ -2195,8 +2195,31 @@ void cmake::SetProperty(const std::string& prop, const char* value)
   this->Properties.SetProperty(prop, value, cmProperty::GLOBAL);
 }
 
+void cmake::SetProperty(const std::string& prop, const std::string& value)
+{
+  // Special hook to invalidate cached value.
+  if(prop == "DEBUG_CONFIGURATIONS")
+    {
+    this->DebugConfigs.clear();
+    }
+
+  this->Properties.SetProperty(prop, value, cmProperty::GLOBAL);
+}
+
 void cmake::AppendProperty(const std::string& prop,
                            const char* value, bool asString)
+{
+  // Special hook to invalidate cached value.
+  if(prop == "DEBUG_CONFIGURATIONS")
+    {
+    this->DebugConfigs.clear();
+    }
+
+  this->Properties.AppendProperty(prop, value, cmProperty::GLOBAL, asString);
+}
+
+void cmake::AppendProperty(const std::string& prop,
+                           const std::string& value, bool asString)
 {
   // Special hook to invalidate cached value.
   if(prop == "DEBUG_CONFIGURATIONS")

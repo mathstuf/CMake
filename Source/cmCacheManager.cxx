@@ -823,13 +823,35 @@ cmCacheManager::CacheEntry::GetProperty(const std::string& prop) const
 void cmCacheManager::CacheEntry::SetProperty(const std::string& prop,
                                              const char* value)
 {
+  if(!value)
+    {
+    if(prop == "TYPE")
+      {
+      this->Type = cmCacheManager::StringToType("STRING");
+      }
+    else if(prop == "VALUE")
+      {
+      this->Value = "";
+      }
+    else
+      {
+      this->Properties.SetProperty(prop, 0, cmProperty::CACHE);
+      }
+    }
+  this->SetProperty(prop, std::string(value));
+}
+
+//----------------------------------------------------------------------------
+void cmCacheManager::CacheEntry::SetProperty(const std::string& prop,
+                                             const std::string& value)
+{
   if(prop == "TYPE")
     {
-    this->Type = cmCacheManager::StringToType(value? value : "STRING");
+    this->Type = cmCacheManager::StringToType(value.c_str());
     }
   else if(prop == "VALUE")
     {
-    this->Value = value? value : "";
+    this->Value = value;
     }
   else
     {
@@ -842,20 +864,33 @@ void cmCacheManager::CacheEntry::AppendProperty(const std::string& prop,
                                                 const char* value,
                                                 bool asString)
 {
+  if(!value)
+    {
+    if(prop == "TYPE")
+      {
+      this->Type = cmCacheManager::StringToType(value? value : "STRING");
+      }
+    return;
+    }
+  this->AppendProperty(prop, std::string(value), asString);
+}
+
+//----------------------------------------------------------------------------
+void cmCacheManager::CacheEntry::AppendProperty(const std::string& prop,
+                                                const std::string& value,
+                                                bool asString)
+{
   if(prop == "TYPE")
     {
-    this->Type = cmCacheManager::StringToType(value? value : "STRING");
+    this->Type = cmCacheManager::StringToType(value.c_str());
     }
   else if(prop == "VALUE")
     {
-    if(value)
+    if(!asString && !this->Value.empty() && !value.empty())
       {
-      if(!this->Value.empty() && *value && !asString)
-        {
-        this->Value += ";";
-        }
-      this->Value += value;
+      this->Value += ";";
       }
+    this->Value += value;
     }
   else
     {
@@ -885,8 +920,29 @@ void cmCacheManager::CacheIterator::SetProperty(const std::string& p,
 }
 
 //----------------------------------------------------------------------------
+void cmCacheManager::CacheIterator::SetProperty(const std::string& p,
+                                                const std::string& v)
+{
+  if(!this->IsAtEnd())
+    {
+    this->GetEntry().SetProperty(p, v);
+    }
+}
+
+//----------------------------------------------------------------------------
 void cmCacheManager::CacheIterator::AppendProperty(const std::string& p,
                                                    const char* v,
+                                                   bool asString)
+{
+  if(!this->IsAtEnd())
+    {
+    this->GetEntry().AppendProperty(p, v, asString);
+    }
+}
+
+//----------------------------------------------------------------------------
+void cmCacheManager::CacheIterator::AppendProperty(const std::string& p,
+                                                   const std::string& v,
                                                    bool asString)
 {
   if(!this->IsAtEnd())

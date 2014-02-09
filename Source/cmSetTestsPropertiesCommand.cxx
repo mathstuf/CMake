@@ -102,7 +102,7 @@ bool cmSetTestsPropertiesCommand
     for (k = 0; k < propertyPairs.size(); k = k + 2)
       {
       test->SetProperty(propertyPairs[k],
-                        propertyPairs[k+1].c_str());
+                        propertyPairs[k+1]);
       }
     }
   else

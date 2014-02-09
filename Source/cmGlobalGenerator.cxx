@@ -209,7 +209,7 @@ void cmGlobalGenerator::ResolveLanguageCompiler(const std::string &lang,
       changeVars += cname;
       this->GetCMakeInstance()->SetProperty(
         "__CMAKE_DELETE_CACHE_CHANGE_VARS_",
-        changeVars.c_str());
+        changeVars);
       }
     }
 }

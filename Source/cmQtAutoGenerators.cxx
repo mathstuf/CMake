@@ -189,7 +189,7 @@ bool cmQtAutoGenerators::InitializeAutogenTarget(cmTarget* target)
     mocCppFile += ".cpp";
     makefile->GetOrCreateSource(mocCppFile, true);
     makefile->AppendProperty("ADDITIONAL_MAKE_CLEAN_FILES",
-                            mocCppFile.c_str(), false);
+                            mocCppFile, false);
 
     target->AddSource(mocCppFile);
     }
@@ -513,7 +513,7 @@ void cmQtAutoGenerators::SetupSourceFiles(cmTarget const* target)
         std::string rcc_output_file = rcc_output_dir;
         rcc_output_file += "/qrc_" + basename + ".cpp";
         makefile->AppendProperty("ADDITIONAL_MAKE_CLEAN_FILES",
-                                rcc_output_file.c_str(), false);
+                                rcc_output_file, false);
         makefile->GetOrCreateSource(rcc_output_file, true);
         newRccFiles.push_back(rcc_output_file);
         }

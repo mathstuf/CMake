@@ -1280,7 +1280,7 @@ void cmGlobalXCodeGenerator::ForceLinkerLanguage(cmTarget& cmtarget)
   }
   if(cmSourceFile* sf = mf->GetOrCreateSource(fname))
     {
-    sf->SetProperty("LANGUAGE", llang.c_str());
+    sf->SetProperty("LANGUAGE", llang);
     cmtarget.AddSource(fname);
     }
 }

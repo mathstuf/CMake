@@ -226,15 +226,15 @@ bool cmSetPropertyCommand::HandleDirectoryMode()
     }
 
   // Set or append the property.
-  const char* name = this->PropertyName.c_str();
-  const char *value = this->PropertyValue.c_str();
+  const std::string& name = this->PropertyName;
+  const std::string& value = this->PropertyValue;
   if (this->Remove)
     {
-    value = 0;
+    mf->SetProperty(name, 0);
     }
-  if(this->AppendMode)
+  else if(this->AppendMode)
     {
-    mf->AppendProperty(name, value ? value : "", this->AppendAsString);
+    mf->AppendProperty(name, value, this->AppendAsString);
     }
   else
     {
@@ -279,13 +279,13 @@ bool cmSetPropertyCommand::HandleTargetMode()
 bool cmSetPropertyCommand::HandleTarget(cmTarget* target)
 {
   // Set or append the property.
-  const char* name = this->PropertyName.c_str();
-  const char *value = this->PropertyValue.c_str();
+  const std::string& name = this->PropertyName;
+  const std::string& value = this->PropertyValue;
   if (this->Remove)
     {
-    value = 0;
+    target->SetProperty(name, 0);
     }
-  if(this->AppendMode)
+  else if(this->AppendMode)
     {
     target->AppendProperty(name, value, this->AppendAsString);
     }
@@ -329,14 +329,13 @@ bool cmSetPropertyCommand::HandleSourceMode()
 bool cmSetPropertyCommand::HandleSource(cmSourceFile* sf)
 {
   // Set or append the property.
-  const char* name = this->PropertyName.c_str();
-  const char *value = this->PropertyValue.c_str();
+  const std::string& name = this->PropertyName;
+  const std::string& value = this->PropertyValue;
   if (this->Remove)
     {
-    value = 0;
+    sf->SetProperty(name, 0);
     }
-
-  if(this->AppendMode)
+  else if(this->AppendMode)
     {
     sf->AppendProperty(name, value, this->AppendAsString);
     }
@@ -390,13 +389,13 @@ bool cmSetPropertyCommand::HandleTestMode()
 bool cmSetPropertyCommand::HandleTest(cmTest* test)
 {
   // Set or append the property.
-  const char* name = this->PropertyName.c_str();
-  const char *value = this->PropertyValue.c_str();
+  const std::string& name = this->PropertyName;
+  const std::string& value = this->PropertyValue;
   if (this->Remove)
     {
-    value = 0;
+    test->SetProperty(name, 0);
     }
-  if(this->AppendMode)
+  else if(this->AppendMode)
     {
     test->AppendProperty(name, value, this->AppendAsString);
     }
@@ -477,13 +476,13 @@ bool cmSetPropertyCommand::HandleCacheMode()
 bool cmSetPropertyCommand::HandleCacheEntry(cmCacheManager::CacheIterator& it)
 {
   // Set or append the property.
-  const char* name = this->PropertyName.c_str();
-  const char* value = this->PropertyValue.c_str();
+  const std::string& name = this->PropertyName;
+  const std::string& value = this->PropertyValue;
   if (this->Remove)
     {
-    value = 0;
+    it.SetProperty(name, (const char*)0);
     }
-  if(this->AppendMode)
+  else if(this->AppendMode)
     {
     it.AppendProperty(name, value, this->AppendAsString);
     }

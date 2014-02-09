@@ -425,7 +425,7 @@ cmTargetLinkLibrariesCommand::HandleLibrary(const std::string& lib,
     if(this->CurrentProcessingState == ProcessingLinkLibraries)
       {
       this->Target->AppendProperty("INTERFACE_LINK_LIBRARIES",
-        this->Target->GetDebugGeneratorExpressions(lib, llt).c_str());
+        this->Target->GetDebugGeneratorExpressions(lib, llt));
       return true;
       }
     else if(this->CurrentProcessingState != ProcessingKeywordPublicInterface
@@ -441,7 +441,7 @@ cmTargetLinkLibrariesCommand::HandleLibrary(const std::string& lib,
           configLib = "$<LINK_ONLY:" + configLib + ">";
           }
         this->Target->AppendProperty("INTERFACE_LINK_LIBRARIES",
-                                     configLib.c_str());
+                                     configLib);
         }
       // Not a 'public' or 'interface' library. Do not add to interface
       // property.
@@ -450,7 +450,7 @@ cmTargetLinkLibrariesCommand::HandleLibrary(const std::string& lib,
     }
 
   this->Target->AppendProperty("INTERFACE_LINK_LIBRARIES",
-              this->Target->GetDebugGeneratorExpressions(lib, llt).c_str());
+              this->Target->GetDebugGeneratorExpressions(lib, llt));
 
   const cmPolicies::PolicyStatus policy22Status
                       = this->Target->GetPolicyStatusCMP0022();
@@ -480,13 +480,13 @@ cmTargetLinkLibrariesCommand::HandleLibrary(const std::string& lib,
       {
       prop = "LINK_INTERFACE_LIBRARIES_";
       prop += *i;
-      this->Target->AppendProperty(prop, lib.c_str());
+      this->Target->AppendProperty(prop, lib);
       }
     }
   if(llt == cmTarget::OPTIMIZED || llt == cmTarget::GENERAL)
     {
     // Put in the non-DEBUG configuration interfaces.
-    this->Target->AppendProperty("LINK_INTERFACE_LIBRARIES", lib.c_str());
+    this->Target->AppendProperty("LINK_INTERFACE_LIBRARIES", lib);
 
     // Make sure the DEBUG configuration interfaces exist so that the
     // general one will not be used as a fall-back.

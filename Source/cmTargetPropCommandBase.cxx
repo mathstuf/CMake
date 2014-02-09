@@ -171,11 +171,11 @@ void cmTargetPropCommandBase::HandleInterfaceContent(cmTarget *tgt,
     const std::string totalContent = this->Join(content) + (propValue
                                               ? std::string(";") + propValue
                                               : std::string());
-    tgt->SetProperty(propName, totalContent.c_str());
+    tgt->SetProperty(propName, totalContent);
     }
   else
     {
     tgt->AppendProperty("INTERFACE_" + this->Property,
-                          this->Join(content).c_str());
+                        this->Join(content));
     }
 }

@@ -62,6 +62,6 @@ bool cmTargetCompileDefinitionsCommand
 ::HandleDirectContent(cmTarget *tgt, const std::vector<std::string> &content,
                                    bool, bool)
 {
-  tgt->AppendProperty("COMPILE_DEFINITIONS", this->Join(content).c_str());
+  tgt->AppendProperty("COMPILE_DEFINITIONS", this->Join(content));
   return true;
 }

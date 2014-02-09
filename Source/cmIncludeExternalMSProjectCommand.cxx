@@ -80,14 +80,14 @@ bool cmIncludeExternalMSProjectCommand
     cmTarget* target=this->Makefile->AddNewTarget(cmTarget::UTILITY,
                                                   utility_name);
 
-    target->SetProperty("GENERATOR_FILE_NAME", utility_name.c_str());
-    target->SetProperty("EXTERNAL_MSPROJECT", path.c_str());
+    target->SetProperty("GENERATOR_FILE_NAME", utility_name);
+    target->SetProperty("EXTERNAL_MSPROJECT", path);
     target->SetProperty("EXCLUDE_FROM_ALL", "FALSE");
 
     if (!customType.empty())
-      target->SetProperty("VS_PROJECT_TYPE",customType.c_str());
+      target->SetProperty("VS_PROJECT_TYPE",customType);
     if (!platformMapping.empty())
-      target->SetProperty("VS_PLATFORM_MAPPING",platformMapping.c_str());
+      target->SetProperty("VS_PLATFORM_MAPPING",platformMapping);
 
     for (std::vector<std::string>::const_iterator it = depends.begin();
          it != depends.end();

@@ -255,7 +255,7 @@ void cmLocalVisualStudio7Generator
     }
 
   // add to the list of projects
-  target.SetProperty("GENERATOR_FILE_NAME",lname.c_str());
+  target.SetProperty("GENERATOR_FILE_NAME",lname);
   // create the dsp.cmake file
   std::string fname;
   fname = this->Makefile->GetStartOutputDirectory();

@@ -1039,7 +1039,7 @@ void cmFindPackageCommand::AppendToFoundProperty(bool found)
     }
 
   this->Makefile->GetCMakeInstance()->SetProperty("PACKAGES_FOUND",
-                                                  tmp.c_str());
+                                                  tmp);
 
   tmp = "";
   sep = "";
@@ -1050,7 +1050,7 @@ void cmFindPackageCommand::AppendToFoundProperty(bool found)
     sep = ";";
     }
   this->Makefile->GetCMakeInstance()->SetProperty("PACKAGES_NOT_FOUND",
-                                                  tmp.c_str());
+                                                  tmp);
 }
 
 //----------------------------------------------------------------------------
@@ -1093,7 +1093,7 @@ void cmFindPackageCommand::AppendSuccessInformation()
     versionInfo += this->Version;
     }
   this->Makefile->GetCMakeInstance()->SetProperty(versionInfoPropName,
-                                                  versionInfo.c_str());
+                                                  versionInfo);
   if (this->Required)
     {
     std::string requiredInfoPropName = "_CMAKE_";

@@ -62,7 +62,7 @@ bool cmSetDirectoryPropertiesCommand
         "Commands and macros cannot be set using SET_CMAKE_PROPERTIES";
       return false;
       }
-    mf->SetProperty(prop, value.c_str());
+    mf->SetProperty(prop, value);
     }
 
   return true;

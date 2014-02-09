@@ -579,7 +579,7 @@ bool cmake::FindPackage(const std::vector<std::string>& args)
     const char* targetName = "dummy";
     std::vector<std::string> srcs;
     cmTarget* tgt = mf->AddExecutable(targetName, srcs, true);
-    tgt->SetProperty("LINKER_LANGUAGE", language.c_str());
+    tgt->SetProperty("LINKER_LANGUAGE", language);
 
     std::string libs = mf->GetSafeDefinition("PACKAGE_LIBRARIES");
     std::vector<std::string> libList;
@@ -2254,7 +2254,7 @@ const char *cmake::GetProperty(const std::string& prop,
         }
       output += cit.GetName();
       }
-    this->SetProperty("CACHE_VARIABLES", output.c_str());
+    this->SetProperty("CACHE_VARIABLES", output);
     }
   else if ( prop == "COMMANDS" )
     {
@@ -2269,7 +2269,7 @@ const char *cmake::GetProperty(const std::string& prop,
       output += cmds->first.c_str();
       cc++;
       }
-    this->SetProperty("COMMANDS",output.c_str());
+    this->SetProperty("COMMANDS",output);
     }
   else if ( prop == "IN_TRY_COMPILE" )
     {
@@ -2292,7 +2292,7 @@ const char *cmake::GetProperty(const std::string& prop,
         lang += *i;
         }
       }
-    this->SetProperty("ENABLED_LANGUAGES", lang.c_str());
+    this->SetProperty("ENABLED_LANGUAGES", lang);
     }
 #define STRING_LIST_ELEMENT(F) ";" #F
   if (prop == "CMAKE_C_KNOWN_FEATURES")

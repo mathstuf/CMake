@@ -1451,7 +1451,7 @@ bool cmMakefile::ParseDefineFlag(std::string const& def, bool remove)
         }
 
       // Store the new list.
-      this->SetProperty("COMPILE_DEFINITIONS", ndefs.c_str());
+      this->SetProperty("COMPILE_DEFINITIONS", ndefs);
       }
     }
   else
@@ -2259,7 +2259,7 @@ void cmMakefile::ExpandVariablesCMP0019()
         << "as\n"
         << "  " << dirs << "\n";
       }
-    this->SetProperty("INCLUDE_DIRECTORIES", dirs.c_str());
+    this->SetProperty("INCLUDE_DIRECTORIES", dirs);
     }
 
   // Also for each target's INCLUDE_DIRECTORIES property:
@@ -2283,7 +2283,7 @@ void cmMakefile::ExpandVariablesCMP0019()
           << "as\n"
           << "  " << dirs << "\n";
         }
-      t.SetProperty("INCLUDE_DIRECTORIES", dirs.c_str());
+      t.SetProperty("INCLUDE_DIRECTORIES", dirs);
       }
     }
 

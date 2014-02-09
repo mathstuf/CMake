@@ -1328,10 +1328,10 @@ void cmMakefile::AddDefineFlag(const char* flag, std::string& dflags)
 }
 
 
-void cmMakefile::RemoveDefineFlag(const char* flag)
+void cmMakefile::RemoveDefineFlag(const std::string& flag)
 {
   // Check the length of the flag to remove.
-  std::string::size_type len = strlen(flag);
+  std::string::size_type len = flag.size();
   if(len < 1)
     {
     return;
@@ -1350,7 +1350,7 @@ void cmMakefile::RemoveDefineFlag(const char* flag)
   this->RemoveDefineFlag(flag, len, this->DefineFlags);
 }
 
-void cmMakefile::RemoveDefineFlag(const char* flag,
+void cmMakefile::RemoveDefineFlag(const std::string& flag,
                                   std::string::size_type len,
                                   std::string& dflags)
 {
@@ -1372,7 +1372,7 @@ void cmMakefile::RemoveDefineFlag(const char* flag,
     }
 }
 
-void cmMakefile::AddCompileOption(const char* option)
+void cmMakefile::AddCompileOption(const std::string& option)
 {
   this->AppendProperty("COMPILE_OPTIONS", option);
 }
@@ -4000,23 +4000,46 @@ int cmMakefile::ConfigureFile(const char* infile, const char* outfile,
 
 void cmMakefile::SetProperty(const std::string& prop, const char* value)
 {
+  if ( !value )
+    {
+    if(prop == "LINK_DIRECTORIES")
+      {
+      this->SetLinkDirectories(std::vector<std::string>());
+      }
+    else if (prop == "INCLUDE_DIRECTORIES")
+      {
+      this->IncludeDirectoriesEntries.clear();
+      }
+    else if (prop == "COMPILE_OPTIONS")
+      {
+      this->CompileOptionsEntries.clear();
+      }
+    else if (prop == "COMPILE_DEFINITIONS")
+      {
+      this->CompileDefinitionsEntries.clear();
+      }
+    else
+      {
+      this->Properties.SetProperty(prop, 0, cmProperty::DIRECTORY);
+      }
+    return;
+    }
+  this->SetProperty(prop, std::string(value));
+}
+
+void cmMakefile::SetProperty(const std::string& prop,
+                             const std::string& value)
+{
   if ( prop == "LINK_DIRECTORIES" )
     {
     std::vector<std::string> varArgsExpanded;
-    if(value)
-      {
-      cmSystemTools::ExpandListArgument(value, varArgsExpanded);
-      }
+    cmSystemTools::ExpandListArgument(value, varArgsExpanded);
     this->SetLinkDirectories(varArgsExpanded);
     return;
     }
   if (prop == "INCLUDE_DIRECTORIES")
     {
     this->IncludeDirectoriesEntries.clear();
-      if (!value)
-        {
-        return;
-        }
     cmListFileBacktrace lfbt = this->GetBacktrace();
     this->IncludeDirectoriesEntries.push_back(
                                         cmValueWithOrigin(value, lfbt));
@@ -4025,10 +4048,6 @@ void cmMakefile::SetProperty(const std::string& prop, const char* value)
   if (prop == "COMPILE_OPTIONS")
     {
     this->CompileOptionsEntries.clear();
-      if (!value)
-        {
-        return;
-        }
     cmListFileBacktrace lfbt = this->GetBacktrace();
     this->CompileOptionsEntries.push_back(cmValueWithOrigin(value, lfbt));
     return;
@@ -4036,25 +4055,19 @@ void cmMakefile::SetProperty(const std::string& prop, const char* value)
   if (prop == "COMPILE_DEFINITIONS")
     {
     this->CompileDefinitionsEntries.clear();
-    if (!value)
-      {
-      return;
-      }
     cmListFileBacktrace lfbt = this->GetBacktrace();
     cmValueWithOrigin entry(value, lfbt);
     this->CompileDefinitionsEntries.push_back(entry);
     return;
     }
-
   if ( prop == "INCLUDE_REGULAR_EXPRESSION" )
     {
     this->SetIncludeRegularExpression(value);
     return;
     }
-
   if ( prop == "ADDITIONAL_MAKE_CLEAN_FILES" )
     {
-    // This property is not inherrited
+    // This property is not inherited
     if ( strcmp(this->GetCurrentDirectory(),
                 this->GetStartDirectory()) != 0 )
       {
@@ -4067,6 +4080,17 @@ void cmMakefile::SetProperty(const std::string& prop, const char* value)
 
 void cmMakefile::AppendProperty(const std::string& prop,
                                 const char* value,
+                                bool asString)
+{
+  if(!value)
+    {
+    return;
+    }
+  this->AppendProperty(prop, std::string(value), asString);
+}
+
+void cmMakefile::AppendProperty(const std::string& prop,
+                                const std::string& value,
                                 bool asString)
 {
   if (prop == "INCLUDE_DIRECTORIES")

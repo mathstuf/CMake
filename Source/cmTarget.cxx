@@ -1772,6 +1772,58 @@ void cmTarget::SetProperty(const std::string& prop, const char* value)
     this->Makefile->IssueMessage(cmake::FATAL_ERROR, e.str());
     return;
     }
+  else if(!value)
+    {
+    if (prop == "NAME")
+      {
+      this->Makefile->IssueMessage(cmake::FATAL_ERROR, "NAME property is read-only\n");
+      }
+    else if(prop == "INCLUDE_DIRECTORIES")
+      {
+      deleteAndClear(this->Internal->IncludeDirectoriesEntries);
+      }
+    else if(prop == "COMPILE_OPTIONS")
+      {
+      deleteAndClear(this->Internal->CompileOptionsEntries);
+      }
+    else if(prop == "COMPILE_DEFINITIONS")
+      {
+      deleteAndClear(this->Internal->CompileDefinitionsEntries);
+      }
+    else if(prop == "EXPORT_NAME" && this->IsImported())
+      {
+      cmOStringStream e;
+      e << "EXPORT_NAME property can't be set on imported targets (\""
+            << this->Name << "\")\n";
+      this->Makefile->IssueMessage(cmake::FATAL_ERROR, e.str());
+      }
+    else if (prop == "LINK_LIBRARIES")
+      {
+      this->Internal->LinkImplementationPropertyEntries.clear();
+      }
+    else
+      {
+      this->Properties.SetProperty(prop, 0, cmProperty::TARGET);
+      this->MaybeInvalidatePropertyCache(prop);
+      }
+    }
+  else
+    {
+    this->SetProperty(prop, std::string(value));
+    this->MaybeInvalidatePropertyCache(prop);
+    }
+}
+
+//----------------------------------------------------------------------------
+void cmTarget::SetProperty(const std::string& prop, const std::string& value)
+{
+  if (this->GetType() == INTERFACE_LIBRARY
+      && !whiteListedInterfaceProperty(prop))
+    {
+    std::string e = "INTERFACE_LIBRARY targets may only have whitelisted "
+         "properties.  The property \"" + prop + "\" is not allowed.";
+    this->Makefile->IssueMessage(cmake::FATAL_ERROR, e);
+    }
   else if (prop == "NAME")
     {
     cmOStringStream e;
@@ -1856,6 +1908,18 @@ void cmTarget::SetProperty(const std::string& prop, const char* value)
 
 //----------------------------------------------------------------------------
 void cmTarget::AppendProperty(const std::string& prop, const char* value,
+                              bool asString)
+{
+  if(!value)
+    {
+    return;
+    }
+  this->AppendProperty(prop, std::string(value), asString);
+}
+
+//----------------------------------------------------------------------------
+void cmTarget::AppendProperty(const std::string& prop,
+                              const std::string& value,
                               bool asString)
 {
   if (this->GetType() == INTERFACE_LIBRARY

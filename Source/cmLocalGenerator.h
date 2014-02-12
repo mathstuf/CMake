@@ -170,10 +170,7 @@ public:
   void AppendDefines(std::set<std::string>& defines,
                      const char* defines_list);
   void AppendDefines(std::set<std::string>& defines,
-                     std::string defines_list)
-  {
-    this->AppendDefines(defines, defines_list.c_str());
-  }
+                     const std::string& defines_list);
   void AppendDefines(std::set<std::string>& defines,
                      const std::vector<std::string> &defines_vec);
 

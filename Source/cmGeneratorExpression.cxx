@@ -201,7 +201,7 @@ std::string cmGeneratorExpression::StripEmptyListElements(
     }
   result.append(last);
 
-  if (!result.empty() && *(result.end() - 1) == ';')
+  if (!result.empty() && *result.rbegin() == ';')
     {
     result.resize(result.size() - 1);
     }

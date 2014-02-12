@@ -39,11 +39,11 @@ void cmGeneratorExpressionParser::Parse(
 static void extendText(std::vector<cmGeneratorExpressionEvaluator*> &result,
                   std::vector<cmGeneratorExpressionToken>::const_iterator it)
 {
-  if (result.size() > 0
-      && (*(result.end() - 1))->GetType()
+  if (!result.empty()
+      && (*result.rbegin())->GetType()
                                   == cmGeneratorExpressionEvaluator::Text)
     {
-    TextContent *textContent = static_cast<TextContent*>(*(result.end() - 1));
+    TextContent *textContent = static_cast<TextContent*>(*result.rbegin());
     textContent->Extend(it->Length);
     }
   else
@@ -57,13 +57,13 @@ static void extendText(std::vector<cmGeneratorExpressionEvaluator*> &result,
 static void extendResult(std::vector<cmGeneratorExpressionEvaluator*> &result,
                 const std::vector<cmGeneratorExpressionEvaluator*> &contents)
 {
-  if (result.size() > 0
-      && (*(result.end() - 1))->GetType()
+  if (!result.empty()
+      && (*result.rbegin())->GetType()
                                   == cmGeneratorExpressionEvaluator::Text
       && (*contents.begin())->GetType()
                                   == cmGeneratorExpressionEvaluator::Text)
   {
-    TextContent *textContent = static_cast<TextContent*>(*(result.end() - 1));
+    TextContent *textContent = static_cast<TextContent*>(*result.rbegin());
     textContent->Extend(
                   static_cast<TextContent*>(*contents.begin())->GetLength());
     delete *contents.begin();
@@ -156,14 +156,14 @@ void cmGeneratorExpressionParser::ParseGeneratorExpression(
     while (this->it != this->Tokens.end() &&
            this->it->TokenType == cmGeneratorExpressionToken::ColonSeparator)
       {
-      extendText(*(parameters.end() - 1), this->it);
+      extendText(*parameters.rbegin(), this->it);
       assert(this->it != this->Tokens.end());
       ++this->it;
       }
     while (this->it != this->Tokens.end() &&
            this->it->TokenType != cmGeneratorExpressionToken::EndExpression)
       {
-      this->ParseContent(*(parameters.end() - 1));
+      this->ParseContent(*parameters.rbegin());
       if (this->it == this->Tokens.end())
         {
         break;
@@ -183,7 +183,7 @@ void cmGeneratorExpressionParser::ParseGeneratorExpression(
       while (this->it != this->Tokens.end() &&
              this->it->TokenType == cmGeneratorExpressionToken::ColonSeparator)
         {
-        extendText(*(parameters.end() - 1), this->it);
+        extendText(*parameters.rbegin(), this->it);
         assert(this->it != this->Tokens.end());
         ++this->it;
         }
@@ -256,15 +256,15 @@ void cmGeneratorExpressionParser::ParseContent(
     {
       if (this->NestingLevel == 0)
         {
-        if (result.size() > 0
-            && (*(result.end() - 1))->GetType()
+        if (!result.empty()
+            && (*result.rbegin())->GetType()
                                       == cmGeneratorExpressionEvaluator::Text)
           {
           // A comma in 'plain text' could have split text that should
           // otherwise be continuous. Extend the last text content instead of
           // creating a new one.
           TextContent *textContent =
-                              static_cast<TextContent*>(*(result.end() - 1));
+                              static_cast<TextContent*>(*result.rbegin());
           textContent->Extend(this->it->Length);
           assert(this->it != this->Tokens.end());
           ++this->it;

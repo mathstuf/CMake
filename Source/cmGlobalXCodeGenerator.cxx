@@ -473,7 +473,7 @@ cmGlobalXCodeGenerator::AddExtraTargets(cmLocalGenerator* root,
           target.GetType() == cmTarget::SHARED_LIBRARY ||
           target.GetType() == cmTarget::MODULE_LIBRARY))
         {
-        makeHelper[makeHelper.size()-1] = // fill placeholder
+        *makeHelper.rbegin() = // fill placeholder
           this->PostBuildMakeTarget(target.GetName(), "$(CONFIGURATION)");
         cmCustomCommandLines commandLines;
         commandLines.push_back(makeHelper);

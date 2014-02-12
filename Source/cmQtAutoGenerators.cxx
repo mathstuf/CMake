@@ -2141,7 +2141,7 @@ std::string cmQtAutoGenerators::Join(const std::vector<std::string>& lst,
       {
       result += "." + (*it) + separator;
       }
-    result.erase(result.end() - 1);
+    result.erase(result.size()-1);
     return result;
 }
 

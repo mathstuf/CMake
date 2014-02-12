@@ -873,7 +873,7 @@ cmLocalVisualStudio6Generator::CreateTargetRules(cmTarget &target,
 
 inline std::string removeQuotes(const std::string& s)
 {
-  if(s[0] == '\"' && s[s.size()-1] == '\"')
+  if(s[0] == '\"' && *s.rbegin() == '\"')
     {
     return s.substr(1, s.size()-2);
     }
@@ -967,14 +967,14 @@ void cmLocalVisualStudio6Generator
   // Make sure there are trailing slashes.
   if(!libPath.empty())
     {
-    if(libPath[libPath.size()-1] != '/')
+    if(*libPath.rbegin() != '/')
       {
       libPath += "/";
       }
     }
   if(!exePath.empty())
     {
-    if(exePath[exePath.size()-1] != '/')
+    if(*exePath.rbegin() != '/')
       {
       exePath += "/";
       }
@@ -1064,7 +1064,7 @@ void cmLocalVisualStudio6Generator
   for(i = libdirs.begin(); i != libdirs.end(); ++i)
     {
     std::string path = *i;
-    if(path[path.size()-1] != '/')
+    if(*path.rbegin() != '/')
       {
       path += "/";
       }
@@ -1871,7 +1871,7 @@ void cmLocalVisualStudio6Generator
     std::string dir = *d;
     if(!dir.empty())
       {
-      if(dir[dir.size()-1] != '/')
+      if(*dir.rbegin() != '/')
         {
         dir += "/";
         }

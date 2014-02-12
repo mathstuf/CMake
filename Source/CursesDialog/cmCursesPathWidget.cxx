@@ -64,7 +64,7 @@ void cmCursesPathWidget::OnTab(cmCursesMainForm* fm, WINDOW* w)
     {
     cstr = dirs[this->CurrentIndex];
     }
-  if ( cstr[cstr.size()-1] == '*' )
+  if ( *cstr.rbegin() == '*' )
     {
     cstr = cstr.substr(0, cstr.size()-1);
     }

@@ -180,7 +180,7 @@ bool cmStringCommand::HandleAsciiCommand(std::vector<std::string> const& args)
     return false;
     }
   std::string::size_type cc;
-  std::string outvar = args[args.size()-1];
+  std::string outvar = args.back();
   std::string output = "";
   for ( cc = 1; cc < args.size()-1; cc ++ )
     {
@@ -916,7 +916,7 @@ bool cmStringCommand
     this->SetError("sub-command RANDOM invoked with bad length.");
     return false;
     }
-  const std::string& variableName = args[args.size()-1];
+  const std::string& variableName = args.back();
 
   std::vector<char> result;
 

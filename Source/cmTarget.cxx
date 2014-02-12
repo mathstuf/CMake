@@ -3125,7 +3125,7 @@ const char *cmTarget::GetProperty(const std::string& prop,
             li = files.begin(); li != files.end(); ++li)
           {
           if(cmHasLiteralPrefix(*li, "$<TARGET_OBJECTS:") &&
-              (*li)[li->size() - 1] == '>')
+              *li->rbegin() == '>')
             {
             std::string objLibName = li->substr(17, li->size()-18);
 

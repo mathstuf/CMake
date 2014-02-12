@@ -1455,7 +1455,7 @@ void cmFindPackageCommand::AddPrefixesUserHints()
 //----------------------------------------------------------------------------
 bool cmFindPackageCommand::SearchDirectory(std::string const& dir)
 {
-  assert(!dir.empty() && dir[dir.size()-1] == '/');
+  assert(!dir.empty() && *dir.rbegin() == '/');
 
   // Check each path suffix on this directory.
   for(std::vector<std::string>::const_iterator
@@ -1479,7 +1479,7 @@ bool cmFindPackageCommand::SearchDirectory(std::string const& dir)
 //----------------------------------------------------------------------------
 bool cmFindPackageCommand::CheckDirectory(std::string const& dir)
 {
-  assert(!dir.empty() && dir[dir.size()-1] == '/');
+  assert(!dir.empty() && *dir.rbegin() == '/');
 
   // Look for the file in this directory.
   std::string d = dir.substr(0, dir.size()-1);
@@ -2028,7 +2028,7 @@ private:
 //----------------------------------------------------------------------------
 bool cmFindPackageCommand::SearchPrefix(std::string const& prefix_in)
 {
-  assert(!prefix_in.empty() && prefix_in[prefix_in.size()-1] == '/');
+  assert(!prefix_in.empty() && *prefix_in.rbegin() == '/');
   if(this->DebugMode)
     {
     fprintf(stderr, "Checking prefix [%s]\n", prefix_in.c_str());
@@ -2147,7 +2147,7 @@ bool cmFindPackageCommand::SearchPrefix(std::string const& prefix_in)
 //----------------------------------------------------------------------------
 bool cmFindPackageCommand::SearchFrameworkPrefix(std::string const& prefix_in)
 {
-  assert(!prefix_in.empty() && prefix_in[prefix_in.size()-1] == '/');
+  assert(!prefix_in.empty() && *prefix_in.rbegin() == '/');
   if(this->DebugMode)
     {
     fprintf(stderr, "Checking framework prefix [%s]\n", prefix_in.c_str());
@@ -2218,7 +2218,7 @@ bool cmFindPackageCommand::SearchFrameworkPrefix(std::string const& prefix_in)
 //----------------------------------------------------------------------------
 bool cmFindPackageCommand::SearchAppBundlePrefix(std::string const& prefix_in)
 {
-  assert(!prefix_in.empty() && prefix_in[prefix_in.size()-1] == '/');
+  assert(!prefix_in.empty() && *prefix_in.rbegin() == '/');
   if(this->DebugMode)
     {
     fprintf(stderr, "Checking bundle prefix [%s]\n", prefix_in.c_str());

@@ -64,7 +64,7 @@ bool cmSetCommand
     }
   // SET (VAR PARENT_SCOPE) // Removes the definition of VAR
                             // in the parent scope.
-  else if (args.size() == 2 && args[args.size()-1] == "PARENT_SCOPE")
+  else if (args.size() == 2 && args.back() == "PARENT_SCOPE")
     {
     this->Makefile->RaiseScope(variable, 0);
     return true;
@@ -85,7 +85,7 @@ bool cmSetCommand
 
   unsigned int ignoreLastArgs = 0;
   // look for PARENT_SCOPE argument
-  if (args.size() > 1 && args[args.size()-1] == "PARENT_SCOPE")
+  if (args.size() > 1 && args.back() == "PARENT_SCOPE")
     {
     parentScope = true;
     ignoreLastArgs++;
@@ -93,7 +93,7 @@ bool cmSetCommand
   else
     {
     // look for FORCE argument
-    if (args.size() > 4 && args[args.size()-1] == "FORCE")
+    if (args.size() > 4 && args.back() == "FORCE")
       {
       force = true;
       ignoreLastArgs++;
@@ -130,7 +130,7 @@ bool cmSetCommand
   // we should be nice and try to catch some simple screwups if the last or
   // next to last args are CACHE then they screwed up.  If they used FORCE
   // without CACHE they screwed up
-  if ((args[args.size() - 1] == "CACHE") ||
+  if ((args.back() == "CACHE") ||
       (args.size() > 1 && args[args.size() - 2] == "CACHE") ||
       (force && !cache))
     {

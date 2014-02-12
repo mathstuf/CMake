@@ -1437,7 +1437,7 @@ bool cmFileCopier::CheckValue(std::string const& arg)
       regex += cmsys::Glob::PatternToRegex(arg, false);
       regex += "$";
       this->MatchRules.push_back(MatchRule(regex));
-      this->CurrentMatchRule = &*(this->MatchRules.end()-1);
+      this->CurrentMatchRule = &*this->MatchRules.rbegin();
       if(this->CurrentMatchRule->Regex.is_valid())
         {
         this->Doing = DoingNone;
@@ -1453,7 +1453,7 @@ bool cmFileCopier::CheckValue(std::string const& arg)
       break;
     case DoingRegex:
       this->MatchRules.push_back(MatchRule(arg));
-      this->CurrentMatchRule = &*(this->MatchRules.end()-1);
+      this->CurrentMatchRule = &*this->MatchRules.rbegin();
       if(this->CurrentMatchRule->Regex.is_valid())
         {
         this->Doing = DoingNone;
@@ -1505,7 +1505,7 @@ bool cmFileCopier::Run(std::vector<std::string> const& args)
     // Split the input file into its directory and name components.
     std::vector<std::string> fromPathComponents;
     cmSystemTools::SplitPath(files[i].c_str(), fromPathComponents);
-    std::string fromName = *(fromPathComponents.end()-1);
+    std::string fromName = *fromPathComponents.rbegin();
     std::string fromDir = cmSystemTools::JoinPath(fromPathComponents.begin(),
                                                   fromPathComponents.end()-1);
 
@@ -2606,7 +2606,7 @@ bool cmFileCommand::HandleCMakePathCommand(std::vector<std::string>
       // remove double quotes in the path
       cmsys::String& s = *j;
 
-      if(s.size() > 1 && s[0] == '\"' && s[s.size()-1] == '\"')
+      if(s.size() > 1 && s[0] == '\"' && *s.rbegin() == '\"')
         {
         s = s.substr(1,s.size()-2);
         }

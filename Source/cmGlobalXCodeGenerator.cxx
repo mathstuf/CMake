@@ -3850,6 +3850,14 @@ void cmGlobalXCodeGenerator::AppendDefines(BuildObjectListOrString& defs,
     return;
     }
 
+  this->AppendDefines(defs, std::string(defines_list), dflag);
+}
+
+//----------------------------------------------------------------------------
+void cmGlobalXCodeGenerator::AppendDefines(BuildObjectListOrString& defs,
+                                           const std::string& defines_list,
+                                           bool dflag)
+{
   // Expand the list of definitions.
   std::vector<std::string> defines;
   cmSystemTools::ExpandListArgument(defines_list, defines);

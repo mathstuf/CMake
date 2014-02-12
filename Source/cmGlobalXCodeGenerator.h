@@ -199,6 +199,9 @@ private:
   void AppendDefines(BuildObjectListOrString& defs, const char* defines_list,
                      bool dflag = false);
   void AppendDefines(BuildObjectListOrString& defs,
+                     const std::string& defines_list,
+                     bool dflag = false);
+  void AppendDefines(BuildObjectListOrString& defs,
                      std::vector<std::string> const& defines,
                      bool dflag = false);
 

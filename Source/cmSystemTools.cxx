@@ -1099,7 +1099,7 @@ bool cmSystemTools::SimpleGlob(const std::string& glob,
                                int type /* = 0 */)
 {
   files.clear();
-  if ( glob[glob.size()-1] != '*' )
+  if ( *glob.rbegin() != '*' )
     {
     return false;
     }
@@ -1121,7 +1121,7 @@ bool cmSystemTools::SimpleGlob(const std::string& glob,
          && (std::string(d.GetFile(i)) != ".."))
         {
         std::string fname = path;
-        if ( path[path.size()-1] != '/' )
+        if ( *path.rbegin() != '/' )
           {
           fname +="/";
           }

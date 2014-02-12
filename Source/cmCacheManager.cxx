@@ -123,7 +123,7 @@ static bool ParseEntryWithoutType(const std::string& entry,
   if (flag &&
       value.size() >= 2 &&
       value[0] == '\'' &&
-      value[value.size() - 1] == '\'')
+      *value.rbegin() == '\'')
     {
     value = value.substr(1,
                          value.size() - 2);
@@ -164,7 +164,7 @@ bool cmCacheManager::ParseEntry(const std::string& entry,
   if (flag &&
       value.size() >= 2 &&
       value[0] == '\'' &&
-      value[value.size() - 1] == '\'')
+      *value.rbegin() == '\'')
     {
     value = value.substr(1,
                          value.size() - 2);
@@ -609,9 +609,9 @@ void cmCacheManager::OutputKey(std::ostream& fout, std::string const& key)
 void cmCacheManager::OutputValue(std::ostream& fout, std::string const& value)
 {
   // if value has trailing space or tab, enclose it in single quotes
-  if (value.size() &&
-      (value[value.size() - 1] == ' ' ||
-       value[value.size() - 1] == '\t'))
+  if (!value.empty() &&
+      (*value.rbegin() == ' ' ||
+       *value.rbegin() == '\t'))
     {
     fout << '\'' << value << '\'';
     }

@@ -1355,7 +1355,7 @@ cmLocalVisualStudio7Generator
     {
     // Remove any trailing slash and skip empty paths.
     std::string dir = *d;
-    if(dir[dir.size()-1] == '/')
+    if(*dir.rbegin() == '/')
       {
       dir = dir.substr(0, dir.size()-1);
       }

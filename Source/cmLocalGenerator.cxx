@@ -1415,9 +1415,9 @@ std::string cmLocalGenerator::GetIncludeFlags(
     }
   std::string flags = includeFlags.str();
   // remove trailing separators
-  if((sep[0] != ' ') && flags.size()>0 && flags[flags.size()-1] == sep[0])
+  if((sep[0] != ' ') && !flags.empty() && *flags.rbegin() == sep[0])
     {
-    flags[flags.size()-1] = ' ';
+    *flags.rbegin() = ' ';
     }
   return flags;
 }
@@ -2891,7 +2891,7 @@ cmLocalGenerator::ConvertToRelativePath(const std::vector<std::string>& local,
   assert(in_remote[0] != '\"');
 
   // The local path should never have a trailing slash.
-  assert(local.size() > 0 && !(local[local.size()-1] == ""));
+  assert(local.size() > 0 && !(*local.rbegin() == "/"));
 
   // If the path is already relative then just return the path.
   if(!cmSystemTools::FileIsFullPath(in_remote.c_str()))

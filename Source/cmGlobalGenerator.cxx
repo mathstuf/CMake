@@ -2140,7 +2140,7 @@ cmGlobalGenerator::NameResolvesToFramework(const std::string& libname) const
 //----------------------------------------------------------------------------
 inline std::string removeQuotes(const std::string& s)
 {
-  if(s[0] == '\"' && s[s.size()-1] == '\"')
+  if(s[0] == '\"' && *s.rbegin() == '\"')
     {
     return s.substr(1, s.size()-2);
     }

@@ -171,7 +171,7 @@ bool cmArchiveWrite::Add(std::string path, size_t skip, const char* prefix)
 {
   if(this->Okay())
     {
-    if(!path.empty() && path[path.size()-1] == '/')
+    if(!path.empty() && *path.rbegin() == '/')
       {
       path.erase(path.size()-1);
       }

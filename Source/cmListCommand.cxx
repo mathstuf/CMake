@@ -171,7 +171,7 @@ bool cmListCommand::HandleLengthCommand(std::vector<std::string> const& args)
     }
 
   const std::string& listName = args[1];
-  const std::string& variableName = args[args.size() - 1];
+  const std::string& variableName = args.back();
   std::vector<std::string> varArgsExpanded;
   // do not check the return value here
   // if the list var is not found varArgsExpanded will have size 0
@@ -195,7 +195,7 @@ bool cmListCommand::HandleGetCommand(std::vector<std::string> const& args)
     }
 
   const std::string& listName = args[1];
-  const std::string& variableName = args[args.size() - 1];
+  const std::string& variableName = args.back();
   // expand the variable
   std::vector<std::string> varArgsExpanded;
   if ( !this->GetList(varArgsExpanded, listName) )
@@ -278,7 +278,7 @@ bool cmListCommand::HandleFindCommand(std::vector<std::string> const& args)
     }
 
   const std::string& listName = args[1];
-  const std::string& variableName = args[args.size() - 1];
+  const std::string& variableName = args.back();
   // expand the variable
   std::vector<std::string> varArgsExpanded;
   if ( !this->GetList(varArgsExpanded, listName) )

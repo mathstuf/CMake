@@ -1376,8 +1376,8 @@ void cmCTestTestHandler
 {
   std::string tempPath;
 
-  if (filepath.size() &&
-      filepath[filepath.size()-1] != '/')
+  if (!filepath.empty() &&
+      *filepath.rbegin() != '/')
     {
     filepath += "/";
     }

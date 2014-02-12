@@ -780,7 +780,7 @@ bool cmCTest::UpdateCTestConfiguration()
         {
         continue;
         }
-      while ( fin && (line[line.size()-1] == '\\') )
+      while ( fin && (*line.rbegin() == '\\') )
         {
         line = line.substr(0, line.size()-1);
         buffer[0] = 0;
@@ -2681,7 +2681,7 @@ std::string cmCTest::GetShortPathToFile(const char* cfname)
     cmSystemTools::ConvertToUnixSlashes(*res);
 
     path = "./" + *res;
-    if ( path[path.size()-1] == '/' )
+    if ( *path.rbegin() == '/' )
       {
       path = path.substr(0, path.size()-1);
       }

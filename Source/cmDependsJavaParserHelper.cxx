@@ -228,7 +228,7 @@ void cmDependsJavaParserHelper::EndClass()
   CurrentClass* current = 0;
   if ( this->ClassStack.size() > 0 )
     {
-    current = &(*(this->ClassStack.end() - 1));
+    current = &(*this->ClassStack.rbegin());
     if ( this->ClassStack.size() > 1 )
       {
       parent = &(*(this->ClassStack.end() - 2));

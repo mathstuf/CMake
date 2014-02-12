@@ -331,7 +331,7 @@ void cmFindCommon::AddPathSuffix(std::string const& arg)
     {
     return;
     }
-  if(suffix[suffix.size()-1] == '/')
+  if(*suffix.rbegin() == '/')
     {
     suffix = suffix.substr(0, suffix.size()-1);
     }
@@ -450,7 +450,7 @@ void cmFindCommon::ComputeFinalPaths()
       i != paths.end(); ++i)
     {
     std::string& p = *i;
-    if(!p.empty() && p[p.size()-1] != '/')
+    if(!p.empty() && *p.rbegin() != '/')
       {
       p += "/";
       }

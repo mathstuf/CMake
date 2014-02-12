@@ -2534,6 +2534,13 @@ void cmLocalGenerator::AppendDefines(std::set<std::string>& defines,
     return;
     }
 
+  this->AppendDefines(defines, std::string(defines_list));
+}
+
+//----------------------------------------------------------------------------
+void cmLocalGenerator::AppendDefines(std::set<std::string>& defines,
+                                     const std::string& defines_list)
+{
   // Expand the list of definitions.
   std::vector<std::string> defines_vec;
   cmSystemTools::ExpandListArgument(defines_list, defines_vec);

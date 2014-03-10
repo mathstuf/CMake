@@ -127,21 +127,19 @@ cmNinjaTargetGenerator::OrderDependsTargetForTarget()
   return "cmake_order_depends_target_" + this->GetTargetName();
 }
 
-// TODO: Most of the code is picked up from
-// void cmMakefileExecutableTargetGenerator::WriteExecutableRule(bool relink),
-// void cmMakefileTargetGenerator::WriteTargetLanguageFlags()
-// Refactor it.
 std::string
-cmNinjaTargetGenerator::ComputeFlagsForObject(cmSourceFile const* source,
-                                              const std::string& language)
+cmNinjaTargetGenerator::FlagVariableForTarget(std::string const& lang)
 {
-  // TODO: Fortran support.
-  // // Fortran-specific flags computed for this target.
-  // if(*l == "Fortran")
-  //   {
-  //   this->AddFortranFlags(flags);
-  //   }
+  std::string targetName = this->GetTargetName();
+  // '.' is not allowed in variable names, so escape them.
+  cmSystemTools::ReplaceString(targetName, "dot", "dotdot_");
+  cmSystemTools::ReplaceString(targetName, ".", "dot_");
+  return "cmake_flags_target_" + targetName + "_lang_" + lang;
+}
 
+std::string
+cmNinjaTargetGenerator::ComputeFlagsForTarget(const std::string& language)
+{
   bool hasLangCached = this->LanguageFlags.count(language) != 0;
   std::string& languageFlags = this->LanguageFlags[language];
   if(!hasLangCached)
@@ -187,7 +185,25 @@ cmNinjaTargetGenerator::ComputeFlagsForObject(cmSourceFile const* source,
                                             this->GetConfigName());
     }
 
-  std::string flags = languageFlags;
+  return languageFlags;
+}
+
+// TODO: Most of the code is picked up from
+// void cmMakefileExecutableTargetGenerator::WriteExecutableRule(bool relink),
+// void cmMakefileTargetGenerator::WriteTargetLanguageFlags()
+// Refactor it.
+std::string
+cmNinjaTargetGenerator::ComputeFlagsForObject(cmSourceFile const* source,
+                                              const std::string& language)
+{
+  // TODO: Fortran support.
+  // // Fortran-specific flags computed for this target.
+  // if(*l == "Fortran")
+  //   {
+  //   this->AddFortranFlags(flags);
+  //   }
+
+  std::string flags = "$" + this->FlagVariableForTarget(language);
 
   // Add source file specific flags.
   this->LocalGenerator->AppendFlags(flags,
@@ -552,8 +568,30 @@ cmNinjaTargetGenerator
                                           cmNinjaDeps(),
                                           orderOnlyDeps);
 
+
+  std::set<std::string> langs;
   std::vector<cmSourceFile const*> objectSources;
   this->GeneratorTarget->GetObjectSources(objectSources, config);
+  for(std::vector<cmSourceFile const*>::const_iterator
+        si = objectSources.begin(); si != objectSources.end(); ++si)
+    {
+    langs.insert((*si)->GetLanguage());
+    }
+
+  cmNinjaVars targetVars;
+  for (std::set<std::string>::const_iterator l = langs.begin();
+       l != langs.end(); ++l)
+    {
+    targetVars[this->FlagVariableForTarget(*l)] =
+      this->ComputeFlagsForTarget(*l);
+    }
+
+  for(cmNinjaVars::const_iterator i = targetVars.begin();
+      i != targetVars.end(); ++i)
+    cmGlobalNinjaGenerator::WriteVariable(this->GetBuildFileStream(),
+                                          i->first, i->second, "", 0);
+  this->GetBuildFileStream() << std::endl;
+
   for(std::vector<cmSourceFile const*>::const_iterator
         si = objectSources.begin(); si != objectSources.end(); ++si)
     {

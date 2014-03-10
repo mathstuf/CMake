@@ -75,8 +75,10 @@ protected:
   void AddFeatureFlags(std::string& flags, const std::string& lang);
 
   std::string OrderDependsTargetForTarget();
+  std::string FlagVariableForTarget(std::string const& lang);
 
   std::string ComputeOrderDependsForTarget();
+  std::string ComputeFlagsForTarget(const std::string& language);
 
   /**
    * Compute the flags for compilation of object files for a given @a language.

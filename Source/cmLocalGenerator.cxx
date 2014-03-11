@@ -2914,14 +2914,14 @@ cmLocalGenerator::ConvertToRelativePath(const std::vector<std::string>& local,
     // Skip conversion if the path and local are not both in the source
     // or both in the binary tree.
     std::string local_path = cmSystemTools::JoinPath(local);
-    if(!((cmLocalGeneratorNotAbove(local_path.c_str(),
+    if(!((cmLocalGeneratorNotAbove(in_remote.c_str(),
+                                   this->RelativePathTopSource.c_str()) &&
+          cmLocalGeneratorNotAbove(local_path.c_str(),
+                                   this->RelativePathTopSource.c_str())) ||
+         (cmLocalGeneratorNotAbove(local_path.c_str(),
                                    this->RelativePathTopBinary.c_str()) &&
           cmLocalGeneratorNotAbove(in_remote.c_str(),
-                                   this->RelativePathTopBinary.c_str())) ||
-         (cmLocalGeneratorNotAbove(local_path.c_str(),
-                                   this->RelativePathTopSource.c_str()) &&
-          cmLocalGeneratorNotAbove(in_remote.c_str(),
-                                   this->RelativePathTopSource.c_str()))))
+                                   this->RelativePathTopBinary.c_str()))))
       {
       return in_remote;
       }

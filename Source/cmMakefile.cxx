@@ -2073,8 +2073,6 @@ cmMakefile::AddNewTarget(cmTarget::TargetType type, const std::string& name)
 cmSourceFile*
 cmMakefile::LinearGetSourceFileWithOutput(const std::string& name) const
 {
-  std::string out;
-
   // look through all the source files that have custom commands
   // and see if the custom command has the passed source file as an output
   for(std::vector<cmSourceFile*>::const_iterator i =
@@ -2089,12 +2087,11 @@ cmMakefile::LinearGetSourceFileWithOutput(const std::string& name) const
       for(std::vector<std::string>::const_iterator o = outputs.begin();
           o != outputs.end(); ++o)
         {
-        out = *o;
-        std::string::size_type pos = out.rfind(name);
+        std::string const& out = *o;
         // If the output matches exactly
-        if (pos != out.npos &&
-            pos == out.size() - name.size() &&
-            (pos ==0 || out[pos-1] == '/'))
+        if (cmHasLiteralSuffixImpl(out, name.c_str(), name.size()) &&
+            (out.size() == name.size() ||
+             out[out.size() - name.size() - 1] == '/'))
           {
           return *i;
           }

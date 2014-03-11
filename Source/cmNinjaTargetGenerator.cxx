@@ -138,6 +138,16 @@ cmNinjaTargetGenerator::FlagVariableForTarget(std::string const& lang)
 }
 
 std::string
+cmNinjaTargetGenerator::DefineVariableForTarget(std::string const& lang)
+{
+  std::string targetName = this->GetTargetName();
+  // '.' is not allowed in variable names, so escape them.
+  cmSystemTools::ReplaceString(targetName, "dot", "dotdot_");
+  cmSystemTools::ReplaceString(targetName, ".", "dot_");
+  return "cmake_defines_target_" + targetName + "_lang_" + lang;
+}
+
+std::string
 cmNinjaTargetGenerator::ComputeFlagsForTarget(const std::string& language)
 {
   bool hasLangCached = this->LanguageFlags.count(language) != 0;
@@ -186,6 +196,28 @@ cmNinjaTargetGenerator::ComputeFlagsForTarget(const std::string& language)
     }
 
   return languageFlags;
+}
+
+std::string
+cmNinjaTargetGenerator::ComputeDefinesForTarget(const std::string& language)
+{
+  std::set<std::string> targetDefines;
+
+  // Add the export symbol definition for shared library objects.
+  if(const char* exportMacro = this->Target->GetExportMacro())
+    {
+    this->LocalGenerator->AppendDefines(targetDefines, exportMacro);
+    }
+
+  // Add preprocessor definitions for this target and configuration.
+  this->LocalGenerator->AddCompileDefinitions(targetDefines, this->Target,
+                                             this->GetConfigName());
+
+  std::string targetDefinesString;
+  this->LocalGenerator->JoinDefines(targetDefines, targetDefinesString,
+     language);
+
+  return targetDefinesString;
 }
 
 // TODO: Most of the code is picked up from
@@ -237,15 +269,6 @@ ComputeDefines(cmSourceFile const* source, const std::string& language)
 {
   std::set<std::string> defines;
 
-  // Add the export symbol definition for shared library objects.
-  if(const char* exportMacro = this->Target->GetExportMacro())
-    {
-    this->LocalGenerator->AppendDefines(defines, exportMacro);
-    }
-
-  // Add preprocessor definitions for this target and configuration.
-  this->LocalGenerator->AddCompileDefinitions(defines, this->Target,
-                                             this->GetConfigName());
   this->LocalGenerator->AppendDefines
     (defines,
      source->GetProperty("COMPILE_DEFINITIONS"));
@@ -257,7 +280,7 @@ ComputeDefines(cmSourceFile const* source, const std::string& language)
      source->GetProperty(defPropName));
   }
 
-  std::string definesString;
+  std::string definesString = "$" + this->DefineVariableForTarget(language);
   this->LocalGenerator->JoinDefines(defines, definesString,
      language);
 
@@ -586,6 +609,8 @@ cmNinjaTargetGenerator
     {
     targetVars[this->FlagVariableForTarget(*l)] =
       this->ComputeFlagsForTarget(*l);
+    targetVars[this->DefineVariableForTarget(*l)] =
+      this->ComputeDefinesForTarget(*l);
     }
 
   for(cmNinjaVars::const_iterator i = targetVars.begin();

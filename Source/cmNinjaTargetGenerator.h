@@ -76,9 +76,11 @@ protected:
 
   std::string OrderDependsTargetForTarget();
   std::string FlagVariableForTarget(std::string const& lang);
+  std::string DefineVariableForTarget(std::string const& lang);
 
   std::string ComputeOrderDependsForTarget();
   std::string ComputeFlagsForTarget(const std::string& language);
+  std::string ComputeDefinesForTarget(const std::string& language);
 
   /**
    * Compute the flags for compilation of object files for a given @a language.

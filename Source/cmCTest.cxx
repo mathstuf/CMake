@@ -747,7 +747,7 @@ bool cmCTest::UpdateCTestConfiguration()
       fileName = this->BinaryDir + "/DartConfiguration.tcl";
       }
     }
-  cmCTestLog(this, HANDLER_VERBOSE_OUTPUT, "UpdateCTestConfiguration  from :"
+  cmCTestLog(this, HANDLER_VERBOSE_OUTPUT, "UpdateCTestConfiguration from: "
              << fileName << "\n");
   if ( !cmSystemTools::FileExists(fileName.c_str()) )
     {

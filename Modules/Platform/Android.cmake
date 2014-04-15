@@ -1,4 +1,5 @@
 include(Platform/Linux)
+set(CMAKE_SHARED_LIBRARY_SONAME_C_FLAG "-Wl,-soname,")
 
 # Android has soname, but binary names must end in ".so" so we cannot append
 # a version number.  Also we cannot portably represent symlinks on the host.

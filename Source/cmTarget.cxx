@@ -147,10 +147,11 @@ public:
   struct TargetPropertyEntry {
     TargetPropertyEntry(cmsys::auto_ptr<cmCompiledGeneratorExpression> cge,
       const std::string &targetName = std::string())
-      : ge(cge), TargetName(targetName)
+      : ge(cge), Cached(false), TargetName(targetName)
     {}
     const cmsys::auto_ptr<cmCompiledGeneratorExpression> ge;
     std::vector<std::string> CachedEntries;
+    bool Cached;
     const std::string TargetName;
   };
   std::vector<TargetPropertyEntry*> IncludeDirectoriesEntries;
@@ -2356,7 +2357,7 @@ static void processCompileOptionsInternal(cmTarget const* tgt,
     std::vector<std::string>& entriesRef = (*it)->CachedEntries;
     std::vector<std::string> localEntries;
     std::vector<std::string>* entryOptions = &entriesRef;
-    if(entryOptions->empty())
+    if(!(*it)->Cached)
       {
       cmSystemTools::ExpandListArgument((*it)->ge->Evaluate(mf,
                                                 config,
@@ -2369,6 +2370,7 @@ static void processCompileOptionsInternal(cmTarget const* tgt,
         {
         // Cache the result.
         *entryOptions = localEntries;
+        (*it)->Cached = true;
         }
       else
         {

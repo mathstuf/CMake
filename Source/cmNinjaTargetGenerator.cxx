@@ -113,7 +113,8 @@ void cmNinjaTargetGenerator::AddFeatureFlags(std::string& flags,
                                              const std::string& lang)
 {
   // Add language-specific flags.
-  this->LocalGenerator->AddLanguageFlags(flags, lang, this->GetConfigName());
+  this->LocalGenerator->AppendFlags(flags,
+    "$" + this->LocalGenerator->FlagVariableForLanguage(lang));
 
   if(this->GetFeatureAsBool("INTERPROCEDURAL_OPTIMIZATION"))
     {

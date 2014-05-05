@@ -639,53 +639,6 @@ cmNinjaTargetGenerator
 
   this->SetMsvcTargetPdbVariable(vars);
 
-  if(this->Makefile->IsOn("CMAKE_EXPORT_COMPILE_COMMANDS"))
-    {
-    cmLocalGenerator::RuleVariables compileObjectVars;
-    std::string lang = language;
-    compileObjectVars.Language = lang.c_str();
-
-    std::string escapedSourceFileName = sourceFileName;
-
-    if (!cmSystemTools::FileIsFullPath(sourceFileName.c_str()))
-      {
-      escapedSourceFileName = cmSystemTools::CollapseFullPath(
-        escapedSourceFileName.c_str(),
-        this->GetGlobalGenerator()->GetCMakeInstance()->
-          GetHomeOutputDirectory());
-      }
-
-    escapedSourceFileName =
-      this->LocalGenerator->ConvertToOutputFormat(
-        escapedSourceFileName, cmLocalGenerator::SHELL);
-
-    compileObjectVars.Source = escapedSourceFileName.c_str();
-    compileObjectVars.Object = objectFileName.c_str();
-    compileObjectVars.ObjectDir = objectDir.c_str();
-    compileObjectVars.ObjectFileDir = objectFileDir.c_str();
-    compileObjectVars.Flags = vars["FLAGS"].c_str();
-    compileObjectVars.Defines = vars["DEFINES"].c_str();
-
-    // Rule for compiling object file.
-    std::string compileCmdVar = "CMAKE_";
-    compileCmdVar += language;
-    compileCmdVar += "_COMPILE_OBJECT";
-    std::string compileCmd =
-      this->GetMakefile()->GetRequiredDefinition(compileCmdVar);
-    std::vector<std::string> compileCmds;
-    cmSystemTools::ExpandListArgument(compileCmd, compileCmds);
-
-    for (std::vector<std::string>::iterator i = compileCmds.begin();
-        i != compileCmds.end(); ++i)
-      this->GetLocalGenerator()->ExpandRuleVariables(*i, compileObjectVars);
-
-    std::string cmdLine =
-      this->GetLocalGenerator()->BuildCommandLine(compileCmds);
-
-    this->GetGlobalGenerator()->AddCXXCompileCommand(cmdLine,
-                                                     sourceFileName);
-    }
-
   this->GetGlobalGenerator()->WriteBuild(this->GetBuildFileStream(),
                                          comment,
                                          rule,

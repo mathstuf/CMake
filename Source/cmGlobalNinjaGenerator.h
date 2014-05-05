@@ -228,9 +228,6 @@ public:
   cmGeneratedFileStream* GetRulesFileStream() const {
     return this->RulesFileStream; }
 
-  void AddCXXCompileCommand(const std::string &commandLine,
-                            const std::string &sourceFile);
-
   /**
    * Add a rule to the generated build system.
    * Call WriteRule() behind the scene but perform some check before like:
@@ -316,8 +313,6 @@ private:
   void OpenBuildFileStream();
   void CloseBuildFileStream();
 
-  void CloseCompileCommandsStream();
-
   void OpenRulesFileStream();
   void CloseRulesFileStream();
 
@@ -343,7 +338,6 @@ private:
   /// The file containing the rule statements. (The action attached to each
   /// edge of the compilation DAG).
   cmGeneratedFileStream* RulesFileStream;
-  cmGeneratedFileStream* CompileCommandsStream;
 
   /// The type used to store the set of rules added to the generated build
   /// system.

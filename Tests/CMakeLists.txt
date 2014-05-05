@@ -58,6 +58,12 @@ if(BUILD_TESTING)
   endif()
 
   if(NOT CMake_TEST_EXTERNAL_CMAKE)
+    if("${CMAKE_GENERATOR}" MATCHES "Unix Makefiles" OR "${CMAKE_GENERATOR}" MATCHES Ninja)
+      set(TEST_OrderOnlyCustomTargetDeps 1)
+    endif()
+  endif()
+
+  if(NOT CMake_TEST_EXTERNAL_CMAKE)
     if("${CMAKE_GENERATOR}" MATCHES "Unix Makefiles" OR ("${CMAKE_GENERATOR}" MATCHES Ninja AND NOT WIN32))
       set(TEST_CompileCommandOutput 1)
     endif()
@@ -2806,6 +2812,11 @@ ${CMake_BINARY_DIR}/bin/cmake -DDIR=dev -P ${CMake_SOURCE_DIR}/Utilities/Release
     endif()
     set_tests_properties(Contracts.${project} PROPERTIES TIMEOUT ${timeout})
   endforeach()
+
+  if(TEST_OrderOnlyCustomTargetDeps)
+    ADD_TEST_MACRO(OrderOnlyCustomTargetDeps
+      $<TARGET_FILE:cmake> -E rename cmd2 cmd3)
+  endif()
 
   if(TEST_CompileCommandOutput)
     set(CompileCommandOutput_BUILD_OPTIONS

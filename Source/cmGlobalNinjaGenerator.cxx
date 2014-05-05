@@ -467,7 +467,6 @@ cmGlobalNinjaGenerator::cmGlobalNinjaGenerator()
   : cmGlobalGenerator()
   , BuildFileStream(0)
   , RulesFileStream(0)
-  , CompileCommandsStream(0)
   , Rules()
   , AllDependencies()
 {
@@ -515,9 +514,31 @@ void cmGlobalNinjaGenerator::Generate()
     this->BuildFileStream->setstate(std::ios_base::failbit);
   }
 
-  this->CloseCompileCommandsStream();
   this->CloseRulesFileStream();
   this->CloseBuildFileStream();
+
+  cmLocalGenerator *lg = this->LocalGenerators[0];
+  cmMakefile* mf = lg->GetMakefile();
+  if(mf->IsOn("CMAKE_EXPORT_COMPILE_COMMANDS"))
+    {
+    cmsysProcess *cp = cmsysProcess_New();
+    char const* const command[] = {
+      mf->GetSafeDefinition("CMAKE_BUILD_TOOL"),
+      "-t",
+      "compdb",
+      "C_COMPILER",
+      "CXX_COMPILER",
+      NULL
+    };
+    cmsysProcess_AddCommand(cp, command);
+    std::string const buildDir =
+      mf->GetSafeDefinition("CMAKE_BUILD_DIR");
+    cmsysProcess_SetWorkingDirectory(cp, buildDir.c_str());
+    cmsysProcess_SetPipeFile(cp, 1,
+      (buildDir + "/compile_commands.json").c_str());
+    cmsysProcess_Execute(cp);
+    cmsysProcess_WaitForExit(cp, NULL);
+    }
 }
 
 // Implemented in all cmGlobaleGenerator sub-classes.
@@ -735,55 +756,6 @@ void cmGlobalNinjaGenerator::CloseRulesFileStream()
     {
     cmSystemTools::Error("Rules file stream was not open.");
    }
-}
-
-void cmGlobalNinjaGenerator::AddCXXCompileCommand(
-                                      const std::string &commandLine,
-                                      const std::string &sourceFile)
-{
-  // Compute Ninja's build file path.
-  std::string buildFileDir =
-    this->GetCMakeInstance()->GetHomeOutputDirectory();
-  if (!this->CompileCommandsStream)
-    {
-    std::string buildFilePath = buildFileDir + "/compile_commands.json";
-
-    // Get a stream where to generate things.
-    this->CompileCommandsStream =
-      new cmGeneratedFileStream(buildFilePath.c_str());
-    *this->CompileCommandsStream << "[";
-    } else {
-    *this->CompileCommandsStream << "," << std::endl;
-    }
-
-  std::string sourceFileName = sourceFile;
-  if (!cmSystemTools::FileIsFullPath(sourceFileName.c_str()))
-    {
-    sourceFileName = cmSystemTools::CollapseFullPath(
-      sourceFileName.c_str(),
-      this->GetCMakeInstance()->GetHomeOutputDirectory());
-    }
-
-
-  *this->CompileCommandsStream << "\n{\n"
-     << "  \"directory\": \""
-     << cmGlobalGenerator::EscapeJSON(buildFileDir) << "\",\n"
-     << "  \"command\": \""
-     << cmGlobalGenerator::EscapeJSON(commandLine) << "\",\n"
-     << "  \"file\": \""
-     << cmGlobalGenerator::EscapeJSON(sourceFileName) << "\"\n"
-     << "}";
-}
-
-void cmGlobalNinjaGenerator::CloseCompileCommandsStream()
-{
-  if (this->CompileCommandsStream)
-    {
-    *this->CompileCommandsStream << "\n]";
-    delete this->CompileCommandsStream;
-    this->CompileCommandsStream = 0;
-    }
-
 }
 
 void cmGlobalNinjaGenerator::WriteDisclaimer(std::ostream& os)

@@ -618,6 +618,10 @@ cmNinjaTargetGenerator
                                                              orderOnlyDeps);
   }
 
+  std::sort(orderOnlyDeps.begin(), orderOnlyDeps.end());
+  orderOnlyDeps.erase(std::unique(orderOnlyDeps.begin(), orderOnlyDeps.end()),
+                      orderOnlyDeps.end());
+
   cmNinjaVars vars;
   vars["FLAGS"] = this->ComputeFlagsForObject(source, language);
   vars["DEFINES"] = this->ComputeDefines(source, language);

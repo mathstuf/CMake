@@ -633,7 +633,7 @@ void cmNinjaNormalTargetGenerator::WriteLinkStatement()
                             emptyDeps,
                             symlinkVars);
       }
-   else
+    else
      {
       cmNinjaDeps symlinks;
       const std::string soName = this->GetTargetFilePath(this->TargetNameSO);

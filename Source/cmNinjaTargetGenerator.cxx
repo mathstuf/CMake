@@ -527,7 +527,8 @@ cmNinjaTargetGenerator
     }
 
   cmNinjaDeps orderOnlyDeps;
-  this->GetLocalGenerator()->AppendTargetDepends(this->Target, orderOnlyDeps);
+  this->GetLocalGenerator()->AppendTargetDepends(this->Target, orderOnlyDeps,
+      true);
 
   // Add order-only dependencies on custom command outputs.
   for(std::vector<cmCustomCommand const*>::const_iterator

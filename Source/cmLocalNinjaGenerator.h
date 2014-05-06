@@ -90,7 +90,8 @@ public:
   std::string BuildCommandLine(const std::vector<std::string> &cmdLines);
 
   void AppendTargetOutputs(cmTarget* target, cmNinjaDeps& outputs);
-  void AppendTargetDepends(cmTarget* target, cmNinjaDeps& outputs);
+  void AppendTargetDepends(cmTarget* target, cmNinjaDeps& outputs,
+                           bool excludeExcessLinkDependencies = false);
 
   void AddCustomCommandTarget(cmCustomCommand const* cc, cmTarget* target);
   void AppendCustomCommandLines(cmCustomCommandGenerator const& ccg,

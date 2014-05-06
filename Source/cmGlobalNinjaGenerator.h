@@ -280,8 +280,10 @@ public:
     ASD.insert(deps.begin(), deps.end());
   }
 
-  void AppendTargetOutputs(cmTarget const* target, cmNinjaDeps& outputs);
-  void AppendTargetDepends(cmTarget const* target, cmNinjaDeps& outputs);
+  void AppendTargetOutputs(cmTarget const* target, cmNinjaDeps& outputs,
+                           bool excludeExcessLinkDependencies = false);
+  void AppendTargetDepends(cmTarget const* target, cmNinjaDeps& outputs,
+                           bool excludeExcessLinkDependencies = false);
   void AddDependencyToAll(cmTarget* target);
   void AddDependencyToAll(const std::string& input);
 

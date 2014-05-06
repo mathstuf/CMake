@@ -832,7 +832,8 @@ void cmGlobalNinjaGenerator::WriteAssumedSourceDependencies()
 
 void
 cmGlobalNinjaGenerator
-::AppendTargetOutputs(cmTarget const* target, cmNinjaDeps& outputs)
+::AppendTargetOutputs(cmTarget const* target, cmNinjaDeps& outputs,
+                      bool excludeExcessLinkDependencies)
 {
   std::string configName =
     target->GetMakefile()->GetSafeDefinition("CMAKE_BUILD_TYPE");
@@ -846,15 +847,27 @@ cmGlobalNinjaGenerator
   bool realname = target->IsFrameworkOnApple();
 
   switch (target->GetType()) {
-  case cmTarget::EXECUTABLE:
   case cmTarget::SHARED_LIBRARY:
   case cmTarget::STATIC_LIBRARY:
   case cmTarget::MODULE_LIBRARY:
+    if (excludeExcessLinkDependencies)
+      {
+      this->AppendTargetDepends(target, outputs,
+        excludeExcessLinkDependencies);
+      break;
+      }
+  case cmTarget::EXECUTABLE:
     outputs.push_back(ng->ConvertToNinjaPath(
       target->GetFullPath(configName, false, realname).c_str()));
     break;
 
   case cmTarget::OBJECT_LIBRARY:
+    if (excludeExcessLinkDependencies)
+      {
+      this->AppendTargetDepends(target, outputs,
+        excludeExcessLinkDependencies);
+      break;
+      }
   case cmTarget::UTILITY: {
     std::string path = ng->ConvertToNinjaPath(
       target->GetMakefile()->GetStartOutputDirectory());
@@ -881,7 +894,8 @@ cmGlobalNinjaGenerator
 
 void
 cmGlobalNinjaGenerator
-::AppendTargetDepends(cmTarget const* target, cmNinjaDeps& outputs)
+::AppendTargetDepends(cmTarget const* target, cmNinjaDeps& outputs,
+                      bool excludeExcessLinkDependencies)
 {
   if (target->GetType() == cmTarget::GLOBAL_TARGET) {
     // Global targets only depend on other utilities, which may not appear in
@@ -898,7 +912,7 @@ cmGlobalNinjaGenerator
         {
         continue;
         }
-      this->AppendTargetOutputs(*i, outputs);
+      this->AppendTargetOutputs(*i, outputs, excludeExcessLinkDependencies);
     }
   }
 }

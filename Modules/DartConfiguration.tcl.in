@@ -104,3 +104,6 @@ CurlOptions: @CTEST_CURL_OPTIONS@
 # specify behavior for retrying the submission
 CTestSubmitRetryDelay: @CTEST_SUBMIT_RETRY_DELAY@
 CTestSubmitRetryCount: @CTEST_SUBMIT_RETRY_COUNT@
+
+CustomRunners: @CTEST_CUSTOM_RUNNERS@
+@CUSTOM_RUNNER_OPTIONS@

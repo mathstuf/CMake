@@ -183,6 +183,7 @@ protected:
   unsigned int            StartTestTime;
   unsigned int            EndTestTime;
   bool MemCheck;
+  bool Custom;
   int CustomMaximumPassedTestOutputSize;
   int CustomMaximumFailedTestOutputSize;
   int MaxIndex;

@@ -32,6 +32,7 @@
 #include "cmCTestConfigureHandler.h"
 #include "cmCTestCoverageHandler.h"
 #include "cmCTestMemCheckHandler.h"
+#include "cmCTestCustomHandler.h"
 #include "cmCTestScriptHandler.h"
 #include "cmCTestSubmitHandler.h"
 #include "cmCTestTestHandler.h"
@@ -308,6 +309,7 @@ cmCTest::cmCTest()
   this->PrintLabels            = false;
   this->CompressTestOutput     = true;
   this->CompressMemCheckOutput = true;
+  this->CompressCustomOutput   = true;
   this->TestModel              = cmCTest::EXPERIMENTAL;
   this->MaxTestNameWidth       = 30;
   this->InteractiveDebugMode   = true;
@@ -327,6 +329,7 @@ cmCTest::cmCTest()
   this->OutputTestOutputOnTestFailure = false;
   this->ComputedCompressTestOutput = false;
   this->ComputedCompressMemCheckOutput = false;
+  this->ComputedCompressCustomOutput = false;
   if(cmSystemTools::GetEnv("CTEST_OUTPUT_ON_FAILURE"))
     {
     this->OutputTestOutputOnTestFailure = true;
@@ -340,6 +343,7 @@ cmCTest::cmCTest()
   this->Parts[PartTest].SetName("Test");
   this->Parts[PartCoverage].SetName("Coverage");
   this->Parts[PartMemCheck].SetName("MemCheck");
+  this->Parts[PartCustom].SetName("Custom");
   this->Parts[PartSubmit].SetName("Submit");
   this->Parts[PartNotes].SetName("Notes");
   this->Parts[PartExtraFiles].SetName("ExtraFiles");
@@ -423,6 +427,21 @@ bool cmCTest::ShouldCompressMemCheckOutput()
     this->ComputedCompressMemCheckOutput = true;
     }
   return this->CompressMemCheckOutput;
+}
+
+//----------------------------------------------------------------------------
+bool cmCTest::ShouldCompressCustomOutput()
+{
+  if(!this->ComputedCompressCustomOutput)
+    {
+    std::string cdashVersion = this->GetCDashVersion();
+
+    bool compressionSupported = cmSystemTools::VersionCompare(
+      cmSystemTools::OP_GREATER, cdashVersion.c_str(), "1.9.0");
+    this->CompressCustomOutput &= compressionSupported;
+    this->ComputedCompressCustomOutput = true;
+    }
+  return this->CompressCustomOutput;
 }
 
 //----------------------------------------------------------------------------
@@ -515,6 +534,19 @@ int cmCTest::Initialize(const char* binary_dir, cmCTestStartCommand* command)
     cmCTestLog(this, DEBUG, "Cannot find custom configuration file tree"
       << std::endl);
     return 0;
+    }
+
+  std::string parts = this->GetCTestConfiguration("CustomRunners");
+  std::vector<std::string> customParts;
+  cmSystemTools::ExpandListArgument(parts, customParts);
+  std::vector<std::string>::const_iterator i;
+  for (i = customParts.begin(); i != customParts.end(); ++i)
+    {
+    std::string part = "custom_" + *i;
+    this->CustomParts.push_back(part);
+    cmCTestGenericHandler* handler = new cmCTestCustomHandler(*i);
+    handler->SetCTestInstance(this);
+    this->TestingHandlers[part] = handler;
     }
 
   if ( this->ProduceXML )
@@ -1056,6 +1088,22 @@ int cmCTest::ProcessTests()
     if (this->GetHandler("memcheck")->ProcessHandler() < 0)
       {
       res |= cmCTest::MEMORY_ERRORS;
+      }
+    }
+  if (this->Parts[PartCustom])
+    {
+    while (this->GetRemainingTimeAllowed() - 120 > 0)
+      {
+      this->UpdateCTestConfiguration();
+      std::vector<std::string>::const_iterator i;
+      for (i = this->CustomParts.begin();
+           i != this->CustomParts.end(); ++i)
+        {
+        if (this->GetHandler(i->c_str())->ProcessHandler() < 0)
+          {
+          res |= cmCTest::CUSTOM_ERRORS;
+          }
+        }
       }
     }
   if ( !notest )
@@ -1805,6 +1853,11 @@ bool cmCTest::AddTestsForDashboardType(std::string &targ)
     this->SetTestModel(cmCTest::EXPERIMENTAL);
     this->SetTest("MemCheck");
     }
+  else if ( targ == "ExperimentalCustom" )
+    {
+    this->SetTestModel(cmCTest::EXPERIMENTAL);
+    this->SetTest("Custom");
+    }
   else if ( targ == "ExperimentalCoverage" )
     {
     this->SetTestModel(cmCTest::EXPERIMENTAL);
@@ -1856,6 +1909,11 @@ bool cmCTest::AddTestsForDashboardType(std::string &targ)
     {
     this->SetTestModel(cmCTest::CONTINUOUS);
     this->SetTest("MemCheck");
+    }
+  else if ( targ == "ContinuousCustom" )
+    {
+    this->SetTestModel(cmCTest::CONTINUOUS);
+    this->SetTest("Custom");
     }
   else if ( targ == "ContinuousCoverage" )
     {
@@ -1909,6 +1967,11 @@ bool cmCTest::AddTestsForDashboardType(std::string &targ)
     this->SetTestModel(cmCTest::NIGHTLY);
     this->SetTest("MemCheck");
     }
+  else if ( targ == "NightlyCustom" )
+    {
+    this->SetTestModel(cmCTest::NIGHTLY);
+    this->SetTest("Custom");
+    }
   else if ( targ == "NightlyCoverage" )
     {
     this->SetTestModel(cmCTest::NIGHTLY);
@@ -1958,13 +2021,15 @@ void cmCTest::ErrorMessageUnknownDashDValue(std::string &val)
     "Available options are:" << std::endl
     << "  ctest -D Continuous" << std::endl
     << "  ctest -D Continuous(Start|Update|Configure|Build)" << std::endl
-    << "  ctest -D Continuous(Test|Coverage|MemCheck|Submit)" << std::endl
+    << "  ctest -D Continuous(Test|Coverage|MemCheck|Custom|Submit)"
+    << std::endl
     << "  ctest -D Experimental" << std::endl
     << "  ctest -D Experimental(Start|Update|Configure|Build)" << std::endl
-    << "  ctest -D Experimental(Test|Coverage|MemCheck|Submit)" << std::endl
+    << "  ctest -D Experimental(Test|Coverage|MemCheck|Custom|Submit)"
+    << std::endl
     << "  ctest -D Nightly" << std::endl
     << "  ctest -D Nightly(Start|Update|Configure|Build)" << std::endl
-    << "  ctest -D Nightly(Test|Coverage|MemCheck|Submit)" << std::endl
+    << "  ctest -D Nightly(Test|Coverage|MemCheck|Custom|Submit)" << std::endl
     << "  ctest -D NightlyMemoryCheck" << std::endl);
 }
 
@@ -2007,6 +2072,7 @@ void cmCTest::HandleCommandLineArguments(size_t &i,
     {
     this->CompressTestOutput = false;
     this->CompressMemCheckOutput = false;
+    this->CompressCustomOutput = false;
     }
 
   if(this->CheckArgument(arg, "--print-labels"))
@@ -2141,11 +2207,13 @@ void cmCTest::HandleCommandLineArguments(size_t &i,
                                                   args[i].c_str());
     this->GetHandler("memcheck")->
       SetPersistentOption("TestsToRunInformation",args[i].c_str());
+    this->SetCustomOption("TestsToRunInformation",args[i].c_str());
     }
   if(this->CheckArgument(arg, "-U", "--union"))
     {
     this->GetHandler("test")->SetPersistentOption("UseUnion", "true");
     this->GetHandler("memcheck")->SetPersistentOption("UseUnion", "true");
+    this->SetCustomOption("UseUnion","true");
     }
   if(this->CheckArgument(arg, "-R", "--tests-regex") && i < args.size() - 1)
     {
@@ -2154,6 +2222,7 @@ void cmCTest::HandleCommandLineArguments(size_t &i,
       SetPersistentOption("IncludeRegularExpression", args[i].c_str());
     this->GetHandler("memcheck")->
       SetPersistentOption("IncludeRegularExpression", args[i].c_str());
+    this->SetCustomOption("IncludeRegularExpression",args[i].c_str());
     }
   if(this->CheckArgument(arg, "-L", "--label-regex") && i < args.size() - 1)
     {
@@ -2162,6 +2231,7 @@ void cmCTest::HandleCommandLineArguments(size_t &i,
       SetPersistentOption("LabelRegularExpression", args[i].c_str());
     this->GetHandler("memcheck")->
       SetPersistentOption("LabelRegularExpression", args[i].c_str());
+    this->SetCustomOption("LabelRegularExpression",args[i].c_str());
     }
   if(this->CheckArgument(arg, "-LE", "--label-exclude") && i < args.size() - 1)
     {
@@ -2170,6 +2240,7 @@ void cmCTest::HandleCommandLineArguments(size_t &i,
       SetPersistentOption("ExcludeLabelRegularExpression", args[i].c_str());
     this->GetHandler("memcheck")->
       SetPersistentOption("ExcludeLabelRegularExpression", args[i].c_str());
+    this->SetCustomOption("ExcludeLabelRegularExpression",args[i].c_str());
     }
 
   if(this->CheckArgument(arg, "-E", "--exclude-regex") &&
@@ -2180,12 +2251,14 @@ void cmCTest::HandleCommandLineArguments(size_t &i,
       SetPersistentOption("ExcludeRegularExpression", args[i].c_str());
     this->GetHandler("memcheck")->
       SetPersistentOption("ExcludeRegularExpression", args[i].c_str());
+    this->SetCustomOption("ExcludeRegularExpression", args[i].c_str());
     }
 
   if(this->CheckArgument(arg, "--rerun-failed"))
     {
     this->GetHandler("test")->SetPersistentOption("RerunFailed", "true");
     this->GetHandler("memcheck")->SetPersistentOption("RerunFailed", "true");
+    this->SetCustomOption("RerunFailed","true");
     }
 }
 
@@ -2316,6 +2389,13 @@ int cmCTest::Run(std::vector<std::string> &args, std::string* output)
         cmCTestLog(this, ERROR_MESSAGE,
           "CTest -T called with incorrect option: "
           << args[i] << std::endl);
+        cmOStringStream customParts;
+        std::vector<std::string>::const_iterator it;
+        for (it = this->CustomParts.begin();
+             it != this->CustomParts.end(); ++it)
+          {
+          customParts << "  " << ctestExec << " -T " << *it << std::endl;
+          }
         cmCTestLog(this, ERROR_MESSAGE, "Available options are:" << std::endl
           << "  " << ctestExec << " -T all" << std::endl
           << "  " << ctestExec << " -T start" << std::endl
@@ -2325,6 +2405,7 @@ int cmCTest::Run(std::vector<std::string> &args, std::string* output)
           << "  " << ctestExec << " -T test" << std::endl
           << "  " << ctestExec << " -T coverage" << std::endl
           << "  " << ctestExec << " -T memcheck" << std::endl
+          << customParts.str()
           << "  " << ctestExec << " -T notes" << std::endl
           << "  " << ctestExec << " -T submit" << std::endl);
         }
@@ -2765,6 +2846,16 @@ void cmCTest::SetCTestConfiguration(const char *name, const char* value)
   this->CTestConfiguration[name] = value;
 }
 
+//----------------------------------------------------------------------
+void cmCTest::SetCustomOption(const char *name, const char* value)
+{
+  std::vector<std::string>::const_iterator i;
+  for (i = this->CustomParts.begin();
+       i != this->CustomParts.end(); ++i)
+    {
+    this->TestingHandlers[*i]->SetPersistentOption(name, value);
+    }
+}
 
 //----------------------------------------------------------------------
 std::string cmCTest::GetCurrentTag()

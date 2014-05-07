@@ -268,6 +268,16 @@ if(BUILD_TESTING)
     set(DEFAULT_CTEST_CONFIGURATION_TYPE "Release")
   endif()
 
+  set(CUSTOM_RUNNER_OPTIONS)
+  foreach (runner IN LISTS CTEST_CUSTOM_RUNNERS)
+    set(CUSTOM_RUNNER_OPTIONS
+"${CUSTOM_RUNNER_OPTIONS}
+
+CustomRunner${runner}Command: ${CTEST_${runner}_COMMAND}
+CustomRunner${runner}Arguments: ${CTEST_${runner}_ARGUMENTS}
+CustomRunner${runner}OutputFiles: ${CTEST_${runner}_OUTPUT_FILES}")
+  endforeach ()
+
   mark_as_advanced(
     BZRCOMMAND
     BZR_UPDATE_OPTIONS

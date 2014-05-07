@@ -58,6 +58,7 @@ public:
     PartTest,
     PartCoverage,
     PartMemCheck,
+    PartCustom,
     PartSubmit,
     PartNotes,
     PartExtraFiles,
@@ -139,7 +140,8 @@ public:
   /**
    * Try to run tests of the project
    */
-  int TestDirectory(bool memcheck);
+  int TestDirectory(bool memcheck,
+                    std::vector<std::string> const& customParts);
 
   ///! what is the configuraiton type, e.g. Debug, Release etc.
   std::string const& GetConfigType();
@@ -220,6 +222,7 @@ public:
 
   bool ShouldCompressTestOutput();
   bool ShouldCompressMemCheckOutput();
+  bool ShouldCompressCustomOutput();
   bool CompressString(std::string& str);
 
   std::string GetCDashVersion();
@@ -301,7 +304,8 @@ public:
     TEST_ERRORS      = 0x08,
     MEMORY_ERRORS    = 0x10,
     COVERAGE_ERRORS  = 0x20,
-    SUBMIT_ERRORS    = 0x40
+    SUBMIT_ERRORS    = 0x40,
+    CUSTOM_ERRORS    = 0x80
   };
 
   ///! Are we producing XML
@@ -441,6 +445,7 @@ private:
   //flag for lazy getter (optimization)
   bool ComputedCompressTestOutput;
   bool ComputedCompressMemCheckOutput;
+  bool ComputedCompressCustomOutput;
 
   int GenerateNotesFile(const char* files);
 
@@ -498,6 +503,7 @@ private:
   bool                     CompressXMLFiles;
   bool                     CompressTestOutput;
   bool                     CompressMemCheckOutput;
+  bool                     CompressCustomOutput;
 
   void InitStreams();
   std::ostream* StreamOut;
@@ -557,6 +563,8 @@ private:
   bool DropSiteCDash;
 
   std::vector<std::string> InitialCommandLineArguments;
+  void SetCustomOption(const char* name, const char* value);
+  std::vector<std::string> CustomParts;
 
   int SubmitIndex;
 

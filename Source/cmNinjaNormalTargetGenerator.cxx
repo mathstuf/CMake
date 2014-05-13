@@ -81,7 +81,10 @@ void cmNinjaNormalTargetGenerator::Generate()
   }
 
   // Write the rules for each language.
-  this->WriteLanguagesRules();
+  if (!this->WriteLanguagesRules())
+    {
+    return;
+    }
 
   // Write the build statements
   this->WriteObjectBuildStatements();
@@ -98,7 +101,7 @@ void cmNinjaNormalTargetGenerator::Generate()
     }
 }
 
-void cmNinjaNormalTargetGenerator::WriteLanguagesRules()
+bool cmNinjaNormalTargetGenerator::WriteLanguagesRules()
 {
 #ifdef NINJA_GEN_VERBOSE_FILES
   cmGlobalNinjaGenerator::WriteDivider(this->GetRulesFileStream());
@@ -116,7 +119,14 @@ void cmNinjaNormalTargetGenerator::WriteLanguagesRules()
   for(std::set<std::string>::const_iterator l = languages.begin();
       l != languages.end();
       ++l)
-    this->WriteLanguageRules(*l);
+    {
+    if (!this->WriteLanguageRules(*l))
+      {
+      return false;
+      }
+    }
+
+  return true;
 }
 
 const char *cmNinjaNormalTargetGenerator::GetVisibleTypeName() const

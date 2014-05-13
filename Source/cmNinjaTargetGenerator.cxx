@@ -360,15 +360,22 @@ bool cmNinjaTargetGenerator::SetMsvcTargetPdbVariable(cmNinjaVars& vars) const
   return false;
 }
 
-void
+bool
 cmNinjaTargetGenerator
 ::WriteLanguageRules(const std::string& language)
 {
+  static const std::string langFortran = "Fortran";
+  if (language == langFortran)
+    {
+    cmSystemTools::Error("The Ninja generator does not support Fortran yet.");
+    return false;
+    }
 #ifdef NINJA_GEN_VERBOSE_FILES
   this->GetRulesFileStream()
     << "# Rules for language " << language << "\n\n";
 #endif
   this->WriteCompileRule(language);
+  return true;
 }
 
 void

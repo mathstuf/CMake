@@ -111,7 +111,7 @@ protected:
   /// @return the output path for the target.
   virtual std::string GetTargetOutputDir() const;
 
-  void WriteLanguageRules(const std::string& language);
+  bool WriteLanguageRules(const std::string& language);
   void WriteCompileRule(const std::string& language);
   void WriteObjectBuildStatements();
   void WriteObjectBuildStatement(cmSourceFile const* source);

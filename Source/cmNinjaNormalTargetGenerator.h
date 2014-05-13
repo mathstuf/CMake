@@ -34,7 +34,7 @@ public:
 private:
   std::string LanguageLinkerRule() const;
   const char* GetVisibleTypeName() const;
-  void WriteLanguagesRules();
+  bool WriteLanguagesRules();
   void WriteLinkRule(bool useResponseFile);
   void WriteLinkStatement();
   void WriteObjectLibStatement();

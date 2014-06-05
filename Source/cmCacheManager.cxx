@@ -836,6 +836,7 @@ void cmCacheManager::CacheEntry::SetProperty(const std::string& prop,
     else
       {
       this->Properties.SetProperty(prop, 0, cmProperty::CACHE);
+      return;
       }
     }
   this->SetProperty(prop, std::string(value));

@@ -3995,6 +3995,18 @@ void cmMakefile::SetProperty(const std::string& prop, const char* value)
       {
       this->SetLinkDirectories(std::vector<std::string>());
       }
+    else if (prop == "INCLUDE_DIRECTORIES")
+      {
+      this->IncludeDirectoriesEntries.clear();
+      }
+    else if (prop == "COMPILE_OPTIONS")
+      {
+      this->CompileOptionsEntries.clear();
+      }
+    else if (prop == "COMPILE_DEFINITIONS")
+      {
+      this->CompileDefinitionsEntries.clear();
+      }
     else
       {
       this->Properties.SetProperty(prop, 0, cmProperty::DIRECTORY);

@@ -25,6 +25,12 @@
 #include <stdlib.h> // required for atof
 #include <assert.h>
 #include <errno.h>
+#if defined(CMAKE_BUILD_WITH_CMAKE)
+#include <cmsys/hash_set.hxx>
+#define FAST_SET cmsys::hash_set
+#else
+#define FAST_SET std::set
+#endif
 
 const char* cmTarget::GetTargetTypeName(TargetType targetType)
 {
@@ -578,7 +584,7 @@ bool cmTarget::IsBundleOnApple() const
 static bool processSources(cmTarget const* tgt,
       const std::vector<cmTargetInternals::TargetPropertyEntry*> &entries,
       std::vector<std::string> &srcs,
-      std::set<std::string> &uniqueSrcs,
+      FAST_SET<std::string> &uniqueSrcs,
       cmGeneratorExpressionDAGChecker *dagChecker,
       cmTarget const* head,
       std::string const& config, bool debugSources)
@@ -722,7 +728,7 @@ void cmTarget::GetSourceFiles(std::vector<std::string> &files,
   cmGeneratorExpressionDAGChecker dagChecker(this->GetName(),
                                              "SOURCES", 0, 0);
 
-  std::set<std::string> uniqueSrcs;
+  FAST_SET<std::string> uniqueSrcs;
   bool contextDependentDirectSources = processSources(this,
                  this->Internal->SourceEntries,
                  files,
@@ -1332,7 +1338,7 @@ void cmTarget::GetTllSignatureTraces(cmOStringStream &s,
                         = (sig == cmTarget::KeywordTLLSignature ? "keyword"
                                                                 : "plain");
     s << "The uses of the " << sigString << " signature are here:\n";
-    std::set<std::string> emitted;
+    FAST_SET<std::string> emitted;
     for(std::vector<cmListFileBacktrace>::iterator it = sigs.begin();
         it != sigs.end(); ++it)
       {
@@ -2345,7 +2351,7 @@ cmTarget::GetIncludeDirectories(const std::string& config) const
 static void processCompileOptionsInternal(cmTarget const* tgt,
       const std::vector<cmTargetInternals::TargetPropertyEntry*> &entries,
       std::vector<std::string> &options,
-      std::set<std::string> &uniqueOptions,
+      FAST_SET<std::string> &uniqueOptions,
       cmGeneratorExpressionDAGChecker *dagChecker,
       const std::string& config, bool debugOptions, const char *logName)
 {
@@ -2408,7 +2414,7 @@ static void processCompileOptionsInternal(cmTarget const* tgt,
 static void processCompileOptions(cmTarget const* tgt,
       const std::vector<cmTargetInternals::TargetPropertyEntry*> &entries,
       std::vector<std::string> &options,
-      std::set<std::string> &uniqueOptions,
+      FAST_SET<std::string> &uniqueOptions,
       cmGeneratorExpressionDAGChecker *dagChecker,
       const std::string& config, bool debugOptions)
 {
@@ -2445,7 +2451,7 @@ void cmTarget::GetAutoUicOptions(std::vector<std::string> &result,
 void cmTarget::GetCompileOptions(std::vector<std::string> &result,
                                  const std::string& config) const
 {
-  std::set<std::string> uniqueOptions;
+  FAST_SET<std::string> uniqueOptions;
 
   cmGeneratorExpressionDAGChecker dagChecker(this->GetName(),
                                              "COMPILE_OPTIONS", 0, 0);
@@ -2542,7 +2548,7 @@ void cmTarget::GetCompileOptions(std::vector<std::string> &result,
 static void processCompileDefinitions(cmTarget const* tgt,
       const std::vector<cmTargetInternals::TargetPropertyEntry*> &entries,
       std::vector<std::string> &options,
-      std::set<std::string> &uniqueOptions,
+      FAST_SET<std::string> &uniqueOptions,
       cmGeneratorExpressionDAGChecker *dagChecker,
       const std::string& config, bool debugOptions)
 {
@@ -2555,7 +2561,7 @@ static void processCompileDefinitions(cmTarget const* tgt,
 void cmTarget::GetCompileDefinitions(std::vector<std::string> &list,
                                             const std::string& config) const
 {
-  std::set<std::string> uniqueOptions;
+  FAST_SET<std::string> uniqueOptions;
 
   cmGeneratorExpressionDAGChecker dagChecker(this->GetName(),
                                              "COMPILE_DEFINITIONS", 0, 0);
@@ -2689,7 +2695,7 @@ void cmTarget::GetCompileDefinitions(std::vector<std::string> &list,
 static void processCompileFeatures(cmTarget const* tgt,
       const std::vector<cmTargetInternals::TargetPropertyEntry*> &entries,
       std::vector<std::string> &options,
-      std::set<std::string> &uniqueOptions,
+      FAST_SET<std::string> &uniqueOptions,
       cmGeneratorExpressionDAGChecker *dagChecker,
       const std::string& config, bool debugOptions)
 {
@@ -2701,7 +2707,7 @@ static void processCompileFeatures(cmTarget const* tgt,
 void cmTarget::GetCompileFeatures(std::vector<std::string> &result,
                                   const std::string& config) const
 {
-  std::set<std::string> uniqueFeatures;
+  FAST_SET<std::string> uniqueFeatures;
 
   cmGeneratorExpressionDAGChecker dagChecker(this->GetName(),
                                              "COMPILE_FEATURES",

@@ -6178,7 +6178,7 @@ void cmTarget::GetTransitiveTargetClosure(const std::string& config,
   for(std::vector<std::string>::const_iterator it = impl->Libraries.begin();
       it != impl->Libraries.end(); ++it)
     {
-      processILibs(config, headTarget, *it, tgts, emitted);
+    processILibs(config, headTarget, *it, tgts, emitted);
     }
 }
 

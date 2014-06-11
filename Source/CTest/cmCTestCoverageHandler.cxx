@@ -1727,7 +1727,7 @@ int cmCTestCoverageHandler::HandleTracePyCoverage(
             }
           }
         int cov = atoi(prefix.c_str());
-        if ( prefix[prefix.size()-1] != ':' )
+        if ( *prefix.rbegin() != ':' )
           {
           // This line does not have ':' so no coverage here. That said,
           // Trace.py does not handle not covered lines versus comments etc.
@@ -1867,7 +1867,7 @@ int cmCTestCoverageHandler::RunBullseyeCoverageBranch(
   while(cmSystemTools::GetLineFromStream(fin, lineIn))
     {
     bool startFile = false;
-    if(lineIn.size() > 1 && lineIn[lineIn.size()-1] == ':')
+    if(lineIn.size() > 1 && *lineIn.rbegin() == ':')
       {
       file = lineIn.substr(0, lineIn.size()-1);
       if(coveredFileNames.find(file) != coveredFileNames.end())

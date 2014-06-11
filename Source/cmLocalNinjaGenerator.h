@@ -105,6 +105,7 @@ public:
                         std::map<cmSourceFile const*, std::string>& mapping,
                         cmGeneratorTarget const* gt = 0);
 
+  std::string FlagVariableForLanguage(std::string const& lang) const;
 
 protected:
   virtual std::string ConvertToIncludeReference(std::string const& path,

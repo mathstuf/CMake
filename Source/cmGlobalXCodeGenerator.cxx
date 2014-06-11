@@ -470,7 +470,7 @@ cmGlobalXCodeGenerator::AddExtraTargets(cmLocalGenerator* root,
           target.GetType() == cmTarget::SHARED_LIBRARY ||
           target.GetType() == cmTarget::MODULE_LIBRARY))
         {
-        makeHelper[makeHelper.size()-1] = // fill placeholder
+        *makeHelper.rbegin() = // fill placeholder
           this->PostBuildMakeTarget(target.GetName(), "$(CONFIGURATION)");
         cmCustomCommandLines commandLines;
         commandLines.push_back(makeHelper);
@@ -3831,6 +3831,14 @@ void cmGlobalXCodeGenerator::AppendDefines(BuildObjectListOrString& defs,
     return;
     }
 
+  this->AppendDefines(defs, std::string(defines_list), dflag);
+}
+
+//----------------------------------------------------------------------------
+void cmGlobalXCodeGenerator::AppendDefines(BuildObjectListOrString& defs,
+                                           const std::string& defines_list,
+                                           bool dflag)
+{
   // Expand the list of definitions.
   std::vector<std::string> defines;
   cmSystemTools::ExpandListArgument(defines_list, defines);

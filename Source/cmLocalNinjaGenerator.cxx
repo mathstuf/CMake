@@ -39,6 +39,12 @@ cmLocalNinjaGenerator::~cmLocalNinjaGenerator()
 {
 }
 
+std::string
+cmLocalNinjaGenerator::FlagVariableForLanguage(std::string const& lang) const
+{
+  return "cmake_langs_flag_lang_" + lang;
+}
+
 void cmLocalNinjaGenerator::Generate()
 {
   this->SetConfigName();
@@ -64,6 +70,20 @@ void cmLocalNinjaGenerator::Generate()
       this->GetRulesFileStream()
             << "msvc_deps_prefix = " << showIncludesPrefix << "\n\n";
       }
+    }
+
+  // Write out global flag variables.
+  // Language flags
+  std::vector<std::string> langs;
+  this->GlobalGenerator->GetEnabledLanguages(langs);
+  for (std::vector<std::string>::const_iterator i = langs.begin();
+       i != langs.end(); ++i)
+    {
+    std::string langFlags;
+    this->AddLanguageFlags(langFlags, *i, this->GetConfigName());
+    cmGlobalNinjaGenerator::WriteVariable(this->GetBuildFileStream(),
+                                          this->FlagVariableForLanguage(*i),
+                                          langFlags, "", 0);
     }
 
   cmGeneratorTargetsType targets = this->GetMakefile()->GetGeneratorTargets();

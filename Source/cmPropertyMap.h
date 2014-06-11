@@ -23,7 +23,11 @@ public:
 
   void SetProperty(const std::string& name, const char *value,
                    cmProperty::ScopeType scope);
+  void SetProperty(const std::string& name, const std::string& value,
+                   cmProperty::ScopeType scope);
 
+  void AppendProperty(const std::string& name, const std::string& value,
+                      cmProperty::ScopeType scope, bool asString=false);
   void AppendProperty(const std::string& name, const char* value,
                       cmProperty::ScopeType scope, bool asString=false);
 

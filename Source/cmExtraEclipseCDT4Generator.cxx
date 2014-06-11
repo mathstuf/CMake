@@ -1179,9 +1179,9 @@ std::string
 cmExtraEclipseCDT4Generator::GetPathBasename(const std::string& path)
 {
   std::string outputBasename = path;
-  while (outputBasename.size() > 0 &&
-         (outputBasename[outputBasename.size() - 1] == '/' ||
-          outputBasename[outputBasename.size() - 1] == '\\'))
+  while (!outputBasename.empty() &&
+         (*outputBasename.rbegin() == '/' ||
+          *outputBasename.rbegin() == '\\'))
     {
     outputBasename.resize(outputBasename.size() - 1);
     }

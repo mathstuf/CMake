@@ -989,7 +989,7 @@ cmMakefile::AddCustomCommandToOutput(const std::vector<std::string>& outputs,
 
   // Choose a source file on which to store the custom command.
   cmSourceFile* file = 0;
-  if(!main_dependency.empty())
+  if(!commandLines.empty() && !main_dependency.empty())
     {
     // The main dependency was specified.  Use it unless a different
     // custom command already used it.
@@ -1010,11 +1010,9 @@ cmMakefile::AddCustomCommandToOutput(const std::vector<std::string>& outputs,
         file = 0;
         }
       }
-    else
+    else if (!file)
       {
-      // The main dependency does not have a custom command or we are
-      // allowed to replace it.  Use it to store the command.
-      file = this->GetOrCreateSource(main_dependency);
+      file = this->CreateSource(main_dependency);
       }
     }
 
@@ -1041,8 +1039,11 @@ cmMakefile::AddCustomCommandToOutput(const std::vector<std::string>& outputs,
       }
 
     // Create a cmSourceFile for the rule file.
-    file = this->GetOrCreateSource(outName, true);
-    file->SetProperty("__CMAKE_RULE", "1");
+    if (!file)
+      {
+      file = this->CreateSource(outName, true);
+      file->SetProperty("__CMAKE_RULE", "1");
+      }
     }
 
   // Always create the output sources and mark them generated.
@@ -1055,16 +1056,16 @@ cmMakefile::AddCustomCommandToOutput(const std::vector<std::string>& outputs,
       }
     }
 
-  // Construct a complete list of dependencies.
-  std::vector<std::string> depends2(depends);
-  if(!main_dependency.empty())
-    {
-    depends2.push_back(main_dependency);
-    }
-
   // Attach the custom command to the file.
   if(file)
     {
+    // Construct a complete list of dependencies.
+    std::vector<std::string> depends2(depends);
+    if(!main_dependency.empty())
+      {
+      depends2.push_back(main_dependency);
+      }
+
     cmCustomCommand* cc =
       new cmCustomCommand(this, outputs, depends2, commandLines,
                           comment, workingDir);
@@ -1256,28 +1257,31 @@ cmMakefile::AddUtilityCommand(const std::string& utilityName,
     }
 
   // Store the custom command in the target.
-  std::string force = this->GetStartOutputDirectory();
-  force += cmake::GetCMakeFilesDirectory();
-  force += "/";
-  force += utilityName;
-  std::string no_main_dependency = "";
-  bool no_replace = false;
-  this->AddCustomCommandToOutput(force, depends,
-                                 no_main_dependency,
-                                 commandLines, comment,
-                                 workingDirectory, no_replace,
-                                 escapeOldStyle);
-  cmSourceFile* sf = target->AddSourceCMP0049(force);
+  if (!commandLines.empty() || !depends.empty())
+    {
+    std::string force = this->GetStartOutputDirectory();
+    force += cmake::GetCMakeFilesDirectory();
+    force += "/";
+    force += utilityName;
+    std::string no_main_dependency = "";
+    bool no_replace = false;
+    this->AddCustomCommandToOutput(force, depends,
+                                   no_main_dependency,
+                                   commandLines, comment,
+                                   workingDirectory, no_replace,
+                                   escapeOldStyle);
+    cmSourceFile* sf = target->AddSourceCMP0049(force);
 
-  // The output is not actually created so mark it symbolic.
-  if(sf)
-    {
-    sf->SetProperty("SYMBOLIC", "1");
-    }
-  else
-    {
-    cmSystemTools::Error("Could not get source file entry for ",
-                         force.c_str());
+    // The output is not actually created so mark it symbolic.
+    if(sf)
+      {
+      sf->SetProperty("SYMBOLIC", "1");
+      }
+    else
+      {
+      cmSystemTools::Error("Could not get source file entry for ",
+                          force.c_str());
+      }
     }
   return target;
 }
@@ -1324,10 +1328,10 @@ void cmMakefile::AddDefineFlag(const char* flag, std::string& dflags)
 }
 
 
-void cmMakefile::RemoveDefineFlag(const char* flag)
+void cmMakefile::RemoveDefineFlag(const std::string& flag)
 {
   // Check the length of the flag to remove.
-  std::string::size_type len = strlen(flag);
+  std::string::size_type len = flag.size();
   if(len < 1)
     {
     return;
@@ -1346,7 +1350,7 @@ void cmMakefile::RemoveDefineFlag(const char* flag)
   this->RemoveDefineFlag(flag, len, this->DefineFlags);
 }
 
-void cmMakefile::RemoveDefineFlag(const char* flag,
+void cmMakefile::RemoveDefineFlag(const std::string& flag,
                                   std::string::size_type len,
                                   std::string& dflags)
 {
@@ -1368,7 +1372,7 @@ void cmMakefile::RemoveDefineFlag(const char* flag,
     }
 }
 
-void cmMakefile::AddCompileOption(const char* option)
+void cmMakefile::AddCompileOption(const std::string& option)
 {
   this->AppendProperty("COMPILE_OPTIONS", option);
 }
@@ -1451,7 +1455,7 @@ bool cmMakefile::ParseDefineFlag(std::string const& def, bool remove)
         }
 
       // Store the new list.
-      this->SetProperty("COMPILE_DEFINITIONS", ndefs.c_str());
+      this->SetProperty("COMPILE_DEFINITIONS", ndefs);
       }
     }
   else
@@ -2069,8 +2073,6 @@ cmMakefile::AddNewTarget(cmTarget::TargetType type, const std::string& name)
 cmSourceFile*
 cmMakefile::LinearGetSourceFileWithOutput(const std::string& name) const
 {
-  std::string out;
-
   // look through all the source files that have custom commands
   // and see if the custom command has the passed source file as an output
   for(std::vector<cmSourceFile*>::const_iterator i =
@@ -2085,12 +2087,11 @@ cmMakefile::LinearGetSourceFileWithOutput(const std::string& name) const
       for(std::vector<std::string>::const_iterator o = outputs.begin();
           o != outputs.end(); ++o)
         {
-        out = *o;
-        std::string::size_type pos = out.rfind(name);
+        std::string const& out = *o;
         // If the output matches exactly
-        if (pos != out.npos &&
-            pos == out.size() - name.size() &&
-            (pos ==0 || out[pos-1] == '/'))
+        if (cmHasLiteralSuffixImpl(out, name.c_str(), name.size()) &&
+            (out.size() == name.size() ||
+             out[out.size() - name.size() - 1] == '/'))
           {
           return *i;
           }
@@ -2259,7 +2260,7 @@ void cmMakefile::ExpandVariablesCMP0019()
         << "as\n"
         << "  " << dirs << "\n";
       }
-    this->SetProperty("INCLUDE_DIRECTORIES", dirs.c_str());
+    this->SetProperty("INCLUDE_DIRECTORIES", dirs);
     }
 
   // Also for each target's INCLUDE_DIRECTORIES property:
@@ -2283,7 +2284,7 @@ void cmMakefile::ExpandVariablesCMP0019()
           << "as\n"
           << "  " << dirs << "\n";
         }
-      t.SetProperty("INCLUDE_DIRECTORIES", dirs.c_str());
+      t.SetProperty("INCLUDE_DIRECTORIES", dirs);
       }
     }
 
@@ -3451,6 +3452,19 @@ cmSourceFile* cmMakefile::GetSource(const std::string& sourceName) const
 }
 
 //----------------------------------------------------------------------------
+cmSourceFile* cmMakefile::CreateSource(const std::string& sourceName,
+                                       bool generated)
+{
+  cmSourceFile* sf = new cmSourceFile(this, sourceName);
+  if(generated)
+    {
+    sf->SetProperty("GENERATED", "1");
+    }
+  this->SourceFiles.push_back(sf);
+  return sf;
+}
+
+//----------------------------------------------------------------------------
 cmSourceFile* cmMakefile::GetOrCreateSource(const std::string& sourceName,
                                             bool generated)
 {
@@ -3460,13 +3474,7 @@ cmSourceFile* cmMakefile::GetOrCreateSource(const std::string& sourceName,
     }
   else
     {
-    cmSourceFile* sf = new cmSourceFile(this, sourceName);
-    if(generated)
-      {
-      sf->SetProperty("GENERATED", "1");
-      }
-    this->SourceFiles.push_back(sf);
-    return sf;
+    return this->CreateSource(sourceName, generated);
     }
 }
 
@@ -3989,23 +3997,46 @@ int cmMakefile::ConfigureFile(const char* infile, const char* outfile,
 
 void cmMakefile::SetProperty(const std::string& prop, const char* value)
 {
+  if ( !value )
+    {
+    if(prop == "LINK_DIRECTORIES")
+      {
+      this->SetLinkDirectories(std::vector<std::string>());
+      }
+    else if (prop == "INCLUDE_DIRECTORIES")
+      {
+      this->IncludeDirectoriesEntries.clear();
+      }
+    else if (prop == "COMPILE_OPTIONS")
+      {
+      this->CompileOptionsEntries.clear();
+      }
+    else if (prop == "COMPILE_DEFINITIONS")
+      {
+      this->CompileDefinitionsEntries.clear();
+      }
+    else
+      {
+      this->Properties.SetProperty(prop, 0, cmProperty::DIRECTORY);
+      }
+    return;
+    }
+  this->SetProperty(prop, std::string(value));
+}
+
+void cmMakefile::SetProperty(const std::string& prop,
+                             const std::string& value)
+{
   if ( prop == "LINK_DIRECTORIES" )
     {
     std::vector<std::string> varArgsExpanded;
-    if(value)
-      {
-      cmSystemTools::ExpandListArgument(value, varArgsExpanded);
-      }
+    cmSystemTools::ExpandListArgument(value, varArgsExpanded);
     this->SetLinkDirectories(varArgsExpanded);
     return;
     }
   if (prop == "INCLUDE_DIRECTORIES")
     {
     this->IncludeDirectoriesEntries.clear();
-      if (!value)
-        {
-        return;
-        }
     cmListFileBacktrace lfbt = this->GetBacktrace();
     this->IncludeDirectoriesEntries.push_back(
                                         cmValueWithOrigin(value, lfbt));
@@ -4014,10 +4045,6 @@ void cmMakefile::SetProperty(const std::string& prop, const char* value)
   if (prop == "COMPILE_OPTIONS")
     {
     this->CompileOptionsEntries.clear();
-      if (!value)
-        {
-        return;
-        }
     cmListFileBacktrace lfbt = this->GetBacktrace();
     this->CompileOptionsEntries.push_back(cmValueWithOrigin(value, lfbt));
     return;
@@ -4025,25 +4052,19 @@ void cmMakefile::SetProperty(const std::string& prop, const char* value)
   if (prop == "COMPILE_DEFINITIONS")
     {
     this->CompileDefinitionsEntries.clear();
-    if (!value)
-      {
-      return;
-      }
     cmListFileBacktrace lfbt = this->GetBacktrace();
     cmValueWithOrigin entry(value, lfbt);
     this->CompileDefinitionsEntries.push_back(entry);
     return;
     }
-
   if ( prop == "INCLUDE_REGULAR_EXPRESSION" )
     {
     this->SetIncludeRegularExpression(value);
     return;
     }
-
   if ( prop == "ADDITIONAL_MAKE_CLEAN_FILES" )
     {
-    // This property is not inherrited
+    // This property is not inherited
     if ( strcmp(this->GetCurrentDirectory(),
                 this->GetStartDirectory()) != 0 )
       {
@@ -4056,6 +4077,17 @@ void cmMakefile::SetProperty(const std::string& prop, const char* value)
 
 void cmMakefile::AppendProperty(const std::string& prop,
                                 const char* value,
+                                bool asString)
+{
+  if(!value)
+    {
+    return;
+    }
+  this->AppendProperty(prop, std::string(value), asString);
+}
+
+void cmMakefile::AppendProperty(const std::string& prop,
+                                const std::string& value,
                                 bool asString)
 {
   if (prop == "INCLUDE_DIRECTORIES")

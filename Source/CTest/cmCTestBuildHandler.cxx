@@ -436,7 +436,7 @@ int cmCTestBuildHandler::ProcessHandler()
         {
         srcdirrep = srcdir.c_str() + cc;
         srcdirrep = "/..." + srcdirrep;
-        srcdir = srcdir.substr(0, cc+1);
+        srcdir.resize(cc+1);
         break;
         }
       }
@@ -453,7 +453,7 @@ int cmCTestBuildHandler::ProcessHandler()
         {
         bindirrep = bindir.c_str() + cc;
         bindirrep = "/..." + bindirrep;
-        bindir = bindir.substr(0, cc+1);
+        bindir.resize(cc+1);
         break;
         }
       }

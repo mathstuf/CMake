@@ -183,7 +183,7 @@ void cmGlobalGenerator::ResolveLanguageCompiler(const std::string &lang,
       changeVars += cname;
       this->GetCMakeInstance()->SetProperty(
         "__CMAKE_DELETE_CACHE_CHANGE_VARS_",
-        changeVars.c_str());
+        changeVars);
       }
     }
   mf->AddCacheDefinition(langComp, path.c_str(),
@@ -297,7 +297,7 @@ void cmGlobalGenerator::FindMakeProgram(cmMakefile* mf)
     // untill no text file busy errors occur.
     std::string cmakexbuild =
       this->CMakeInstance->GetCacheManager()->GetCacheValue("CMAKE_COMMAND");
-    cmakexbuild = cmakexbuild.substr(0, cmakexbuild.length()-5);
+    cmakexbuild.resize(cmakexbuild.length()-5);
     cmakexbuild += "cmakexbuild";
 
     mf->AddCacheDefinition("CMAKE_MAKE_PROGRAM",
@@ -2140,7 +2140,7 @@ cmGlobalGenerator::NameResolvesToFramework(const std::string& libname) const
 //----------------------------------------------------------------------------
 inline std::string removeQuotes(const std::string& s)
 {
-  if(s[0] == '\"' && s[s.size()-1] == '\"')
+  if(s[0] == '\"' && *s.rbegin() == '\"')
     {
     return s.substr(1, s.size()-2);
     }
@@ -2971,6 +2971,7 @@ void cmGlobalGenerator::WriteSummary(cmTarget* target)
 // static
 std::string cmGlobalGenerator::EscapeJSON(const std::string& s) {
   std::string result;
+  result.reserve(s.size());
   for (std::string::size_type i = 0; i < s.size(); ++i) {
     if (s[i] == '"' || s[i] == '\\') {
       result += '\\';

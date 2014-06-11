@@ -22,7 +22,7 @@ bool cmAddCompileOptionsCommand
   for(std::vector<std::string>::const_iterator i = args.begin();
       i != args.end(); ++i)
     {
-    this->Makefile->AddCompileOption(i->c_str());
+    this->Makefile->AddCompileOption(*i);
     }
   return true;
 }

@@ -36,6 +36,13 @@ void cmPropertyMap::SetProperty(const std::string& name, const char *value,
     this->erase(name);
     return;
     }
+  this->SetProperty(name, std::string(value), scope);
+}
+
+void cmPropertyMap::SetProperty(const std::string& name,
+                                const std::string& value,
+                                cmProperty::ScopeType scope)
+{
   (void)scope;
 
   cmProperty *prop = this->GetOrCreateProperty(name);
@@ -47,6 +54,18 @@ void cmPropertyMap::AppendProperty(const std::string& name, const char* value,
 {
   // Skip if nothing to append.
   if(!value || !*value)
+    {
+    return;
+    }
+  this->AppendProperty(name, std::string(value), scope, asString);
+}
+
+void cmPropertyMap::AppendProperty(const std::string& name,
+                                   const std::string& value,
+                                   cmProperty::ScopeType scope, bool asString)
+{
+  // Skip if nothing to append.
+  if(value.empty())
     {
     return;
     }

@@ -228,7 +228,10 @@ public:
 
   ///! Set/Get a property of this target file
   void SetProperty(const std::string& prop, const char *value);
+  void SetProperty(const std::string& prop, const std::string& value);
   void AppendProperty(const std::string&  prop, const char* value,
+          bool asString=false);
+  void AppendProperty(const std::string&  prop, const std::string& value,
           bool asString=false);
   const char *GetProperty(const std::string& prop) const;
   const char *GetProperty(const std::string& prop, cmMakefile* context) const;

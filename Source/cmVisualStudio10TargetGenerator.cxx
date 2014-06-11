@@ -194,7 +194,7 @@ void cmVisualStudio10TargetGenerator::Generate()
     return;
     }
   // Tell the global generator the name of the project file
-  this->Target->SetProperty("GENERATOR_FILE_NAME",this->Name.c_str());
+  this->Target->SetProperty("GENERATOR_FILE_NAME",this->Name);
   this->Target->SetProperty("GENERATOR_FILE_NAME_EXT",
                             ".vcxproj");
   if(this->Target->GetType() <= cmTarget::OBJECT_LIBRARY)

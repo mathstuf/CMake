@@ -172,7 +172,7 @@ bool cmAddTestCommand::HandleNameMode(std::vector<std::string> const& args)
   test->SetCommand(command);
   if(!working_directory.empty())
     {
-    test->SetProperty("WORKING_DIRECTORY", working_directory.c_str());
+    test->SetProperty("WORKING_DIRECTORY", working_directory);
     }
   this->Makefile->AddTestGenerator(new cmTestGenerator(test, configurations));
 

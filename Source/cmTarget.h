@@ -286,7 +286,6 @@ public:
                                         cmTarget const* headTarget,
                                         std::vector<cmTarget*> &libs) const;
   void GetTransitiveTargetClosure(const std::string& config,
-                                        cmTarget const* headTarget,
                                         std::vector<cmTarget*> &libs) const;
 
   /** The link implementation specifies the direct library

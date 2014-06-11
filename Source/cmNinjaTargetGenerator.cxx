@@ -113,12 +113,23 @@ void cmNinjaTargetGenerator::AddFeatureFlags(std::string& flags,
                                              const std::string& lang)
 {
   // Add language-specific flags.
-  this->LocalGenerator->AddLanguageFlags(flags, lang, this->GetConfigName());
+  this->LocalGenerator->AppendFlags(flags,
+    "$" + this->LocalGenerator->FlagVariableForLanguage(lang));
 
   if(this->GetFeatureAsBool("INTERPROCEDURAL_OPTIMIZATION"))
     {
     this->LocalGenerator->AppendFeatureOptions(flags, lang, "IPO");
     }
+}
+
+static void EscapeTargetForVariable(std::string& name)
+{
+  // '.' is not allowed in variable names, so escape them.
+  cmSystemTools::ReplaceString(name, "dot", "dotdot");
+  cmSystemTools::ReplaceString(name, ".", "ldot");
+  // '+' is not allowed in variable names, so escape them.
+  cmSystemTools::ReplaceString(name, "plus", "plusplus");
+  cmSystemTools::ReplaceString(name, "+", "lplus");
 }
 
 std::string
@@ -127,21 +138,25 @@ cmNinjaTargetGenerator::OrderDependsTargetForTarget()
   return "cmake_order_depends_target_" + this->GetTargetName();
 }
 
-// TODO: Most of the code is picked up from
-// void cmMakefileExecutableTargetGenerator::WriteExecutableRule(bool relink),
-// void cmMakefileTargetGenerator::WriteTargetLanguageFlags()
-// Refactor it.
 std::string
-cmNinjaTargetGenerator::ComputeFlagsForObject(cmSourceFile const* source,
-                                              const std::string& language)
+cmNinjaTargetGenerator::FlagVariableForTarget(std::string const& lang)
 {
-  // TODO: Fortran support.
-  // // Fortran-specific flags computed for this target.
-  // if(*l == "Fortran")
-  //   {
-  //   this->AddFortranFlags(flags);
-  //   }
+  std::string targetName = this->GetTargetName();
+  EscapeTargetForVariable(targetName);
+  return "cmake_flags_target_" + targetName + "_lang_" + lang;
+}
 
+std::string
+cmNinjaTargetGenerator::DefineVariableForTarget(std::string const& lang)
+{
+  std::string targetName = this->GetTargetName();
+  EscapeTargetForVariable(targetName);
+  return "cmake_defines_target_" + targetName + "_lang_" + lang;
+}
+
+std::string
+cmNinjaTargetGenerator::ComputeFlagsForTarget(const std::string& language)
+{
   bool hasLangCached = this->LanguageFlags.count(language) != 0;
   std::string& languageFlags = this->LanguageFlags[language];
   if(!hasLangCached)
@@ -187,7 +202,47 @@ cmNinjaTargetGenerator::ComputeFlagsForObject(cmSourceFile const* source,
                                             this->GetConfigName());
     }
 
-  std::string flags = languageFlags;
+  return languageFlags;
+}
+
+std::string
+cmNinjaTargetGenerator::ComputeDefinesForTarget(const std::string& language)
+{
+  std::set<std::string> targetDefines;
+
+  // Add the export symbol definition for shared library objects.
+  if(const char* exportMacro = this->Target->GetExportMacro())
+    {
+    this->LocalGenerator->AppendDefines(targetDefines, exportMacro);
+    }
+
+  // Add preprocessor definitions for this target and configuration.
+  this->LocalGenerator->AddCompileDefinitions(targetDefines, this->Target,
+                                             this->GetConfigName());
+
+  std::string targetDefinesString;
+  this->LocalGenerator->JoinDefines(targetDefines, targetDefinesString,
+     language);
+
+  return targetDefinesString;
+}
+
+// TODO: Most of the code is picked up from
+// void cmMakefileExecutableTargetGenerator::WriteExecutableRule(bool relink),
+// void cmMakefileTargetGenerator::WriteTargetLanguageFlags()
+// Refactor it.
+std::string
+cmNinjaTargetGenerator::ComputeFlagsForObject(cmSourceFile const* source,
+                                              const std::string& language)
+{
+  // TODO: Fortran support.
+  // // Fortran-specific flags computed for this target.
+  // if(*l == "Fortran")
+  //   {
+  //   this->AddFortranFlags(flags);
+  //   }
+
+  std::string flags = "$" + this->FlagVariableForTarget(language);
 
   // Add source file specific flags.
   this->LocalGenerator->AppendFlags(flags,
@@ -221,15 +276,6 @@ ComputeDefines(cmSourceFile const* source, const std::string& language)
 {
   std::set<std::string> defines;
 
-  // Add the export symbol definition for shared library objects.
-  if(const char* exportMacro = this->Target->GetExportMacro())
-    {
-    this->LocalGenerator->AppendDefines(defines, exportMacro);
-    }
-
-  // Add preprocessor definitions for this target and configuration.
-  this->LocalGenerator->AddCompileDefinitions(defines, this->Target,
-                                             this->GetConfigName());
   this->LocalGenerator->AppendDefines
     (defines,
      source->GetProperty("COMPILE_DEFINITIONS"));
@@ -241,7 +287,7 @@ ComputeDefines(cmSourceFile const* source, const std::string& language)
      source->GetProperty(defPropName));
   }
 
-  std::string definesString;
+  std::string definesString = "$" + this->DefineVariableForTarget(language);
   this->LocalGenerator->JoinDefines(defines, definesString,
      language);
 
@@ -552,8 +598,32 @@ cmNinjaTargetGenerator
                                           cmNinjaDeps(),
                                           orderOnlyDeps);
 
+
+  std::set<std::string> langs;
   std::vector<cmSourceFile const*> objectSources;
   this->GeneratorTarget->GetObjectSources(objectSources, config);
+  for(std::vector<cmSourceFile const*>::const_iterator
+        si = objectSources.begin(); si != objectSources.end(); ++si)
+    {
+    langs.insert((*si)->GetLanguage());
+    }
+
+  cmNinjaVars targetVars;
+  for (std::set<std::string>::const_iterator l = langs.begin();
+       l != langs.end(); ++l)
+    {
+    targetVars[this->FlagVariableForTarget(*l)] =
+      this->ComputeFlagsForTarget(*l);
+    targetVars[this->DefineVariableForTarget(*l)] =
+      this->ComputeDefinesForTarget(*l);
+    }
+
+  for(cmNinjaVars::const_iterator i = targetVars.begin();
+      i != targetVars.end(); ++i)
+    cmGlobalNinjaGenerator::WriteVariable(this->GetBuildFileStream(),
+                                          i->first, i->second, "", 0);
+  this->GetBuildFileStream() << std::endl;
+
   for(std::vector<cmSourceFile const*>::const_iterator
         si = objectSources.begin(); si != objectSources.end(); ++si)
     {
@@ -632,53 +702,6 @@ cmNinjaTargetGenerator
   this->addPoolNinjaVariable("JOB_POOL_COMPILE", this->GetTarget(), vars);
 
   this->SetMsvcTargetPdbVariable(vars);
-
-  if(this->Makefile->IsOn("CMAKE_EXPORT_COMPILE_COMMANDS"))
-    {
-    cmLocalGenerator::RuleVariables compileObjectVars;
-    std::string lang = language;
-    compileObjectVars.Language = lang.c_str();
-
-    std::string escapedSourceFileName = sourceFileName;
-
-    if (!cmSystemTools::FileIsFullPath(sourceFileName.c_str()))
-      {
-      escapedSourceFileName = cmSystemTools::CollapseFullPath(
-        escapedSourceFileName.c_str(),
-        this->GetGlobalGenerator()->GetCMakeInstance()->
-          GetHomeOutputDirectory());
-      }
-
-    escapedSourceFileName =
-      this->LocalGenerator->ConvertToOutputFormat(
-        escapedSourceFileName, cmLocalGenerator::SHELL);
-
-    compileObjectVars.Source = escapedSourceFileName.c_str();
-    compileObjectVars.Object = objectFileName.c_str();
-    compileObjectVars.ObjectDir = objectDir.c_str();
-    compileObjectVars.ObjectFileDir = objectFileDir.c_str();
-    compileObjectVars.Flags = vars["FLAGS"].c_str();
-    compileObjectVars.Defines = vars["DEFINES"].c_str();
-
-    // Rule for compiling object file.
-    std::string compileCmdVar = "CMAKE_";
-    compileCmdVar += language;
-    compileCmdVar += "_COMPILE_OBJECT";
-    std::string compileCmd =
-      this->GetMakefile()->GetRequiredDefinition(compileCmdVar);
-    std::vector<std::string> compileCmds;
-    cmSystemTools::ExpandListArgument(compileCmd, compileCmds);
-
-    for (std::vector<std::string>::iterator i = compileCmds.begin();
-        i != compileCmds.end(); ++i)
-      this->GetLocalGenerator()->ExpandRuleVariables(*i, compileObjectVars);
-
-    std::string cmdLine =
-      this->GetLocalGenerator()->BuildCommandLine(compileCmds);
-
-    this->GetGlobalGenerator()->AddCXXCompileCommand(cmdLine,
-                                                     sourceFileName);
-    }
 
   this->GetGlobalGenerator()->WriteBuild(this->GetBuildFileStream(),
                                          comment,

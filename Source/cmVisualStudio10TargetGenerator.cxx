@@ -1623,7 +1623,7 @@ cmVisualStudio10TargetGenerator::ComputeLinkOptions(std::string const& config)
     }
   if(pos != libs.size()-1)
     {
-    libs = libs.substr(0, pos+1);
+    libs.resize(pos+1);
     }
   // Replace spaces in libs with ;
   cmSystemTools::ReplaceString(libs, " ", ";");

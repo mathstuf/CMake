@@ -157,13 +157,14 @@ static const struct NotNode : public cmGeneratorExpressionNode
                        const GeneratorExpressionContent *content,
                        cmGeneratorExpressionDAGChecker *) const
   {
-    if (*parameters.begin() != "0" && *parameters.begin() != "1")
+    std::string const& value = parameters[0];
+    if (value != "0" && value != "1")
       {
       reportError(context, content->GetOriginalExpression(),
             "$<NOT> parameter must resolve to exactly one '0' or '1' value.");
       return std::string();
       }
-    return *parameters.begin() == "0" ? "1" : "0";
+    return value == "0" ? "1" : "0";
   }
 } notNode;
 
@@ -195,7 +196,7 @@ static const struct StrEqualNode : public cmGeneratorExpressionNode
                        const GeneratorExpressionContent *,
                        cmGeneratorExpressionDAGChecker *) const
   {
-    return *parameters.begin() == parameters[1] ? "1" : "0";
+    return parameters[0] == parameters[1] ? "1" : "0";
   }
 } strEqualNode;
 

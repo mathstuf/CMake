@@ -172,7 +172,7 @@ bool cmFindBase::ParseArguments(std::vector<std::string> const& argsIn)
         this->VariableDocumentation += ", " + this->Names[j];
         }
       this->VariableDocumentation += " or "
-        + this->Names[this->Names.size() - 1] + " libraries be found";
+        + *this->Names.rbegin() + " libraries be found";
       }
     }
 
@@ -238,7 +238,7 @@ void cmFindBase::AddPrefixPaths(std::vector<std::string> const& in_paths,
       it != in_paths.end(); ++it)
     {
     std::string dir = *it;
-    if(!subdir.empty() && !dir.empty() && dir[dir.size()-1] != '/')
+    if(!subdir.empty() && !dir.empty() && *dir.rbegin() != '/')
       {
       dir += "/";
       }
@@ -409,7 +409,7 @@ void cmFindBase::AddPathSuffixes()
       // this will get incorrectly considered a network
       // path on windows and cause huge delays.
       std::string p = *i;
-      if(p.size() && p[p.size()-1] != '/')
+      if(p.size() && *p.rbegin() != '/')
         {
         p += std::string("/");
         }

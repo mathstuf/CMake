@@ -1711,22 +1711,20 @@ static bool whiteListedInterfaceProperty(const std::string& prop)
     {
     return true;
     }
-  static const char* builtIns[] = {
-    // ###: This must remain sorted. It is processed with a binary search.
-    "COMPATIBLE_INTERFACE_BOOL",
-    "COMPATIBLE_INTERFACE_NUMBER_MAX",
-    "COMPATIBLE_INTERFACE_NUMBER_MIN",
-    "COMPATIBLE_INTERFACE_STRING",
-    "EXPORT_NAME",
-    "IMPORTED",
-    "NAME",
-    "TYPE"
-  };
+  static FAST_SET<std::string> builtIns;
+  if (builtIns.empty())
+    {
+    builtIns.insert("COMPATIBLE_INTERFACE_BOOL");
+    builtIns.insert("COMPATIBLE_INTERFACE_NUMBER_MAX");
+    builtIns.insert("COMPATIBLE_INTERFACE_NUMBER_MIN");
+    builtIns.insert("COMPATIBLE_INTERFACE_STRING");
+    builtIns.insert("EXPORT_NAME");
+    builtIns.insert("IMPORTED");
+    builtIns.insert("NAME");
+    builtIns.insert("TYPE");
+    }
 
-  if (std::binary_search(cmArrayBegin(builtIns),
-                         cmArrayEnd(builtIns),
-                         prop.c_str(),
-                         cmStrCmp(prop)))
+  if (builtIns.count(prop))
     {
     return true;
     }
@@ -2011,7 +2009,7 @@ void cmTarget::InsertCompileDefinition(const cmValueWithOrigin &entry)
 static void processIncludeDirectories(cmTarget const* tgt,
       const std::vector<cmTargetInternals::TargetPropertyEntry*> &entries,
       std::vector<std::string> &includes,
-      std::set<std::string> &uniqueIncludes,
+      FAST_SET<std::string> &uniqueIncludes,
       cmGeneratorExpressionDAGChecker *dagChecker,
       const std::string& config, bool debugIncludes)
 {
@@ -2160,7 +2158,7 @@ std::vector<std::string>
 cmTarget::GetIncludeDirectories(const std::string& config) const
 {
   std::vector<std::string> includes;
-  std::set<std::string> uniqueIncludes;
+  FAST_SET<std::string> uniqueIncludes;
 
   cmGeneratorExpressionDAGChecker dagChecker(this->GetName(),
                                              "INCLUDE_DIRECTORIES", 0, 0);
@@ -3076,7 +3074,7 @@ const char *cmTarget::GetProperty(const std::string& prop,
                                    cmProperty::TARGET);
       }
     // Support "<CONFIG>_LOCATION".
-    if(cmHasLiteralSuffix(prop, "_LOCATION"))
+    else if(cmHasLiteralSuffix(prop, "_LOCATION"))
       {
       std::string configName(prop.c_str(), prop.size() - 9);
       if(configName != "IMPORTED")
@@ -3091,7 +3089,7 @@ const char *cmTarget::GetProperty(const std::string& prop,
         }
       }
     }
-  static std::set<std::string> specialProps;
+  static FAST_SET<std::string> specialProps;
 #define MAKE_STATIC_PROP(PROP) \
   static const std::string prop##PROP = #PROP
   MAKE_STATIC_PROP(LINK_LIBRARIES);
@@ -3317,7 +3315,7 @@ class cmTargetCollectLinkLanguages
 public:
   cmTargetCollectLinkLanguages(cmTarget const* target,
                                const std::string& config,
-                               std::set<std::string>& languages,
+                               FAST_SET<std::string>& languages,
                                cmTarget const* head):
     Config(config), Languages(languages), HeadTarget(head),
     Makefile(target->GetMakefile()), Target(target)
@@ -3387,7 +3385,7 @@ public:
     }
 private:
   std::string Config;
-  std::set<std::string>& Languages;
+  FAST_SET<std::string>& Languages;
   cmTarget const* HeadTarget;
   cmMakefile* Makefile;
   const cmTarget* Target;
@@ -3424,7 +3422,7 @@ class cmTargetSelectLinker
   cmTarget const* Target;
   cmMakefile* Makefile;
   cmGlobalGenerator* GG;
-  std::set<std::string> Preferred;
+  FAST_SET<std::string> Preferred;
 public:
   cmTargetSelectLinker(cmTarget const* target): Preference(0), Target(target)
     {
@@ -3456,7 +3454,7 @@ public:
       e << "Target " << this->Target->GetName()
         << " contains multiple languages with the highest linker preference"
         << " (" << this->Preference << "):\n";
-      for(std::set<std::string>::const_iterator
+      for(FAST_SET<std::string>::const_iterator
             li = this->Preferred.begin(); li != this->Preferred.end(); ++li)
         {
         e << "  " << *li << "\n";
@@ -3475,7 +3473,7 @@ void cmTarget::ComputeLinkClosure(const std::string& config,
                                   LinkClosure& lc) const
 {
   // Get languages built in this target.
-  std::set<std::string> languages;
+  FAST_SET<std::string> languages;
   LinkImplementation const* impl = this->GetLinkImplementation(config);
   for(std::vector<std::string>::const_iterator li = impl->Languages.begin();
       li != impl->Languages.end(); ++li)
@@ -3493,7 +3491,7 @@ void cmTarget::ComputeLinkClosure(const std::string& config,
     }
 
   // Store the transitive closure of languages.
-  for(std::set<std::string>::const_iterator li = languages.begin();
+  for(FAST_SET<std::string>::const_iterator li = languages.begin();
       li != languages.end(); ++li)
     {
     lc.Languages.push_back(*li);
@@ -3521,7 +3519,7 @@ void cmTarget::ComputeLinkClosure(const std::string& config,
       }
 
     // Now consider languages that propagate from linked targets.
-    for(std::set<std::string>::const_iterator sit = languages.begin();
+    for(FAST_SET<std::string>::const_iterator sit = languages.begin();
         sit != languages.end(); ++sit)
       {
       std::string propagates = "CMAKE_"+*sit+"_LINKER_PREFERENCE_PROPAGATES";
@@ -6275,7 +6273,7 @@ void cmTargetInternals::ComputeLinkInterface(cmTarget const* thisTarget,
       {
       // Shared libraries may have runtime implementation dependencies
       // on other shared libraries that are not in the interface.
-      std::set<std::string> emitted;
+      FAST_SET<std::string> emitted;
       for(std::vector<cmLinkItem>::const_iterator
           li = iface.Libraries.begin(); li != iface.Libraries.end(); ++li)
         {
@@ -6850,6 +6848,7 @@ void cmTarget::CheckPropertyCompatibility(cmComputeLinkInformation *info,
 
   if (!prop.empty())
     {
+    // Use a std::set to keep the error message sorted.
     std::set<std::string> props;
     std::set<std::string>::const_iterator i = emittedBools.find(prop);
     if (i != emittedBools.end())

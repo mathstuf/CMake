@@ -104,6 +104,33 @@ private:
   size_t Length;
 };
 
+struct CachedContent : public cmGeneratorExpressionEvaluator
+{
+  CachedContent(std::string const& value)
+    : Content(value)
+  {
+  }
+
+  std::string Evaluate(cmGeneratorExpressionContext *,
+                       cmGeneratorExpressionDAGChecker *) const
+  {
+    return this->Content;
+  }
+
+  Type GetType() const
+  {
+    return cmGeneratorExpressionEvaluator::Text;
+  }
+
+  size_t GetLength()
+  {
+    return Content.size();
+  }
+
+private:
+  const std::string Content;
+};
+
 //----------------------------------------------------------------------------
 struct GeneratorExpressionContent : public cmGeneratorExpressionEvaluator
 {
@@ -148,7 +175,8 @@ private:
 
 private:
   std::vector<cmGeneratorExpressionEvaluator*> IdentifierChildren;
-  std::vector<std::vector<cmGeneratorExpressionEvaluator*> > ParamChildren;
+  mutable std::vector<std::vector<cmGeneratorExpressionEvaluator*> >
+    ParamChildren;
   const char *StartContent;
   size_t ContentLength;
 };

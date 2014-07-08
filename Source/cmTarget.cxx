@@ -3213,7 +3213,7 @@ const char *cmTarget::GetProperty(const std::string& prop,
           li = files.begin(); li != files.end(); ++li)
         {
         if(cmHasLiteralPrefix(*li, "$<TARGET_OBJECTS:") &&
-            (*li)[li->size() - 1] == '>')
+            *li->rbegin() == '>')
           {
           std::string objLibName = li->substr(17, li->size()-18);
 
@@ -6606,7 +6606,7 @@ std::string cmTarget::CheckCMP0004(std::string const& item) const
   pos = lib.find_last_not_of(" \t\r\n");
   if(pos != lib.npos)
     {
-    lib = lib.substr(0, pos+1);
+    lib.resize(pos+1);
     }
   if(lib != item)
     {

@@ -745,7 +745,7 @@ bool cmCTest::UpdateCTestConfiguration()
       fileName = this->BinaryDir + "/DartConfiguration.tcl";
       }
     }
-  cmCTestLog(this, HANDLER_VERBOSE_OUTPUT, "UpdateCTestConfiguration  from :"
+  cmCTestLog(this, HANDLER_VERBOSE_OUTPUT, "UpdateCTestConfiguration from: "
              << fileName << "\n");
   if ( !cmSystemTools::FileExists(fileName.c_str()) )
     {
@@ -780,9 +780,9 @@ bool cmCTest::UpdateCTestConfiguration()
         {
         continue;
         }
-      while ( fin && (line[line.size()-1] == '\\') )
+      while ( fin && (*line.rbegin() == '\\') )
         {
-        line = line.substr(0, line.size()-1);
+        line.resize(line.size()-1);
         buffer[0] = 0;
         fin.getline(buffer, 1023);
         buffer[1023] = 0;
@@ -2681,9 +2681,9 @@ std::string cmCTest::GetShortPathToFile(const char* cfname)
     cmSystemTools::ConvertToUnixSlashes(*res);
 
     path = "./" + *res;
-    if ( path[path.size()-1] == '/' )
+    if ( *path.rbegin() == '/' )
       {
-      path = path.substr(0, path.size()-1);
+      path.resize(path.size()-1);
       }
     }
 

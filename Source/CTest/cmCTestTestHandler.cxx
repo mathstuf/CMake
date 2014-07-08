@@ -1376,8 +1376,8 @@ void cmCTestTestHandler
 {
   std::string tempPath;
 
-  if (filepath.size() &&
-      filepath[filepath.size()-1] != '/')
+  if (!filepath.empty() &&
+      *filepath.rbegin() != '/')
     {
     filepath += "/";
     }
@@ -2096,7 +2096,7 @@ bool cmCTestTestHandler::CleanTestOutput(std::string& output, size_t length)
       ++current;
       }
     }
-  output = output.substr(0, current - begin);
+  output.resize(current - begin);
 
   // Append truncation message.
   cmOStringStream msg;

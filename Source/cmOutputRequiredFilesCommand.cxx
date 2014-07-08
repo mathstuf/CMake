@@ -233,7 +233,7 @@ ListDependencies(cmDependInformation const *info,
         std::string::size_type pos = tmp.rfind('.');
         if(pos != std::string::npos && (tmp.substr(pos) != ".h"))
           {
-          tmp = tmp.substr(0, pos);
+          tmp.resize(pos);
           fprintf(fout,"%s\n",(*d)->FullPath.c_str());
           }
         }

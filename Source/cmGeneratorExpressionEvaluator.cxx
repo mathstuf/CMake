@@ -1958,6 +1958,7 @@ std::string GeneratorExpressionContent::EvaluateParameters(
         if (!context->HadContextSensitiveCondition)
           {
           // Cache context-insensitive results.
+          delete *it;
           *it = new CachedContent(value);
           }
         if (wasContextDependent)

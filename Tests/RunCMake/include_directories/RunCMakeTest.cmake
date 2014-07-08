@@ -9,7 +9,11 @@ run_cmake(RelativePathInInterface)
 run_cmake(ImportedTarget)
 run_cmake(RelativePathInGenex)
 run_cmake(CMP0021)
-run_cmake(install_config)
+if (CMAKE_CONFIGURATION_TYPES)
+  # $<CONFIGURATION> is only context-dependent in multi-config
+  # generators.
+  run_cmake(install_config)
+endif ()
 run_cmake(incomplete-genex)
 run_cmake(export-NOWARN)
 

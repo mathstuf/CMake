@@ -1933,10 +1933,10 @@ std::string GeneratorExpressionContent::EvaluateParameters(
 {
   const int numExpected = node->NumExpectedParameters();
   {
-  std::vector<std::vector<cmGeneratorExpressionEvaluator*> >::const_iterator
+  std::vector<std::vector<cmGeneratorExpressionEvaluator*> >::iterator
                                         pit = this->ParamChildren.begin();
   const
-  std::vector<std::vector<cmGeneratorExpressionEvaluator*> >::const_iterator
+  std::vector<std::vector<cmGeneratorExpressionEvaluator*> >::iterator
                                         pend = this->ParamChildren.end();
   const bool acceptsArbitraryContent
                                   = node->AcceptsArbitraryContentParameter();
@@ -1955,13 +1955,25 @@ std::string GeneratorExpressionContent::EvaluateParameters(
     else
       {
       std::string parameter;
-      std::vector<cmGeneratorExpressionEvaluator*>::const_iterator it =
+      std::vector<cmGeneratorExpressionEvaluator*>::iterator it =
                                                                 pit->begin();
-      const std::vector<cmGeneratorExpressionEvaluator*>::const_iterator end =
+      const std::vector<cmGeneratorExpressionEvaluator*>::iterator end =
                                                                 pit->end();
       for ( ; it != end; ++it)
         {
-        parameter += (*it)->Evaluate(context, dagChecker);
+        bool wasContextDependent = context->HadContextSensitiveCondition;
+        context->HadContextSensitiveCondition = false;
+        std::string const& value = (*it)->Evaluate(context, dagChecker);
+        parameter += value;
+        if (!context->HadContextSensitiveCondition)
+          {
+          // Cache context-insensitive results.
+          *it = new CachedContent(value);
+          }
+        if (wasContextDependent)
+          {
+          context->HadContextSensitiveCondition = true;
+          }
         if (context->HadError)
           {
           return std::string();

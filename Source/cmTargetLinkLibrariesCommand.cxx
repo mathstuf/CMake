@@ -480,13 +480,13 @@ cmTargetLinkLibrariesCommand::HandleLibrary(const std::string& lib,
       {
       prop = "LINK_INTERFACE_LIBRARIES_";
       prop += *i;
-      this->Target->AppendProperty(prop, lib.c_str());
+      this->Target->AppendProperty(prop, lib);
       }
     }
   if(llt == cmTarget::OPTIMIZED || llt == cmTarget::GENERAL)
     {
     // Put in the non-DEBUG configuration interfaces.
-    this->Target->AppendProperty("LINK_INTERFACE_LIBRARIES", lib.c_str());
+    this->Target->AppendProperty("LINK_INTERFACE_LIBRARIES", lib);
 
     // Make sure the DEBUG configuration interfaces exist so that the
     // general one will not be used as a fall-back.

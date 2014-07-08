@@ -24,7 +24,7 @@ bool cmRemoveDefinitionsCommand
   for(std::vector<std::string>::const_iterator i = args.begin();
       i != args.end(); ++i)
     {
-    this->Makefile->RemoveDefineFlag(i->c_str());
+    this->Makefile->RemoveDefineFlag(*i);
     }
   return true;
 }

@@ -1,4 +1,4 @@
-CMake Error at BadContext.cmake:4 \(file\):
+(CMake Error at BadContext.cmake:4 \(file\):
   Error evaluating generator expression:
 
     \$<TARGET_OBJECTS:NoTarget>
@@ -7,8 +7,8 @@ CMake Error at BadContext.cmake:4 \(file\):
   for consumption by CMake.  It is not suitable for writing out elsewhere.
 Call Stack \(most recent call first\):
   CMakeLists.txt:3 \(include\)
-+
-CMake Error at BadContext.cmake:5 \(file\):
+*)+
+(CMake Error at BadContext.cmake:5 \(file\):
   Error evaluating generator expression:
 
     \$<TARGET_OBJECTS:NoTarget>
@@ -17,7 +17,7 @@ CMake Error at BadContext.cmake:5 \(file\):
   for consumption by CMake.  It is not suitable for writing out elsewhere.
 Call Stack \(most recent call first\):
   CMakeLists.txt:3 \(include\)
-+
+*)+
 CMake Error:
   Error evaluating generator expression:
 

@@ -1,5 +1,4 @@
-/* Identify known platforms by name. If you add a platform here, also
-   document it in "Help/variable/CMAKE_LANG_PLATFORM_ID.rst". */
+/* Identify known platforms by name.  */
 #if defined(__linux) || defined(__linux__) || defined(linux)
 # define PLATFORM_ID "Linux"
 

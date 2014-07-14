@@ -117,7 +117,7 @@ than 4.2.0.
   Configuration name
 ``$<PLATFORM_ID>``
   The CMake-id of the platform.
-  See also the :variable:`CMAKE_<LANG>_PLATFORM_ID` variable.
+  See also the :variable:`CMAKE_SYSTEM_NAME` variable.
 ``$<C_COMPILER_ID>``
   The CMake-id of the C compiler used.
   See also the :variable:`CMAKE_<LANG>_COMPILER_ID` variable.

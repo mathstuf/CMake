@@ -943,7 +943,7 @@ void cmGlobalXCodeGenerator::SetCurrentLocalGenerator(cmLocalGenerator* gen)
   std::string outdir =
     cmSystemTools::CollapseFullPath(this->CurrentMakefile->
                                     GetCurrentOutputDirectory());
-  cmSystemTools::SplitPath(outdir.c_str(),
+  cmSystemTools::SplitPath(outdir,
                            this->CurrentOutputDirectoryComponents);
 
   // Select the current set of configuration types.

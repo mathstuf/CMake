@@ -1426,7 +1426,7 @@ bool cmFileCopier::Run(std::vector<std::string> const& args)
     {
     // Split the input file into its directory and name components.
     std::vector<std::string> fromPathComponents;
-    cmSystemTools::SplitPath(files[i].c_str(), fromPathComponents);
+    cmSystemTools::SplitPath(files[i], fromPathComponents);
     std::string fromName = *(fromPathComponents.end()-1);
     std::string fromDir = cmSystemTools::JoinPath(fromPathComponents.begin(),
                                                   fromPathComponents.end()-1);

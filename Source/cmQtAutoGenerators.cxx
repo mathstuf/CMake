@@ -1220,7 +1220,7 @@ void cmQtAutoGenerators::Init()
       {
       // Go up twice to get to the framework root
       std::vector<std::string> pathComponents;
-      cmsys::SystemTools::SplitPath(path.c_str(), pathComponents);
+      cmsys::SystemTools::SplitPath(path, pathComponents);
       std::string frameworkPath =cmsys::SystemTools::JoinPath(
                              pathComponents.begin(), pathComponents.end() - 2);
       frameworkPaths.insert(frameworkPath);

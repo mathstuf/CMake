@@ -1376,7 +1376,7 @@ cmMakefileTargetGenerator
     {
     *this->BuildFileStream << " " << lineContinue << "\n";
     *this->BuildFileStream  <<
-      this->LocalGenerator->ConvertToQuotedOutputPath(i->c_str(),
+      this->LocalGenerator->ConvertToQuotedOutputPath(*i,
                                                       useWatcomQuote);
     }
   *this->BuildFileStream << "\n";
@@ -1400,7 +1400,7 @@ cmMakefileTargetGenerator
       << " " << lineContinue << "\n"
       << this->Makefile->GetSafeDefinition("CMAKE_OBJECT_NAME");
     *this->BuildFileStream  <<
-      this->LocalGenerator->ConvertToQuotedOutputPath(i->c_str(),
+      this->LocalGenerator->ConvertToQuotedOutputPath(*i,
                                                       useWatcomQuote);
     }
   *this->BuildFileStream << "\n" << "\n";

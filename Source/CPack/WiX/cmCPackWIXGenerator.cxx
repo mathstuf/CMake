@@ -986,7 +986,7 @@ std::string cmCPackWIXGenerator::PathToId(std::string const& path)
 std::string cmCPackWIXGenerator::CreateNewIdForPath(std::string const& path)
 {
   std::vector<std::string> components;
-  cmSystemTools::SplitPath(path.c_str(), components, false);
+  cmSystemTools::SplitPath(path, components, false);
 
   size_t replacementCount = 0;
 

@@ -221,19 +221,19 @@ void cmLocalGenerator::SetupPathConversions()
   std::string outdir;
   outdir =
     cmSystemTools::CollapseFullPath(this->Makefile->GetHomeDirectory());
-  cmSystemTools::SplitPath(outdir.c_str(), this->HomeDirectoryComponents);
+  cmSystemTools::SplitPath(outdir, this->HomeDirectoryComponents);
   outdir =
     cmSystemTools::CollapseFullPath(this->Makefile->GetStartDirectory());
-  cmSystemTools::SplitPath(outdir.c_str(), this->StartDirectoryComponents);
+  cmSystemTools::SplitPath(outdir, this->StartDirectoryComponents);
 
   outdir = cmSystemTools::CollapseFullPath
     (this->Makefile->GetHomeOutputDirectory());
-  cmSystemTools::SplitPath(outdir.c_str(),
+  cmSystemTools::SplitPath(outdir,
                            this->HomeOutputDirectoryComponents);
 
   outdir = cmSystemTools::CollapseFullPath
     (this->Makefile->GetStartOutputDirectory());
-  cmSystemTools::SplitPath(outdir.c_str(),
+  cmSystemTools::SplitPath(outdir,
                            this->StartOutputDirectoryComponents);
 }
 
@@ -2811,7 +2811,7 @@ std::string cmLocalGenerator::Convert(RelativeRoot remote,
   if(!local.empty() && (!optional || this->UseRelativePaths))
     {
     std::vector<std::string> components;
-    cmSystemTools::SplitPath(local.c_str(), components);
+    cmSystemTools::SplitPath(local, components);
     std::string result = this->ConvertToRelativePath(components, remotePath);
     return this->ConvertToOutputFormat(result, output);
     }
@@ -2937,7 +2937,7 @@ cmLocalGenerator::ConvertToRelativePath(const std::vector<std::string>& local,
   // Identify the longest shared path component between the remote
   // path and the local path.
   std::vector<std::string> remote;
-  cmSystemTools::SplitPath(in_remote.c_str(), remote);
+  cmSystemTools::SplitPath(in_remote, remote);
   unsigned int common=0;
   while(common < remote.size() &&
         common < local.size() &&

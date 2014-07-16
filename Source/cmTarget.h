@@ -709,7 +709,7 @@ private:
                           const char* default_value);
 
   // Returns ARCHIVE, LIBRARY, or RUNTIME based on platform and type.
-  const char* GetOutputTargetType(bool implib) const;
+  const std::string& GetOutputTargetType(bool implib) const;
 
   // Get the target base name.
   std::string GetOutputName(const std::string& config, bool implib) const;

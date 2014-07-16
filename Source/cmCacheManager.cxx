@@ -378,7 +378,7 @@ bool cmCacheManager::ReadPropertyEntry(std::string const& entryKey,
        strcmp(end-plen+1, *p) == 0)
       {
       std::string key = entryKey.substr(0, entryKey.size() - plen);
-      cmCacheManager::CacheIterator it = this->GetCacheIterator(key.c_str());
+      cmCacheManager::CacheIterator it = this->GetCacheIterator(key);
       if(it.IsAtEnd())
         {
         // Create an entry and store the property.
@@ -669,6 +669,12 @@ cmCacheManager::CacheEntry *cmCacheManager::GetCacheEntry(
     return &i->second;
     }
   return 0;
+}
+
+cmCacheManager::CacheIterator cmCacheManager::GetCacheIterator(
+  const std::string& key)
+{
+  return CacheIterator(*this, key);
 }
 
 cmCacheManager::CacheIterator cmCacheManager::GetCacheIterator(

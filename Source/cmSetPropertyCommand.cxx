@@ -452,7 +452,7 @@ bool cmSetPropertyCommand::HandleCacheMode()
     cmMakefile* mf = this->GetMakefile();
     cmake* cm = mf->GetCMakeInstance();
     cmCacheManager::CacheIterator it =
-      cm->GetCacheManager()->GetCacheIterator(ni->c_str());
+      cm->GetCacheManager()->GetCacheIterator(*ni);
     if(!it.IsAtEnd())
       {
       if(!this->HandleCacheEntry(it))

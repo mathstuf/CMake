@@ -627,9 +627,12 @@ bool cmTarget::HasImportLibrary() const
 //----------------------------------------------------------------------------
 bool cmTarget::IsFrameworkOnApple() const
 {
+  static const std::string varAPPLE = "APPLE";
+  static const std::string propFRAMEWORK = "FRAMEWORK";
+
   return (this->GetType() == cmTarget::SHARED_LIBRARY &&
-          this->Makefile->IsOn("APPLE") &&
-          this->GetPropertyAsBool("FRAMEWORK"));
+          this->Makefile->IsOn(varAPPLE) &&
+          this->GetPropertyAsBool(propFRAMEWORK));
 }
 
 //----------------------------------------------------------------------------
@@ -4124,8 +4127,8 @@ void cmTarget::GetFullNameInternal(const std::string& config,
 
   // Return an empty name for the import library if this platform
   // does not support import libraries.
-  if(implib &&
-     !this->Makefile->GetDefinition("CMAKE_IMPORT_LIBRARY_SUFFIX"))
+  static const std::string varIMPORT_SUFFIX = "CMAKE_IMPORT_LIBRARY_SUFFIX";
+  if(implib && !this->Makefile->GetDefinition(varIMPORT_SUFFIX))
     {
     outPrefix = "";
     outBase = "";
@@ -4143,12 +4146,16 @@ void cmTarget::GetFullNameInternal(const std::string& config,
     }
 
   // Compute the full name for main target types.
+  static const std::string propIMPORT_PREFIX = "IMPORT_PREFIX";
+  static const std::string propPREFIX = "PREFIX";
+  static const std::string propIMPORT_SUFFIX = "IMPORT_SUFFIX";
+  static const std::string propSUFFIX = "SUFFIX";
   const char* targetPrefix = (implib
-                              ? this->GetProperty("IMPORT_PREFIX")
-                              : this->GetProperty("PREFIX"));
+                              ? this->GetProperty(propIMPORT_PREFIX)
+                              : this->GetProperty(propPREFIX));
   const char* targetSuffix = (implib
-                              ? this->GetProperty("IMPORT_SUFFIX")
-                              : this->GetProperty("SUFFIX"));
+                              ? this->GetProperty(propIMPORT_SUFFIX)
+                              : this->GetProperty(propSUFFIX));
   const char* configPostfix = 0;
   if(!config.empty())
     {
@@ -4162,32 +4169,34 @@ void cmTarget::GetFullNameInternal(const std::string& config,
       configPostfix = 0;
       }
     }
-  const char* prefixVar = this->GetPrefixVariableInternal(implib);
-  const char* suffixVar = this->GetSuffixVariableInternal(implib);
+  const char* cPrefixVar = this->GetPrefixVariableInternal(implib);
+  const char* cSuffixVar = this->GetSuffixVariableInternal(implib);
+  const std::string prefixVar = cPrefixVar ? cPrefixVar : "";
+  const std::string suffixVar = cSuffixVar ? cSuffixVar : "";
 
   // Check for language-specific default prefix and suffix.
   std::string ll = this->GetLinkerLanguage(config);
   if(!ll.empty())
     {
-    if(!targetSuffix && suffixVar && *suffixVar)
+    if(!targetSuffix && !suffixVar.empty())
       {
-      std::string langSuff = suffixVar + std::string("_") + ll;
+      std::string langSuff = suffixVar + "_" + ll;
       targetSuffix = this->Makefile->GetDefinition(langSuff);
       }
-    if(!targetPrefix && prefixVar && *prefixVar)
+    if(!targetPrefix && !prefixVar.empty())
       {
-      std::string langPrefix = prefixVar + std::string("_") + ll;
+      std::string langPrefix = prefixVar + "_" + ll;
       targetPrefix = this->Makefile->GetDefinition(langPrefix);
       }
     }
 
   // if there is no prefix on the target use the cmake definition
-  if(!targetPrefix && prefixVar)
+  if(!targetPrefix && cPrefixVar)
     {
     targetPrefix = this->Makefile->GetSafeDefinition(prefixVar);
     }
   // if there is no suffix on the target use the cmake definition
-  if(!targetSuffix && suffixVar)
+  if(!targetSuffix && cSuffixVar)
     {
     targetSuffix = this->Makefile->GetSafeDefinition(suffixVar);
     }
@@ -4602,8 +4611,13 @@ std::string cmTarget::GetInstallNameDirForInstallTree() const
 }
 
 //----------------------------------------------------------------------------
-const char* cmTarget::GetOutputTargetType(bool implib) const
+std::string const& cmTarget::GetOutputTargetType(bool implib) const
 {
+  static const std::string typeARCHIVE = "ARCHIVE";
+  static const std::string typeRUNTIME = "RUNTIME";
+  static const std::string typeLIBRARY = "LIBRARY";
+  static const std::string typeNONE = "";
+
   switch(this->GetType())
     {
     case cmTarget::SHARED_LIBRARY:
@@ -4612,49 +4626,49 @@ const char* cmTarget::GetOutputTargetType(bool implib) const
         if(implib)
           {
           // A DLL import library is treated as an archive target.
-          return "ARCHIVE";
+          return typeARCHIVE;
           }
         else
           {
           // A DLL shared library is treated as a runtime target.
-          return "RUNTIME";
+          return typeRUNTIME;
           }
         }
       else
         {
         // For non-DLL platforms shared libraries are treated as
         // library targets.
-        return "LIBRARY";
+        return typeLIBRARY;
         }
     case cmTarget::STATIC_LIBRARY:
       // Static libraries are always treated as archive targets.
-      return "ARCHIVE";
+      return typeARCHIVE;
     case cmTarget::MODULE_LIBRARY:
       if(implib)
         {
         // Module libraries are always treated as library targets.
-        return "ARCHIVE";
+        return typeARCHIVE;
         }
       else
         {
         // Module import libraries are treated as archive targets.
-        return "LIBRARY";
+        return typeLIBRARY;
         }
     case cmTarget::EXECUTABLE:
       if(implib)
         {
         // Executable import libraries are treated as archive targets.
-        return "ARCHIVE";
+        return typeARCHIVE;
         }
       else
         {
         // Executables are always treated as runtime targets.
-        return "RUNTIME";
+        return typeRUNTIME;
         }
     default:
       break;
     }
-  return "";
+  return typeNONE;
 }
 
 //----------------------------------------------------------------------------
@@ -4666,7 +4680,7 @@ bool cmTarget::ComputeOutputDir(const std::string& config,
 
   // Look for a target property defining the target output directory
   // based on the target type.
-  std::string targetTypeName = this->GetOutputTargetType(implib);
+  std::string const& targetTypeName = this->GetOutputTargetType(implib);
   const char* propertyName = 0;
   std::string propertyNameStr = targetTypeName;
   if(!propertyNameStr.empty())
@@ -4813,7 +4827,7 @@ std::string cmTarget::GetOutputName(const std::string& config,
                                     bool implib) const
 {
   std::vector<std::string> props;
-  std::string type = this->GetOutputTargetType(implib);
+  std::string const& type = this->GetOutputTargetType(implib);
   std::string configUpper = cmSystemTools::UpperCase(config);
   if(!type.empty() && !configUpper.empty())
     {

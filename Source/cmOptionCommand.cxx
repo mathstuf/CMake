@@ -47,7 +47,7 @@ bool cmOptionCommand
   // Now check and see if the value has been stored in the cache
   // already, if so use that value and don't look for the program
   cmCacheManager::CacheIterator it =
-    this->Makefile->GetCacheManager()->GetCacheIterator(args[0].c_str());
+    this->Makefile->GetCacheManager()->GetCacheIterator(args[0]);
   if(!it.IsAtEnd())
     {
     if ( it.GetType() != cmCacheManager::UNINITIALIZED )

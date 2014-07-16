@@ -42,7 +42,7 @@ bool cmVariableRequiresCommand
       notSet += args[i];
       notSet += "\n";
       cmCacheManager::CacheIterator it =
-        this->Makefile->GetCacheManager()->GetCacheIterator(args[i].c_str());
+        this->Makefile->GetCacheManager()->GetCacheIterator(args[i]);
       if(!it.IsAtEnd() && it.GetPropertyAsBool("ADVANCED"))
         {
         hasAdvanced = true;

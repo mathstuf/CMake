@@ -463,6 +463,11 @@ void getPropertyContents(cmTarget const* tgt, const std::string& prop,
     }
 }
 
+static const std::string propBOOL = "COMPATIBLE_INTERFACE_BOOL";
+static const std::string propSTRING = "COMPATIBLE_INTERFACE_STRING";
+static const std::string propNUMBER_MIN = "COMPATIBLE_INTERFACE_NUMBER_MIN";
+static const std::string propNUMBER_MAX = "COMPATIBLE_INTERFACE_NUMBER_MAX";
+
 //----------------------------------------------------------------------------
 void getCompatibleInterfaceProperties(cmTarget *target,
                                       std::set<std::string> &ifaceProperties,
@@ -491,16 +496,16 @@ void getCompatibleInterfaceProperties(cmTarget *target,
       continue;
       }
     getPropertyContents(li->Target,
-                        "COMPATIBLE_INTERFACE_BOOL",
+                        propBOOL,
                         ifaceProperties);
     getPropertyContents(li->Target,
-                        "COMPATIBLE_INTERFACE_STRING",
+                        propSTRING,
                         ifaceProperties);
     getPropertyContents(li->Target,
-                        "COMPATIBLE_INTERFACE_NUMBER_MIN",
+                        propNUMBER_MIN,
                         ifaceProperties);
     getPropertyContents(li->Target,
-                        "COMPATIBLE_INTERFACE_NUMBER_MAX",
+                        propNUMBER_MAX,
                         ifaceProperties);
     }
 }
@@ -510,22 +515,22 @@ void cmExportFileGenerator::PopulateCompatibleInterfaceProperties(
                                 cmTarget *target,
                                 ImportPropertyMap &properties)
 {
-  this->PopulateInterfaceProperty("COMPATIBLE_INTERFACE_BOOL",
+  this->PopulateInterfaceProperty(propBOOL,
                                 target, properties);
-  this->PopulateInterfaceProperty("COMPATIBLE_INTERFACE_STRING",
+  this->PopulateInterfaceProperty(propSTRING,
                                 target, properties);
-  this->PopulateInterfaceProperty("COMPATIBLE_INTERFACE_NUMBER_MIN",
+  this->PopulateInterfaceProperty(propNUMBER_MIN,
                                 target, properties);
-  this->PopulateInterfaceProperty("COMPATIBLE_INTERFACE_NUMBER_MAX",
+  this->PopulateInterfaceProperty(propNUMBER_MAX,
                                 target, properties);
 
   std::set<std::string> ifaceProperties;
 
-  getPropertyContents(target, "COMPATIBLE_INTERFACE_BOOL", ifaceProperties);
-  getPropertyContents(target, "COMPATIBLE_INTERFACE_STRING", ifaceProperties);
-  getPropertyContents(target, "COMPATIBLE_INTERFACE_NUMBER_MIN",
+  getPropertyContents(target, propBOOL, ifaceProperties);
+  getPropertyContents(target, propSTRING, ifaceProperties);
+  getPropertyContents(target, propNUMBER_MIN,
                       ifaceProperties);
-  getPropertyContents(target, "COMPATIBLE_INTERFACE_NUMBER_MAX",
+  getPropertyContents(target, propNUMBER_MAX,
                       ifaceProperties);
 
   if (target->GetType() != cmTarget::INTERFACE_LIBRARY)

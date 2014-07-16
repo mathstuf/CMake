@@ -802,7 +802,7 @@ void cmCursesMainForm::FillCacheManagerFromUI()
     {
     cmCacheManager::CacheIterator it =
       this->CMakeInstance->GetCacheManager()->GetCacheIterator(
-        (*this->Entries)[i]->Key.c_str());
+        (*this->Entries)[i]->Key);
     if (!it.IsAtEnd())
       {
       std::string oldValue = it.GetValue();

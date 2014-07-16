@@ -2885,7 +2885,8 @@ void cmLocalGenerator::ConfigureRelativePaths()
 }
 
 //----------------------------------------------------------------------------
-static bool cmLocalGeneratorNotAbove(const char* a, const char* b)
+static bool cmLocalGeneratorNotAbove(const std::string& a,
+                                     const std::string& b)
 {
   return (cmSystemTools::ComparePath(a, b) ||
           cmSystemTools::IsSubDirectory(a, b));
@@ -2921,14 +2922,14 @@ cmLocalGenerator::ConvertToRelativePath(const std::vector<std::string>& local,
     // Skip conversion if the path and local are not both in the source
     // or both in the binary tree.
     std::string local_path = cmSystemTools::JoinPath(local);
-    if(!((cmLocalGeneratorNotAbove(local_path.c_str(),
-                                   this->RelativePathTopBinary.c_str()) &&
-          cmLocalGeneratorNotAbove(in_remote.c_str(),
-                                   this->RelativePathTopBinary.c_str())) ||
-         (cmLocalGeneratorNotAbove(local_path.c_str(),
-                                   this->RelativePathTopSource.c_str()) &&
-          cmLocalGeneratorNotAbove(in_remote.c_str(),
-                                   this->RelativePathTopSource.c_str()))))
+    if(!((cmLocalGeneratorNotAbove(local_path,
+                                   this->RelativePathTopBinary) &&
+          cmLocalGeneratorNotAbove(in_remote,
+                                   this->RelativePathTopBinary)) ||
+         (cmLocalGeneratorNotAbove(local_path,
+                                   this->RelativePathTopSource) &&
+          cmLocalGeneratorNotAbove(in_remote,
+                                   this->RelativePathTopSource))))
       {
       return in_remote;
       }

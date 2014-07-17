@@ -146,18 +146,18 @@ int cmCPackOSXX11Generator::PackageFiles()
   appScriptName += this->GetOption("CPACK_PACKAGE_FILE_NAME");
 
   mode_t mode;
-  if (cmsys::SystemTools::GetPermissions(runTimeScript.c_str(), mode))
+  if (cmsys::SystemTools::GetPermissions(runTimeScript, mode))
     {
     mode |= (S_IXUSR | S_IXGRP | S_IXOTH);
-    cmsys::SystemTools::SetPermissions(runTimeScript.c_str(), mode);
+    cmsys::SystemTools::SetPermissions(runTimeScript, mode);
     cmCPackLogger(cmCPackLog::LOG_OUTPUT, "Setting: " << runTimeScript
       << " to permission: " << mode << std::endl);
     }
 
-  if (cmsys::SystemTools::GetPermissions(appScriptName.c_str(), mode))
+  if (cmsys::SystemTools::GetPermissions(appScriptName, mode))
     {
     mode |= (S_IXUSR | S_IXGRP | S_IXOTH);
-    cmsys::SystemTools::SetPermissions(appScriptName.c_str(), mode);
+    cmsys::SystemTools::SetPermissions(appScriptName, mode);
     cmCPackLogger(cmCPackLog::LOG_OUTPUT,  "Setting: " << appScriptName
       << " to permission: " << mode << std::endl);
     }
@@ -168,11 +168,11 @@ int cmCPackOSXX11Generator::PackageFiles()
   cmOStringStream dmgCmd;
   dmgCmd << "\"" << this->GetOption("CPACK_INSTALLER_PROGRAM_DISK_IMAGE")
          << "\" create -ov -format UDZO -srcfolder \""
-         << diskImageDirectory.c_str()
+         << diskImageDirectory
          << "\" \"" << packageFileNames[0] << "\"";
   cmCPackLogger(cmCPackLog::LOG_VERBOSE,
                 "Compress disk image using command: "
-                << dmgCmd.str().c_str() << std::endl);
+                << dmgCmd.str() << std::endl);
   // since we get random dashboard failures with this one
   // try running it more than once
   int retVal = 1;

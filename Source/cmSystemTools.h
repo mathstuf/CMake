@@ -317,7 +317,7 @@ public:
 
   /** Split a string on its newlines into multiple lines.  Returns
       false only if the last line stored had no newline.  */
-  static bool Split(const char* s, std::vector<std::string>& l);
+  static bool Split(const std::string& s, std::vector<std::string>& l);
   static void SetForceUnixPaths(bool v)
     {
       s_ForceUnixPaths = v;
@@ -328,7 +328,7 @@ public:
     }
 
   // ConvertToOutputPath use s_ForceUnixPaths
-  static std::string ConvertToOutputPath(const char* path);
+  static std::string ConvertToOutputPath(const std::string& path);
   static void ConvertToOutputSlashes(std::string& path);
 
   // ConvertToRunCommandPath does not use s_ForceUnixPaths and should

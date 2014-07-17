@@ -850,7 +850,7 @@ void cmCPackWIXGenerator::AddDirectoryAndFileDefinitons(
 
     std::string id = PathToId(relativePath);
 
-    if(cmSystemTools::FileIsDirectory(fullPath.c_str()))
+    if(cmSystemTools::FileIsDirectory(fullPath))
       {
       std::string subDirectoryId = std::string("CM_D") + id;
 

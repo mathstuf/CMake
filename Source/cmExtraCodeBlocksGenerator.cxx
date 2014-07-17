@@ -477,7 +477,7 @@ void cmExtraCodeBlocksGenerator
         break;
         }
 
-      if(cmSystemTools::FileExists(hname.c_str()))
+      if(cmSystemTools::FileExists(hname))
         {
         otherFiles.insert(hname);
         break;

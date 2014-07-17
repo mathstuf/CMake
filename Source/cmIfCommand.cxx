@@ -500,28 +500,28 @@ namespace
       if (*arg == "EXISTS" && argP1  != newArgs.end())
         {
         HandlePredicate(
-          cmSystemTools::FileExists((argP1)->c_str()),
+          cmSystemTools::FileExists(*argP1),
           reducible, arg, newArgs, argP1, argP2);
         }
       // does a directory with this name exist
       if (*arg == "IS_DIRECTORY" && argP1  != newArgs.end())
         {
         HandlePredicate(
-          cmSystemTools::FileIsDirectory((argP1)->c_str()),
+          cmSystemTools::FileIsDirectory(*argP1),
           reducible, arg, newArgs, argP1, argP2);
         }
       // does a symlink with this name exist
       if (*arg == "IS_SYMLINK" && argP1  != newArgs.end())
         {
         HandlePredicate(
-          cmSystemTools::FileIsSymlink((argP1)->c_str()),
+          cmSystemTools::FileIsSymlink(*argP1),
           reducible, arg, newArgs, argP1, argP2);
         }
       // is the given path an absolute path ?
       if (*arg == "IS_ABSOLUTE" && argP1  != newArgs.end())
         {
         HandlePredicate(
-          cmSystemTools::FileIsFullPath((argP1)->c_str()),
+          cmSystemTools::FileIsFullPath(*argP1),
           reducible, arg, newArgs, argP1, argP2);
         }
       // does a command exist

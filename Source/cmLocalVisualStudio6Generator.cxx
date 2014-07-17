@@ -173,7 +173,7 @@ void cmLocalVisualStudio6Generator::OutputDSPFile()
         std::string dir = this->Makefile->GetStartOutputDirectory();
         dir += "/";
         dir += l->first.substr(0, pos);
-        if(!cmSystemTools::MakeDirectory(dir.c_str()))
+        if(!cmSystemTools::MakeDirectory(dir))
           {
           cmSystemTools::Error("Error creating directory: ", dir.c_str());
           }
@@ -227,7 +227,7 @@ void cmLocalVisualStudio6Generator::AddDSPBuildRule(cmTarget& tgt)
   std::string makefileIn = this->Makefile->GetStartDirectory();
   makefileIn += "/";
   makefileIn += "CMakeLists.txt";
-  if(!cmSystemTools::FileExists(makefileIn.c_str()))
+  if(!cmSystemTools::FileExists(makefileIn))
     {
     return;
     }
@@ -341,12 +341,12 @@ void cmLocalVisualStudio6Generator::WriteDSPFile(std::ostream& fout,
     // must generate it
     if ((*i)->GetPropertyAsBool("__CMAKE_RULE"))
       {
-      if(!cmSystemTools::FileExists(source.c_str()))
+      if(!cmSystemTools::FileExists(source))
         {
         cmSystemTools::ReplaceString(source, "$(IntDir)/", "");
         // Make sure the path exists for the file
         std::string path = cmSystemTools::GetFilenamePath(source);
-        cmSystemTools::MakeDirectory(path.c_str());
+        cmSystemTools::MakeDirectory(path);
 #if defined(_WIN32) || defined(__CYGWIN__)
         cmsys::ofstream sourceFout(source.c_str(),
                            std::ios::binary | std::ios::out

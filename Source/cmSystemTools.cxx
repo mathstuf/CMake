@@ -853,7 +853,7 @@ bool cmSystemTools::DoesFileExistWithExtensions(
     hname = name;
     hname += ".";
     hname += *ext;
-    if(cmSystemTools::FileExists(hname.c_str()))
+    if(cmSystemTools::FileExists(hname))
       {
       return true;
       }
@@ -872,7 +872,7 @@ std::string cmSystemTools::FileExistsInParentDirectories(const char* fname,
   while(dir != prevDir)
     {
     std::string path = dir + "/" + file;
-    if ( cmSystemTools::FileExists(path.c_str()) )
+    if ( cmSystemTools::FileExists(path) )
       {
       return path;
       }
@@ -881,7 +881,7 @@ std::string cmSystemTools::FileExistsInParentDirectories(const char* fname,
       break;
       }
     prevDir = dir;
-    dir = cmSystemTools::GetParentDirectory(dir.c_str());
+    dir = cmSystemTools::GetParentDirectory(dir);
     }
   return "";
 }
@@ -1054,7 +1054,7 @@ void cmSystemTools::GlobDirs(const std::string& path,
         std::string fname = startPath;
         fname +="/";
         fname += d.GetFile(i);
-        if(cmSystemTools::FileIsDirectory(fname.c_str()))
+        if(cmSystemTools::FileIsDirectory(fname))
           {
           fname += finishPath;
           cmSystemTools::GlobDirs(fname, files);
@@ -1091,6 +1091,7 @@ void cmSystemTools::ExpandListArgument(const std::string& arg,
     return;
     }
   std::string newArg;
+  newArg.reserve(arg.size());
   const char *last = arg.c_str();
   // Break the string at non-escaped semicolons not nested in [].
   int squareNesting = 0;
@@ -1137,6 +1138,7 @@ void cmSystemTools::ExpandListArgument(const std::string& arg,
         } break;
       default:
         {
+        // TODO: strcspn?
         // Just append this character.
         } break;
       }
@@ -1182,11 +1184,11 @@ bool cmSystemTools::SimpleGlob(const std::string& glob,
           }
         fname += d.GetFile(i);
         std::string sfname = d.GetFile(i);
-        if ( type > 0 && cmSystemTools::FileIsDirectory(fname.c_str()) )
+        if ( type > 0 && cmSystemTools::FileIsDirectory(fname) )
           {
           continue;
           }
-        if ( type < 0 && !cmSystemTools::FileIsDirectory(fname.c_str()) )
+        if ( type < 0 && !cmSystemTools::FileIsDirectory(fname) )
           {
           continue;
           }
@@ -1268,7 +1270,7 @@ cmSystemTools::FileFormat cmSystemTools::GetFileFormat(const char* cext)
   return cmSystemTools::UNKNOWN_FILE_FORMAT;
 }
 
-bool cmSystemTools::Split(const char* s, std::vector<std::string>& l)
+bool cmSystemTools::Split(const std::string& s, std::vector<std::string>& l)
 {
   std::vector<std::string> temp;
   bool res = Superclass::Split(s, temp);
@@ -1280,7 +1282,7 @@ bool cmSystemTools::Split(const char* s, std::vector<std::string>& l)
   return res;
 }
 
-std::string cmSystemTools::ConvertToOutputPath(const char* path)
+std::string cmSystemTools::ConvertToOutputPath(const std::string& path)
 {
 #if defined(_WIN32) && !defined(__CYGWIN__)
   if(s_ForceUnixPaths)
@@ -1504,7 +1506,7 @@ bool cmSystemTools::CreateTar(const char* outFileName,
       i != files.end(); ++i)
     {
     std::string path = *i;
-    if(cmSystemTools::FileIsFullPath(path.c_str()))
+    if(cmSystemTools::FileIsFullPath(path))
       {
       // Get the relative path to the file.
       path = cmSystemTools::RelativePath(cwd.c_str(), path.c_str());
@@ -2157,7 +2159,7 @@ void cmSystemTools::FindCMakeResources(const char* argv0)
     // Look for ../bin (install tree) and then fall back to
     // ../../../bin (build tree).
     exe_dir = cmSystemTools::GetFilenamePath(exe_dir);
-    if(cmSystemTools::FileExists((exe_dir+"/bin/cmake").c_str()))
+    if(cmSystemTools::FileExists(exe_dir+"/bin/cmake"))
       {
       exe_dir += "/bin";
       }
@@ -2199,14 +2201,14 @@ void cmSystemTools::FindCMakeResources(const char* argv0)
   cmSystemToolsCMakeGUICommand = exe_dir;
   cmSystemToolsCMakeGUICommand += "/cmake-gui";
   cmSystemToolsCMakeGUICommand += cmSystemTools::GetExecutableExtension();
-  if(!cmSystemTools::FileExists(cmSystemToolsCMakeGUICommand.c_str()))
+  if(!cmSystemTools::FileExists(cmSystemToolsCMakeGUICommand))
     {
     cmSystemToolsCMakeGUICommand = "";
     }
   cmSystemToolsCMakeCursesCommand = exe_dir;
   cmSystemToolsCMakeCursesCommand += "/ccmake";
   cmSystemToolsCMakeCursesCommand += cmSystemTools::GetExecutableExtension();
-  if(!cmSystemTools::FileExists(cmSystemToolsCMakeCursesCommand.c_str()))
+  if(!cmSystemTools::FileExists(cmSystemToolsCMakeCursesCommand))
     {
     cmSystemToolsCMakeCursesCommand = "";
     }
@@ -2216,7 +2218,7 @@ void cmSystemTools::FindCMakeResources(const char* argv0)
   std::string dir = cmSystemTools::GetFilenamePath(exe_dir);
   cmSystemToolsCMakeRoot = dir + CMAKE_DATA_DIR;
   if(!cmSystemTools::FileExists(
-       (cmSystemToolsCMakeRoot+"/Modules/CMake.cmake").c_str()))
+       cmSystemToolsCMakeRoot+"/Modules/CMake.cmake"))
     {
     // Build tree has "<build>/bin[/<config>]/cmake" and
     // "<build>/CMakeFiles/CMakeSourceDir.txt".
@@ -2224,7 +2226,7 @@ void cmSystemTools::FindCMakeResources(const char* argv0)
     cmsys::ifstream fin(src_dir_txt.c_str());
     std::string src_dir;
     if(fin && cmSystemTools::GetLineFromStream(fin, src_dir) &&
-       cmSystemTools::FileIsDirectory(src_dir.c_str()))
+       cmSystemTools::FileIsDirectory(src_dir))
       {
       cmSystemToolsCMakeRoot = src_dir;
       }
@@ -2234,7 +2236,7 @@ void cmSystemTools::FindCMakeResources(const char* argv0)
       src_dir_txt = dir + "/CMakeFiles/CMakeSourceDir.txt";
       cmsys::ifstream fin2(src_dir_txt.c_str());
       if(fin2 && cmSystemTools::GetLineFromStream(fin2, src_dir) &&
-         cmSystemTools::FileIsDirectory(src_dir.c_str()))
+         cmSystemTools::FileIsDirectory(src_dir))
         {
         cmSystemToolsCMakeRoot = src_dir;
         }
@@ -2330,7 +2332,7 @@ bool cmSystemTools::GuessLibrarySOName(std::string const& fullPath,
 #endif
 
   // If the file is not a symlink we have no guess for its soname.
-  if(!cmSystemTools::FileIsSymlink(fullPath.c_str()))
+  if(!cmSystemTools::FileIsSymlink(fullPath))
     {
     return false;
     }

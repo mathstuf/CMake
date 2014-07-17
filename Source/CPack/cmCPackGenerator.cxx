@@ -204,7 +204,7 @@ int cmCPackGenerator::InstallProject()
 
   const char* tempInstallDirectory = tempInstallDirectoryStr.c_str();
   int res = 1;
-  if ( !cmsys::SystemTools::MakeDirectory(bareTempInstallDirectory.c_str()))
+  if ( !cmsys::SystemTools::MakeDirectory(bareTempInstallDirectory))
     {
     cmCPackLogger(cmCPackLog::LOG_ERROR,
       "Problem creating temporary directory: "
@@ -399,7 +399,7 @@ int cmCPackGenerator::InstallProjectViaInstalledDirectories(
         cmCPackLogger(cmCPackLog::LOG_DEBUG, "Copy file: "
           << inFile << " -> " << filePath << std::endl);
         /* If the file is a symlink we will have to re-create it */
-        if ( cmSystemTools::FileIsSymlink(inFile.c_str()))
+        if ( cmSystemTools::FileIsSymlink(inFile))
           {
           std::string targetFile;
           std::string inFileRelative =
@@ -792,7 +792,7 @@ int cmCPackGenerator::InstallProjectViaInstallCMakeProjects(
           cmCPackLogger(cmCPackLog::LOG_DEBUG,
                         "- Creating directory: '" << dir << "'" << std::endl);
 
-          if ( !cmsys::SystemTools::MakeDirectory(dir.c_str()))
+          if ( !cmsys::SystemTools::MakeDirectory(dir))
             {
             cmCPackLogger(cmCPackLog::LOG_ERROR,
                           "Problem creating temporary directory: "
@@ -806,7 +806,7 @@ int cmCPackGenerator::InstallProjectViaInstallCMakeProjects(
                             tempInstallDirectory.c_str());
 
           if ( !cmsys::SystemTools::MakeDirectory(
-                 tempInstallDirectory.c_str()))
+                 tempInstallDirectory))
             {
             cmCPackLogger(cmCPackLog::LOG_ERROR,
                           "Problem creating temporary directory: "

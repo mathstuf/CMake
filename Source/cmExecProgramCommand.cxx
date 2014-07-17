@@ -104,7 +104,7 @@ bool cmExecProgramCommand
   bool result = true;
   if(args.size() - count == 2)
     {
-    cmSystemTools::MakeDirectory(args[1].c_str());
+    cmSystemTools::MakeDirectory(args[1]);
     result = cmExecProgramCommand::RunCommand(command.c_str(), output, retVal,
                                               args[1].c_str(), verbose);
     }
@@ -188,7 +188,7 @@ bool cmExecProgramCommand::RunCommand(const char* command,
         {
         std::string cmd = quoted.match(1);
         std::string args = quoted.match(2);
-        if(! cmSystemTools::FileExists(cmd.c_str()) )
+        if(! cmSystemTools::FileExists(cmd) )
           {
           shortCmd = cmd;
           }

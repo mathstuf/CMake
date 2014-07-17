@@ -26,7 +26,7 @@
 //----------------------------------------------------------------------------
 struct cmListFileParser
 {
-  cmListFileParser(cmListFile* lf, cmMakefile* mf, const char* filename);
+  cmListFileParser(cmListFile* lf, cmMakefile* mf, const std::string& filename);
   ~cmListFileParser();
   bool ParseFile();
   bool ParseFunction(const char* name, long line);
@@ -34,7 +34,7 @@ struct cmListFileParser
                    cmListFileArgument::Delimiter delim);
   cmListFile* ListFile;
   cmMakefile* Makefile;
-  const char* FileName;
+  const std::string& FileName;
   cmListFileLexer* Lexer;
   cmListFileFunction Function;
   enum { SeparationOkay, SeparationWarning, SeparationError} Separation;
@@ -42,7 +42,7 @@ struct cmListFileParser
 
 //----------------------------------------------------------------------------
 cmListFileParser::cmListFileParser(cmListFile* lf, cmMakefile* mf,
-                                   const char* filename):
+                                   const std::string& filename):
   ListFile(lf), Makefile(mf), FileName(filename),
   Lexer(cmListFileLexer_New())
 {
@@ -59,10 +59,10 @@ bool cmListFileParser::ParseFile()
 {
   // Open the file.
   cmListFileLexer_BOM bom;
-  if(!cmListFileLexer_SetFileName(this->Lexer, this->FileName, &bom))
+  if(!cmListFileLexer_SetFileName(this->Lexer, this->FileName.c_str(), &bom))
     {
     cmSystemTools::Error("cmListFileCache: error can not open file ",
-                         this->FileName);
+                         this->FileName.c_str());
     return false;
     }
 
@@ -138,7 +138,7 @@ bool cmListFileParser::ParseFile()
 }
 
 //----------------------------------------------------------------------------
-bool cmListFile::ParseFile(const char* filename,
+bool cmListFile::ParseFile(const std::string& filename,
                            bool topLevel,
                            cmMakefile *mf)
 {
@@ -244,7 +244,7 @@ bool cmListFile::ParseFile(const char* filename,
       cmListFileFunction project;
       project.Name = "PROJECT";
       cmListFileArgument prj("Project", cmListFileArgument::Unquoted,
-                             filename, 0);
+                             filename.c_str(), 0);
       project.Arguments.push_back(prj);
       this->Functions.insert(this->Functions.begin(),project);
       }
@@ -384,7 +384,7 @@ bool cmListFileParser::ParseFunction(const char* name, long line)
 bool cmListFileParser::AddArgument(cmListFileLexer_Token* token,
                                    cmListFileArgument::Delimiter delim)
 {
-  cmListFileArgument a(token->text, delim, this->FileName, token->line);
+  cmListFileArgument a(token->text, delim, this->FileName.c_str(), token->line);
   this->Function.Arguments.push_back(a);
   if(this->Separation == SeparationOkay)
     {

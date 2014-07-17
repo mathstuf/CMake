@@ -89,7 +89,7 @@ public:
   /*
    * Write an initial CMakeCache.txt from the given contents.
    */
-  static bool WriteInitialCache(const char* directory, const char* text);
+  static bool WriteInitialCache(const std::string& directory, const char* text);
 
   /*
    * Some elapsed time handling functions

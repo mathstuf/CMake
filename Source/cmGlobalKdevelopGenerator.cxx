@@ -166,7 +166,7 @@ bool cmGlobalKdevelopGenerator
             std::string hname=headerBasename;
             hname += ".";
             hname += *ext;
-            if(cmSystemTools::FileExists(hname.c_str()))
+            if(cmSystemTools::FileExists(hname))
               {
               cmSystemTools::ReplaceString(hname, projectDir.c_str(), "");
               files.insert(hname);
@@ -202,7 +202,7 @@ bool cmGlobalKdevelopGenerator
         continue;
         }
       std::string completePath=projectDir+tmp;
-      if (cmSystemTools::FileExists(completePath.c_str()))
+      if (cmSystemTools::FileExists(completePath))
         {
         files.insert(tmp);
         }
@@ -222,7 +222,7 @@ bool cmGlobalKdevelopGenerator
        it!=files.end(); it++)
     {
     // get the full path to the file
-    tmp=cmSystemTools::CollapseFullPath(it->c_str(), projectDir.c_str());
+    tmp=cmSystemTools::CollapseFullPath(*it, projectDir.c_str());
     // just select the first source file
     if (fileToOpen.empty())
     {
@@ -238,7 +238,7 @@ bool cmGlobalKdevelopGenerator
     // only put relative paths
     if (tmp.size() && tmp[0] != '/')
       {
-      fout << tmp.c_str() <<"\n";
+      fout << tmp <<"\n";
       }
     }
   return true;
@@ -262,7 +262,7 @@ void cmGlobalKdevelopGenerator
   std::string sessionFilename=outputDir+"/";
   sessionFilename+=projectname+".kdevses";
 
-  if (cmSystemTools::FileExists(filename.c_str()))
+  if (cmSystemTools::FileExists(filename))
     {
     this->MergeProjectFiles(outputDir, projectDir, filename,
                             executable, cmakeFilePattern,
@@ -285,11 +285,11 @@ void cmGlobalKdevelopGenerator
           std::string tmp = projectDir;
           tmp += "/";
           tmp += nextFile;
-          if (cmSystemTools::FileIsDirectory(tmp.c_str()))
+          if (cmSystemTools::FileIsDirectory(tmp))
             {
             tmp += "/CMakeCache.txt";
             if ((nextFile == "CMakeFiles")
-                || (cmSystemTools::FileExists(tmp.c_str())))
+                || (cmSystemTools::FileExists(tmp)))
               {
               this->Blacklist.push_back(nextFile);
               }
@@ -342,7 +342,7 @@ void cmGlobalKdevelopGenerator
   for (std::vector<std::string>::const_iterator it=lines.begin();
        it!=lines.end(); it++)
     {
-    const char* line=(*it).c_str();
+    const char* line=it->c_str();
     // skip these tags as they are always replaced
     if ((strstr(line, "<projectdirectory>")!=0)
         || (strstr(line, "<projectmanagement>")!=0)
@@ -397,8 +397,8 @@ void cmGlobalKdevelopGenerator
     }
 
   // check for a version control system
-  bool hasSvn = cmSystemTools::FileExists((projectDir + "/.svn").c_str());
-  bool hasCvs = cmSystemTools::FileExists((projectDir + "/CVS").c_str());
+  bool hasSvn = cmSystemTools::FileExists((projectDir + "/.svn"));
+  bool hasCvs = cmSystemTools::FileExists((projectDir + "/CVS"));
 
   bool enableCxx = (this->GlobalGenerator->GetLanguageEnabled("C")
                           || this->GlobalGenerator->GetLanguageEnabled("CXX"));

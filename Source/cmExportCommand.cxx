@@ -99,7 +99,7 @@ bool cmExportCommand
     }
 
   // Get the file to write.
-  if(cmSystemTools::FileIsFullPath(fname.c_str()))
+  if(cmSystemTools::FileIsFullPath(fname))
     {
     if(!this->Makefile->CanIWriteThisFile(fname.c_str()))
       {
@@ -388,10 +388,10 @@ void cmExportCommand::StorePackageRegistryDir(std::string const& package,
   fname += "/.cmake/packages/";
   fname += package;
 #endif
-  cmSystemTools::MakeDirectory(fname.c_str());
+  cmSystemTools::MakeDirectory(fname);
   fname += "/";
   fname += hash;
-  if(!cmSystemTools::FileExists(fname.c_str()))
+  if(!cmSystemTools::FileExists(fname))
     {
     cmGeneratedFileStream entry(fname.c_str(), true);
     if(entry)

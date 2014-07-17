@@ -60,7 +60,7 @@ bool cmFindProgramCommand
   return true;
 }
 
-std::string cmFindProgramCommand::FindProgram(std::vector<std::string> names)
+std::string cmFindProgramCommand::FindProgram(std::vector<std::string> const& names)
 {
   std::string program = "";
 
@@ -81,7 +81,7 @@ std::string cmFindProgramCommand::FindProgram(std::vector<std::string> names)
 }
 
 std::string cmFindProgramCommand
-::FindAppBundle(std::vector<std::string> names)
+::FindAppBundle(std::vector<std::string> const& names)
 {
   for(std::vector<std::string>::const_iterator name = names.begin();
       name != names.end() ; ++name)
@@ -97,7 +97,7 @@ std::string cmFindProgramCommand
       std::string executable = GetBundleExecutable(appPath);
       if (!executable.empty())
         {
-        return cmSystemTools::CollapseFullPath(executable.c_str());
+        return cmSystemTools::CollapseFullPath(executable);
         }
       }
     }
@@ -106,7 +106,7 @@ std::string cmFindProgramCommand
   return "";
 }
 
-std::string cmFindProgramCommand::GetBundleExecutable(std::string bundlePath)
+std::string cmFindProgramCommand::GetBundleExecutable(std::string const& bundlePath)
 {
   std::string executable = "";
   (void)bundlePath;

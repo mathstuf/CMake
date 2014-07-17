@@ -183,7 +183,7 @@ public:
       s starts with a / then the first element of the returned array will
       be /, so /foo/bar will be [/, foo, bar]
   */  
-  static kwsys_stl::vector<String> SplitString(const char* s, char separator = '/', 
+  static kwsys_stl::vector<String> SplitString(const kwsys_stl::string& s, char separator = '/',
                                                bool isPath = false);
   /**
    * Perform a case-independent string comparison
@@ -201,8 +201,8 @@ public:
    * Split a string on its newlines into multiple lines
    * Return false only if the last line stored had no newline
    */
-  static bool Split(const char* s, kwsys_stl::vector<kwsys_stl::string>& l);
-  static bool Split(const char* s, kwsys_stl::vector<kwsys_stl::string>& l, char separator);
+  static bool Split(const kwsys_stl::string& s, kwsys_stl::vector<kwsys_stl::string>& l);
+  static bool Split(const kwsys_stl::string& s, kwsys_stl::vector<kwsys_stl::string>& l, char separator);
   
   /** 
    * Return string with space added between capitalized words
@@ -265,13 +265,13 @@ public:
    * For windows this calls ConvertToWindowsOutputPath and for unix
    * it calls ConvertToUnixOutputPath
    */
-  static kwsys_stl::string ConvertToOutputPath(const char*);
+  static kwsys_stl::string ConvertToOutputPath(const kwsys_stl::string&);
 
   /**
    * Convert the path to a string that can be used in a unix makefile.
    * double slashes are removed, and spaces are escaped.
    */
-  static kwsys_stl::string ConvertToUnixOutputPath(const char*);
+  static kwsys_stl::string ConvertToUnixOutputPath(const kwsys_stl::string&);
 
   /**
    * Convert the path to string that can be used in a windows project or
@@ -279,7 +279,7 @@ public:
    * the string, the slashes are converted to windows style backslashes, and
    * if there are spaces in the string it is double quoted.
    */
-  static kwsys_stl::string ConvertToWindowsOutputPath(const char*);
+  static kwsys_stl::string ConvertToWindowsOutputPath(const kwsys_stl::string&);
 
   /**
    * Return true if a file exists in the current directory.
@@ -288,7 +288,9 @@ public:
    * if it is a file or a directory.
    */
   static bool FileExists(const char* filename, bool isFile);
+  static bool FileExists(const kwsys_stl::string& filename, bool isFile);
   static bool FileExists(const char* filename);
+  static bool FileExists(const kwsys_stl::string& filename);
 
   /**
    * Converts Cygwin path to Win32 path. Uses dictionary container for
@@ -470,6 +472,7 @@ public:
   /**
    * Return whether the path represents a full path (not relative)
    */
+  static bool FileIsFullPath(const kwsys_stl::string&);
   static bool FileIsFullPath(const char*);
   
   /**
@@ -493,7 +496,7 @@ public:
   /**
    * Get the parent directory of the directory or file
    */
-  static kwsys_stl::string GetParentDirectory(const char* fileOrDir);
+  static kwsys_stl::string GetParentDirectory(const kwsys_stl::string& fileOrDir);
 
   /**
    * Check if the given file or directory is in subdirectory of dir
@@ -516,6 +519,7 @@ public:
    * prior to calling this function.  
    */
   static bool MakeDirectory(const char* path);
+  static bool MakeDirectory(const kwsys_stl::string& path);
 
   /**
    * Copy the source file to the destination file only
@@ -559,12 +563,12 @@ public:
   /**
    * Remove a file
    */
-  static bool RemoveFile(const char* source);
+  static bool RemoveFile(const kwsys_stl::string& source);
   
   /**
    * Remove a directory
    */
-  static bool RemoveADirectory(const char* source);
+  static bool RemoveADirectory(const kwsys_stl::string& source);
 
   /**
    * Get the maximum full file path length
@@ -594,12 +598,17 @@ public:
    */
   static kwsys_stl::string FindProgram(
     const char* name,
-    const kwsys_stl::vector<kwsys_stl::string>& path = 
+    const kwsys_stl::vector<kwsys_stl::string>& path =
+    kwsys_stl::vector<kwsys_stl::string>(),
+    bool no_system_path = false);
+  static kwsys_stl::string FindProgram(
+    const kwsys_stl::string& name,
+    const kwsys_stl::vector<kwsys_stl::string>& path =
     kwsys_stl::vector<kwsys_stl::string>(),
     bool no_system_path = false);
   static kwsys_stl::string FindProgram(
     const kwsys_stl::vector<kwsys_stl::string>& names,
-    const kwsys_stl::vector<kwsys_stl::string>& path = 
+    const kwsys_stl::vector<kwsys_stl::string>& path =
     kwsys_stl::vector<kwsys_stl::string>(),
     bool no_system_path = false);
 
@@ -607,18 +616,18 @@ public:
    * Find a library in the system PATH, with optional extra paths
    */
   static kwsys_stl::string FindLibrary(
-    const char* name,
+    const kwsys_stl::string& name,
     const kwsys_stl::vector<kwsys_stl::string>& path);
   
   /**
    * Return true if the file is a directory
    */
-  static bool FileIsDirectory(const char* name);
+  static bool FileIsDirectory(const kwsys_stl::string& name);
   
   /**
    * Return true if the file is a symlink
    */
-  static bool FileIsSymlink(const char* name);
+  static bool FileIsSymlink(const kwsys_stl::string& name);
   
   /**
    * Return true if the file has a given signature (first set of bytes)
@@ -691,7 +700,7 @@ public:
   /**
    * Return file's modified time
    */
-  static long int ModifiedTime(const char* filename);
+  static long int ModifiedTime(const kwsys_stl::string& filename);
 
   /**
    * Return file's creation time (Win32: works only for NTFS, not FAT)
@@ -706,7 +715,9 @@ public:
    * Get and set permissions of the file.
    */
   static bool GetPermissions(const char* file, mode_t& mode);
+  static bool GetPermissions(const kwsys_stl::string& file, mode_t& mode);
   static bool SetPermissions(const char* file, mode_t mode);
+  static bool SetPermissions(const kwsys_stl::string& file, mode_t mode);
 
   /** -----------------------------------------------------------------
    *               Time Manipulation Routines
@@ -793,7 +804,7 @@ public:
   /**
    * Change directory to the directory specified
    */
-  static int ChangeDirectory(const char* dir);
+  static int ChangeDirectory(const kwsys_stl::string& dir);
 
   /**
    * Get the result of strerror(errno)
@@ -899,6 +910,11 @@ private:
     {
     return &SystemToolsManagerInstance;
     }
+
+  /**
+   * Actual implementation of FileIsFullPath.
+   */
+  static bool FileIsFullPath(const char*, size_t);
 
   /**
    * Find a filename (file or directory) in the system PATH, with

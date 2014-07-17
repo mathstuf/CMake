@@ -170,9 +170,9 @@ cmGlobalGenerator* cmGlobalXCodeGenerator::Factory
     versionFile = out.substr(0, pos+5)+"Contents/version.plist";
     }
   }
-  if(!versionFile.empty() && cmSystemTools::FileExists(versionFile.c_str()))
+  if(!versionFile.empty() && cmSystemTools::FileExists(versionFile))
     {
-    parser.ParseFile(versionFile.c_str());
+    parser.ParseFile(versionFile);
     }
   else if (cmSystemTools::FileExists(
              "/Applications/Xcode.app/Contents/version.plist"))
@@ -368,7 +368,7 @@ void cmGlobalXCodeGenerator::SetGenerationRoot(cmLocalGenerator* root)
   this->CurrentXCodeHackMakefile =
     root->GetMakefile()->GetCurrentOutputDirectory();
   this->CurrentXCodeHackMakefile += "/CMakeScripts";
-  cmSystemTools::MakeDirectory(this->CurrentXCodeHackMakefile.c_str());
+  cmSystemTools::MakeDirectory(this->CurrentXCodeHackMakefile);
   this->CurrentXCodeHackMakefile += "/XCODE_DEPEND_HELPER.make";
 }
 
@@ -517,7 +517,7 @@ void cmGlobalXCodeGenerator::CreateReRunCMakeFile(
   lfiles.erase(new_end, lfiles.end());
   this->CurrentReRunCMakeMakefile = mf->GetStartOutputDirectory();
   this->CurrentReRunCMakeMakefile += "/CMakeScripts";
-  cmSystemTools::MakeDirectory(this->CurrentReRunCMakeMakefile.c_str());
+  cmSystemTools::MakeDirectory(this->CurrentReRunCMakeMakefile);
   this->CurrentReRunCMakeMakefile += "/ReRunCMake.make";
   cmGeneratedFileStream makefileStream
     (this->CurrentReRunCMakeMakefile.c_str());
@@ -868,7 +868,7 @@ cmGlobalXCodeGenerator::CreateXCodeFileReferenceFromPath(
     // lastKnownFileType as folder in order for Xcode to be able to
     // open the contents of the folder.
     // (Xcode 4.6 does not like explicitFileType=folder).
-    if(cmSystemTools::FileIsDirectory(fullpath.c_str()))
+    if(cmSystemTools::FileIsDirectory(fullpath))
       {
       fileType = "folder";
       useLastKnownFileType = true;
@@ -894,7 +894,7 @@ cmGlobalXCodeGenerator::CreateXCodeFileReferenceFromPath(
   // Store the file path relative to the top of the source tree.
   std::string path = this->RelativeToSource(fullpath.c_str());
   std::string name = cmSystemTools::GetFilenameName(path.c_str());
-  const char* sourceTree = (cmSystemTools::FileIsFullPath(path.c_str())?
+  const char* sourceTree = (cmSystemTools::FileIsFullPath(path)?
                             "<absolute>" : "SOURCE_ROOT");
   fileRef->AddAttribute("name", this->CreateString(name.c_str()));
   fileRef->AddAttribute("path", this->CreateString(path.c_str()));
@@ -1496,7 +1496,7 @@ cmGlobalXCodeGenerator::AddCommandsToBuildPhase(cmXCodeObject* buildphase,
   bool haveMultipleOutputPairs = false;
   std::string dir = this->CurrentMakefile->GetCurrentOutputDirectory();
   dir += "/CMakeScripts";
-  cmSystemTools::MakeDirectory(dir.c_str());
+  cmSystemTools::MakeDirectory(dir);
   std::string makefile = dir;
   makefile += "/";
   makefile += target.GetName();
@@ -2103,7 +2103,7 @@ void cmGlobalXCodeGenerator::CreateBuildSettings(cmTarget& target,
       {
       std::string frameworkDir = *i;
       frameworkDir += "/../";
-      frameworkDir = cmSystemTools::CollapseFullPath(frameworkDir.c_str());
+      frameworkDir = cmSystemTools::CollapseFullPath(frameworkDir);
       if(emitted.insert(frameworkDir).second)
         {
         fdirs.Add(this->XCodeEscapePath(frameworkDir.c_str()).c_str());
@@ -3623,7 +3623,7 @@ cmGlobalXCodeGenerator::OutputXCodeProject(cmLocalGenerator* root,
     {
     xcodeDir += "proj";
     }
-  cmSystemTools::MakeDirectory(xcodeDir.c_str());
+  cmSystemTools::MakeDirectory(xcodeDir);
   std::string xcodeProjFile = xcodeDir + "/project.pbxproj";
   cmGeneratedFileStream fout(xcodeProjFile.c_str());
   fout.SetCopyIfDifferent(true);
@@ -3727,7 +3727,7 @@ std::string cmGlobalXCodeGenerator::ConvertToRelativeForMake(const char* p)
     std::string ret =
       this->CurrentLocalGenerator->
         ConvertToRelativePath(this->CurrentOutputDirectoryComponents, p);
-    return cmSystemTools::ConvertToOutputPath(ret.c_str());
+    return cmSystemTools::ConvertToOutputPath(ret);
     }
 }
 
@@ -3743,7 +3743,7 @@ std::string cmGlobalXCodeGenerator::ConvertToRelativeForXCode(const char* p)
     std::string ret =
       this->CurrentLocalGenerator->
         ConvertToRelativePath(this->ProjectOutputDirectoryComponents, p);
-    return cmSystemTools::ConvertToOutputPath(ret.c_str());
+    return cmSystemTools::ConvertToOutputPath(ret);
     }
 }
 

@@ -28,7 +28,7 @@ bool cmMakeDirectoryCommand
       cmSystemTools::SetFatalErrorOccured();
       return false;
       }
-  cmSystemTools::MakeDirectory(args[0].c_str());
+  cmSystemTools::MakeDirectory(args[0]);
   return true;
 }
 

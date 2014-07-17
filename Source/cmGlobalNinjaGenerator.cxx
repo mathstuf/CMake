@@ -759,10 +759,10 @@ void cmGlobalNinjaGenerator::AddCXXCompileCommand(
     }
 
   std::string sourceFileName = sourceFile;
-  if (!cmSystemTools::FileIsFullPath(sourceFileName.c_str()))
+  if (!cmSystemTools::FileIsFullPath(sourceFileName))
     {
     sourceFileName = cmSystemTools::CollapseFullPath(
-      sourceFileName.c_str(),
+      sourceFileName,
       this->GetCMakeInstance()->GetHomeOutputDirectory());
     }
 

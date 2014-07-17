@@ -213,7 +213,7 @@ cmGlobalVisualStudioGenerator
     {
     std::string macrosFile = dir + "/CMakeMacros/" CMAKE_VSMACROS_FILENAME;
     std::string nextSubkeyName;
-    if (cmSystemTools::FileExists(macrosFile.c_str()) &&
+    if (cmSystemTools::FileExists(macrosFile) &&
       IsVisualStudioMacrosFileRegistered(macrosFile,
         this->GetUserMacrosRegKeyBase(), nextSubkeyName)
       )
@@ -566,7 +566,7 @@ bool IsVisualStudioMacrosFileRegistered(const std::string& macrosFile,
         std::string filepath;
         std::string filepathname;
         std::string filepathpath;
-        if (cmSystemTools::FileExists(fullname.c_str()))
+        if (cmSystemTools::FileExists(fullname))
           {
           filename = cmSystemTools::GetFilenameName(fullname);
           filepath = cmSystemTools::GetFilenamePath(fullname);

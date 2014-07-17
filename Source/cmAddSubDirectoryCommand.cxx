@@ -51,7 +51,7 @@ bool cmAddSubDirectoryCommand::InitialPass
   // Compute the full path to the specified source directory.
   // Interpret a relative path with respect to the current source directory.
   std::string srcPath;
-  if(cmSystemTools::FileIsFullPath(srcArg.c_str()))
+  if(cmSystemTools::FileIsFullPath(srcArg))
     {
     srcPath = srcArg;
     }
@@ -61,7 +61,7 @@ bool cmAddSubDirectoryCommand::InitialPass
     srcPath += "/";
     srcPath += srcArg;
     }
-  if(!cmSystemTools::FileIsDirectory(srcPath.c_str()))
+  if(!cmSystemTools::FileIsDirectory(srcPath))
     {
     std::string error = "given source \"";
     error += srcArg;
@@ -69,7 +69,7 @@ bool cmAddSubDirectoryCommand::InitialPass
     this->SetError(error);
     return false;
     }
-  srcPath = cmSystemTools::CollapseFullPath(srcPath.c_str());
+  srcPath = cmSystemTools::CollapseFullPath(srcPath);
 
   // Compute the full path to the binary directory.
   std::string binPath;
@@ -107,7 +107,7 @@ bool cmAddSubDirectoryCommand::InitialPass
     {
     // Use the binary directory specified.
     // Interpret a relative path with respect to the current binary directory.
-    if(cmSystemTools::FileIsFullPath(binArg.c_str()))
+    if(cmSystemTools::FileIsFullPath(binArg))
       {
       binPath = binArg;
       }
@@ -118,7 +118,7 @@ bool cmAddSubDirectoryCommand::InitialPass
       binPath += binArg;
       }
     }
-  binPath = cmSystemTools::CollapseFullPath(binPath.c_str());
+  binPath = cmSystemTools::CollapseFullPath(binPath);
 
   // Add the subdirectory using the computed full paths.
   this->Makefile->AddSubDirectory(srcPath, binPath,

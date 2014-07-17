@@ -235,9 +235,9 @@ int cmCTestBuildAndTestHandler::RunCMakeAndTest(std::string* outstring)
   std::string cwd = cmSystemTools::GetCurrentWorkingDirectory();
   out << "Internal cmake changing into directory: "
     << this->BinaryDir << std::endl;
-  if (!cmSystemTools::FileIsDirectory(this->BinaryDir.c_str()))
+  if (!cmSystemTools::FileIsDirectory(this->BinaryDir))
     {
-    cmSystemTools::MakeDirectory(this->BinaryDir.c_str());
+    cmSystemTools::MakeDirectory(this->BinaryDir);
     }
   cmSystemTools::ChangeDirectory(this->BinaryDir.c_str());
 
@@ -348,7 +348,7 @@ int cmCTestBuildAndTestHandler::RunCMakeAndTest(std::string* outstring)
                                        extraPaths,
                                        failed);
 
-  if(!cmSystemTools::FileExists(fullPath.c_str()))
+  if(!cmSystemTools::FileExists(fullPath))
     {
     out << "Could not find path to executable, perhaps it was not built: "
       << this->TestCommand << "\n";
@@ -444,11 +444,11 @@ int cmCTestBuildAndTestHandler::ProcessCommandLineArguments(
       idx++;
       this->BinaryDir = allArgs[idx];
       // dir must exist before CollapseFullPath is called
-      cmSystemTools::MakeDirectory(this->BinaryDir.c_str());
+      cmSystemTools::MakeDirectory(this->BinaryDir);
       this->BinaryDir
-        = cmSystemTools::CollapseFullPath(this->BinaryDir.c_str());
+        = cmSystemTools::CollapseFullPath(this->BinaryDir);
       this->SourceDir
-        = cmSystemTools::CollapseFullPath(this->SourceDir.c_str());
+        = cmSystemTools::CollapseFullPath(this->SourceDir);
       }
     else
       {

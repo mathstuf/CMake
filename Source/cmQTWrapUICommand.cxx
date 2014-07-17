@@ -65,7 +65,7 @@ bool cmQTWrapUICommand::InitialPass(std::vector<std::string> const& argsIn,
 
       // Compute the name of the ui file from which to generate others.
       std::string uiName;
-      if(cmSystemTools::FileIsFullPath(j->c_str()))
+      if(cmSystemTools::FileIsFullPath(*j))
         {
         uiName = *j;
         }

@@ -162,7 +162,7 @@ bool cmCTestRunTest::EndTest(size_t completed, size_t total, bool started)
           passIt != this->TestProperties->RequiredRegularExpressions.end();
           ++ passIt )
       {
-      if ( passIt->first.find(this->ProcessOutput.c_str()) )
+      if ( passIt->first.find(this->ProcessOutput) )
         {
         found = true;
         reason = "Required regular expression found.";
@@ -190,7 +190,7 @@ bool cmCTestRunTest::EndTest(size_t completed, size_t total, bool started)
           passIt != this->TestProperties->ErrorRegularExpressions.end();
           ++ passIt )
       {
-      if ( passIt->first.find(this->ProcessOutput.c_str()) )
+      if ( passIt->first.find(this->ProcessOutput) )
         {
         reason = "Error regular expression found in output.";
         reason += " Regex=[";
@@ -280,12 +280,12 @@ bool cmCTestRunTest::EndTest(size_t completed, size_t total, bool started)
 
   // Set the working directory to the tests directory
   std::string oldpath = cmSystemTools::GetCurrentWorkingDirectory();
-  cmSystemTools::ChangeDirectory(this->TestProperties->Directory.c_str());
+  cmSystemTools::ChangeDirectory(this->TestProperties->Directory);
 
   this->DartProcessing();
 
   // restore working directory
-  cmSystemTools::ChangeDirectory(oldpath.c_str());
+  cmSystemTools::ChangeDirectory(oldpath);
 
 
   // if this is doing MemCheck then all the output needs to be put into
@@ -414,7 +414,7 @@ bool cmCTestRunTest::StartTest(size_t total)
   this->TestResult.Status = cmCTestTestHandler::BAD_COMMAND;
   this->TestResult.TestCount = this->TestProperties->Index;
   this->TestResult.Name = this->TestProperties->Name;
-  this->TestResult.Path = this->TestProperties->Directory.c_str();
+  this->TestResult.Path = this->TestProperties->Directory;
 
   if(args.size() >= 2 && args[1] == "NOT_AVAILABLE")
     {
@@ -447,7 +447,7 @@ bool cmCTestRunTest::StartTest(size_t total)
     {
     std::string file = *i;
 
-    if(!cmSystemTools::FileExists(file.c_str()))
+    if(!cmSystemTools::FileExists(file))
       {
       //Required file was not found
       this->TestProcess = new cmProcess;
@@ -502,19 +502,19 @@ void cmCTestRunTest::ComputeArguments()
     {
     cmCTestMemCheckHandler * handler = static_cast<cmCTestMemCheckHandler*>
       (this->TestHandler);
-    this->ActualCommand = handler->MemoryTester.c_str();
+    this->ActualCommand = handler->MemoryTester;
     this->TestProperties->Args[1] = this->TestHandler->FindTheExecutable(
-      this->TestProperties->Args[1].c_str());
+      this->TestProperties->Args[1]);
     }
   else
     {
     this->ActualCommand =
       this->TestHandler->FindTheExecutable(
-      this->TestProperties->Args[1].c_str());
+      this->TestProperties->Args[1]);
     ++j; //skip the executable (it will be actualCommand)
     }
   std::string testCommand
-    = cmSystemTools::ConvertToOutputPath(this->ActualCommand.c_str());
+    = cmSystemTools::ConvertToOutputPath(this->ActualCommand);
 
   //Prepends memcheck args to our command string
   this->TestHandler->GenerateTestCommand(this->Arguments, this->Index);
@@ -548,11 +548,11 @@ void cmCTestRunTest::DartProcessing()
   if (!this->ProcessOutput.empty() &&
      this->ProcessOutput.find("<DartMeasurement") != this->ProcessOutput.npos)
     {
-    if (this->TestHandler->DartStuff.find(this->ProcessOutput.c_str()))
+    if (this->TestHandler->DartStuff.find(this->ProcessOutput))
       {
       std::string dartString = this->TestHandler->DartStuff.match(1);
       // keep searching and replacing until none are left
-      while (this->TestHandler->DartStuff1.find(this->ProcessOutput.c_str()))
+      while (this->TestHandler->DartStuff1.find(this->ProcessOutput))
         {
         // replace the exact match for the string
         cmSystemTools::ReplaceString(this->ProcessOutput,
@@ -730,7 +730,7 @@ void cmCTestRunTest::WriteLogOutputTop(size_t completed, size_t total)
   *this->TestHandler->LogFile
     << this->ProcessOutput << "<end of output>" << std::endl;
 
-  cmCTestLog(this->CTest, HANDLER_OUTPUT, outname.c_str());
+  cmCTestLog(this->CTest, HANDLER_OUTPUT, outname);
   cmCTestLog(this->CTest, DEBUG, "Testing "
              << this->TestProperties->Name << " ... ");
 }

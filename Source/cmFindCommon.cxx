@@ -428,7 +428,7 @@ void cmFindCommon::AddPathInternal(std::string const& in_path,
 
   // Convert to clean full path.
   std::string fullPath =
-    cmSystemTools::CollapseFullPath(in_path.c_str(), relbase);
+    cmSystemTools::CollapseFullPath(in_path, relbase);
 
   // Insert the path if has not already been emitted.
   if(this->SearchPathsEmitted.insert(fullPath).second)

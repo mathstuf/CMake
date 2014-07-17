@@ -23,7 +23,7 @@ cmWIXPatch::cmWIXPatch(cmCPackLog* logger):
 void cmWIXPatch::LoadFragments(std::string const& patchFilePath)
 {
   cmWIXPatchParser parser(Fragments, Logger);
-  parser.ParseFile(patchFilePath.c_str());
+  parser.ParseFile(patchFilePath);
 }
 
 void cmWIXPatch::ApplyFragment(

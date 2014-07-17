@@ -161,13 +161,13 @@ bool cmInstallCommand::HandleScriptMode(std::vector<std::string> const& args)
       {
       doing_script = false;
       std::string script = args[i];
-      if(!cmSystemTools::FileIsFullPath(script.c_str()))
+      if(!cmSystemTools::FileIsFullPath(script))
         {
         script = this->Makefile->GetCurrentDirectory();
         script += "/";
         script += args[i];
         }
-      if(cmSystemTools::FileIsDirectory(script.c_str()))
+      if(cmSystemTools::FileIsDirectory(script))
         {
         this->SetError("given a directory as value of SCRIPT argument.");
         return false;
@@ -1102,7 +1102,7 @@ cmInstallCommand::HandleDirectoryMode(std::vector<std::string> const& args)
       {
       // Convert this directory to a full path.
       std::string dir = args[i];
-      if(!cmSystemTools::FileIsFullPath(dir.c_str()))
+      if(!cmSystemTools::FileIsFullPath(dir))
         {
         dir = this->Makefile->GetCurrentDirectory();
         dir += "/";
@@ -1110,8 +1110,8 @@ cmInstallCommand::HandleDirectoryMode(std::vector<std::string> const& args)
         }
 
       // Make sure the name is a directory.
-      if(cmSystemTools::FileExists(dir.c_str()) &&
-         !cmSystemTools::FileIsDirectory(dir.c_str()))
+      if(cmSystemTools::FileExists(dir) &&
+         !cmSystemTools::FileIsDirectory(dir))
         {
         cmOStringStream e;
         e << args[0] << " given non-directory \""
@@ -1385,7 +1385,7 @@ bool cmInstallCommand::MakeFilesFullPath(const char* modeName,
     {
     std::string file = (*fileIt);
     std::string::size_type gpos = cmGeneratorExpression::Find(file);
-    if(gpos != 0 && !cmSystemTools::FileIsFullPath(file.c_str()))
+    if(gpos != 0 && !cmSystemTools::FileIsFullPath(file))
       {
       file = this->Makefile->GetCurrentDirectory();
       file += "/";
@@ -1393,7 +1393,7 @@ bool cmInstallCommand::MakeFilesFullPath(const char* modeName,
       }
 
     // Make sure the file is not a directory.
-    if(gpos == file.npos && cmSystemTools::FileIsDirectory(file.c_str()))
+    if(gpos == file.npos && cmSystemTools::FileIsDirectory(file))
       {
       cmOStringStream e;
       e << modeName << " given directory \"" << (*fileIt) << "\" to install.";

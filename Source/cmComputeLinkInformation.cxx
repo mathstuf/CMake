@@ -673,9 +673,9 @@ void cmComputeLinkInformation::AddItem(std::string const& item,
   else
     {
     // This is not a CMake target.  Use the name given.
-    if(cmSystemTools::FileIsFullPath(item.c_str()))
+    if(cmSystemTools::FileIsFullPath(item))
       {
-      if(cmSystemTools::FileIsDirectory(item.c_str()))
+      if(cmSystemTools::FileIsDirectory(item))
         {
         // This is a directory.
         this->AddDirectoryItem(item);
@@ -721,7 +721,7 @@ void cmComputeLinkInformation::AddSharedDepItem(std::string const& item,
     {
     // Skip items that are not full paths.  We will not be able to
     // reliably specify them.
-    if(!cmSystemTools::FileIsFullPath(item.c_str()))
+    if(!cmSystemTools::FileIsFullPath(item))
       {
       return;
       }

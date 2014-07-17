@@ -647,10 +647,10 @@ cmNinjaTargetGenerator
 
     std::string escapedSourceFileName = sourceFileName;
 
-    if (!cmSystemTools::FileIsFullPath(sourceFileName.c_str()))
+    if (!cmSystemTools::FileIsFullPath(sourceFileName))
       {
       escapedSourceFileName = cmSystemTools::CollapseFullPath(
-        escapedSourceFileName.c_str(),
+        escapedSourceFileName,
         this->GetGlobalGenerator()->GetCMakeInstance()->
           GetHomeOutputDirectory());
       }
@@ -737,16 +737,16 @@ void
 cmNinjaTargetGenerator
 ::EnsureDirectoryExists(const std::string& path) const
 {
-  if (cmSystemTools::FileIsFullPath(path.c_str()))
+  if (cmSystemTools::FileIsFullPath(path))
     {
-    cmSystemTools::MakeDirectory(path.c_str());
+    cmSystemTools::MakeDirectory(path);
     }
   else
     {
     const std::string fullPath = std::string(this->GetGlobalGenerator()->
                                  GetCMakeInstance()->GetHomeOutputDirectory())
                                    + "/" + path;
-    cmSystemTools::MakeDirectory(fullPath.c_str());
+    cmSystemTools::MakeDirectory(fullPath);
     }
 }
 
@@ -754,7 +754,7 @@ void
 cmNinjaTargetGenerator
 ::EnsureParentDirectoryExists(const std::string& path) const
 {
-  EnsureDirectoryExists(cmSystemTools::GetParentDirectory(path.c_str()));
+  EnsureDirectoryExists(cmSystemTools::GetParentDirectory(path));
 }
 
 

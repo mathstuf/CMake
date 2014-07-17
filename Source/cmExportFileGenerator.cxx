@@ -216,7 +216,7 @@ bool cmExportFileGenerator::PopulateInterfaceLinkLibrariesProperty(
 }
 
 //----------------------------------------------------------------------------
-static bool isSubDirectory(const char* a, const char* b)
+static bool isSubDirectory(const std::string& a, const std::string& b)
 {
   return (cmSystemTools::ComparePath(a, b) ||
           cmSystemTools::IsSubDirectory(a, b));
@@ -226,15 +226,15 @@ static bool isSubDirectory(const char* a, const char* b)
 static bool checkInterfaceDirs(const std::string &prepro,
                       cmTarget *target)
 {
-  const char* installDir =
+  const std::string& installDir =
             target->GetMakefile()->GetSafeDefinition("CMAKE_INSTALL_PREFIX");
-  const char* topSourceDir = target->GetMakefile()->GetHomeDirectory();
-  const char* topBinaryDir = target->GetMakefile()->GetHomeOutputDirectory();
+  const std::string& topSourceDir = target->GetMakefile()->GetHomeDirectory();
+  const std::string& topBinaryDir = target->GetMakefile()->GetHomeOutputDirectory();
 
   std::vector<std::string> parts;
   cmGeneratorExpression::Split(prepro, parts);
 
-  const bool inSourceBuild = strcmp(topSourceDir, topBinaryDir) == 0;
+  const bool inSourceBuild = topSourceDir == topBinaryDir;
 
   bool hadFatalError = false;
 
@@ -270,16 +270,16 @@ static bool checkInterfaceDirs(const std::string &prepro,
       {
       continue;
       }
-    if (!cmSystemTools::FileIsFullPath(li->c_str()))
+    if (!cmSystemTools::FileIsFullPath(*li))
       {
       e << "Target \"" << target->GetName() << "\" "
            "INTERFACE_INCLUDE_DIRECTORIES property contains relative path:\n"
            "  \"" << *li << "\"";
       target->GetMakefile()->IssueMessage(messageType, e.str());
       }
-    bool inBinary = isSubDirectory(li->c_str(), topBinaryDir);
-    bool inSource = isSubDirectory(li->c_str(), topSourceDir);
-    if (isSubDirectory(li->c_str(), installDir))
+    bool inBinary = isSubDirectory(*li, topBinaryDir);
+    bool inSource = isSubDirectory(*li, topSourceDir);
+    if (isSubDirectory(*li, installDir))
       {
       // The include directory is inside the install tree.  If the
       // install tree is not inside the source tree or build tree then
@@ -355,7 +355,7 @@ static void prefixItems(std::string &exportDirs)
     {
     exportDirs += sep;
     sep = ";";
-    if (!cmSystemTools::FileIsFullPath(ei->c_str())
+    if (!cmSystemTools::FileIsFullPath(*ei)
         && ei->find("${_IMPORT_PREFIX}") == std::string::npos)
       {
       exportDirs += "${_IMPORT_PREFIX}/";

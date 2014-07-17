@@ -57,13 +57,13 @@ cmSourceFileLocation
 ::cmSourceFileLocation(cmMakefile const* mf, const std::string& name)
   : Makefile(mf)
 {
-  this->AmbiguousDirectory = !cmSystemTools::FileIsFullPath(name.c_str());
+  this->AmbiguousDirectory = !cmSystemTools::FileIsFullPath(name);
   this->AmbiguousExtension = true;
   this->Directory = cmSystemTools::GetFilenamePath(name);
-  if (cmSystemTools::FileIsFullPath(this->Directory.c_str()))
+  if (cmSystemTools::FileIsFullPath(this->Directory))
     {
     this->Directory
-                  = cmSystemTools::CollapseFullPath(this->Directory.c_str());
+                  = cmSystemTools::CollapseFullPath(this->Directory);
     }
   this->Name = cmSystemTools::GetFilenameName(name);
   this->UpdateExtension(name);
@@ -92,7 +92,7 @@ void cmSourceFileLocation::DirectoryUseSource()
     {
     this->Directory =
       cmSystemTools::CollapseFullPath(
-        this->Directory.c_str(), this->Makefile->GetCurrentDirectory());
+        this->Directory, this->Makefile->GetCurrentDirectory());
     this->AmbiguousDirectory = false;
     }
 }
@@ -105,7 +105,7 @@ void cmSourceFileLocation::DirectoryUseBinary()
     {
     this->Directory =
       cmSystemTools::CollapseFullPath(
-        this->Directory.c_str(), this->Makefile->GetCurrentOutputDirectory());
+        this->Directory, this->Makefile->GetCurrentOutputDirectory());
     this->AmbiguousDirectory = false;
     }
 }
@@ -151,7 +151,7 @@ void cmSourceFileLocation::UpdateExtension(const std::string& name)
       tryPath += "/";
       }
     tryPath += this->Name;
-    if(cmSystemTools::FileExists(tryPath.c_str(), true))
+    if(cmSystemTools::FileExists(tryPath, true))
       {
       // We found a source file named by the user on disk.  Trust it's
       // extension.
@@ -280,10 +280,10 @@ bool cmSourceFileLocation::Matches(cmSourceFileLocation const& loc)
     // Compare possible directory combinations.
     std::string const& srcDir =
       cmSystemTools::CollapseFullPath(
-        this->Directory.c_str(), this->Makefile->GetCurrentDirectory());
+        this->Directory, this->Makefile->GetCurrentDirectory());
     std::string const& binDir =
       cmSystemTools::CollapseFullPath(
-        this->Directory.c_str(), this->Makefile->GetCurrentOutputDirectory());
+        this->Directory, this->Makefile->GetCurrentOutputDirectory());
     if(srcDir != loc.Directory &&
        binDir != loc.Directory)
       {
@@ -295,10 +295,10 @@ bool cmSourceFileLocation::Matches(cmSourceFileLocation const& loc)
     // Compare possible directory combinations.
     std::string const& srcDir =
       cmSystemTools::CollapseFullPath(
-        loc.Directory.c_str(), loc.Makefile->GetCurrentDirectory());
+        loc.Directory, loc.Makefile->GetCurrentDirectory());
     std::string const& binDir =
       cmSystemTools::CollapseFullPath(
-        loc.Directory.c_str(), loc.Makefile->GetCurrentOutputDirectory());
+        loc.Directory, loc.Makefile->GetCurrentOutputDirectory());
     if(srcDir != this->Directory &&
        binDir != this->Directory)
       {

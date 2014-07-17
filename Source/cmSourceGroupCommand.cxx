@@ -79,13 +79,13 @@ bool cmSourceGroupCommand
       {
       // Convert name to full path and add to the group's list.
       std::string src = args[i];
-      if(!cmSystemTools::FileIsFullPath(src.c_str()))
+      if(!cmSystemTools::FileIsFullPath(src))
         {
         src = this->Makefile->GetCurrentDirectory();
         src += "/";
         src += args[i];
         }
-      src = cmSystemTools::CollapseFullPath(src.c_str());
+      src = cmSystemTools::CollapseFullPath(src);
       sg->AddGroupFile(src);
       }
     else

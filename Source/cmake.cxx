@@ -646,7 +646,7 @@ void cmake::SetArgs(const std::vector<std::string>& args,
       {
       directoriesSet = true;
       std::string path = arg.substr(2);
-      path = cmSystemTools::CollapseFullPath(path.c_str());
+      path = cmSystemTools::CollapseFullPath(path);
       cmSystemTools::ConvertToUnixSlashes(path);
       this->SetHomeDirectory(path);
       }
@@ -662,7 +662,7 @@ void cmake::SetArgs(const std::vector<std::string>& args,
       {
       directoriesSet = true;
       std::string path = arg.substr(2);
-      path = cmSystemTools::CollapseFullPath(path.c_str());
+      path = cmSystemTools::CollapseFullPath(path);
       cmSystemTools::ConvertToUnixSlashes(path);
       this->SetHomeOutputDirectory(path);
       }
@@ -722,7 +722,7 @@ void cmake::SetArgs(const std::vector<std::string>& args,
     else if(arg.find("--graphviz=",0) == 0)
       {
       std::string path = arg.substr(strlen("--graphviz="));
-      path = cmSystemTools::CollapseFullPath(path.c_str());
+      path = cmSystemTools::CollapseFullPath(path);
       cmSystemTools::ConvertToUnixSlashes(path);
       this->GraphVizFile = path;
       if ( this->GraphVizFile.empty() )
@@ -817,7 +817,7 @@ void cmake::SetArgs(const std::vector<std::string>& args,
     else
       {
       directoriesSet = true;
-      this->SetDirectoriesFromFile(arg.c_str());
+      this->SetDirectoriesFromFile(arg);
       }
     }
   if(!directoriesSet)
@@ -837,7 +837,7 @@ void cmake::SetArgs(const std::vector<std::string>& args,
 }
 
 //----------------------------------------------------------------------------
-void cmake::SetDirectoriesFromFile(const char* arg)
+void cmake::SetDirectoriesFromFile(const std::string& arg)
 {
   // Check if the argument refers to a CMakeCache.txt or
   // CMakeLists.txt file.
@@ -852,11 +852,11 @@ void cmake::SetDirectoriesFromFile(const char* arg)
     cacheFile += "/CMakeCache.txt";
     std::string listFile = path;
     listFile += "/CMakeLists.txt";
-    if(cmSystemTools::FileExists(cacheFile.c_str()))
+    if(cmSystemTools::FileExists(cacheFile))
       {
       cachePath = path;
       }
-    if(cmSystemTools::FileExists(listFile.c_str()))
+    if(cmSystemTools::FileExists(listFile))
       {
       listPath = path;
       }
@@ -962,7 +962,7 @@ int cmake::AddCMakePaths()
      "Path to cpack program executable.", cmCacheManager::INTERNAL);
 #endif
   if(!cmSystemTools::FileExists(
-       (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake").c_str()))
+       cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake"))
     {
     // couldn't find modules
     cmSystemTools::Error("Could not find CMAKE_ROOT !!!\n"
@@ -1158,7 +1158,7 @@ int cmake::DoPreConfigureChecks()
   // Make sure the Start directory contains a CMakeLists.txt file.
   std::string srcList = this->GetHomeDirectory();
   srcList += "/CMakeLists.txt";
-  if(!cmSystemTools::FileExists(srcList.c_str()))
+  if(!cmSystemTools::FileExists(srcList))
     {
     cmOStringStream err;
     if(cmSystemTools::FileIsDirectory(this->GetHomeDirectory()))
@@ -1571,7 +1571,7 @@ void cmake::PreLoadCMakeFiles()
   if ( pre_load.size() > 0 )
     {
     pre_load += "/PreLoad.cmake";
-    if ( cmSystemTools::FileExists(pre_load.c_str()) )
+    if ( cmSystemTools::FileExists(pre_load) )
       {
       this->ReadListFile(args, pre_load.c_str());
       }
@@ -1580,7 +1580,7 @@ void cmake::PreLoadCMakeFiles()
   if ( pre_load.size() > 0 )
     {
     pre_load += "/PreLoad.cmake";
-    if ( cmSystemTools::FileExists(pre_load.c_str()) )
+    if ( cmSystemTools::FileExists(pre_load) )
       {
       this->ReadListFile(args, pre_load.c_str());
       }
@@ -1674,7 +1674,9 @@ int cmake::Run(const std::vector<std::string>& args, bool noconfigure)
   std::string oldstartoutputdir = this->GetStartOutputDirectory();
   this->SetStartDirectory(this->GetHomeDirectory());
   this->SetStartOutputDirectory(this->GetHomeOutputDirectory());
+  clock_t cbegin = clock();
   int ret = this->Configure();
+  clock_t cend = clock();
   if (ret || this->GetWorkingMode() != NORMAL_MODE)
     {
 #if defined(CMAKE_HAVE_VS_GENERATORS)
@@ -1695,7 +1697,9 @@ int cmake::Run(const std::vector<std::string>& args, bool noconfigure)
 #endif
     return ret;
     }
+  clock_t gbegin = clock();
   ret = this->Generate();
+  clock_t gend = clock();
   std::string message = "Build files have been written to: ";
   message += this->GetHomeOutputDirectory();
   this->UpdateProgress(message.c_str(), -1);
@@ -1705,6 +1709,9 @@ int cmake::Run(const std::vector<std::string>& args, bool noconfigure)
     }
   this->SetStartDirectory(oldstartdir);
   this->SetStartOutputDirectory(oldstartoutputdir);
+
+  std::cerr << "XXXXXX Timing of configure: " << (cend - cbegin) / static_cast<double>(CLOCKS_PER_SEC) << std::endl;
+  std::cerr << "XXXXXX Timing of generate: " << (gend - gbegin) / static_cast<double>(CLOCKS_PER_SEC) << std::endl;
 
   return ret;
 }
@@ -1822,7 +1829,7 @@ int cmake::LoadCache()
     // if it does exist, but isn't readable then warn the user
     std::string cacheFile = this->GetHomeOutputDirectory();
     cacheFile += "/CMakeCache.txt";
-    if(cmSystemTools::FileExists(cacheFile.c_str()))
+    if(cmSystemTools::FileExists(cacheFile))
       {
       cmSystemTools::Error(
         "There is a CMakeCache.txt file for the current binary tree but "
@@ -1931,7 +1938,7 @@ int cmake::CheckBuildSystem()
     }
 
   // If the file provided does not exist, we have to rerun.
-  if(!cmSystemTools::FileExists(this->CheckBuildSystemArgument.c_str()))
+  if(!cmSystemTools::FileExists(this->CheckBuildSystemArgument))
     {
     if(verbose)
       {
@@ -1992,8 +1999,8 @@ int cmake::CheckBuildSystem()
   for(std::vector<std::string>::const_iterator pi = products.begin();
       pi != products.end(); ++pi)
     {
-    if(!(cmSystemTools::FileExists(pi->c_str()) ||
-         cmSystemTools::FileIsSymlink(pi->c_str())))
+    if(!(cmSystemTools::FileExists(*pi) ||
+         cmSystemTools::FileIsSymlink(*pi)))
       {
       if(verbose)
         {
@@ -2116,7 +2123,7 @@ void cmake::TruncateOutputLog(const char* fname)
     }
   if ( !this->CacheManager->GetCacheValue("CMAKE_CACHEFILE_DIR") )
     {
-    cmSystemTools::RemoveFile(fullPath.c_str());
+    cmSystemTools::RemoveFile(fullPath);
     return;
     }
   off_t fsize = st.st_size;
@@ -2365,8 +2372,8 @@ int cmake::GetSystemInformation(std::vector<std::string>& args)
   std::string resultFile;
   std::string cwd = cmSystemTools::GetCurrentWorkingDirectory();
   std::string destPath = cwd + "/__cmake_systeminformation";
-  cmSystemTools::RemoveADirectory(destPath.c_str());
-  if (!cmSystemTools::MakeDirectory(destPath.c_str()))
+  cmSystemTools::RemoveADirectory(destPath);
+  if (!cmSystemTools::MakeDirectory(destPath))
     {
     std::cerr << "Error: --system-information must be run from a "
       "writable directory!\n";
@@ -2410,7 +2417,7 @@ int cmake::GetSystemInformation(std::vector<std::string>& args)
     // no option assume it is the output file
     else
       {
-      if (!cmSystemTools::FileIsFullPath(arg.c_str()))
+      if (!cmSystemTools::FileIsFullPath(arg))
         {
         resultFile = cwd;
         resultFile += "/";
@@ -2487,7 +2494,7 @@ int cmake::GetSystemInformation(std::vector<std::string>& args)
     }
 
   // clean up the directory
-  cmSystemTools::RemoveADirectory(destPath.c_str());
+  cmSystemTools::RemoveADirectory(destPath);
   return 0;
 }
 
@@ -2743,7 +2750,7 @@ int cmake::Build(const std::string& dir,
                  const std::vector<std::string>& nativeOptions,
                  bool clean)
 {
-  if(!cmSystemTools::FileIsDirectory(dir.c_str()))
+  if(!cmSystemTools::FileIsDirectory(dir))
     {
     std::cerr << "Error: " << dir << " is not a directory\n";
     return 1;

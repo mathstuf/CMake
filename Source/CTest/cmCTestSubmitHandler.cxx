@@ -218,7 +218,7 @@ bool cmCTestSubmitHandler::SubmitUsingFTP(const std::string& localprefix,
       ::curl_easy_setopt(curl, CURLOPT_UPLOAD, 1);
 
       std::string local_file = *file;
-      if ( !cmSystemTools::FileExists(local_file.c_str()) )
+      if ( !cmSystemTools::FileExists(local_file) )
         {
         local_file = localprefix + "/" + *file;
         }
@@ -226,7 +226,7 @@ bool cmCTestSubmitHandler::SubmitUsingFTP(const std::string& localprefix,
         = url + "/" + remoteprefix + cmSystemTools::GetFilenameName(*file);
 
 
-      if ( !cmSystemTools::FileExists(local_file.c_str()) )
+      if ( !cmSystemTools::FileExists(local_file) )
         {
         cmCTestLog(this->CTest, ERROR_MESSAGE, "   Cannot find file: "
           << local_file << std::endl);
@@ -416,7 +416,7 @@ bool cmCTestSubmitHandler::SubmitUsingHTTP(const std::string& localprefix,
       ::curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
 
       std::string local_file = *file;
-      if ( !cmSystemTools::FileExists(local_file.c_str()) )
+      if ( !cmSystemTools::FileExists(local_file) )
         {
         local_file = localprefix + "/" + *file;
         }
@@ -467,7 +467,7 @@ bool cmCTestSubmitHandler::SubmitUsingHTTP(const std::string& localprefix,
         upload_as += md5;
         }
 
-      if( !cmSystemTools::FileExists(local_file.c_str()) )
+      if( !cmSystemTools::FileExists(local_file) )
         {
         cmCTestLog(this->CTest, ERROR_MESSAGE, "   Cannot find file: "
           << local_file << std::endl);
@@ -837,7 +837,7 @@ bool cmCTestSubmitHandler::SubmitUsingSCP(
     std::string lfname = localprefix;
     cmSystemTools::ConvertToUnixSlashes(lfname);
     lfname += "/" + *file;
-    lfname = cmSystemTools::ConvertToOutputPath(lfname.c_str());
+    lfname = cmSystemTools::ConvertToOutputPath(lfname);
     argv[1] = lfname.c_str();
     std::string rfname = url + "/" + remoteprefix + *file;
     argv[2] = rfname.c_str();
@@ -975,17 +975,17 @@ bool cmCTestSubmitHandler::SubmitUsingXMLRPC(const std::string& localprefix,
     xmlrpc_value *result;
 
     std::string local_file = *file;
-    if ( !cmSystemTools::FileExists(local_file.c_str()) )
+    if ( !cmSystemTools::FileExists(local_file) )
       {
       local_file = localprefix + "/" + *file;
       }
     cmCTestLog(this->CTest, HANDLER_OUTPUT, "   Submit file: "
-      << local_file.c_str() << std::endl);
+      << local_file << std::endl);
     struct stat st;
     if ( ::stat(local_file.c_str(), &st) )
       {
       cmCTestLog(this->CTest, ERROR_MESSAGE, "  Cannot find file: "
-        << local_file.c_str() << std::endl);
+        << local_file << std::endl);
       return false;
       }
 
@@ -995,7 +995,7 @@ bool cmCTestSubmitHandler::SubmitUsingXMLRPC(const std::string& localprefix,
        static_cast<off_t>(st.st_size))
       {
       cmCTestLog(this->CTest, ERROR_MESSAGE, "  File too big: "
-        << local_file.c_str() << std::endl);
+        << local_file << std::endl);
       return false;
       }
     size_t fileSize = static_cast<size_t>(st.st_size);
@@ -1003,7 +1003,7 @@ bool cmCTestSubmitHandler::SubmitUsingXMLRPC(const std::string& localprefix,
     if ( !fp )
       {
       cmCTestLog(this->CTest, ERROR_MESSAGE, "  Cannot open file: "
-        << local_file.c_str() << std::endl);
+        << local_file << std::endl);
       return false;
       }
 
@@ -1013,7 +1013,7 @@ bool cmCTestSubmitHandler::SubmitUsingXMLRPC(const std::string& localprefix,
       delete [] fileBuffer;
       fclose(fp);
       cmCTestLog(this->CTest, ERROR_MESSAGE, "  Cannot read file: "
-        << local_file.c_str() << std::endl);
+        << local_file << std::endl);
       return false;
       }
     fclose(fp);
@@ -1418,7 +1418,7 @@ int cmCTestSubmitHandler::ProcessHandler()
     // change to the build directory so that we can uses a relative path
     // on windows since scp dosn't support "c:" a drive in the path
     oldWorkingDirectory = cmSystemTools::GetCurrentWorkingDirectory();
-    cmSystemTools::ChangeDirectory(buildDirectory.c_str());
+    cmSystemTools::ChangeDirectory(buildDirectory);
 
     if ( !this->SubmitUsingSCP(
         this->CTest->GetCTestConfiguration("ScpCommand"),

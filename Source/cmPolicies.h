@@ -109,6 +109,7 @@ public:
     /// INTERFACE_INCLUDE_DIRECTORIES
 
     CMP0053, ///< Simplify variable reference and escape sequence evaluation
+    CMP0054, ///< Disallow ambiguous extensions to source files
 
     /** \brief Always the last entry.
      *

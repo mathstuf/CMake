@@ -123,7 +123,7 @@ void cmCTestMultiProcessHandler::StartTestProcess(int test)
   testRun->SetTestProperties(this->Properties[test]);
 
   std::string current_dir = cmSystemTools::GetCurrentWorkingDirectory();
-  cmSystemTools::ChangeDirectory(this->Properties[test]->Directory.c_str());
+  cmSystemTools::ChangeDirectory(this->Properties[test]->Directory);
 
   // Lock the resources we'll be using
   this->LockResources(test);
@@ -156,7 +156,7 @@ void cmCTestMultiProcessHandler::StartTestProcess(int test)
     this->Failed->push_back(this->Properties[test]->Name);
     delete testRun;
     }
-  cmSystemTools::ChangeDirectory(current_dir.c_str());
+  cmSystemTools::ChangeDirectory(current_dir);
 }
 
 //---------------------------------------------------------
@@ -324,7 +324,7 @@ void cmCTestMultiProcessHandler::UpdateCostData()
 
   PropertiesMap temp = this->Properties;
 
-  if(cmSystemTools::FileExists(fname.c_str()))
+  if(cmSystemTools::FileExists(fname))
     {
     cmsys::ifstream fin;
     fin.open(fname.c_str());
@@ -334,7 +334,7 @@ void cmCTestMultiProcessHandler::UpdateCostData()
       {
       if(line == "---") break;
       std::vector<cmsys::String> parts =
-        cmSystemTools::SplitString(line.c_str(), ' ');
+        cmSystemTools::SplitString(line, ' ');
       //Format: <name> <previous_runs> <avg_cost>
       if(parts.size() < 3) break;
 
@@ -357,7 +357,7 @@ void cmCTestMultiProcessHandler::UpdateCostData()
         }
       }
     fin.close();
-    cmSystemTools::RemoveFile(fname.c_str());
+    cmSystemTools::RemoveFile(fname);
     }
 
   // Add all tests not previously listed in the file
@@ -383,7 +383,7 @@ void cmCTestMultiProcessHandler::ReadCostData()
 {
   std::string fname = this->CTest->GetCostDataFile();
 
-  if(cmSystemTools::FileExists(fname.c_str(), true))
+  if(cmSystemTools::FileExists(fname, true))
     {
     cmsys::ifstream fin;
     fin.open(fname.c_str());
@@ -393,7 +393,7 @@ void cmCTestMultiProcessHandler::ReadCostData()
       if(line == "---") break;
 
       std::vector<cmsys::String> parts =
-        cmSystemTools::SplitString(line.c_str(), ' ');
+        cmSystemTools::SplitString(line, ' ');
 
       // Probably an older version of the file, will be fixed next run
       if(parts.size() < 3)
@@ -621,7 +621,7 @@ void cmCTestMultiProcessHandler::MarkFinished()
 {
   std::string fname = this->CTest->GetBinaryDir()
     + "/Testing/Temporary/CTestCheckpoint.txt";
-  cmSystemTools::RemoveFile(fname.c_str());
+  cmSystemTools::RemoveFile(fname);
 }
 
 //---------------------------------------------------------
@@ -639,7 +639,7 @@ void cmCTestMultiProcessHandler::PrintTestList()
 
     //push working dir
     std::string current_dir = cmSystemTools::GetCurrentWorkingDirectory();
-    cmSystemTools::ChangeDirectory(p.Directory.c_str());
+    cmSystemTools::ChangeDirectory(p.Directory);
 
     cmCTestRunTest testRun(this->TestHandler);
     testRun.SetIndex(p.Index);
@@ -674,9 +674,9 @@ void cmCTestMultiProcessHandler::PrintTestList()
       std::setw(3 + getNumWidth(this->TestHandler->GetMaxIndex()))
       << indexStr.str());
     cmCTestLog(this->CTest, HANDLER_OUTPUT, " ");
-    cmCTestLog(this->CTest, HANDLER_OUTPUT, p.Name.c_str() << std::endl);
+    cmCTestLog(this->CTest, HANDLER_OUTPUT, p.Name << std::endl);
     //pop working dir
-    cmSystemTools::ChangeDirectory(current_dir.c_str());
+    cmSystemTools::ChangeDirectory(current_dir);
     }
 
   cmCTestLog(this->CTest, HANDLER_OUTPUT, std::endl << "Total Tests: "
@@ -715,7 +715,7 @@ void cmCTestMultiProcessHandler::CheckResume()
       + "/Testing/Temporary/CTestCheckpoint.txt";
   if(this->CTest->GetFailover())
     {
-    if(cmSystemTools::FileExists(fname.c_str(), true))
+    if(cmSystemTools::FileExists(fname, true))
       {
       *this->TestHandler->LogFile << "Resuming previously interrupted test set"
         << std::endl
@@ -733,9 +733,9 @@ void cmCTestMultiProcessHandler::CheckResume()
       fin.close();
       }
     }
-  else if(cmSystemTools::FileExists(fname.c_str(), true))
+  else if(cmSystemTools::FileExists(fname, true))
     {
-    cmSystemTools::RemoveFile(fname.c_str());
+    cmSystemTools::RemoveFile(fname);
     }
 }
 

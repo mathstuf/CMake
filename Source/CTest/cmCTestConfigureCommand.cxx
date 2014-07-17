@@ -64,7 +64,7 @@ cmCTestGenericHandler* cmCTestConfigureCommand::InitializeHandler()
         }
 
       const std::string cmakelists_file = source_dir + "/CMakeLists.txt";
-      if ( !cmSystemTools::FileExists(cmakelists_file.c_str()) )
+      if ( !cmSystemTools::FileExists(cmakelists_file) )
         {
         cmOStringStream e;
         e << "CMakeLists.txt file does not exist ["

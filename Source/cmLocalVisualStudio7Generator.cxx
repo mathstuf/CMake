@@ -202,7 +202,7 @@ void cmLocalVisualStudio7Generator::WriteStampFiles()
   // out of date.
   std::string stampName = this->Makefile->GetStartOutputDirectory();
   stampName += cmake::GetCMakeFilesDirectory();
-  cmSystemTools::MakeDirectory(stampName.c_str());
+  cmSystemTools::MakeDirectory(stampName);
   stampName += "/";
   stampName += "generate.stamp";
   cmsys::ofstream stamp(stampName.c_str());
@@ -288,8 +288,8 @@ cmSourceFile* cmLocalVisualStudio7Generator::CreateVCProjBuildRule()
   std::string makefileIn = this->Makefile->GetStartDirectory();
   makefileIn += "/";
   makefileIn += "CMakeLists.txt";
-  makefileIn = cmSystemTools::CollapseFullPath(makefileIn.c_str());
-  if(!cmSystemTools::FileExists(makefileIn.c_str()))
+  makefileIn = cmSystemTools::CollapseFullPath(makefileIn);
+  if(!cmSystemTools::FileExists(makefileIn))
     {
     return 0;
     }
@@ -1367,7 +1367,7 @@ cmLocalVisualStudio7Generator
       }
 
     // Switch to a relative path specification if it is shorter.
-    if(cmSystemTools::FileIsFullPath(dir.c_str()))
+    if(cmSystemTools::FileIsFullPath(dir))
       {
       std::string rel = this->Convert(dir.c_str(), START_OUTPUT, UNCHANGED);
       if(rel.size() < dir.size())

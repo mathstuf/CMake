@@ -61,7 +61,7 @@ void cmInstallGenerator
     }
   os << indent;
   std::string dest = this->GetInstallDestination();
-  if (cmSystemTools::FileIsFullPath(dest.c_str()))
+  if (cmSystemTools::FileIsFullPath(dest))
      {
      os << "list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES\n";
      os << indent << " \"";
@@ -183,7 +183,7 @@ std::string cmInstallGenerator::GetInstallDestination() const
 {
   std::string result;
   if(!this->Destination.empty() &&
-     !cmSystemTools::FileIsFullPath(this->Destination.c_str()))
+     !cmSystemTools::FileIsFullPath(this->Destination))
     {
     result = "${CMAKE_INSTALL_PREFIX}/";
     }

@@ -218,7 +218,7 @@ GetLocalObjectFiles(std::map<std::string, LocalObjectInfo> &localObjectFiles)
       std::string objectName = this->GetObjectFileNameWithoutTarget(*sf,
                                                                     dir,
                                                         &hasSourceExtension);
-      if(cmSystemTools::FileIsFullPath(objectName.c_str()))
+      if(cmSystemTools::FileIsFullPath(objectName))
         {
         objectName = cmSystemTools::GetFilenameName(objectName);
         }
@@ -693,7 +693,7 @@ cmLocalUnixMakefileGenerator3
 ::ConvertShellCommand(std::string const& cmd, RelativeRoot root)
 {
   if(this->WatcomWMake &&
-     cmSystemTools::FileIsFullPath(cmd.c_str()) &&
+     cmSystemTools::FileIsFullPath(cmd) &&
      cmd.find_first_of("( )") != cmd.npos)
     {
     // On Watcom WMake use the windows short path for the command
@@ -1722,8 +1722,8 @@ void cmLocalUnixMakefileGenerator3::CheckMultipleOutputs(bool verbose)
 
     // If the depender is missing then delete the dependee to make
     // sure both will be regenerated.
-    if(cmSystemTools::FileExists(dependee.c_str()) &&
-       !cmSystemTools::FileExists(depender.c_str()))
+    if(cmSystemTools::FileExists(dependee) &&
+       !cmSystemTools::FileExists(depender))
       {
       if(verbose)
         {
@@ -1733,7 +1733,7 @@ void cmLocalUnixMakefileGenerator3::CheckMultipleOutputs(bool verbose)
             << depender << "\" does not exist." << std::endl;
         cmSystemTools::Stdout(msg.str().c_str());
         }
-      cmSystemTools::RemoveFile(dependee.c_str());
+      cmSystemTools::RemoveFile(dependee);
       }
     }
 }
@@ -1988,7 +1988,7 @@ void cmLocalUnixMakefileGenerator3::ClearDependencies(cmMakefile* mf,
     // Remove the internal dependency check file to force
     // regeneration.
     std::string internalDependFile = dir + "/depend.internal";
-    cmSystemTools::RemoveFile(internalDependFile.c_str());
+    cmSystemTools::RemoveFile(internalDependFile);
     }
 }
 

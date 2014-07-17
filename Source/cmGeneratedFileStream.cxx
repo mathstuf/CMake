@@ -152,10 +152,10 @@ void cmGeneratedFileStreamBase::Open(const char* name)
 #endif
 
   // Make sure the temporary file that will be used is not present.
-  cmSystemTools::RemoveFile(this->TempName.c_str());
+  cmSystemTools::RemoveFile(this->TempName);
 
   std::string dir = cmSystemTools::GetFilenamePath(this->TempName);
-  cmSystemTools::MakeDirectory(dir.c_str());
+  cmSystemTools::MakeDirectory(dir);
 }
 
 //----------------------------------------------------------------------------
@@ -185,7 +185,7 @@ bool cmGeneratedFileStreamBase::Close()
         {
         this->RenameFile(gzname.c_str(), resname.c_str());
         }
-      cmSystemTools::RemoveFile(gzname.c_str());
+      cmSystemTools::RemoveFile(gzname);
       }
     else
       {
@@ -198,7 +198,7 @@ bool cmGeneratedFileStreamBase::Close()
   // Else, the destination was not replaced.
   //
   // Always delete the temporary file. We never want it to stay around.
-  cmSystemTools::RemoveFile(this->TempName.c_str());
+  cmSystemTools::RemoveFile(this->TempName);
 
   return replaced;
 }

@@ -33,7 +33,7 @@ bool cmUseMangledMesaCommand
   std::string glh = inputDir;
   glh += "/";
   glh += "gl.h";
-  if(!cmSystemTools::FileExists(glh.c_str()))
+  if(!cmSystemTools::FileExists(glh))
     {
     std::string e = "Bad path to Mesa, could not find: ";
     e += glh;
@@ -41,7 +41,7 @@ bool cmUseMangledMesaCommand
     this->SetError(e);
     return false;
     }
-  const char* destDir = args[1].c_str();
+  const std::string& destDir = args[1];
   std::vector<std::string> files;
   cmSystemTools::Glob(inputDir, "\\.h$", files);
   if(files.size() == 0)
@@ -56,7 +56,7 @@ bool cmUseMangledMesaCommand
     std::string path = inputDir;
     path += "/";
     path += *i;
-    this->CopyAndFullPathMesaHeader(path.c_str(), destDir);
+    this->CopyAndFullPathMesaHeader(path.c_str(), destDir.c_str());
     }
 
   return true;
@@ -129,6 +129,6 @@ CopyAndFullPathMesaHeader(const char* source,
   fout.close();
   cmSystemTools::CopyFileIfDifferent(tempOutputFile.c_str(),
                                      outFile.c_str());
-  cmSystemTools::RemoveFile(tempOutputFile.c_str());
+  cmSystemTools::RemoveFile(tempOutputFile);
 }
 

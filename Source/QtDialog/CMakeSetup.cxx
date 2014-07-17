@@ -153,28 +153,28 @@ int main(int argc, char** argv)
 
       // check if argument is a directory containing CMakeCache.txt
       cmsys_stl::string buildFilePath =
-        cmSystemTools::CollapseFullPath("CMakeCache.txt", filePath.c_str());
+        cmSystemTools::CollapseFullPath("CMakeCache.txt", filePath);
 
       // check if argument is a CMakeCache.txt file
       if(cmSystemTools::GetFilenameName(filePath) == "CMakeCache.txt" &&
-         cmSystemTools::FileExists(filePath.c_str()))
+         cmSystemTools::FileExists(filePath))
         {
         buildFilePath = filePath;
         }
 
       // check if argument is a directory containing CMakeLists.txt
       cmsys_stl::string srcFilePath =
-        cmSystemTools::CollapseFullPath("CMakeLists.txt", filePath.c_str());
+        cmSystemTools::CollapseFullPath("CMakeLists.txt", filePath);
 
-      if(cmSystemTools::FileExists(buildFilePath.c_str()))
+      if(cmSystemTools::FileExists(buildFilePath))
         {
         dialog.setBinaryDirectory(
           QString::fromLocal8Bit(
-            cmSystemTools::GetFilenamePath(buildFilePath).c_str()
+            cmSystemTools::GetFilenamePath(buildFilePath)
             )
           );
         }
-      else if(cmSystemTools::FileExists(srcFilePath.c_str()))
+      else if(cmSystemTools::FileExists(srcFilePath))
         {
         dialog.setSourceDirectory(QString::fromLocal8Bit(filePath.c_str()));
         dialog.setBinaryDirectory(

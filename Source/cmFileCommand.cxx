@@ -188,7 +188,7 @@ bool cmFileCommand::HandleWriteCommand(std::vector<std::string> const& args,
   i++; // Get rid of subcommand
 
   std::string fileName = *i;
-  if ( !cmsys::SystemTools::FileIsFullPath(i->c_str()) )
+  if ( !cmsys::SystemTools::FileIsFullPath(*i) )
     {
     fileName = this->Makefile->GetCurrentDirectory();
     fileName += "/" + *i;
@@ -210,14 +210,14 @@ bool cmFileCommand::HandleWriteCommand(std::vector<std::string> const& args,
     return false;
     }
   std::string dir = cmSystemTools::GetFilenamePath(fileName);
-  cmSystemTools::MakeDirectory(dir.c_str());
+  cmSystemTools::MakeDirectory(dir);
 
   mode_t mode = 0;
 
   // Set permissions to writable
-  if ( cmSystemTools::GetPermissions(fileName.c_str(), mode) )
+  if ( cmSystemTools::GetPermissions(fileName, mode) )
     {
-    cmSystemTools::SetPermissions(fileName.c_str(),
+    cmSystemTools::SetPermissions(fileName,
 #if defined( _MSC_VER ) || defined( __MINGW32__ )
       mode | S_IWRITE
 #elif defined( __BORLANDC__ )
@@ -243,7 +243,7 @@ bool cmFileCommand::HandleWriteCommand(std::vector<std::string> const& args,
   file.close();
   if(mode)
     {
-    cmSystemTools::SetPermissions(fileName.c_str(), mode);
+    cmSystemTools::SetPermissions(fileName, mode);
     }
   return true;
 }
@@ -275,7 +275,7 @@ bool cmFileCommand::HandleReadCommand(std::vector<std::string> const& args)
   argHelper.Parse(&args, 0);
 
   std::string fileName = fileNameArg.GetString();
-  if ( !cmsys::SystemTools::FileIsFullPath(fileName.c_str()) )
+  if ( !cmsys::SystemTools::FileIsFullPath(fileName) )
     {
     fileName = this->Makefile->GetCurrentDirectory();
     fileName += "/" + fileNameArg.GetString();
@@ -411,7 +411,7 @@ bool cmFileCommand::HandleStringsCommand(std::vector<std::string> const& args)
 
   // Get the file to read.
   std::string fileName = args[1];
-  if(!cmsys::SystemTools::FileIsFullPath(fileName.c_str()))
+  if(!cmsys::SystemTools::FileIsFullPath(fileName))
     {
     fileName = this->Makefile->GetCurrentDirectory();
     fileName += "/" + args[1];
@@ -784,7 +784,7 @@ bool cmFileCommand::HandleGlobCommand(std::vector<std::string> const& args,
         }
       }
 
-    if ( !cmsys::SystemTools::FileIsFullPath(i->c_str()) )
+    if ( !cmsys::SystemTools::FileIsFullPath(*i) )
       {
       std::string expr = this->Makefile->GetCurrentDirectory();
       // Handle script mode
@@ -865,7 +865,7 @@ bool cmFileCommand::HandleMakeDirectoryCommand(
   for ( ; i != args.end(); ++i )
     {
     const std::string* cdir = &(*i);
-    if ( !cmsys::SystemTools::FileIsFullPath(i->c_str()) )
+    if ( !cmsys::SystemTools::FileIsFullPath(*i) )
       {
       expr = this->Makefile->GetCurrentDirectory();
       expr += "/" + *i;
@@ -879,7 +879,7 @@ bool cmFileCommand::HandleMakeDirectoryCommand(
       cmSystemTools::SetFatalErrorOccured();
       return false;
       }
-    if ( !cmSystemTools::MakeDirectory(cdir->c_str()) )
+    if ( !cmSystemTools::MakeDirectory(*cdir) )
       {
       std::string error = "problem creating directory: " + *cdir;
       this->SetError(error);
@@ -1037,7 +1037,7 @@ protected:
     return result;
     }
 
-  bool SetPermissions(const char* toFile, mode_t permissions)
+  bool SetPermissions(const std::string& toFile, mode_t permissions)
     {
     if(permissions && !cmSystemTools::SetPermissions(toFile, permissions))
       {
@@ -1326,7 +1326,7 @@ bool cmFileCopier::CheckValue(std::string const& arg)
   switch(this->Doing)
     {
     case DoingFiles:
-      if(arg.empty() || cmSystemTools::FileIsFullPath(arg.c_str()))
+      if(arg.empty() || cmSystemTools::FileIsFullPath(arg))
         {
         this->Files.push_back(arg);
         }
@@ -1338,7 +1338,7 @@ bool cmFileCopier::CheckValue(std::string const& arg)
         }
       break;
     case DoingDestination:
-      if(arg.empty() || cmSystemTools::FileIsFullPath(arg.c_str()))
+      if(arg.empty() || cmSystemTools::FileIsFullPath(arg))
         {
         this->Destination = arg;
         }
@@ -2115,9 +2115,9 @@ bool cmFileInstaller::HandleInstallDestination()
 
   if(this->InstallType != cmInstallType_DIRECTORY)
     {
-    if ( !cmSystemTools::FileExists(destination.c_str()) )
+    if ( !cmSystemTools::FileExists(destination) )
       {
-      if ( !cmSystemTools::MakeDirectory(destination.c_str()) )
+      if ( !cmSystemTools::MakeDirectory(destination) )
         {
         std::string errstring = "cannot create directory: " + destination +
           ". Maybe need administrative privileges.";
@@ -2125,7 +2125,7 @@ bool cmFileInstaller::HandleInstallDestination()
         return false;
         }
       }
-    if ( !cmSystemTools::FileIsDirectory(destination.c_str()) )
+    if ( !cmSystemTools::FileIsDirectory(destination) )
       {
       std::string errstring = "INSTALL destination: " + destination +
         " is not a directory.";
@@ -2393,7 +2393,7 @@ bool cmFileCommand::HandleRelativePathCommand(
   const std::string& directoryName = args[2];
   const std::string& fileName = args[3];
 
-  if(!cmSystemTools::FileIsFullPath(directoryName.c_str()))
+  if(!cmSystemTools::FileIsFullPath(directoryName))
     {
     std::string errstring =
       "RELATIVE_PATH must be passed a full path to the directory: "
@@ -2401,7 +2401,7 @@ bool cmFileCommand::HandleRelativePathCommand(
     this->SetError(errstring);
     return false;
     }
-  if(!cmSystemTools::FileIsFullPath(fileName.c_str()))
+  if(!cmSystemTools::FileIsFullPath(fileName))
     {
     std::string errstring =
       "RELATIVE_PATH must be passed a full path to the file: "
@@ -2429,13 +2429,13 @@ bool cmFileCommand::HandleRename(std::vector<std::string> const& args)
 
   // Compute full path for old and new names.
   std::string oldname = args[1];
-  if(!cmsys::SystemTools::FileIsFullPath(oldname.c_str()))
+  if(!cmsys::SystemTools::FileIsFullPath(oldname))
     {
     oldname = this->Makefile->GetCurrentDirectory();
     oldname += "/" + args[1];
     }
   std::string newname = args[2];
-  if(!cmsys::SystemTools::FileIsFullPath(newname.c_str()))
+  if(!cmsys::SystemTools::FileIsFullPath(newname))
     {
     newname = this->Makefile->GetCurrentDirectory();
     newname += "/" + args[2];
@@ -2469,20 +2469,20 @@ bool cmFileCommand::HandleRemove(std::vector<std::string> const& args,
   for(;i != args.end(); ++i)
     {
     std::string fileName = *i;
-    if(!cmsys::SystemTools::FileIsFullPath(fileName.c_str()))
+    if(!cmsys::SystemTools::FileIsFullPath(fileName))
       {
       fileName = this->Makefile->GetCurrentDirectory();
       fileName += "/" + *i;
       }
 
-    if(cmSystemTools::FileIsDirectory(fileName.c_str()) &&
-       !cmSystemTools::FileIsSymlink(fileName.c_str()) && recurse)
+    if(cmSystemTools::FileIsDirectory(fileName) &&
+       !cmSystemTools::FileIsSymlink(fileName) && recurse)
       {
-      cmSystemTools::RemoveADirectory(fileName.c_str());
+      cmSystemTools::RemoveADirectory(fileName);
       }
     else
       {
-      cmSystemTools::RemoveFile(fileName.c_str());
+      cmSystemTools::RemoveFile(fileName);
       }
     }
   return true;
@@ -2506,7 +2506,7 @@ bool cmFileCommand::HandleCMakePathCommand(std::vector<std::string>
 #else
   char pathSep = ':';
 #endif
-  std::vector<cmsys::String> path = cmSystemTools::SplitString(i->c_str(),
+  std::vector<cmsys::String> path = cmSystemTools::SplitString(*i,
                                                              pathSep);
   i++;
   const char* var =  i->c_str();
@@ -2524,11 +2524,11 @@ bool cmFileCommand::HandleCMakePathCommand(std::vector<std::string>
       }
     else
       {
-      *j = cmSystemTools::ConvertToOutputPath(j->c_str());
+      *j = cmSystemTools::ConvertToOutputPath(*j);
       // remove double quotes in the path
       cmsys::String& s = *j;
 
-      if(s.size() > 1 && s[0] == '\"' && s[s.size()-1] == '\"')
+      if(s.size() > 1 && s[0] == '\"' && *s.rbegin() == '\"')
         {
         s = s.substr(1,s.size()-2);
         }
@@ -2872,7 +2872,7 @@ cmFileCommand::HandleDownloadCommand(std::vector<std::string> const& args)
   // and the existing file already has the expected hash, then simply
   // return.
   //
-  if(cmSystemTools::FileExists(file.c_str()) && hash.get())
+  if(cmSystemTools::FileExists(file) && hash.get())
     {
     std::string msg;
     std::string actualHash = hash->HashFile(file);
@@ -2895,8 +2895,8 @@ cmFileCommand::HandleDownloadCommand(std::vector<std::string> const& args)
   // as we receive downloaded bits from curl...
   //
   std::string dir = cmSystemTools::GetFilenamePath(file);
-  if(!cmSystemTools::FileExists(dir.c_str()) &&
-     !cmSystemTools::MakeDirectory(dir.c_str()))
+  if(!cmSystemTools::FileExists(dir) &&
+     !cmSystemTools::MakeDirectory(dir))
     {
     std::string errstring = "DOWNLOAD error: cannot create directory '"
       + dir + "' - Specify file by full path name and verify that you "

@@ -258,7 +258,7 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
 
     else if (args[1] == "make_directory" && args.size() == 3)
       {
-      if(!cmSystemTools::MakeDirectory(args[2].c_str()))
+      if(!cmSystemTools::MakeDirectory(args[2]))
         {
         std::cerr << "Error making directory \"" << args[2]
                   << "\".\n";
@@ -269,8 +269,8 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
 
     else if (args[1] == "remove_directory" && args.size() == 3)
       {
-      if(cmSystemTools::FileIsDirectory(args[2].c_str()) &&
-         !cmSystemTools::RemoveADirectory(args[2].c_str()))
+      if(cmSystemTools::FileIsDirectory(args[2]) &&
+         !cmSystemTools::RemoveADirectory(args[2]))
         {
         std::cerr << "Error removing directory \"" << args[2]
                   << "\".\n";
@@ -293,8 +293,8 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
           {
           // Complain if the file could not be removed, still exists,
           // and the -f option was not given.
-          if(!cmSystemTools::RemoveFile(args[cc].c_str()) && !force &&
-             cmSystemTools::FileExists(args[cc].c_str()))
+          if(!cmSystemTools::RemoveFile(args[cc]) && !force &&
+             cmSystemTools::FileExists(args[cc]))
             {
             return 1;
             }
@@ -395,7 +395,7 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
       int retval = 0;
       for (std::string::size_type cc = 2; cc < args.size(); cc ++)
         {
-        const char *filename = args[cc].c_str();
+        const std::string& filename = args[cc];
         // Cannot compute md5sum of a directory
         if(cmSystemTools::FileIsDirectory(filename))
           {
@@ -420,7 +420,7 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
     else if (args[1] == "chdir" && args.size() >= 4)
       {
       std::string directory = args[2];
-      if(!cmSystemTools::FileExists(directory.c_str()))
+      if(!cmSystemTools::FileExists(directory))
         {
         cmSystemTools::Error("Directory does not exist for chdir command: ",
                              args[2].c_str());
@@ -453,7 +453,7 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
       // basically remove the directory
       std::string dirName = args[2];
       dirName += "/Progress";
-      cmSystemTools::RemoveADirectory(dirName.c_str());
+      cmSystemTools::RemoveADirectory(dirName);
 
       // is the last argument a filename that exists?
       FILE *countFile = cmsys::SystemTools::Fopen(args[3].c_str(),"r");
@@ -472,7 +472,7 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
         }
       if (count)
         {
-        cmSystemTools::MakeDirectory(dirName.c_str());
+        cmSystemTools::MakeDirectory(dirName);
         // write the count into the directory
         std::string fName = dirName;
         fName += "/count.txt";
@@ -538,7 +538,7 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
     // supporting them.
     else if (args[1] == "create_symlink" && args.size() == 4)
       {
-      const char* destinationFileName = args[3].c_str();
+      const std::string& destinationFileName = args[3];
       if((cmSystemTools::FileExists(destinationFileName) ||
           cmSystemTools::FileIsSymlink(destinationFileName)) &&
          !cmSystemTools::RemoveFile(destinationFileName))
@@ -660,10 +660,10 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
 
       // Create a local generator configured for the directory in
       // which dependencies will be scanned.
-      homeDir = cmSystemTools::CollapseFullPath(homeDir.c_str());
-      startDir = cmSystemTools::CollapseFullPath(startDir.c_str());
-      homeOutDir = cmSystemTools::CollapseFullPath(homeOutDir.c_str());
-      startOutDir = cmSystemTools::CollapseFullPath(startOutDir.c_str());
+      homeDir = cmSystemTools::CollapseFullPath(homeDir);
+      startDir = cmSystemTools::CollapseFullPath(startDir);
+      homeOutDir = cmSystemTools::CollapseFullPath(homeOutDir);
+      startOutDir = cmSystemTools::CollapseFullPath(startOutDir);
       cm.SetHomeDirectory(homeDir);
       cm.SetStartDirectory(startDir);
       cm.SetHomeOutputDirectory(homeOutDir);
@@ -884,10 +884,10 @@ int cmcmd::SymlinkExecutable(std::vector<std::string>& args)
 //----------------------------------------------------------------------------
 bool cmcmd::SymlinkInternal(std::string const& file, std::string const& link)
 {
-  if(cmSystemTools::FileExists(link.c_str()) ||
-     cmSystemTools::FileIsSymlink(link.c_str()))
+  if(cmSystemTools::FileExists(link) ||
+     cmSystemTools::FileIsSymlink(link))
     {
-    cmSystemTools::RemoveFile(link.c_str());
+    cmSystemTools::RemoveFile(link);
     }
 #if defined(_WIN32) && !defined(__CYGWIN__)
   return cmSystemTools::CopyFileAlways(file.c_str(), link.c_str());
@@ -1318,7 +1318,7 @@ int cmcmd::VisualStudioLinkIncremental(std::vector<std::string>& args,
     }
   std::string manifestFile = targetName;
   manifestFile += ".embed.manifest";
-  std::string fullPath= cmSystemTools::CollapseFullPath(manifestFile.c_str());
+  std::string fullPath= cmSystemTools::CollapseFullPath(manifestFile);
   fout << type << " /* CREATEPROCESS_MANIFEST_RESOURCE_ID "
     "*/ 24 /* RT_MANIFEST */ " << "\"" << fullPath << "\"";
   fout.close();
@@ -1328,7 +1328,7 @@ int cmcmd::VisualStudioLinkIncremental(std::vector<std::string>& args,
   linkCommand.push_back(manifestArg);
   // if manifestFile is not yet created, create an
   // empty one
-  if(!cmSystemTools::FileExists(manifestFile.c_str()))
+  if(!cmSystemTools::FileExists(manifestFile))
     {
     if(verbose)
       {

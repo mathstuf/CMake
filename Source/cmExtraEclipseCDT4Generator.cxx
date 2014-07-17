@@ -590,7 +590,7 @@ void cmExtraEclipseCDT4Generator::CreateLinksForTargets(
                 ++fileIt)
               {
               std::string fullPath = (*fileIt)->GetFullPath();
-              if (!cmSystemTools::FileIsDirectory(fullPath.c_str()))
+              if (!cmSystemTools::FileIsDirectory(fullPath))
                 {
                 std::string linkName4 = linkName3;
                 linkName4 += "/";
@@ -663,7 +663,7 @@ void cmExtraEclipseCDT4Generator::AppendIncludeDirectories(
     {
     if (!inc->empty())
       {
-      std::string dir = cmSystemTools::CollapseFullPath(inc->c_str());
+      std::string dir = cmSystemTools::CollapseFullPath(*inc);
 
       // handle framework include dirs on OSX, the remainder after the
       // Frameworks/ part has to be stripped
@@ -819,7 +819,7 @@ void cmExtraEclipseCDT4Generator::CreateCProjectFile() const
     // exlude source directory from output search path
     // - only if not named the same as an output directory
     if (!cmSystemTools::FileIsDirectory(
-           std::string(this->HomeOutputDirectory + "/" + *it).c_str()))
+           this->HomeOutputDirectory + "/" + *it))
       {
       excludeFromOut += this->EscapeForXML(*it) + "/|";
       }

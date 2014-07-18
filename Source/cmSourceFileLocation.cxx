@@ -67,6 +67,34 @@ cmSourceFileLocation
     }
   this->Name = cmSystemTools::GetFilenameName(name);
   this->UpdateExtension(name);
+  return;
+
+  cmake::MessageType messageType = cmake::FATAL_ERROR;
+  cmPolicies::PolicyStatus status = mf->GetPolicyStatus(cmPolicies::CMP0054);
+  switch(status)
+    {
+    case cmPolicies::OLD:
+      break;
+    case cmPolicies::WARN:
+      messageType = cmake::AUTHOR_WARNING;
+    case cmPolicies::REQUIRED_IF_USED:
+    case cmPolicies::REQUIRED_ALWAYS:
+    case cmPolicies::NEW:
+      if (this->AmbiguousExtension && this->Name != name)
+        {
+        std::string e = mf->GetPolicies()->
+            GetPolicyWarning(cmPolicies::CMP0054);
+        e += "\n given path  : " + name;
+        e += "\n derived path: " + this->Name;
+        this->Makefile->IssueMessage(messageType, e + "\n");
+        }
+      break;
+    }
+  if (status != cmPolicies::OLD &&
+      status != cmPolicies::WARN)
+    {
+    this->AmbiguousExtension = true;
+    }
 }
 
 //----------------------------------------------------------------------------

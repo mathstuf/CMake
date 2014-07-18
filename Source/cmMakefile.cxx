@@ -1572,8 +1572,9 @@ void cmMakefile::InitializeFromParent()
 {
   cmMakefile *parent = this->LocalGenerator->GetParent()->GetMakefile();
 
-  // Initialize definitions with the closure of the parent scope.
-  this->Internal->VarStack.top() = parent->Internal->VarStack.top().Closure();
+  // Point definitions to the parent's scope.
+  this->Internal->VarStack.top() =
+    cmDefinitions(&parent->Internal->VarStack.top());
 
   const std::vector<cmValueWithOrigin>& parentIncludes =
                                         parent->GetIncludeDirectoriesEntries();
@@ -4480,21 +4481,6 @@ void cmMakefile::RaiseScope(const std::string& var, const char *varDef)
 
     // Now update the definition in the parent scope.
     up->Set(var, varDef);
-    }
-  else if(cmLocalGenerator* plg = this->LocalGenerator->GetParent())
-    {
-    // Update the definition in the parent directory top scope.  This
-    // directory's scope was initialized by the closure of the parent
-    // scope, so we do not need to localize the definition first.
-    cmMakefile* parent = plg->GetMakefile();
-    if (varDef)
-      {
-      parent->AddDefinition(var, varDef);
-      }
-    else
-      {
-      parent->RemoveDefinition(var);
-      }
     }
   else
     {

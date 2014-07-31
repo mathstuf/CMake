@@ -730,7 +730,7 @@ void cmCTestRunTest::WriteLogOutputTop(size_t completed, size_t total)
   *this->TestHandler->LogFile
     << this->ProcessOutput << "<end of output>" << std::endl;
 
-  cmCTestLog(this->CTest, HANDLER_OUTPUT, outname.c_str());
+  cmCTestLog(this->CTest, HANDLER_OUTPUT, outname);
   cmCTestLog(this->CTest, DEBUG, "Testing "
              << this->TestProperties->Name << " ... ");
 }

@@ -932,7 +932,7 @@ int cmCTestScriptHandler::RunConfigurationDashboard()
       cmGeneratedFileStream fout(cmakeOutputFile.c_str());
       if ( fout )
         {
-        fout << output.c_str();
+        fout << output;
         }
       else
         {

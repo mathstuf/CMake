@@ -168,11 +168,11 @@ int cmCPackOSXX11Generator::PackageFiles()
   cmOStringStream dmgCmd;
   dmgCmd << "\"" << this->GetOption("CPACK_INSTALLER_PROGRAM_DISK_IMAGE")
          << "\" create -ov -format UDZO -srcfolder \""
-         << diskImageDirectory.c_str()
+         << diskImageDirectory
          << "\" \"" << packageFileNames[0] << "\"";
   cmCPackLogger(cmCPackLog::LOG_VERBOSE,
                 "Compress disk image using command: "
-                << dmgCmd.str().c_str() << std::endl);
+                << dmgCmd.str() << std::endl);
   // since we get random dashboard failures with this one
   // try running it more than once
   int retVal = 1;
@@ -194,12 +194,12 @@ int cmCPackOSXX11Generator::PackageFiles()
   if ( !res || retVal )
     {
     cmGeneratedFileStream ofs(tmpFile.c_str());
-    ofs << "# Run command: " << dmgCmd.str().c_str() << std::endl
+    ofs << "# Run command: " << dmgCmd.str() << std::endl
       << "# Output:" << std::endl
-      << output.c_str() << std::endl;
+      << output << std::endl;
     cmCPackLogger(cmCPackLog::LOG_ERROR, "Problem running hdiutil command: "
-      << dmgCmd.str().c_str() << std::endl
-      << "Please check " << tmpFile.c_str() << " for errors" << std::endl);
+      << dmgCmd.str() << std::endl
+      << "Please check " << tmpFile << " for errors" << std::endl);
     return 0;
     }
 
@@ -234,7 +234,7 @@ bool cmCPackOSXX11Generator::CopyCreateResourceFile(const std::string& name)
   const char* inFileName = this->GetOption(cpackVar.c_str());
   if ( !inFileName )
     {
-    cmCPackLogger(cmCPackLog::LOG_ERROR, "CPack option: " << cpackVar.c_str()
+    cmCPackLogger(cmCPackLog::LOG_ERROR, "CPack option: " << cpackVar
                   << " not specified. It should point to "
                   << (name ? name : "(NULL)")
                   << ".rtf, " << name
@@ -264,7 +264,7 @@ bool cmCPackOSXX11Generator::CopyCreateResourceFile(const std::string& name)
 
   cmCPackLogger(cmCPackLog::LOG_VERBOSE, "Configure file: "
                 << (inFileName ? inFileName : "(NULL)")
-                << " to " << destFileName.c_str() << std::endl);
+                << " to " << destFileName << std::endl);
   this->ConfigureFile(inFileName, destFileName.c_str());
   return true;
 }
@@ -296,7 +296,7 @@ bool cmCPackOSXX11Generator::CopyResourcePlistFile(const std::string& name,
   destFileName += outputFileName;
 
   cmCPackLogger(cmCPackLog::LOG_VERBOSE, "Configure file: "
-    << inFileName.c_str() << " to " << destFileName.c_str() << std::endl);
+    << inFileName << " to " << destFileName << std::endl);
   this->ConfigureFile(inFileName.c_str(), destFileName.c_str(), copyOnly);
   return true;
 }

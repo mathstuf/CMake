@@ -948,7 +948,7 @@ std::string cmCPackNSISGenerator::CreateSelectionDependenciesDescription
     out << "  IntOp $" << (*dependIt)->Name
         << "_selected 0 + ${SF_SELECTED}\n";
     // Recurse
-    out << CreateSelectionDependenciesDescription(*dependIt, visited).c_str();
+    out << CreateSelectionDependenciesDescription(*dependIt, visited);
     }
 
   return out.str();
@@ -981,8 +981,7 @@ std::string cmCPackNSISGenerator::CreateDeselectionDependenciesDescription
     out << "  IntOp $" << (*dependIt)->Name << "_selected 0 + 0\n";
 
     // Recurse
-    out <<
-      CreateDeselectionDependenciesDescription(*dependIt, visited).c_str();
+    out << CreateDeselectionDependenciesDescription(*dependIt, visited);
     }
 
   return out.str();

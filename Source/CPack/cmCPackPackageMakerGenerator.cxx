@@ -53,7 +53,7 @@ int cmCPackPackageMakerGenerator::CopyInstallScript(const std::string& resdir,
   cmSystemTools::CopyFileAlways(script, dst);
   cmSystemTools::SetPermissions(dst,0777);
   cmCPackLogger(cmCPackLog::LOG_VERBOSE,
-                "copy script : " << script << "\ninto " << dst.c_str() <<
+                "copy script : " << script << "\ninto " << dst <<
                 std::endl);
 
   return 1;
@@ -124,7 +124,7 @@ int cmCPackPackageMakerGenerator::PackageFiles()
         {
         cmCPackLogger(cmCPackLog::LOG_ERROR,
                       "Problem creating installer directory: "
-                      << preflightDirName.c_str() << std::endl);
+                      << preflightDirName << std::endl);
         return 0;
         }
       }
@@ -134,7 +134,7 @@ int cmCPackPackageMakerGenerator::PackageFiles()
         {
         cmCPackLogger(cmCPackLog::LOG_ERROR,
                       "Problem creating installer directory: "
-                      << postflightDirName.c_str() << std::endl);
+                      << postflightDirName << std::endl);
         return 0;
         }
       }
@@ -174,7 +174,7 @@ int cmCPackPackageMakerGenerator::PackageFiles()
       {
       cmCPackLogger(cmCPackLog::LOG_ERROR,
                     "Problem creating component packages directory: "
-                    << packageDir.c_str() << std::endl);
+                    << packageDir << std::endl);
       return 0;
       }
 
@@ -184,7 +184,7 @@ int cmCPackPackageMakerGenerator::PackageFiles()
       {
       cmCPackLogger(cmCPackLog::LOG_ERROR,
                    "Problem creating component PostFlight Packages directory: "
-                    << packageFileDir.c_str() << std::endl);
+                    << packageFileDir << std::endl);
       return 0;
       }
     std::string packageFile = packageFileDir +
@@ -212,7 +212,7 @@ int cmCPackPackageMakerGenerator::PackageFiles()
       {
       cmCPackLogger(cmCPackLog::LOG_ERROR,
                     "Problem creating component packages directory: "
-                    << basePackageDir.c_str() << std::endl);
+                    << basePackageDir << std::endl);
       return 0;
       }
 
@@ -383,12 +383,12 @@ int cmCPackPackageMakerGenerator::PackageFiles()
   if ( !res || retVal )
     {
     cmGeneratedFileStream ofs(tmpFile.c_str());
-    ofs << "# Run command: " << dmgCmd.str().c_str() << std::endl
+    ofs << "# Run command: " << dmgCmd.str() << std::endl
       << "# Output:" << std::endl
-      << output.c_str() << std::endl;
+      << output << std::endl;
     cmCPackLogger(cmCPackLog::LOG_ERROR, "Problem running hdiutil command: "
-      << dmgCmd.str().c_str() << std::endl
-      << "Please check " << tmpFile.c_str() << " for errors" << std::endl);
+      << dmgCmd.str() << std::endl
+      << "Please check " << tmpFile << " for errors" << std::endl);
     return 0;
     }
 
@@ -463,7 +463,7 @@ int cmCPackPackageMakerGenerator::InitializeInternal()
     {
     cmCPackLogger(cmCPackLog::LOG_ERROR,
       "Cannot find PackageMaker compiler version file: "
-      << versionFile.c_str()
+      << versionFile
       << std::endl);
     return 0;
     }
@@ -501,7 +501,7 @@ int cmCPackPackageMakerGenerator::InitializeInternal()
     {
     cmCPackLogger(cmCPackLog::LOG_ERROR,
       "Problem reading the PackageMaker compiler version file: "
-      << versionFile.c_str() << std::endl);
+      << versionFile << std::endl);
     return 0;
     }
   this->PackageMakerVersion = atof(rexVersion.match(1).c_str());
@@ -562,7 +562,7 @@ bool cmCPackPackageMakerGenerator::CopyCreateResourceFile(
   const char* inFileName = this->GetOption(cpackVar.c_str());
   if ( !inFileName )
     {
-    cmCPackLogger(cmCPackLog::LOG_ERROR, "CPack option: " << cpackVar.c_str()
+    cmCPackLogger(cmCPackLog::LOG_ERROR, "CPack option: " << cpackVar
                   << " not specified. It should point to "
                   << (!name.empty() ? name : "<empty>")
                   << ".rtf, " << name
@@ -596,7 +596,7 @@ bool cmCPackPackageMakerGenerator::CopyCreateResourceFile(
 
   cmCPackLogger(cmCPackLog::LOG_VERBOSE, "Configure file: "
                 << (inFileName ? inFileName : "(NULL)")
-                << " to " << destFileName.c_str() << std::endl);
+                << " to " << destFileName << std::endl);
   this->ConfigureFile(inFileName, destFileName.c_str());
   return true;
 }
@@ -626,7 +626,7 @@ bool cmCPackPackageMakerGenerator::CopyResourcePlistFile(
   destFileName += outName;
 
   cmCPackLogger(cmCPackLog::LOG_VERBOSE, "Configure file: "
-    << inFileName.c_str() << " to " << destFileName.c_str() << std::endl);
+    << inFileName << " to " << destFileName << std::endl);
   this->ConfigureFile(inFileName.c_str(), destFileName.c_str());
   return true;
 }
@@ -650,10 +650,10 @@ bool cmCPackPackageMakerGenerator::RunPackageMaker(const char *command,
     cmGeneratedFileStream ofs(tmpFile.c_str());
     ofs << "# Run command: " << command << std::endl
       << "# Output:" << std::endl
-      << output.c_str() << std::endl;
+      << output << std::endl;
     cmCPackLogger(cmCPackLog::LOG_ERROR,
       "Problem running PackageMaker command: " << command
-      << std::endl << "Please check " << tmpFile.c_str() << " for errors"
+      << std::endl << "Please check " << tmpFile << " for errors"
       << std::endl);
     return false;
     }

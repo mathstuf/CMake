@@ -968,7 +968,7 @@ bool cmCTestSubmitHandler::SubmitUsingXMLRPC(const std::string& localprefix,
 
   /* Call the famous server at UserLand. */
   cmCTestLog(this->CTest, HANDLER_OUTPUT, "   Submitting to: "
-    << realURL.c_str() << " (" << remoteprefix.c_str() << ")" << std::endl);
+    << realURL << " (" << remoteprefix << ")" << std::endl);
   cmCTest::SetOfStrings::const_iterator file;
   for ( file = files.begin(); file != files.end(); ++file )
     {
@@ -980,12 +980,12 @@ bool cmCTestSubmitHandler::SubmitUsingXMLRPC(const std::string& localprefix,
       local_file = localprefix + "/" + *file;
       }
     cmCTestLog(this->CTest, HANDLER_OUTPUT, "   Submit file: "
-      << local_file.c_str() << std::endl);
+      << local_file << std::endl);
     struct stat st;
     if ( ::stat(local_file.c_str(), &st) )
       {
       cmCTestLog(this->CTest, ERROR_MESSAGE, "  Cannot find file: "
-        << local_file.c_str() << std::endl);
+        << local_file << std::endl);
       return false;
       }
 
@@ -995,7 +995,7 @@ bool cmCTestSubmitHandler::SubmitUsingXMLRPC(const std::string& localprefix,
        static_cast<off_t>(st.st_size))
       {
       cmCTestLog(this->CTest, ERROR_MESSAGE, "  File too big: "
-        << local_file.c_str() << std::endl);
+        << local_file << std::endl);
       return false;
       }
     size_t fileSize = static_cast<size_t>(st.st_size);
@@ -1003,7 +1003,7 @@ bool cmCTestSubmitHandler::SubmitUsingXMLRPC(const std::string& localprefix,
     if ( !fp )
       {
       cmCTestLog(this->CTest, ERROR_MESSAGE, "  Cannot open file: "
-        << local_file.c_str() << std::endl);
+        << local_file << std::endl);
       return false;
       }
 
@@ -1013,7 +1013,7 @@ bool cmCTestSubmitHandler::SubmitUsingXMLRPC(const std::string& localprefix,
       delete [] fileBuffer;
       fclose(fp);
       cmCTestLog(this->CTest, ERROR_MESSAGE, "  Cannot read file: "
-        << local_file.c_str() << std::endl);
+        << local_file << std::endl);
       return false;
       }
     fclose(fp);

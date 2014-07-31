@@ -1542,7 +1542,7 @@ std::string cmCTestTestHandler
         i != failed.end(); ++i)
       {
       cmCTestLog(ctest, HANDLER_OUTPUT,
-                 i->c_str() << "\n");
+                 *i << "\n");
       }
     }
 

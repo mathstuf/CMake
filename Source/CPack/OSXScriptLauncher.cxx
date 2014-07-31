@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
 
   cmsys_stl::string scriptDirectory = cmsys::SystemTools::GetFilenamePath(
     fullScriptPath);
-  ofs << fullScriptPath.c_str() << cmsys_ios::endl;
+  ofs << fullScriptPath << cmsys_ios::endl;
   cmsys_stl::vector<const char*> args;
   args.push_back(fullScriptPath.c_str());
   int cc;

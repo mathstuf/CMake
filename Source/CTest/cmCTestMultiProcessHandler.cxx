@@ -372,7 +372,7 @@ void cmCTestMultiProcessHandler::UpdateCostData()
   for(std::vector<std::string>::iterator i = this->Failed->begin();
       i != this->Failed->end(); ++i)
     {
-    fout << i->c_str() << "\n";
+    fout << *i << "\n";
     }
   fout.close();
   cmSystemTools::RenameFile(tmpout.c_str(), fname.c_str());
@@ -674,7 +674,7 @@ void cmCTestMultiProcessHandler::PrintTestList()
       std::setw(3 + getNumWidth(this->TestHandler->GetMaxIndex()))
       << indexStr.str());
     cmCTestLog(this->CTest, HANDLER_OUTPUT, " ");
-    cmCTestLog(this->CTest, HANDLER_OUTPUT, p.Name.c_str() << std::endl);
+    cmCTestLog(this->CTest, HANDLER_OUTPUT, p.Name << std::endl);
     //pop working dir
     cmSystemTools::ChangeDirectory(current_dir);
     }

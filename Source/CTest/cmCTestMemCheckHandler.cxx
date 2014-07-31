@@ -668,7 +668,7 @@ bool cmCTestMemCheckHandler::InitializeMemoryChecking()
           cmCTestLog(this->CTest, ERROR_MESSAGE,
                      "Cannot find memory checker suppression file: "
                      << this->CTest->GetCTestConfiguration(
-                       "MemoryCheckSuppressionFile").c_str() << std::endl);
+                       "MemoryCheckSuppressionFile") << std::endl);
           return false;
           }
         std::string filterFiles = "/FilterFiles="
@@ -1208,7 +1208,7 @@ cmCTestMemCheckHandler::PostProcessBoundsCheckerTest(cmCTestTestResult& res,
   if ( !ifs )
     {
     std::string log = "Cannot read memory tester output file: " + ofile;
-    cmCTestLog(this->CTest, ERROR_MESSAGE, log.c_str() << std::endl);
+    cmCTestLog(this->CTest, ERROR_MESSAGE, log << std::endl);
     return;
     }
   res.Output += BOUNDS_CHECKER_MARKER;
@@ -1243,7 +1243,7 @@ cmCTestMemCheckHandler::AppendMemTesterOutput(cmCTestTestResult& res,
   if ( !ifs )
     {
     std::string log = "Cannot read memory tester output file: " + ofile;
-    cmCTestLog(this->CTest, ERROR_MESSAGE, log.c_str() << std::endl);
+    cmCTestLog(this->CTest, ERROR_MESSAGE, log << std::endl);
     return;
     }
   std::string line;
@@ -1280,7 +1280,7 @@ void cmCTestMemCheckHandler::TestOutputFileNames(int test,
       {
       std::string log = "Cannot find memory tester output file: "
         + ofile;
-      cmCTestLog(this->CTest, ERROR_MESSAGE, log.c_str() << std::endl);
+      cmCTestLog(this->CTest, ERROR_MESSAGE, log << std::endl);
       ofile = "";
       }
     else
@@ -1293,7 +1293,7 @@ void cmCTestMemCheckHandler::TestOutputFileNames(int test,
     {
     std::string log = "Cannot find memory tester output file: "
       + ofile;
-    cmCTestLog(this->CTest, ERROR_MESSAGE, log.c_str() << std::endl);
+    cmCTestLog(this->CTest, ERROR_MESSAGE, log << std::endl);
     ofile = "";
     }
   files.push_back(ofile);

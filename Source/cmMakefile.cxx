@@ -4022,7 +4022,7 @@ int cmMakefile::ConfigureFile(const char* infile, const char* outfile,
       {
       outLine = "";
       this->ConfigureString(inLine, outLine, atOnly, escapeQuotes);
-      fout << outLine.c_str() << newLineCharacters;
+      fout << outLine << newLineCharacters;
       }
     // close the files before attempting to copy
     fin.close();
@@ -4226,7 +4226,7 @@ const char *cmMakefile::GetProperty(const std::string& prop,
         {
         str << ";";
         }
-      str << it->c_str();
+      str << *it;
       }
     output = str.str();
     return output.c_str();

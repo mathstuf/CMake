@@ -1176,7 +1176,7 @@ cmGlobalXCodeGenerator::CreateXCodeTargets(cmLocalGenerator* gen,
         else if ( mit->first != "MacOS" )
           {
           // dstPath in bundles is relative to Contents/MacOS
-          ostr << "../" << mit->first.c_str();
+          ostr << "../" << mit->first;
           }
         copyFilesBuildPhase->AddAttribute("dstPath",
           this->CreateString(ostr.str()));
@@ -1642,7 +1642,7 @@ void  cmGlobalXCodeGenerator
         std::string echo_cmd = "echo ";
         echo_cmd += (this->CurrentLocalGenerator->
           EscapeForShell(comment, ccg.GetCC().GetEscapeAllowMakeVars()));
-        makefileStream << "\t" << echo_cmd.c_str() << "\n";
+        makefileStream << "\t" << echo_cmd << "\n";
         }
 
       // Add each command line to the set of commands.
@@ -1662,7 +1662,7 @@ void  cmGlobalXCodeGenerator
           }
         cmd += cmd2;
         ccg.AppendArguments(c, cmd);
-        makefileStream << "\t" << cmd.c_str() << "\n";
+        makefileStream << "\t" << cmd << "\n";
         }
       }
     }

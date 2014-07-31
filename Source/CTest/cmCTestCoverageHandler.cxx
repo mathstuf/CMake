@@ -1003,7 +1003,7 @@ int cmCTestCoverageHandler::HandleGCovCoverage(
       "-o \"" + fileDir + "\" " +
       "\"" + *it + "\"";
 
-    cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT, command.c_str()
+    cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT, command
       << std::endl);
 
     std::string output = "";
@@ -1412,24 +1412,24 @@ int cmCTestCoverageHandler::HandleLCovCoverage(
       lcovExtraFlags + " ";
 
     cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT, "Current coverage dir: "
-               << fileDir.c_str() << std::endl);
-    cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT, command.c_str()
+               << fileDir << std::endl);
+    cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT, command
                << std::endl);
 
     std::string output = "";
     std::string errors = "";
     int retVal = 0;
-    *cont->OFS << "* Run coverage for: " << fileDir.c_str() << std::endl;
-    *cont->OFS << "  Command: " << command.c_str() << std::endl;
+    *cont->OFS << "* Run coverage for: " << fileDir << std::endl;
+    *cont->OFS << "  Command: " << command << std::endl;
     int res = this->CTest->RunCommand(command.c_str(), &output, &errors,
                 &retVal, fileDir.c_str(), 0 /*this->TimeOut*/);
 
-    *cont->OFS << "  Output: " << output.c_str() << std::endl;
-    *cont->OFS << "  Errors: " << errors.c_str() << std::endl;
+    *cont->OFS << "  Output: " << output << std::endl;
+    *cont->OFS << "  Errors: " << errors << std::endl;
     if ( ! res )
       {
       cmCTestLog(this->CTest, ERROR_MESSAGE,
-        "Problem running coverage on file: " << it->c_str() << std::endl);
+        "Problem running coverage on file: " << *it << std::endl);
       cmCTestLog(this->CTest, ERROR_MESSAGE,
         "Command produced error: " << errors << std::endl);
       cont->Error ++;
@@ -1438,7 +1438,7 @@ int cmCTestCoverageHandler::HandleLCovCoverage(
     if ( retVal != 0 )
       {
       cmCTestLog(this->CTest, ERROR_MESSAGE, "Coverage command returned: "
-        << retVal << " while processing: " << it->c_str() << std::endl);
+        << retVal << " while processing: " << *it << std::endl);
       cmCTestLog(this->CTest, ERROR_MESSAGE,
         "Command produced error: " << cont->Error << std::endl);
       }

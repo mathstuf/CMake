@@ -238,7 +238,7 @@ bool cmGlobalKdevelopGenerator
     // only put relative paths
     if (tmp.size() && tmp[0] != '/')
       {
-      fout << tmp.c_str() <<"\n";
+      fout << tmp <<"\n";
       }
     }
   return true;

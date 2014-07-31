@@ -1417,7 +1417,7 @@ int cmCTest::RunTest(std::vector<const char*> argv,
     std::string outerr = "\n*** Exception executing: ";
     outerr += cmsysProcess_GetExceptionString(cp);
     *output += outerr;
-    cmCTestLog(this, HANDLER_VERBOSE_OUTPUT, outerr.c_str() << std::endl
+    cmCTestLog(this, HANDLER_VERBOSE_OUTPUT, outerr << std::endl
       << std::flush);
     }
   else if(result == cmsysProcess_State_Error)
@@ -1425,7 +1425,7 @@ int cmCTest::RunTest(std::vector<const char*> argv,
     std::string outerr = "\n*** ERROR executing: ";
     outerr += cmsysProcess_GetErrorString(cp);
     *output += outerr;
-    cmCTestLog(this, HANDLER_VERBOSE_OUTPUT, outerr.c_str() << std::endl
+    cmCTestLog(this, HANDLER_VERBOSE_OUTPUT, outerr << std::endl
       << std::flush);
     }
   cmsysProcess_Delete(cp);

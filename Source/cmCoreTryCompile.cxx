@@ -524,7 +524,7 @@ int cmCoreTryCompile::TryCompileCode(std::vector<std::string> const& argv)
              << "  '" << copyFile << "'\n";
         if(!this->FindErrorMessage.empty())
           {
-          emsg << this->FindErrorMessage.c_str();
+          emsg << this->FindErrorMessage;
           }
         if(copyFileError.empty())
           {

@@ -123,7 +123,7 @@ std::string cmGlobalGenerator::SelectMakeProgram(
                                           const std::string& makeDefault) const
 {
   std::string makeProgram = inMakeProgram;
-  if(cmSystemTools::IsOff(makeProgram.c_str()))
+  if(cmSystemTools::IsOff(makeProgram))
     {
     const char* makeProgramCSTR =
       this->CMakeInstance->GetCacheDefinition("CMAKE_MAKE_PROGRAM");
@@ -135,7 +135,7 @@ std::string cmGlobalGenerator::SelectMakeProgram(
       {
       makeProgram = makeProgramCSTR;
       }
-    if(cmSystemTools::IsOff(makeProgram.c_str()) &&
+    if(cmSystemTools::IsOff(makeProgram) &&
        !makeProgram.empty())
       {
       makeProgram = "CMAKE_MAKE_PROGRAM-NOTFOUND";
@@ -1585,7 +1585,7 @@ void cmGlobalGenerator::CheckLocalGenerators()
           lib != libs.end(); ++lib)
         {
         if(lib->first.size() > 9 &&
-           cmSystemTools::IsNOTFOUND(lib->first.c_str()))
+           cmSystemTools::IsNOTFOUND(lib->first))
           {
           std::string varName = lib->first.substr(0, lib->first.size()-9);
           cmCacheManager::CacheIterator it =
@@ -1618,7 +1618,7 @@ void cmGlobalGenerator::CheckLocalGenerators()
             incDir != incs.end(); ++incDir)
         {
         if(incDir->size() > 9 &&
-            cmSystemTools::IsNOTFOUND(incDir->c_str()))
+            cmSystemTools::IsNOTFOUND(*incDir))
           {
           std::string varName = incDir->substr(0, incDir->size()-9);
           cmCacheManager::CacheIterator it =
@@ -1817,7 +1817,7 @@ std::string cmGlobalGenerator::GenerateCMakeBuildCommand(
   bool ignoreErrors)
 {
   std::string makeCommand = cmSystemTools::GetCMakeCommand();
-  makeCommand = cmSystemTools::ConvertToOutputPath(makeCommand.c_str());
+  makeCommand = cmSystemTools::ConvertToOutputPath(makeCommand);
   makeCommand += " --build .";
   if(!config.empty())
     {
@@ -2123,7 +2123,7 @@ cmGlobalGenerator::FindTarget(const std::string& name,
 bool
 cmGlobalGenerator::NameResolvesToFramework(const std::string& libname) const
 {
-  if(cmSystemTools::IsPathToFramework(libname.c_str()))
+  if(cmSystemTools::IsPathToFramework(libname))
     {
     return true;
     }

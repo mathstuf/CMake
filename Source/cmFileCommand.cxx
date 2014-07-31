@@ -2488,8 +2488,8 @@ bool cmFileCommand::HandleRelativePathCommand(
     return false;
     }
 
-  std::string res = cmSystemTools::RelativePath(directoryName.c_str(),
-                                                fileName.c_str());
+  std::string res = cmSystemTools::RelativePath(directoryName,
+                                                fileName);
   this->Makefile->AddDefinition(outVar,
     res.c_str());
   return true;
@@ -2519,7 +2519,7 @@ bool cmFileCommand::HandleRename(std::vector<std::string> const& args)
     newname += "/" + args[2];
     }
 
-  if(!cmSystemTools::RenameFile(oldname.c_str(), newname.c_str()))
+  if(!cmSystemTools::RenameFile(oldname, newname))
     {
     std::string err = cmSystemTools::GetLastSystemError();
     cmOStringStream e;
@@ -2602,7 +2602,7 @@ bool cmFileCommand::HandleCMakePathCommand(std::vector<std::string>
       }
     else
       {
-      *j = cmSystemTools::ConvertToOutputPath(j->c_str());
+      *j = cmSystemTools::ConvertToOutputPath(*j);
       // remove double quotes in the path
       cmsys::String& s = *j;
 
@@ -2878,7 +2878,7 @@ cmFileCommand::HandleDownloadCommand(std::vector<std::string> const& args)
       ++i;
       if(i != args.end())
         {
-        tls_verify = cmSystemTools::IsOn(i->c_str());
+        tls_verify = cmSystemTools::IsOn(*i);
         }
       else
         {

@@ -3746,7 +3746,7 @@ std::string cmGlobalXCodeGenerator::ConvertToRelativeForMake(const char* p)
     std::string ret =
       this->CurrentLocalGenerator->
         ConvertToRelativePath(this->CurrentOutputDirectoryComponents, p);
-    return cmSystemTools::ConvertToOutputPath(ret.c_str());
+    return cmSystemTools::ConvertToOutputPath(ret);
     }
 }
 
@@ -3762,7 +3762,7 @@ std::string cmGlobalXCodeGenerator::ConvertToRelativeForXCode(const char* p)
     std::string ret =
       this->CurrentLocalGenerator->
         ConvertToRelativePath(this->ProjectOutputDirectoryComponents, p);
-    return cmSystemTools::ConvertToOutputPath(ret.c_str());
+    return cmSystemTools::ConvertToOutputPath(ret);
     }
 }
 

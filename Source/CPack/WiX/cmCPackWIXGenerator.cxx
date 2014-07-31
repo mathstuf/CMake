@@ -65,7 +65,7 @@ bool cmCPackWIXGenerator::RunWiXCommand(std::string const& command)
   std::string output;
 
   int returnValue = 0;
-  bool status = cmSystemTools::RunSingleCommand(command.c_str(), &output,
+  bool status = cmSystemTools::RunSingleCommand(command, &output,
     &returnValue, 0, cmSystemTools::OUTPUT_NONE);
 
   cmsys::ofstream logFile(logFileName.c_str(), std::ios::app);
@@ -848,7 +848,7 @@ void cmCPackWIXGenerator::AddDirectoryAndFileDefinitons(
   dir.Load(topdir);
 
   std::string relativeDirectoryPath =
-    cmSystemTools::RelativePath(toplevel.c_str(), topdir.c_str());
+    cmSystemTools::RelativePath(toplevel, topdir);
 
   if(relativeDirectoryPath.empty())
     {

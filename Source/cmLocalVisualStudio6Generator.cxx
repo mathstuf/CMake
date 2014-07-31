@@ -212,7 +212,7 @@ void cmLocalVisualStudio6Generator::CreateSingleDSP(const std::string& lname,
   this->WriteDSPFile(fout,pname,target);
   fout.close();
   // if the dsp file has changed, then write it.
-  cmSystemTools::CopyFileIfDifferent(fname.c_str(), realDSP.c_str());
+  cmSystemTools::CopyFileIfDifferent(fname, realDSP);
 }
 
 

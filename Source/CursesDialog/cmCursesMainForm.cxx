@@ -832,7 +832,7 @@ void cmCursesMainForm::FixValue(cmCacheManager::CacheEntryType type,
     }
   if(type == cmCacheManager::BOOL)
     {
-    if(cmSystemTools::IsOff(out.c_str()))
+    if(cmSystemTools::IsOff(out))
       {
       out = "OFF";
       }

@@ -75,8 +75,7 @@ int cmCPackNSISGenerator::PackageFiles()
   std::vector<std::string>::const_iterator it;
   for ( it = files.begin(); it != files.end(); ++ it )
     {
-    std::string fileN = cmSystemTools::RelativePath(toplevel.c_str(),
-                                                    it->c_str());
+    std::string fileN = cmSystemTools::RelativePath(toplevel, *it);
     if (!this->Components.empty())
       {
       // Strip off the component part of the path.
@@ -95,8 +94,7 @@ int cmCPackNSISGenerator::PackageFiles()
   for ( sit = dirs.begin(); sit != dirs.end(); ++ sit )
     {
     std::string componentName;
-    std::string fileN = cmSystemTools::RelativePath(toplevel.c_str(),
-                                                    sit->c_str());
+    std::string fileN = cmSystemTools::RelativePath(toplevel, *sit);
     if ( fileN.empty() )
       {
       continue;
@@ -324,7 +322,7 @@ int cmCPackNSISGenerator::PackageFiles()
     << std::endl);
   std::string output;
   int retVal = 1;
-  bool res = cmSystemTools::RunSingleCommand(nsisCmd.c_str(), &output,
+  bool res = cmSystemTools::RunSingleCommand(nsisCmd, &output,
     &retVal, 0, this->GeneratorVerbose, 0);
   if ( !res || retVal )
     {
@@ -430,7 +428,7 @@ int cmCPackNSISGenerator::InitializeInternal()
     << nsisCmd << std::endl);
   std::string output;
   int retVal = 1;
-  bool resS = cmSystemTools::RunSingleCommand(nsisCmd.c_str(),
+  bool resS = cmSystemTools::RunSingleCommand(nsisCmd,
     &output, &retVal, 0, this->GeneratorVerbose, 0);
   cmsys::RegularExpression versionRex("v([0-9]+.[0-9]+)");
   cmsys::RegularExpression versionRexCVS("v(.*)\\.cvs");
@@ -836,7 +834,7 @@ CreateComponentDescription(cmCPackComponent *component,
                                       zipListFileName);
     std::string output;
     int retVal = -1;
-    int res = cmSystemTools::RunSingleCommand(cmd.c_str(), &output, &retVal,
+    int res = cmSystemTools::RunSingleCommand(cmd, &output, &retVal,
                                               dirName.c_str(),
                                               cmSystemTools::OUTPUT_NONE, 0);
     if ( !res || retVal )

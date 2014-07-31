@@ -134,6 +134,7 @@ public:
    * as ifdef.
    */
   static bool IsOn(const char* val);
+  static bool IsOn(const std::string& val);
 
   /**
    * does a string indicate a false or off value ? Note that this is
@@ -143,11 +144,13 @@ public:
    * NOTFOUND, *-NOTFOUND or IGNORE will cause IsOff to return true.
    */
   static bool IsOff(const char* val);
+  static bool IsOff(const std::string& val);
 
   ///! Return true if value is NOTFOUND or ends in -NOTFOUND.
   static bool IsNOTFOUND(const char* value);
+  static bool IsNOTFOUND(const std::string& value);
   ///! Return true if the path is a framework
-  static bool IsPathToFramework(const char* value);
+  static bool IsPathToFramework(const std::string& value);
 
   static bool DoesFileExistWithExtensions(
     const char *name,
@@ -159,7 +162,7 @@ public:
    * Toplevel specifies the top-most directory to where it will look.
    */
   static std::string FileExistsInParentDirectories(const char* fname,
-    const char* directory, const char* toplevel);
+    const std::string& directory, const std::string& toplevel);
 
   static void Glob(const std::string& directory, const std::string& regexp,
                    std::vector<std::string>& files);
@@ -179,14 +182,10 @@ public:
                          std::vector<std::string>& files,
                          int type = 0);
 
-  ///! Copy a file.
-  static bool cmCopyFile(const char* source, const char* destination);
-  static bool CopyFileIfDifferent(const char* source,
-    const char* destination);
-
   /** Rename a file or directory within a single disk volume (atomic
       if possible).  */
-  static bool RenameFile(const char* oldname, const char* newname);
+  static bool RenameFile(const std::string& oldname,
+                         const std::string& newname);
 
   ///! Compute the md5sum of a file
   static bool ComputeFileMD5(const std::string& source, char* md5out);
@@ -223,7 +222,8 @@ public:
      OUTPUT_NORMAL,
      OUTPUT_PASSTHROUGH
    };
-  static bool RunSingleCommand(const char* command, std::string* output = 0,
+  static bool RunSingleCommand(const std::string& command,
+                               std::string* output = 0,
                                int* retVal = 0, const char* dir = 0,
                                OutputOption outputflag = OUTPUT_MERGE,
                                double timeout = 0.0);
@@ -243,14 +243,14 @@ public:
   /**
    * Parse arguments out of a single string command
    */
-  static std::vector<std::string> ParseArguments(const char* command);
+  static std::vector<std::string> ParseArguments(const std::string& command);
 
   /** Parse arguments out of a windows command line string.  */
-  static void ParseWindowsCommandLine(const char* command,
+  static void ParseWindowsCommandLine(const std::string& command,
                                       std::vector<std::string>& args);
 
   /** Parse arguments out of a unix command line string.  */
-  static void ParseUnixCommandLine(const char* command,
+  static void ParseUnixCommandLine(const std::string& command,
                                    std::vector<std::string>& args);
 
   /** Compute an escaped version of the given argument for use in a
@@ -292,12 +292,13 @@ public:
   /**
    * Compare versions
    */
-  static bool VersionCompare(CompareOp op, const char* lhs, const char* rhs);
+  static bool VersionCompare(CompareOp op, const std::string& lhs,
+    const char* rhs);
 
   /**
    * Determine the file type based on the extension
    */
-  static FileFormat GetFileFormat(const char* ext);
+  static FileFormat GetFileFormat(const std::string& ext);
 
   /** Windows if this is true, the CreateProcess in RunCommand will
    *  not show new consol windows when running programs.
@@ -317,7 +318,7 @@ public:
 
   /** Split a string on its newlines into multiple lines.  Returns
       false only if the last line stored had no newline.  */
-  static bool Split(const char* s, std::vector<std::string>& l);
+  static bool Split(const std::string& s, std::vector<std::string>& l);
   static void SetForceUnixPaths(bool v)
     {
       s_ForceUnixPaths = v;
@@ -328,13 +329,13 @@ public:
     }
 
   // ConvertToOutputPath use s_ForceUnixPaths
-  static std::string ConvertToOutputPath(const char* path);
+  static std::string ConvertToOutputPath(const std::string& path);
   static void ConvertToOutputSlashes(std::string& path);
 
   // ConvertToRunCommandPath does not use s_ForceUnixPaths and should
   // be used when RunCommand is called from cmake, because the
   // running cmake needs paths to be in its format
-  static std::string ConvertToRunCommandPath(const char* path);
+  static std::string ConvertToRunCommandPath(const std::string& path);
   //! Check if the first string ends with the second one.
   static bool StringEndsWith(const char* str1, const char* str2);
 
@@ -346,7 +347,8 @@ public:
       /a/b/c/d to /a/b/c1/d1 -> ../../c1/d1
       from /usr/src to /usr/src/test/blah/foo.cpp -> test/blah/foo.cpp
   */
-  static std::string RelativePath(const char* local, const char* remote);
+  static std::string RelativePath(const std::string& local,
+                                  const std::string& remote);
 
   /** Joins two paths while collapsing x/../ parts
    * For example CollapseCombinedPath("a/b/c", "../../d") results in "a/d"
@@ -356,7 +358,7 @@ public:
 
 #ifdef CMAKE_BUILD_WITH_CMAKE
   /** Remove an environment variable */
-  static bool UnsetEnv(const char* value);
+  static bool UnsetEnv(const std::string& value);
 
   /** Get the list of all environment variables */
   static std::vector<std::string> GetEnvironmentVariables();
@@ -383,9 +385,9 @@ public:
   static void EnableVSConsoleOutput();
 
   /** Create tar */
-  static bool ListTar(const char* outFileName,
+  static bool ListTar(const std::string& outFileName,
                       bool gzip, bool verbose);
-  static bool CreateTar(const char* outFileName,
+  static bool CreateTar(const std::string& outFileName,
                         const std::vector<std::string>& files, bool gzip,
                         bool bzip2, bool verbose);
   static bool ExtractTar(const char* inFileName, bool gzip,
@@ -399,7 +401,8 @@ public:
 
   /** Copy the file create/access/modify times from the file named by
       the first argument to that named by the second.  */
-  static bool CopyFileTime(const char* fromFile, const char* toFile);
+  static bool CopyFileTime(const std::string& fromFile,
+                           const std::string& toFile);
 
   /** Save and restore file times.  */
   static cmSystemToolsFileTime* FileTimeNew();
@@ -423,7 +426,7 @@ public:
 
 #if defined(CMAKE_BUILD_WITH_CMAKE)
   /** Echo a message in color using KWSys's Terminal cprintf.  */
-  static void MakefileColorEcho(int color, const char* message,
+  static void MakefileColorEcho(int color, const std::string& message,
                                 bool newLine, bool enabled);
 #endif
 
@@ -452,7 +455,7 @@ public:
                          std::string const& newRPath);
 
   /** Remove a directory; repeat a few times in case of locked files.  */
-  static bool RepeatedRemoveDirectory(const char* dir);
+  static bool RepeatedRemoveDirectory(const std::string& dir);
 
   /** Tokenize a string */
   static std::vector<std::string> tokenize(const std::string& str,
@@ -467,6 +470,8 @@ public:
   static WindowsFileRetry GetWindowsFileRetry();
 #endif
 private:
+  static bool IsOn(const char* val, size_t len);
+  static bool IsOff(const char* val, size_t len);
   static bool s_ForceUnixPaths;
   static bool s_RunCommandHideConsole;
   static bool s_ErrorOccured;

@@ -1142,7 +1142,7 @@ void cmGlobalNinjaGenerator::WriteTargetRebuildManifest(std::ostream& os)
   // Use 'console' pool to get non buffered output of the CMake re-run call
   // Available since Ninja 1.5
   if(cmSystemTools::VersionCompare(cmSystemTools::OP_LESS,
-                                   ninjaVersion().c_str(),
+                                   ninjaVersion(),
                                    "1.5") == false)
     {
     variables["pool"] = "console";
@@ -1178,7 +1178,7 @@ std::string cmGlobalNinjaGenerator::ninjaVersion() const
 {
   std::string version;
   std::string command = ninjaCmd() + " --version";
-  cmSystemTools::RunSingleCommand(command.c_str(),
+  cmSystemTools::RunSingleCommand(command,
                                   &version, 0, 0,
                                   cmSystemTools::OUTPUT_NONE);
 

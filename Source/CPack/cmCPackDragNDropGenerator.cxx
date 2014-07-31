@@ -194,7 +194,7 @@ bool cmCPackDragNDropGenerator::RunCommand(cmOStringStream& command,
   int exit_code = 1;
 
   bool result = cmSystemTools::RunSingleCommand(
-    command.str().c_str(),
+    command.str(),
     output,
     &exit_code,
     0,

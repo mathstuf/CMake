@@ -97,8 +97,7 @@ void cmExtraCodeLiteGenerator::Generate()
     std::string filename    = outputDir + "/" + projectName + ".project";
 
     // Make the project file relative to the workspace
-    filename = cmSystemTools::RelativePath(this->WorkspacePath.c_str(),
-                                          filename.c_str());
+    filename = cmSystemTools::RelativePath(this->WorkspacePath, filename);
 
     // create a project file
     this->CreateProjectFile(it->second);
@@ -311,7 +310,7 @@ void cmExtraCodeLiteGenerator
        ++sit)
     {
     std::string relativePath =
-      cmSystemTools::RelativePath(projectPath.c_str(), sit->first.c_str());
+      cmSystemTools::RelativePath(projectPath, sit->first);
     fout<< "    <File Name=\"" << relativePath << "\"/>\n";
     }
   fout<< "  </VirtualDirectory>\n";
@@ -322,7 +321,7 @@ void cmExtraCodeLiteGenerator
        ++sit)
     {
     std::string relativePath =
-      cmSystemTools::RelativePath(projectPath.c_str(), sit->c_str());
+      cmSystemTools::RelativePath(projectPath, *sit);
     fout << "    <File Name=\"" << relativePath << "\"/>\n";
     }
   fout << "  </VirtualDirectory>\n";

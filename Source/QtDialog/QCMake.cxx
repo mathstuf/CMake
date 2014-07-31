@@ -296,7 +296,7 @@ QCMakePropertyList QCMake::properties() const
     if(i.GetType() == cmCacheManager::BOOL)
       {
       prop.Type = QCMakeProperty::BOOL;
-      prop.Value = cmSystemTools::IsOn(i.GetValue().c_str());
+      prop.Value = cmSystemTools::IsOn(i.GetValue());
       }
     else if(i.GetType() == cmCacheManager::PATH)
       {

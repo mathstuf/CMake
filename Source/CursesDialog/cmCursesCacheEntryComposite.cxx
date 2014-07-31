@@ -51,7 +51,7 @@ cmCursesCacheEntryComposite::cmCursesCacheEntryComposite(
     {
     case  cmCacheManager::BOOL:
       this->Entry = new cmCursesBoolWidget(this->EntryWidth, 1, 1, 1);
-      if (cmSystemTools::IsOn(it.GetValue().c_str()))
+      if (cmSystemTools::IsOn(it.GetValue()))
         {
         static_cast<cmCursesBoolWidget*>(this->Entry)->SetValueAsBool(true);
         }

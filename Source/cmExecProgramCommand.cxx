@@ -86,7 +86,7 @@ bool cmExecProgramCommand
   std::string command;
   if(arguments.size())
     {
-    command = cmSystemTools::ConvertToRunCommandPath(args[0].c_str());
+    command = cmSystemTools::ConvertToRunCommandPath(args[0]);
     command += " ";
     command += arguments;
     }

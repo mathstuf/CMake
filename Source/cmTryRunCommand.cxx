@@ -195,13 +195,13 @@ void cmTryRunCommand::RunExecutable(const std::string& runArgs,
 {
   int retVal = -1;
   std::string finalCommand = cmSystemTools::ConvertToRunCommandPath(
-                               this->OutputFile.c_str());
+                               this->OutputFile);
   if (runArgs.size())
     {
     finalCommand += runArgs;
     }
   int timeout = 0;
-  bool worked = cmSystemTools::RunSingleCommand(finalCommand.c_str(),
+  bool worked = cmSystemTools::RunSingleCommand(finalCommand,
                 out, &retVal,
                 0, cmSystemTools::OUTPUT_NONE, timeout);
   // set the run var

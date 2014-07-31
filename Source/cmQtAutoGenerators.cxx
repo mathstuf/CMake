@@ -137,7 +137,7 @@ cmQtAutoGenerators::cmQtAutoGenerators()
   cmsys::SystemTools::GetEnv("COLOR", colorEnv);
   if(!colorEnv.empty())
     {
-    if(cmSystemTools::IsOn(colorEnv.c_str()))
+    if(cmSystemTools::IsOn(colorEnv))
       {
       this->ColorOutput = true;
       }
@@ -529,8 +529,7 @@ void cmQtAutoGenerators::SetupSourceFiles(cmTarget const* target)
         }
       else
         {
-        cmSystemTools::FileFormat fileType = cmSystemTools::GetFileFormat(
-                                                                ext.c_str());
+        cmSystemTools::FileFormat fileType = cmSystemTools::GetFileFormat(ext);
         if (fileType == cmSystemTools::CXX_FILE_FORMAT)
           {
           this->Sources += sepFiles;
@@ -1917,7 +1916,7 @@ bool cmQtAutoGenerators::GenerateMoc(const std::string& sourceFile,
     msg += mocFileName;
     cmSystemTools::MakefileColorEcho(cmsysTerminal_Color_ForegroundBlue
                                            |cmsysTerminal_Color_ForegroundBold,
-                                     msg.c_str(), true, this->ColorOutput);
+                                     msg, true, this->ColorOutput);
 
     std::vector<std::string> command;
     command.push_back(this->MocExecutable);
@@ -1995,7 +1994,7 @@ bool cmQtAutoGenerators::GenerateUi(const std::string& realName,
     msg += ui_output_file;
     cmSystemTools::MakefileColorEcho(cmsysTerminal_Color_ForegroundBlue
                                           |cmsysTerminal_Color_ForegroundBold,
-                                      msg.c_str(), true, this->ColorOutput);
+                                      msg, true, this->ColorOutput);
 
     std::vector<std::string> command;
     command.push_back(this->UicExecutable);

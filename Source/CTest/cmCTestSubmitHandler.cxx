@@ -512,7 +512,7 @@ bool cmCTestSubmitHandler::SubmitUsingHTTP(const std::string& localprefix,
 
       if(cmSystemTools::IsOn(this->GetOption("InternalTest")) &&
          cmSystemTools::VersionCompare(cmSystemTools::OP_LESS,
-         this->CTest->GetCDashVersion().c_str(), "1.7"))
+         this->CTest->GetCDashVersion(), "1.7"))
         {
         // mock failure output for internal test case
         std::string mock_output = "<cdash version=\"1.7.0\">\n"
@@ -837,7 +837,7 @@ bool cmCTestSubmitHandler::SubmitUsingSCP(
     std::string lfname = localprefix;
     cmSystemTools::ConvertToUnixSlashes(lfname);
     lfname += "/" + *file;
-    lfname = cmSystemTools::ConvertToOutputPath(lfname.c_str());
+    lfname = cmSystemTools::ConvertToOutputPath(lfname);
     argv[1] = lfname.c_str();
     std::string rfname = url + "/" + remoteprefix + *file;
     argv[2] = rfname.c_str();

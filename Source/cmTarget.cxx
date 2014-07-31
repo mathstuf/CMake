@@ -2096,7 +2096,7 @@ static void processIncludeDirectories(cmTarget const* tgt,
           }
         }
 
-      if (!cmSystemTools::IsOff(li->c_str()))
+      if (!cmSystemTools::IsOff(*li))
         {
         cmSystemTools::ConvertToUnixSlashes(*li);
         }

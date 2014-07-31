@@ -74,11 +74,11 @@ bool cmSeparateArgumentsCommand
     std::vector<std::string> vec;
     if(mode == ModeUnix)
       {
-      cmSystemTools::ParseUnixCommandLine(command.c_str(), vec);
+      cmSystemTools::ParseUnixCommandLine(command, vec);
       }
     else // if(mode == ModeWindows)
       {
-      cmSystemTools::ParseWindowsCommandLine(command.c_str(), vec);
+      cmSystemTools::ParseWindowsCommandLine(command, vec);
       }
 
     // Construct the result list value.

@@ -401,9 +401,9 @@ bool cmCTest::ShouldCompressTestOutput()
     std::string cdashVersion = this->GetCDashVersion();
     //version >= 1.6?
     bool cdashSupportsGzip = cmSystemTools::VersionCompare(
-      cmSystemTools::OP_GREATER, cdashVersion.c_str(), "1.6") ||
+      cmSystemTools::OP_GREATER, cdashVersion, "1.6") ||
       cmSystemTools::VersionCompare(cmSystemTools::OP_EQUAL,
-      cdashVersion.c_str(), "1.6");
+      cdashVersion, "1.6");
     this->CompressTestOutput &= cdashSupportsGzip;
     this->ComputedCompressTestOutput = true;
     }
@@ -418,7 +418,7 @@ bool cmCTest::ShouldCompressMemCheckOutput()
     std::string cdashVersion = this->GetCDashVersion();
 
     bool compressionSupported = cmSystemTools::VersionCompare(
-      cmSystemTools::OP_GREATER, cdashVersion.c_str(), "1.9.0");
+      cmSystemTools::OP_GREATER, cdashVersion, "1.9.0");
     this->CompressMemCheckOutput &= compressionSupported;
     this->ComputedCompressMemCheckOutput = true;
     }
@@ -815,7 +815,7 @@ bool cmCTest::UpdateCTestConfiguration()
   if ( this->ProduceXML )
     {
     this->CompressXMLFiles = cmSystemTools::IsOn(
-      this->GetCTestConfiguration("CompressSubmission").c_str());
+      this->GetCTestConfiguration("CompressSubmission"));
     }
   return true;
 }
@@ -1674,7 +1674,7 @@ std::string cmCTest::Base64GzipEncodeFile(std::string file)
   std::vector<std::string> files;
   files.push_back(file);
 
-  if(!cmSystemTools::CreateTar(tarFile.c_str(), files, true, false, false))
+  if(!cmSystemTools::CreateTar(tarFile, files, true, false, false))
     {
     cmCTestLog(this, ERROR_MESSAGE, "Error creating tar while "
       "encoding file: " << file << std::endl);
@@ -2107,7 +2107,7 @@ void cmCTest::HandleCommandLineArguments(size_t &i,
      i < args.size() - 1 )
     {
     i++;
-    this->InteractiveDebugMode = cmSystemTools::IsOn(args[i].c_str());
+    this->InteractiveDebugMode = cmSystemTools::IsOn(args[i]);
     }
   if(this->CheckArgument(arg, "--submit-index") && i < args.size() - 1 )
     {
@@ -2628,17 +2628,15 @@ std::string cmCTest::GetShortPathToFile(const char* cfname)
 {
   const std::string& sourceDir
     = cmSystemTools::CollapseFullPath(
-        this->GetCTestConfiguration("SourceDirectory").c_str());
+        this->GetCTestConfiguration("SourceDirectory"));
   const std::string& buildDir
     = cmSystemTools::CollapseFullPath(
-        this->GetCTestConfiguration("BuildDirectory").c_str());
+        this->GetCTestConfiguration("BuildDirectory"));
   std::string fname = cmSystemTools::CollapseFullPath(cfname);
 
   // Find relative paths to both directories
-  std::string srcRelpath
-    = cmSystemTools::RelativePath(sourceDir.c_str(), fname.c_str());
-  std::string bldRelpath
-    = cmSystemTools::RelativePath(buildDir.c_str(), fname.c_str());
+  std::string srcRelpath = cmSystemTools::RelativePath(sourceDir, fname);
+  std::string bldRelpath = cmSystemTools::RelativePath(buildDir, fname);
 
   // If any contains "." it is not parent directory
   bool inSrc = srcRelpath.find("..") == srcRelpath.npos;

@@ -799,7 +799,7 @@ void cmCacheManager::CacheIterator::SetValue(const char* value)
 //----------------------------------------------------------------------------
 bool cmCacheManager::CacheIterator::GetValueAsBool() const
 {
-  return cmSystemTools::IsOn(this->GetEntry().Value.c_str());
+  return cmSystemTools::IsOn(this->GetEntry().Value);
 }
 
 //----------------------------------------------------------------------------

@@ -200,7 +200,7 @@ void cmCTestMemCheckHandler::GenerateTestCommand(
   std::string index;
   cmOStringStream stream;
   std::string memcheckcommand
-    = cmSystemTools::ConvertToOutputPath(this->MemoryTester.c_str());
+    = cmSystemTools::ConvertToOutputPath(this->MemoryTester);
   stream << test;
   index = stream.str();
   for ( pp = 0; pp < this->MemoryTesterDynamicOptions.size(); pp ++ )
@@ -616,7 +616,7 @@ bool cmCTestMemCheckHandler::InitializeMemoryChecking()
       "ValgrindCommandOptions");
     }
   this->MemoryTesterOptions
-    = cmSystemTools::ParseArguments(memoryTesterOptions.c_str());
+    = cmSystemTools::ParseArguments(memoryTesterOptions);
 
   this->MemoryTesterOutputFile
     = this->CTest->GetBinaryDir()
@@ -833,7 +833,7 @@ bool cmCTestMemCheckHandler::ProcessMemCheckSanitizerOutput(
   cmsys::RegularExpression leakWarning("(Direct|Indirect) leak of .*");
   int defects = 0;
   std::vector<std::string> lines;
-  cmSystemTools::Split(str.c_str(), lines);
+  cmSystemTools::Split(str, lines);
   cmOStringStream ostr;
   log = "";
   for( std::vector<std::string>::iterator i = lines.begin();
@@ -877,7 +877,7 @@ bool cmCTestMemCheckHandler::ProcessMemCheckPurifyOutput(
   std::vector<int>& results)
 {
   std::vector<std::string> lines;
-  cmSystemTools::Split(str.c_str(), lines);
+  cmSystemTools::Split(str, lines);
   cmOStringStream ostr;
   log = "";
 
@@ -931,7 +931,7 @@ bool cmCTestMemCheckHandler::ProcessMemCheckValgrindOutput(
   std::vector<int>& results)
 {
   std::vector<std::string> lines;
-  cmSystemTools::Split(str.c_str(), lines);
+  cmSystemTools::Split(str, lines);
   bool unlimitedOutput = false;
   if(str.find("CTEST_FULL_OUTPUT") != str.npos ||
     this->CustomMaximumFailedTestOutputSize == 0)
@@ -1111,7 +1111,7 @@ bool cmCTestMemCheckHandler::ProcessMemCheckBoundsCheckerOutput(
   log = "";
   double sttime = cmSystemTools::GetTime();
   std::vector<std::string> lines;
-  cmSystemTools::Split(str.c_str(), lines);
+  cmSystemTools::Split(str, lines);
   cmCTestLog(this->CTest, DEBUG, "Start test: " << lines.size() << std::endl);
   std::vector<std::string>::size_type cc;
   for ( cc = 0; cc < lines.size(); cc ++ )

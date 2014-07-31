@@ -59,10 +59,10 @@ bool cmSiteNameCommand
     }
 #else
   // try to find the hostname for this computer
-  if (!cmSystemTools::IsOff(hostname_cmd.c_str()))
+  if (!cmSystemTools::IsOff(hostname_cmd))
     {
     std::string host;
-    cmSystemTools::RunSingleCommand(hostname_cmd.c_str(),
+    cmSystemTools::RunSingleCommand(hostname_cmd,
       &host, 0, 0, cmSystemTools::OUTPUT_NONE);
 
     // got the hostname

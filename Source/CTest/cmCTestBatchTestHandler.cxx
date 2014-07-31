@@ -86,7 +86,7 @@ void cmCTestBatchTestHandler::WriteTestCommand(int test, cmsys::ofstream& fout)
   std::string command;
 
   command = this->TestHandler->FindTheExecutable(args[1].c_str());
-  command = cmSystemTools::ConvertToOutputPath(command.c_str());
+  command = cmSystemTools::ConvertToOutputPath(command);
 
   //Prepends memcheck args to our command string if this is a memcheck
   this->TestHandler->GenerateTestCommand(processArgs, test);

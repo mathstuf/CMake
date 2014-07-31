@@ -347,7 +347,7 @@ void cmCTestP4::SetP4Options(std::vector<char const*> &CommandOptions)
     //options before the main command
     std::string opts = this->CTest->GetCTestConfiguration("P4Options");
     std::vector<std::string> args =
-            cmSystemTools::ParseArguments(opts.c_str());
+            cmSystemTools::ParseArguments(opts);
 
     for(std::vector<std::string>::const_iterator ai = args.begin();
         ai != args.end(); ++ai)
@@ -538,7 +538,7 @@ bool cmCTestP4::UpdateImpl()
     {
     opts = this->CTest->GetCTestConfiguration("P4UpdateOptions");
     }
-  std::vector<std::string> args = cmSystemTools::ParseArguments(opts.c_str());
+  std::vector<std::string> args = cmSystemTools::ParseArguments(opts);
   for(std::vector<std::string>::const_iterator ai = args.begin();
       ai != args.end(); ++ai)
     {

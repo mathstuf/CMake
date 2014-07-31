@@ -121,7 +121,7 @@ bool cmSetSourceFilesPropertiesCommand
         if(*j == "GENERATED")
           {
           ++j;
-          if(j != propend && cmSystemTools::IsOn(j->c_str()))
+          if(j != propend && cmSystemTools::IsOn(*j))
             {
             generated = true;
             }

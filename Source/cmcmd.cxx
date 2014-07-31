@@ -102,7 +102,7 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
     // Copy file
     if (args[1] == "copy" && args.size() == 4)
       {
-      if(!cmSystemTools::cmCopyFile(args[2].c_str(), args[3].c_str()))
+      if(!cmSystemTools::CopyFileAlways(args[2], args[3]))
         {
         std::cerr << "Error copying file \"" << args[2]
                   << "\" to \"" << args[3] << "\".\n";
@@ -114,8 +114,7 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
     // Copy file if different.
     if (args[1] == "copy_if_different" && args.size() == 4)
       {
-      if(!cmSystemTools::CopyFileIfDifferent(args[2].c_str(),
-          args[3].c_str()))
+      if(!cmSystemTools::CopyFileIfDifferent(args[2], args[3]))
         {
         std::cerr << "Error copying file (if different) from \""
                   << args[2] << "\" to \"" << args[3]
@@ -141,7 +140,7 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
     // Rename a file or directory
     if (args[1] == "rename" && args.size() == 4)
       {
-      if(!cmSystemTools::RenameFile(args[2].c_str(), args[3].c_str()))
+      if(!cmSystemTools::RenameFile(args[2], args[3]))
         {
         std::string e = cmSystemTools::GetLastSystemError();
         std::cerr << "Error renaming from \""
@@ -374,7 +373,7 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
       time(&time_start);
       clock_start = clock();
       int ret =0;
-      cmSystemTools::RunSingleCommand(command.c_str(), 0, &ret);
+      cmSystemTools::RunSingleCommand(command, 0, &ret);
 
       clock_finish = clock();
       time(&time_finish);
@@ -438,7 +437,7 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
         }
       int retval = 0;
       int timeout = 0;
-      if ( cmSystemTools::RunSingleCommand(command.c_str(), 0, &retval,
+      if ( cmSystemTools::RunSingleCommand(command, 0, &retval,
              directory.c_str(), cmSystemTools::OUTPUT_NORMAL, timeout) )
         {
         return retval;
@@ -637,7 +636,7 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
           {
           // Enable or disable color based on the switch value.
           color = (args[8].size() == 8 ||
-                   cmSystemTools::IsOn(args[8].substr(8).c_str()));
+                   cmSystemTools::IsOn(args[8].substr(8)));
           }
         }
       else
@@ -751,7 +750,7 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
 
       if ( flags.find_first_of('t') != flags.npos )
         {
-        if ( !cmSystemTools::ListTar(outFile.c_str(), gzip, verbose) )
+        if ( !cmSystemTools::ListTar(outFile, gzip, verbose) )
           {
           cmSystemTools::Error("Problem creating tar: ", outFile.c_str());
           return 1;
@@ -916,7 +915,7 @@ int cmcmd::ExecuteEchoColor(std::vector<std::string>& args)
       std::string value = args[i].substr(9);
       if(!value.empty())
         {
-        if(cmSystemTools::IsOn(value.c_str()))
+        if(cmSystemTools::IsOn(value))
           {
           enabled = true;
           }
@@ -977,7 +976,7 @@ int cmcmd::ExecuteEchoColor(std::vector<std::string>& args)
     else
       {
       // Color is enabled.  Print with the current color.
-      cmSystemTools::MakefileColorEcho(color, args[i].c_str(),
+      cmSystemTools::MakefileColorEcho(color, args[i],
                                        newline, enabled);
       }
     }
@@ -1004,7 +1003,7 @@ int cmcmd::ExecuteLinkScript(std::vector<std::string>& args)
     {
     if(args[3].find("--verbose=") == 0)
       {
-      if(!cmSystemTools::IsOff(args[3].substr(10).c_str()))
+      if(!cmSystemTools::IsOff(args[3].substr(10)))
         {
         verbose = true;
         }
@@ -1144,7 +1143,7 @@ int cmcmd::VisualStudioLink(std::vector<std::string>& args, int type)
       while(cmSystemTools::GetLineFromStream(fin,
                                              line))
         {
-        cmSystemTools::ParseWindowsCommandLine(line.c_str(), expandedArgs);
+        cmSystemTools::ParseWindowsCommandLine(line, expandedArgs);
         }
       }
     else

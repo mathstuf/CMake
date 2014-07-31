@@ -176,7 +176,7 @@ void cmCTestLaunch::HandleRealArg(const char* arg)
     std::string line;
     while(cmSystemTools::GetLineFromStream(fin, line))
       {
-      cmSystemTools::ParseWindowsCommandLine(line.c_str(), this->RealArgs);
+      cmSystemTools::ParseWindowsCommandLine(line, this->RealArgs);
       }
     return;
     }
@@ -437,8 +437,7 @@ void cmCTestLaunch::WriteXMLAction(std::ostream& fxml)
        cmSystemTools::IsSubDirectory(source,
                                      this->SourceDir))
       {
-      source = cmSystemTools::RelativePath(this->SourceDir.c_str(),
-                                           source.c_str());
+      source = cmSystemTools::RelativePath(this->SourceDir, source);
       }
 
     fxml << "\t\t\t<SourceFile>"

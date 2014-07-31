@@ -1830,7 +1830,7 @@ void cmMakefile::AddCacheDefinition(const std::string& name, const char* value,
       cmSystemTools::ExpandListArgument(val, files);
       for ( cc = 0; cc < files.size(); cc ++ )
         {
-        if(!cmSystemTools::IsOff(files[cc].c_str()))
+        if(!cmSystemTools::IsOff(files[cc]))
           {
           files[cc] = cmSystemTools::CollapseFullPath(files[cc]);
           }
@@ -3962,8 +3962,7 @@ int cmMakefile::ConfigureFile(const char* infile, const char* outfile,
 
   if(copyonly)
     {
-    if ( !cmSystemTools::CopyFileIfDifferent(sinfile.c_str(),
-                                             soutfile.c_str()))
+    if ( !cmSystemTools::CopyFileIfDifferent(sinfile, soutfile))
       {
       return 0;
       }
@@ -4027,8 +4026,7 @@ int cmMakefile::ConfigureFile(const char* infile, const char* outfile,
     // close the files before attempting to copy
     fin.close();
     fout.close();
-    if ( !cmSystemTools::CopyFileIfDifferent(tempOutputFile.c_str(),
-                                             soutfile.c_str()) )
+    if ( !cmSystemTools::CopyFileIfDifferent(tempOutputFile, soutfile) )
       {
       res = 0;
       }

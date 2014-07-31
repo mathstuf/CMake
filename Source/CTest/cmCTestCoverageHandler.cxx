@@ -265,7 +265,7 @@ bool cmCTestCoverageHandler::ShouldIDoCoverage(const char* file,
     }
   std::string ndc
     = cmSystemTools::FileExistsInParentDirectories(".NoDartCoverage",
-      fFile.c_str(), checkDir.c_str());
+      fFile, checkDir);
   if ( ndc.size() )
     {
     cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT, "Found: " << ndc
@@ -279,7 +279,7 @@ bool cmCTestCoverageHandler::ShouldIDoCoverage(const char* file,
   std::string relPath;
   if(checkDir.size() )
     {
-    relPath = cmSystemTools::RelativePath(checkDir.c_str(), fFile.c_str());
+    relPath = cmSystemTools::RelativePath(checkDir, fFile);
     }
   else
     {
@@ -303,7 +303,7 @@ bool cmCTestCoverageHandler::ShouldIDoCoverage(const char* file,
     }
 
   ndc = cmSystemTools::FileExistsInParentDirectories(".NoDartCoverage",
-    fFile.c_str(), checkDir.c_str());
+    fFile, checkDir);
   if ( ndc.size() )
     {
     cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT, "Found: " << ndc
@@ -1042,7 +1042,7 @@ int cmCTestCoverageHandler::HandleGCovCoverage(
     std::vector<std::string> lines;
     std::vector<std::string>::iterator line;
 
-    cmSystemTools::Split(output.c_str(), lines);
+    cmSystemTools::Split(output, lines);
 
     for ( line = lines.begin(); line != lines.end(); ++line)
       {
@@ -1452,7 +1452,7 @@ int cmCTestCoverageHandler::HandleLCovCoverage(
     std::vector<std::string> lines;
     std::vector<std::string>::iterator line;
 
-    cmSystemTools::Split(output.c_str(), lines);
+    cmSystemTools::Split(output, lines);
 
     for ( line = lines.begin(); line != lines.end(); ++line)
       {

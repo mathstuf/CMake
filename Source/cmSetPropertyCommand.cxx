@@ -414,8 +414,8 @@ bool cmSetPropertyCommand::HandleCacheMode()
   if(this->PropertyName == "ADVANCED")
     {
     if(!this->Remove &&
-       !cmSystemTools::IsOn(this->PropertyValue.c_str()) &&
-       !cmSystemTools::IsOff(this->PropertyValue.c_str()))
+       !cmSystemTools::IsOn(this->PropertyValue) &&
+       !cmSystemTools::IsOff(this->PropertyValue))
       {
       cmOStringStream e;
       e << "given non-boolean value \"" << this->PropertyValue

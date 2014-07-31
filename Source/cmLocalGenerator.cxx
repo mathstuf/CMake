@@ -616,7 +616,7 @@ void cmLocalGenerator::AddCustomCommandToCreateObject(const char* ofname,
 
     // Parse the string to get the custom command line.
     cmCustomCommandLine commandLine;
-    std::vector<std::string> cmd = cmSystemTools::ParseArguments(i->c_str());
+    std::vector<std::string> cmd = cmSystemTools::ParseArguments(*i);
     for(std::vector<std::string>::iterator a = cmd.begin();
         a != cmd.end(); ++a)
       {
@@ -727,7 +727,7 @@ void cmLocalGenerator::AddBuildTargetRule(const std::string& llang,
     this->ExpandRuleVariables(*i, vars);
     // Parse the string to get the custom command line.
     cmCustomCommandLine commandLine;
-    std::vector<std::string> cmd = cmSystemTools::ParseArguments(i->c_str());
+    std::vector<std::string> cmd = cmSystemTools::ParseArguments(*i);
     for(std::vector<std::string>::iterator a = cmd.begin();
         a != cmd.end(); ++a)
       {
@@ -1367,7 +1367,7 @@ std::string cmLocalGenerator::GetIncludeFlags(
   for(i = includes.begin(); i != includes.end(); ++i)
     {
     if(fwSearchFlag && *fwSearchFlag && this->Makefile->IsOn("APPLE")
-       && cmSystemTools::IsPathToFramework(i->c_str()))
+       && cmSystemTools::IsPathToFramework(*i))
       {
       std::string frameworkDir = *i;
       frameworkDir += "/../";
@@ -2760,7 +2760,7 @@ std::string cmLocalGenerator::ConvertToOutputFormat(const std::string& source,
   // Convert it to an output path.
   if (output == MAKERULE)
     {
-    result = cmSystemTools::ConvertToOutputPath(result.c_str());
+    result = cmSystemTools::ConvertToOutputPath(result);
     }
   else if(output == SHELL || output == WATCOMQUOTE)
     {

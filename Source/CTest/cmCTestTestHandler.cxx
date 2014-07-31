@@ -1336,7 +1336,7 @@ int cmCTestTestHandler::ExecuteCommands(std::vector<std::string>& vec)
     int retVal = 0;
     cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT, "Run command: " << *it
       << std::endl);
-    if ( !cmSystemTools::RunSingleCommand(it->c_str(), 0, &retVal, 0,
+    if ( !cmSystemTools::RunSingleCommand(*it, 0, &retVal, 0,
                                           cmSystemTools::OUTPUT_MERGE
         /*this->Verbose*/) || retVal != 0 )
       {
@@ -1500,7 +1500,7 @@ std::string cmCTestTestHandler
     if(cmSystemTools::FileExists(attempted[ai])
        && !cmSystemTools::FileIsDirectory(attempted[ai]))
       {
-      fullPath = cmSystemTools::CollapseFullPath(attempted[ai].c_str());
+      fullPath = cmSystemTools::CollapseFullPath(attempted[ai]);
       resultingConfig = attemptedConfigs[ai];
       }
     // then try with the exe extension
@@ -1512,7 +1512,7 @@ std::string cmCTestTestHandler
       if(cmSystemTools::FileExists(tempPath)
          && !cmSystemTools::FileIsDirectory(tempPath))
         {
-        fullPath = cmSystemTools::CollapseFullPath(tempPath.c_str());
+        fullPath = cmSystemTools::CollapseFullPath(tempPath);
         resultingConfig = attemptedConfigs[ai];
         }
       else
@@ -2149,7 +2149,7 @@ bool cmCTestTestHandler::SetTestsProperties(
           {
           if ( key == "WILL_FAIL" )
             {
-            rtit->WillFail = cmSystemTools::IsOn(val.c_str());
+            rtit->WillFail = cmSystemTools::IsOn(val);
             }
           if ( key == "ATTACHED_FILES" )
             {
@@ -2206,7 +2206,7 @@ bool cmCTestTestHandler::SetTestsProperties(
             }
           if ( key == "RUN_SERIAL" )
             {
-            rtit->RunSerial = cmSystemTools::IsOn(val.c_str());
+            rtit->RunSerial = cmSystemTools::IsOn(val);
             }
           if ( key == "FAIL_REGULAR_EXPRESSION" )
             {

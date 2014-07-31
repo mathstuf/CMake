@@ -179,7 +179,7 @@ static const struct BoolNode : public cmGeneratorExpressionNode
                        const GeneratorExpressionContent *,
                        cmGeneratorExpressionDAGChecker *) const
   {
-    return !cmSystemTools::IsOff(parameters.begin()->c_str()) ? "1" : "0";
+    return !cmSystemTools::IsOff(*parameters.begin()) ? "1" : "0";
   }
 } boolNode;
 
@@ -519,7 +519,7 @@ struct CompilerVersionNode : public cmGeneratorExpressionNode
       }
 
     return cmSystemTools::VersionCompare(cmSystemTools::OP_EQUAL,
-                                      parameters.begin()->c_str(),
+                                      *parameters.begin(),
                                       compilerVersion) ? "1" : "0";
   }
 };
@@ -614,7 +614,7 @@ static const struct VersionGreaterNode : public cmGeneratorExpressionNode
                        cmGeneratorExpressionDAGChecker *) const
   {
     return cmSystemTools::VersionCompare(cmSystemTools::OP_GREATER,
-                                         parameters.front().c_str(),
+                                         parameters.front(),
                                          parameters[1].c_str()) ? "1" : "0";
   }
 } versionGreaterNode;
@@ -632,7 +632,7 @@ static const struct VersionLessNode : public cmGeneratorExpressionNode
                        cmGeneratorExpressionDAGChecker *) const
   {
     return cmSystemTools::VersionCompare(cmSystemTools::OP_LESS,
-                                         parameters.front().c_str(),
+                                         parameters.front(),
                                          parameters[1].c_str()) ? "1" : "0";
   }
 } versionLessNode;
@@ -650,7 +650,7 @@ static const struct VersionEqualNode : public cmGeneratorExpressionNode
                        cmGeneratorExpressionDAGChecker *) const
   {
     return cmSystemTools::VersionCompare(cmSystemTools::OP_EQUAL,
-                                         parameters.front().c_str(),
+                                         parameters.front(),
                                          parameters[1].c_str()) ? "1" : "0";
   }
 } versionEqualNode;

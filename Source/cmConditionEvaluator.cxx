@@ -199,11 +199,11 @@ bool cmConditionEvaluator::GetBooleanValue(
     }
 
   // Check named constants.
-  if (cmSystemTools::IsOn(arg.c_str()))
+  if (cmSystemTools::IsOn(arg.GetValue()))
     {
     return true;
     }
-  if (cmSystemTools::IsOff(arg.c_str()))
+  if (cmSystemTools::IsOff(arg.GetValue()))
     {
     return false;
     }

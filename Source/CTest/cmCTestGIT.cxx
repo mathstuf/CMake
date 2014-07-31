@@ -179,7 +179,7 @@ bool cmCTestGIT::UpdateByFetchAndReset()
     {
     opts = this->CTest->GetCTestConfiguration("GITUpdateOptions");
     }
-  std::vector<std::string> args = cmSystemTools::ParseArguments(opts.c_str());
+  std::vector<std::string> args = cmSystemTools::ParseArguments(opts);
   for(std::vector<std::string>::const_iterator ai = args.begin();
       ai != args.end(); ++ai)
     {

@@ -274,7 +274,7 @@ void cmExtraCodeBlocksGenerator
 
       const std::string &relative = cmSystemTools::RelativePath(
                          it->second[0]->GetMakefile()->GetHomeDirectory(),
-                         jt->c_str());
+                         *jt);
       std::vector<std::string> splitted;
       cmSystemTools::SplitPath(relative, splitted, false);
       // Split filename from path

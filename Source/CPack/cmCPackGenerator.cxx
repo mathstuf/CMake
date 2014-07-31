@@ -289,7 +289,7 @@ int cmCPackGenerator::InstallProjectViaInstallCommands(
         << std::endl);
       std::string output;
       int retVal = 1;
-      bool resB = cmSystemTools::RunSingleCommand(it->c_str(), &output,
+      bool resB = cmSystemTools::RunSingleCommand(*it, &output,
         &retVal, 0, this->GeneratorVerbose, 0);
       if ( !resB || retVal )
         {
@@ -395,7 +395,7 @@ int cmCPackGenerator::InstallProjectViaInstalledDirectories(
           }
         std::string filePath = tempDir;
         filePath += "/" + subdir + "/"
-          + cmSystemTools::RelativePath(top.c_str(), gfit->c_str());
+          + cmSystemTools::RelativePath(top, *gfit);
         cmCPackLogger(cmCPackLog::LOG_DEBUG, "Copy file: "
           << inFile << " -> " << filePath << std::endl);
         /* If the file is a symlink we will have to re-create it */
@@ -403,16 +403,16 @@ int cmCPackGenerator::InstallProjectViaInstalledDirectories(
           {
           std::string targetFile;
           std::string inFileRelative =
-             cmSystemTools::RelativePath(top.c_str(),inFile.c_str());
+             cmSystemTools::RelativePath(top,inFile);
           cmSystemTools::ReadSymlink(inFile,targetFile);
           symlinkedFiles.push_back(std::pair<std::string,
                                    std::string>(targetFile,inFileRelative));
           }
         /* If it is not a symlink then do a plain copy */
         else if (!(
-            cmSystemTools::CopyFileIfDifferent(inFile.c_str(),filePath.c_str())
+            cmSystemTools::CopyFileIfDifferent(inFile,filePath)
             &&
-            cmSystemTools::CopyFileTime(inFile.c_str(),filePath.c_str())
+            cmSystemTools::CopyFileTime(inFile,filePath)
                 ) )
           {
           cmCPackLogger(cmCPackLog::LOG_ERROR, "Problem copying file: "
@@ -904,7 +904,7 @@ int cmCPackGenerator::InstallProjectViaInstallCMakeProjects(
           for (fit=result.begin();fit!=diff;++fit)
             {
             localFileName =
-                cmSystemTools::RelativePath(InstallPrefix, fit->c_str());
+                cmSystemTools::RelativePath(InstallPrefix, *fit);
             localFileName =
                 localFileName.substr(localFileName.find_first_not_of('/'),
                                      std::string::npos);

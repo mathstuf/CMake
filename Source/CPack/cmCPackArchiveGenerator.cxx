@@ -274,8 +274,7 @@ int cmCPackArchiveGenerator::PackageFiles()
   for ( fileIt = files.begin(); fileIt != files.end(); ++ fileIt )
     {
     // Get the relative path to the file
-    std::string rp = cmSystemTools::RelativePath(toplevel.c_str(),
-                                                 fileIt->c_str());
+    std::string rp = cmSystemTools::RelativePath(toplevel, *fileIt);
     archive.Add(rp);
     if(!archive)
       {

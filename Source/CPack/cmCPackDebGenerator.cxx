@@ -466,7 +466,7 @@ int cmCPackDebGenerator::createDeb()
 
   std::string output;
     int retval = -1;
-  int res = cmSystemTools::RunSingleCommand(cmd.c_str(), &output,
+  int res = cmSystemTools::RunSingleCommand(cmd, &output,
       &retval, this->GetOption("WDIR"), this->GeneratorVerbose, 0);
 
     if ( !res || retval )
@@ -505,7 +505,7 @@ int cmCPackDebGenerator::createDeb()
       cmd += "\"";
       //std::string output;
       //int retVal = -1;
-      res = cmSystemTools::RunSingleCommand(cmd.c_str(), &output,
+      res = cmSystemTools::RunSingleCommand(cmd, &output,
           &retval, toplevel.c_str(), this->GeneratorVerbose, 0);
       // debian md5sums entries are like this:
       // 014f3604694729f3bf19263bac599765  usr/bin/ccmake
@@ -547,7 +547,7 @@ int cmCPackDebGenerator::createDeb()
         }
       }
     }
-  res = cmSystemTools::RunSingleCommand(cmd.c_str(), &output,
+  res = cmSystemTools::RunSingleCommand(cmd, &output,
       &retval, this->GetOption("WDIR"), this->GeneratorVerbose, 0);
 
     if ( !res || retval )

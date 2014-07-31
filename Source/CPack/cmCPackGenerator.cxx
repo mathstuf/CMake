@@ -295,7 +295,7 @@ int cmCPackGenerator::InstallProjectViaInstallCommands(
         {
         std::string tmpFile = this->GetOption("CPACK_TOPLEVEL_DIRECTORY");
         tmpFile += "/InstallOutput.log";
-        cmGeneratedFileStream ofs(tmpFile.c_str());
+        cmGeneratedFileStream ofs(tmpFile);
         ofs << "# Run command: " << *it << std::endl
           << "# Output:" << std::endl
           << output << std::endl;
@@ -662,7 +662,7 @@ int cmCPackGenerator::InstallProjectViaInstallCMakeProjects(
           {
           std::string tmpFile = this->GetOption("CPACK_TOPLEVEL_DIRECTORY");
           tmpFile += "/PreinstallOutput.log";
-          cmGeneratedFileStream ofs(tmpFile.c_str());
+          cmGeneratedFileStream ofs(tmpFile);
           ofs << "# Run command: " << buildCommandStr << std::endl
             << "# Directory: " << installDirectory << std::endl
             << "# Output:" << std::endl

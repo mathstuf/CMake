@@ -95,7 +95,7 @@ int cmCPackIFWGenerator::PackageFiles()
       ifwCmd, &output, &retVal, 0, this->GeneratorVerbose, 0);
     if ( !res || retVal )
       {
-      cmGeneratedFileStream ofs(ifwTmpFile.c_str());
+      cmGeneratedFileStream ofs(ifwTmpFile);
       ofs << "# Run command: " << ifwCmd << std::endl
           << "# Output:" << std::endl
           << output << std::endl;
@@ -179,7 +179,7 @@ int cmCPackIFWGenerator::PackageFiles()
     ifwCmd, &output, &retVal, 0, this->GeneratorVerbose, 0);
   if ( !res || retVal )
     {
-    cmGeneratedFileStream ofs(ifwTmpFile.c_str());
+    cmGeneratedFileStream ofs(ifwTmpFile);
     ofs << "# Run command: " << ifwCmd << std::endl
         << "# Output:" << std::endl
         << output << std::endl;

@@ -63,7 +63,7 @@ void cmExtraKateGenerator::CreateKateProjectFile(const cmMakefile* mf) const
 {
   std::string filename = mf->GetHomeOutputDirectory();
   filename += "/.kateproject";
-  cmGeneratedFileStream fout(filename.c_str());
+  cmGeneratedFileStream fout(filename);
   if (!fout)
     {
     return;
@@ -241,7 +241,7 @@ cmExtraKateGenerator::CreateDummyKateProjectFile(const cmMakefile* mf) const
   filename += "/";
   filename += this->ProjectName;
   filename += ".kateproject";
-  cmGeneratedFileStream fout(filename.c_str());
+  cmGeneratedFileStream fout(filename);
   if (!fout)
     {
     return;

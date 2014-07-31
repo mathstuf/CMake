@@ -234,7 +234,7 @@ void cmExtraCodeBlocksGenerator
                          const std::string& filename)
 {
   const cmMakefile* mf=lgs[0]->GetMakefile();
-  cmGeneratedFileStream fout(filename.c_str());
+  cmGeneratedFileStream fout(filename);
   if(!fout)
     {
     return;
@@ -525,7 +525,7 @@ std::string cmExtraCodeBlocksGenerator::CreateDummyTargetFile(
   filename += "/";
   filename += target->GetName();
   filename += ".objlib";
-  cmGeneratedFileStream fout(filename.c_str());
+  cmGeneratedFileStream fout(filename);
   if(fout)
     {
     fout << "# This is a dummy file for the OBJECT library "

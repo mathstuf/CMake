@@ -929,7 +929,7 @@ int cmCTestScriptHandler::RunConfigurationDashboard()
       cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT,
         "Write CMake output to file: " << cmakeOutputFile
         << std::endl);
-      cmGeneratedFileStream fout(cmakeOutputFile.c_str());
+      cmGeneratedFileStream fout(cmakeOutputFile);
       if ( fout )
         {
         fout << output;
@@ -1004,7 +1004,7 @@ bool cmCTestScriptHandler::WriteInitialCache(const char* directory,
 {
   std::string cacheFile = directory;
   cacheFile += "/CMakeCache.txt";
-  cmGeneratedFileStream fout(cacheFile.c_str());
+  cmGeneratedFileStream fout(cacheFile);
   if(!fout)
     {
     return false;

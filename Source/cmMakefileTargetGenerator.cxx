@@ -115,7 +115,7 @@ void cmMakefileTargetGenerator::CreateRuleFile()
   // Open the rule file.  This should be copy-if-different because the
   // rules may depend on this file itself.
   this->BuildFileStream =
-    new cmGeneratedFileStream(this->BuildFileNameFull.c_str());
+    new cmGeneratedFileStream(this->BuildFileNameFull);
   this->BuildFileStream->SetCopyIfDifferent(true);
   if(!this->BuildFileStream)
     {
@@ -237,7 +237,7 @@ void cmMakefileTargetGenerator::WriteCommonCodeRules()
   if (!cmSystemTools::FileExists(dependFileNameFull))
     {
     // Write an empty dependency file.
-    cmGeneratedFileStream depFileStream(dependFileNameFull.c_str());
+    cmGeneratedFileStream depFileStream(dependFileNameFull);
     depFileStream
       << "# Empty dependencies file for " << this->Target->GetName() << ".\n"
       << "# This may be replaced when dependencies are built." << std::endl;
@@ -248,7 +248,7 @@ void cmMakefileTargetGenerator::WriteCommonCodeRules()
   this->FlagFileNameFull = this->TargetBuildDirectoryFull;
   this->FlagFileNameFull += "/flags.make";
   this->FlagFileStream =
-    new cmGeneratedFileStream(this->FlagFileNameFull.c_str());
+    new cmGeneratedFileStream(this->FlagFileNameFull);
   this->FlagFileStream->SetCopyIfDifferent(true);
   if(!this->FlagFileStream)
     {
@@ -1001,7 +1001,7 @@ void cmMakefileTargetGenerator::WriteTargetDependRules()
   this->InfoFileNameFull =
     this->LocalGenerator->ConvertToFullPath(this->InfoFileNameFull);
   this->InfoFileStream =
-    new cmGeneratedFileStream(this->InfoFileNameFull.c_str());
+    new cmGeneratedFileStream(this->InfoFileNameFull);
   this->InfoFileStream->SetCopyIfDifferent(true);
   if(!*this->InfoFileStream)
     {
@@ -1781,7 +1781,7 @@ cmMakefileTargetGenerator
   std::string linkScriptName = this->TargetBuildDirectoryFull;
   linkScriptName += "/";
   linkScriptName += name;
-  cmGeneratedFileStream linkScriptStream(linkScriptName.c_str());
+  cmGeneratedFileStream linkScriptStream(linkScriptName);
   linkScriptStream.SetCopyIfDifferent(true);
   for(std::vector<std::string>::const_iterator cmd = link_commands.begin();
       cmd != link_commands.end(); ++cmd)
@@ -1814,7 +1814,7 @@ cmMakefileTargetGenerator
   std::string responseFileNameFull = this->TargetBuildDirectoryFull;
   responseFileNameFull += "/";
   responseFileNameFull += name;
-  cmGeneratedFileStream responseStream(responseFileNameFull.c_str());
+  cmGeneratedFileStream responseStream(responseFileNameFull);
   responseStream.SetCopyIfDifferent(true);
   responseStream << options << "\n";
 

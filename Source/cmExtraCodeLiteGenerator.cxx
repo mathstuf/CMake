@@ -78,7 +78,7 @@ void cmExtraCodeLiteGenerator::Generate()
       workspaceFileName   += workspaceProjectName + ".workspace";
       this->WorkspacePath = mf->GetStartOutputDirectory();;
 
-      fout.Open(workspaceFileName.c_str(), false, false);
+      fout.Open(workspaceFileName, false, false);
       fout << "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
            "<CodeLite_Workspace Name=\"" << workspaceProjectName << "\" >\n";
       }
@@ -134,7 +134,7 @@ void cmExtraCodeLiteGenerator
                        const std::string& filename)
 {
   const cmMakefile* mf=lgs[0]->GetMakefile();
-  cmGeneratedFileStream fout(filename.c_str());
+  cmGeneratedFileStream fout(filename);
   if(!fout)
     {
     return;

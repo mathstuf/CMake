@@ -326,7 +326,7 @@ int cmCPackNSISGenerator::PackageFiles()
     &retVal, 0, this->GeneratorVerbose, 0);
   if ( !res || retVal )
     {
-    cmGeneratedFileStream ofs(tmpFile.c_str());
+    cmGeneratedFileStream ofs(tmpFile);
     ofs << "# Run command: " << nsisCmd << std::endl
       << "# Output:" << std::endl
       << output << std::endl;
@@ -439,7 +439,7 @@ int cmCPackNSISGenerator::InitializeInternal()
     const char* topDir = this->GetOption("CPACK_TOPLEVEL_DIRECTORY");
     std::string tmpFile = topDir ? topDir : ".";
     tmpFile += "/NSISOutput.log";
-    cmGeneratedFileStream ofs(tmpFile.c_str());
+    cmGeneratedFileStream ofs(tmpFile);
     ofs << "# Run command: " << nsisCmd << std::endl
       << "# Output:" << std::endl
       << output << std::endl;
@@ -806,7 +806,7 @@ CreateComponentDescription(cmCPackComponent *component,
       = cmSystemTools::IsOn(this->GetOption("CPACK_ZIP_NEED_QUOTES"));
     unsigned long totalSize = 0;
     { // the scope is needed for cmGeneratedFileStream
-      cmGeneratedFileStream out(zipListFileName.c_str());
+      cmGeneratedFileStream out(zipListFileName);
       std::vector<std::string>::iterator fileIt;
       for (fileIt = component->Files.begin();
            fileIt != component->Files.end();
@@ -841,7 +841,7 @@ CreateComponentDescription(cmCPackComponent *component,
     {
       std::string tmpFile = this->GetOption("CPACK_TOPLEVEL_DIRECTORY");
       tmpFile += "/CompressZip.log";
-      cmGeneratedFileStream ofs(tmpFile.c_str());
+      cmGeneratedFileStream ofs(tmpFile);
       ofs << "# Run command: " << cmd << std::endl
         << "# Output:" << std::endl
         << output << std::endl;

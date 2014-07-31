@@ -432,7 +432,7 @@ bool cmCacheManager::SaveCache(const std::string& path)
 {
   std::string cacheFile = path;
   cacheFile += "/CMakeCache.txt";
-  cmGeneratedFileStream fout(cacheFile.c_str());
+  cmGeneratedFileStream fout(cacheFile);
   fout.SetCopyIfDifferent(true);
   if(!fout)
     {

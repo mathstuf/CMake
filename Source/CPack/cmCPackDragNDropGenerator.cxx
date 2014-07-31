@@ -425,7 +425,7 @@ int cmCPackDragNDropGenerator::CreateDMG(const std::string& src_dir,
     ifs.open(cpack_license_file.c_str());
     if(ifs.is_open())
     {
-      cmGeneratedFileStream osf(sla_r.c_str());
+      cmGeneratedFileStream osf(sla_r);
       osf << "#include <CoreServices/CoreServices.r>\n\n";
       osf << SLAHeader;
       osf << "\n";

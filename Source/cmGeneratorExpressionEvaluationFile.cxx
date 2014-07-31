@@ -80,7 +80,7 @@ void cmGeneratorExpressionEvaluationFile::Generate(const std::string& config,
   this->Files.push_back(outputFileName);
   outputFiles[outputFileName] = outputContent;
 
-  cmGeneratedFileStream fout(outputFileName.c_str());
+  cmGeneratedFileStream fout(outputFileName);
   fout.SetCopyIfDifferent(true);
   fout << outputContent;
 }

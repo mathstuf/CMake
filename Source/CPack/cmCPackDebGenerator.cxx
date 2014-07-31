@@ -289,7 +289,7 @@ int cmCPackDebGenerator::createDeb()
     dbfilename += this->GetOption("WDIR");
   dbfilename += "/debian-binary";
     { // the scope is needed for cmGeneratedFileStream
-    cmGeneratedFileStream out(dbfilename.c_str());
+    cmGeneratedFileStream out(dbfilename);
     out << "2.0";
     out << std::endl; // required for valid debian package
     }
@@ -336,7 +336,7 @@ int cmCPackDebGenerator::createDeb()
                     this->GetOption("CPACK_DEBIAN_PACKAGE_REPLACES");
 
     { // the scope is needed for cmGeneratedFileStream
-    cmGeneratedFileStream out(ctlfilename.c_str());
+    cmGeneratedFileStream out(ctlfilename);
     out << "Package: " << debian_pkg_name << "\n";
     out << "Version: " << debian_pkg_version << "\n";
     out << "Section: " << debian_pkg_section << "\n";
@@ -473,7 +473,7 @@ int cmCPackDebGenerator::createDeb()
     {
     std::string tmpFile = this->GetOption("CPACK_TOPLEVEL_DIRECTORY");
     tmpFile += "/Deb.log";
-    cmGeneratedFileStream ofs(tmpFile.c_str());
+    cmGeneratedFileStream ofs(tmpFile);
     ofs << "# Run command: " << cmd << std::endl
       << "# Working directory: " << toplevel << std::endl
       << "# Output:" << std::endl
@@ -489,7 +489,7 @@ int cmCPackDebGenerator::createDeb()
   md5filename += "/md5sums";
 
     { // the scope is needed for cmGeneratedFileStream
-    cmGeneratedFileStream out(md5filename.c_str());
+    cmGeneratedFileStream out(md5filename);
     std::vector<std::string>::const_iterator fileIt;
 //       std::string topLevelWithTrailingSlash = toplevel;
     std::string topLevelWithTrailingSlash =
@@ -554,7 +554,7 @@ int cmCPackDebGenerator::createDeb()
     {
     std::string tmpFile = this->GetOption("CPACK_TOPLEVEL_DIRECTORY");
     tmpFile += "/Deb.log";
-    cmGeneratedFileStream ofs(tmpFile.c_str());
+    cmGeneratedFileStream ofs(tmpFile);
     ofs << "# Run command: " << cmd << std::endl
       << "# Working directory: " << toplevel << std::endl
       << "# Output:" << std::endl
@@ -582,7 +582,7 @@ int cmCPackDebGenerator::createDeb()
     {
     std::string tmpFile = this->GetOption("CPACK_TEMPORARY_PACKAGE_FILE_NAME");
     tmpFile += "/Deb.log";
-    cmGeneratedFileStream ofs(tmpFile.c_str());
+    cmGeneratedFileStream ofs(tmpFile);
     ofs << "# Problem creating archive using: " << res << std::endl;
     return 0;
     }

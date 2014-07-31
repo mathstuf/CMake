@@ -111,7 +111,7 @@ bool cmCTestStartCommand
 
   // Log startup actions.
   std::string startLogFile = binaryDir + "/Testing/Temporary/LastStart.log";
-  cmGeneratedFileStream ofs(startLogFile.c_str());
+  cmGeneratedFileStream ofs(startLogFile);
   if(!ofs)
     {
     cmCTestLog(this->CTest, ERROR_MESSAGE,

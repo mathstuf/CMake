@@ -211,7 +211,7 @@ bool cmGlobalKdevelopGenerator
     }
 
   //now write the new filename
-  cmGeneratedFileStream fout(filename.c_str());
+  cmGeneratedFileStream fout(filename);
   if(!fout)
     {
     return false;
@@ -333,7 +333,7 @@ void cmGlobalKdevelopGenerator
     }
   oldProjectFile.close();
 
-  cmGeneratedFileStream fout(filename.c_str());
+  cmGeneratedFileStream fout(filename);
   if(!fout)
     {
     return;
@@ -593,7 +593,7 @@ void cmGlobalKdevelopGenerator
 
   // and a session file, so that kdevelop opens a file if it opens the
   // project the first time
-  cmGeneratedFileStream devses(sessionFilename.c_str());
+  cmGeneratedFileStream devses(sessionFilename);
   if(!devses)
     {
     return;

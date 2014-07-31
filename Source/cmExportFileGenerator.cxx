@@ -74,7 +74,7 @@ bool cmExportFileGenerator::GenerateImportFile()
     {
     // Generate atomically and with copy-if-different.
     cmsys::auto_ptr<cmGeneratedFileStream>
-      ap(new cmGeneratedFileStream(this->MainImportFile.c_str(), true));
+      ap(new cmGeneratedFileStream(this->MainImportFile, true));
     ap->SetCopyIfDifferent(true);
     foutPtr = ap;
     }

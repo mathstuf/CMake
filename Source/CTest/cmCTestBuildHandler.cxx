@@ -862,7 +862,7 @@ void cmCTestBuildHandler::LaunchHelper::WriteLauncherConfig()
   // Give some testing configuration information to the launcher.
   std::string fname = this->Handler->CTestLaunchDir;
   fname += "/CTestLaunchConfig.cmake";
-  cmGeneratedFileStream fout(fname.c_str());
+  cmGeneratedFileStream fout(fname);
   std::string srcdir = this->CTest->GetCTestConfiguration("SourceDirectory");
   fout << "set(CTEST_SOURCE_DIRECTORY \"" << srcdir << "\")\n";
 }
@@ -881,7 +881,7 @@ cmCTestBuildHandler::LaunchHelper
   fname += "/Custom";
   fname += purpose;
   fname += ".txt";
-  cmGeneratedFileStream fout(fname.c_str());
+  cmGeneratedFileStream fout(fname);
   for(std::vector<std::string>::const_iterator mi = matchers.begin();
       mi != matchers.end(); ++mi)
     {

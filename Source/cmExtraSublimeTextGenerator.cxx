@@ -93,7 +93,7 @@ void cmExtraSublimeTextGenerator
                          const std::string& filename)
 {
   const cmMakefile* mf=lgs[0]->GetMakefile();
-  cmGeneratedFileStream fout(filename.c_str());
+  cmGeneratedFileStream fout(filename);
   if(!fout)
     {
     return;

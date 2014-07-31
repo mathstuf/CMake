@@ -59,7 +59,7 @@ int cmCPackCygwinBinaryGenerator::PackageFiles()
   // create an extra scope to force the stream
   // to create the file before the super class is called
   {
-  cmGeneratedFileStream ofs(manifestFile.c_str());
+  cmGeneratedFileStream ofs(manifestFile);
   for(std::vector<std::string>::const_iterator i = files.begin();
       i != files.end(); ++i)
     {

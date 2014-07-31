@@ -302,7 +302,7 @@ void cmVisualStudio10TargetGenerator::Generate()
   path += this->Name;
   path += ".vcxproj";
   this->BuildFileStream =
-    new cmGeneratedFileStream(path.c_str());
+    new cmGeneratedFileStream(path);
   this->PathToVcxproj = path;
   this->BuildFileStream->SetCopyIfDifferent(true);
 
@@ -935,7 +935,7 @@ void cmVisualStudio10TargetGenerator::WriteGroups()
   path += "/";
   path += this->Name;
   path += ".vcxproj.filters";
-  cmGeneratedFileStream fout(path.c_str());
+  cmGeneratedFileStream fout(path);
   fout.SetCopyIfDifferent(true);
   char magic[] = {0xEF,0xBB, 0xBF};
   fout.write(magic, 3);
@@ -2829,7 +2829,7 @@ void cmVisualStudio10TargetGenerator::WriteMissingFilesWP80()
   std::string artifactDirXML = cmVS10EscapeXML(artifactDir);
   std::string targetNameXML = cmVS10EscapeXML(this->Target->GetName());
 
-  cmGeneratedFileStream fout(manifestFile.c_str());
+  cmGeneratedFileStream fout(manifestFile);
   fout.SetCopyIfDifferent(true);
 
   fout <<
@@ -2912,7 +2912,7 @@ void cmVisualStudio10TargetGenerator::WriteMissingFilesWP81()
   std::string artifactDirXML = cmVS10EscapeXML(artifactDir);
   std::string targetNameXML = cmVS10EscapeXML(this->Target->GetName());
 
-  cmGeneratedFileStream fout(manifestFile.c_str());
+  cmGeneratedFileStream fout(manifestFile);
   fout.SetCopyIfDifferent(true);
 
   fout <<
@@ -2972,7 +2972,7 @@ void cmVisualStudio10TargetGenerator::WriteMissingFilesWS80()
   std::string artifactDirXML = cmVS10EscapeXML(artifactDir);
   std::string targetNameXML = cmVS10EscapeXML(this->Target->GetName());
 
-  cmGeneratedFileStream fout(manifestFile.c_str());
+  cmGeneratedFileStream fout(manifestFile);
   fout.SetCopyIfDifferent(true);
 
   fout <<
@@ -3024,7 +3024,7 @@ void cmVisualStudio10TargetGenerator::WriteMissingFilesWS81()
   std::string artifactDirXML = cmVS10EscapeXML(artifactDir);
   std::string targetNameXML = cmVS10EscapeXML(this->Target->GetName());
 
-  cmGeneratedFileStream fout(manifestFile.c_str());
+  cmGeneratedFileStream fout(manifestFile);
   fout.SetCopyIfDifferent(true);
 
   fout <<

@@ -2864,7 +2864,7 @@ void cmGlobalGenerator::WriteRuleHashes(std::string const& pfile)
     }
   else
     {
-    cmGeneratedFileStream fout(pfile.c_str());
+    cmGeneratedFileStream fout(pfile);
     fout << "# Hashes of file build rules.\n";
     for(std::map<std::string, RuleHash>::const_iterator
           rhi = this->RuleHashes.begin(); rhi != this->RuleHashes.end(); ++rhi)
@@ -2884,7 +2884,7 @@ void cmGlobalGenerator::WriteSummary()
   std::string fname = mf->GetHomeOutputDirectory();
   fname += cmake::GetCMakeFilesDirectory();
   fname += "/TargetDirectories.txt";
-  cmGeneratedFileStream fout(fname.c_str());
+  cmGeneratedFileStream fout(fname);
 
   // Generate summary information files for each target.
   for(TargetMap::const_iterator ti =
@@ -2911,7 +2911,7 @@ void cmGlobalGenerator::WriteSummary(cmTarget* target)
   if(const char* value = target->GetProperty("LABELS"))
     {
     cmSystemTools::MakeDirectory(dir);
-    cmGeneratedFileStream fout(file.c_str());
+    cmGeneratedFileStream fout(file);
 
     // List the target-wide labels.  All sources in the target get
     // these labels.
@@ -3049,7 +3049,7 @@ bool cmGlobalGenerator::GenerateCPackPropertiesFile()
       return true;
     }
 
-  cmGeneratedFileStream file(path.c_str());
+  cmGeneratedFileStream file(path);
   file << "# CPack properties\n";
 
   for(cmake::InstalledFilesMap::const_iterator i = installedFiles.begin();

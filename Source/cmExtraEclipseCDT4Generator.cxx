@@ -161,7 +161,7 @@ void cmExtraEclipseCDT4Generator::CreateSourceProjectFile()
                                    this->GetPathBasename(this->HomeDirectory));
 
   const std::string filename = this->HomeDirectory + "/.project";
-  cmGeneratedFileStream fout(filename.c_str());
+  cmGeneratedFileStream fout(filename);
   if (!fout)
     {
     return;
@@ -262,7 +262,7 @@ void cmExtraEclipseCDT4Generator::CreateProjectFile()
 
   const std::string filename = this->HomeOutputDirectory + "/.project";
 
-  cmGeneratedFileStream fout(filename.c_str());
+  cmGeneratedFileStream fout(filename);
   if (!fout)
     {
     return;
@@ -696,7 +696,7 @@ void cmExtraEclipseCDT4Generator::CreateCProjectFile() const
 
   const std::string filename = this->HomeOutputDirectory + "/.cproject";
 
-  cmGeneratedFileStream fout(filename.c_str());
+  cmGeneratedFileStream fout(filename);
   if (!fout)
     {
     return;

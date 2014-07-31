@@ -24,7 +24,8 @@ cmGeneratedFileStream::cmGeneratedFileStream():
 }
 
 //----------------------------------------------------------------------------
-cmGeneratedFileStream::cmGeneratedFileStream(const char* name, bool quiet):
+cmGeneratedFileStream::cmGeneratedFileStream(const std::string& name,
+                                             bool quiet):
   cmGeneratedFileStreamBase(name),
   Stream(TempName.c_str())
 {
@@ -50,7 +51,8 @@ cmGeneratedFileStream::~cmGeneratedFileStream()
 
 //----------------------------------------------------------------------------
 cmGeneratedFileStream&
-cmGeneratedFileStream::Open(const char* name, bool quiet, bool binaryFlag)
+cmGeneratedFileStream::Open(const std::string& name, bool quiet,
+                            bool binaryFlag)
 {
   // Store the file name and construct the temporary file name.
   this->cmGeneratedFileStreamBase::Open(name);
@@ -120,7 +122,7 @@ cmGeneratedFileStreamBase::cmGeneratedFileStreamBase():
 }
 
 //----------------------------------------------------------------------------
-cmGeneratedFileStreamBase::cmGeneratedFileStreamBase(const char* name):
+cmGeneratedFileStreamBase::cmGeneratedFileStreamBase(const std::string& name):
   Name(),
   TempName(),
   CopyIfDifferent(false),
@@ -138,7 +140,7 @@ cmGeneratedFileStreamBase::~cmGeneratedFileStreamBase()
 }
 
 //----------------------------------------------------------------------------
-void cmGeneratedFileStreamBase::Open(const char* name)
+void cmGeneratedFileStreamBase::Open(const std::string& name)
 {
   // Save the original name of the file.
   this->Name = name;
@@ -183,13 +185,13 @@ bool cmGeneratedFileStreamBase::Close()
       std::string gzname = this->TempName + ".temp.gz";
       if ( this->CompressFile(this->TempName.c_str(), gzname.c_str()) )
         {
-        this->RenameFile(gzname.c_str(), resname.c_str());
+        this->RenameFile(gzname, resname);
         }
       cmSystemTools::RemoveFile(gzname);
       }
     else
       {
-      this->RenameFile(this->TempName.c_str(), resname.c_str());
+      this->RenameFile(this->TempName, resname);
       }
 
     replaced = true;
@@ -242,8 +244,8 @@ int cmGeneratedFileStreamBase::CompressFile(const char*, const char*)
 #endif
 
 //----------------------------------------------------------------------------
-int cmGeneratedFileStreamBase::RenameFile(const char* oldname,
-                                          const char* newname)
+int cmGeneratedFileStreamBase::RenameFile(const std::string& oldname,
+                                          const std::string& newname)
 {
   return cmSystemTools::RenameFile(oldname, newname);
 }

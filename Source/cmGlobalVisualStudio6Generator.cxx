@@ -374,7 +374,7 @@ cmGlobalVisualStudio6Generator::WriteUtilityDepend(cmTarget const* target)
   fname += "/";
   fname += pname;
   fname += ".dsp";
-  cmGeneratedFileStream fout(fname.c_str());
+  cmGeneratedFileStream fout(fname);
   fout.SetCopyIfDifferent(true);
   fout <<
     "# Microsoft Developer Studio Project File - Name=\""

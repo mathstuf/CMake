@@ -30,7 +30,7 @@ protected:
   cmGeneratedFileStreamBase();
 
   // This constructor prepares the temporary output file.
-  cmGeneratedFileStreamBase(const char* name);
+  cmGeneratedFileStreamBase(const std::string& name);
 
   // The destructor renames the temporary output file to the real name.
   ~cmGeneratedFileStreamBase();
@@ -39,11 +39,11 @@ protected:
   // called before the real stream is opened.  Close is always called
   // after the real stream is closed and Okay is set to whether the
   // real stream was still valid for writing when it was closed.
-  void Open(const char* name);
+  void Open(const std::string& name);
   bool Close();
 
   // Internal file replacement implementation.
-  int RenameFile(const char* oldname, const char* newname);
+  int RenameFile(const std::string& oldname, const std::string& newname);
 
   // Internal file compression implementation.
   int CompressFile(const char* oldname, const char* newname);
@@ -95,7 +95,7 @@ public:
    * file cannot be opened an error message is produced unless the
    * second argument is set to true.
    */
-  cmGeneratedFileStream(const char* name, bool quiet=false);
+  cmGeneratedFileStream(const std::string& name, bool quiet=false);
 
   /**
    * The destructor checks the stream status to be sure the temporary
@@ -110,7 +110,7 @@ public:
    * temporary file.  If the file cannot be opened an error message is
    * produced unless the second argument is set to true.
    */
-  cmGeneratedFileStream& Open(const char* name, bool quiet=false,
+  cmGeneratedFileStream& Open(const std::string& name, bool quiet=false,
     bool binaryFlag=false);
 
   /**

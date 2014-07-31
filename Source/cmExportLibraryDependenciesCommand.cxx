@@ -65,7 +65,7 @@ void cmExportLibraryDependenciesCommand::ConstFinalPass() const
   else
     {
     cmsys::auto_ptr<cmGeneratedFileStream> ap(
-      new cmGeneratedFileStream(this->Filename.c_str(), true));
+      new cmGeneratedFileStream(this->Filename, true));
     ap->SetCopyIfDifferent(true);
     foutPtr = ap;
     }

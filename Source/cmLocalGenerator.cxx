@@ -289,7 +289,7 @@ void cmLocalGenerator::GenerateTestFiles()
   file += "/";
   file += "CTestTestfile.cmake";
 
-  cmGeneratedFileStream fout(file.c_str());
+  cmGeneratedFileStream fout(file);
   fout.SetCopyIfDifferent(true);
 
   fout << "# CMake generated Testfile for " << std::endl
@@ -426,7 +426,7 @@ void cmLocalGenerator::GenerateInstallRules()
     toplevel_install = 1;
     }
   file += "/cmake_install.cmake";
-  cmGeneratedFileStream fout(file.c_str());
+  cmGeneratedFileStream fout(file);
   fout.SetCopyIfDifferent(true);
 
   // Write the header.

@@ -282,7 +282,7 @@ bool cmGlobalVisualStudio8Generator::AddCheckTarget()
   stampListFile += "/";
   stampListFile += stampList;
   std::string stampFile;
-  cmGeneratedFileStream fout(stampListFile.c_str());
+  cmGeneratedFileStream fout(stampListFile);
   for(std::vector<cmLocalGenerator*>::const_iterator
         gi = generators.begin(); gi != generators.end(); ++gi)
     {

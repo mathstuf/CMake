@@ -366,7 +366,7 @@ void cmGlobalVisualStudio7Generator
   fname += "/";
   fname += root->GetMakefile()->GetProjectName();
   fname += ".sln";
-  cmGeneratedFileStream fout(fname.c_str());
+  cmGeneratedFileStream fout(fname);
   fout.SetCopyIfDifferent(true);
   if(!fout)
     {
@@ -890,7 +890,7 @@ cmGlobalVisualStudio7Generator::WriteUtilityDepend(cmTarget const* target)
   fname += "/";
   fname += pname;
   fname += ".vcproj";
-  cmGeneratedFileStream fout(fname.c_str());
+  cmGeneratedFileStream fout(fname);
   fout.SetCopyIfDifferent(true);
   this->CreateGUID(pname.c_str());
   std::string guid = this->GetGUID(pname.c_str());

@@ -33,7 +33,7 @@ bool cmUseMangledMesaCommand
   std::string glh = inputDir;
   glh += "/";
   glh += "gl.h";
-  if(!cmSystemTools::FileExists(glh.c_str()))
+  if(!cmSystemTools::FileExists(glh))
     {
     std::string e = "Bad path to Mesa, could not find: ";
     e += glh;
@@ -101,15 +101,15 @@ CopyAndFullPathMesaHeader(const char* source,
   cmsys::RegularExpression glLine("(gl|GL|xmesa)");
   while(cmSystemTools::GetLineFromStream(fin,inLine))
     {
-    if(includeLine.find(inLine.c_str()))
+    if(includeLine.find(inLine))
       {
       std::string includeFile = includeLine.match(1);
-      if(glDirLine.find(includeFile.c_str()))
+      if(glDirLine.find(includeFile))
         {
         std::string gfile = glDirLine.match(3);
         fout << "#include \"" << outdir << "/" << gfile << "\"\n";
         }
-      else if(glLine.find(includeFile.c_str()))
+      else if(glLine.find(includeFile))
         {
         fout << "#include \"" << outdir << "/" <<
           includeLine.match(1) << "\"\n";
@@ -129,6 +129,6 @@ CopyAndFullPathMesaHeader(const char* source,
   fout.close();
   cmSystemTools::CopyFileIfDifferent(tempOutputFile.c_str(),
                                      outFile.c_str());
-  cmSystemTools::RemoveFile(tempOutputFile.c_str());
+  cmSystemTools::RemoveFile(tempOutputFile);
 }
 

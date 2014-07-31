@@ -91,13 +91,13 @@ void cmNinjaUtilityTargetGenerator::Generate()
       "$(CMAKE_SOURCE_DIR)",
       this->GetLocalGenerator()->ConvertToOutputFormat(
         this->GetTarget()->GetMakefile()->GetHomeDirectory(),
-        cmLocalGenerator::SHELL).c_str());
+        cmLocalGenerator::SHELL));
     cmSystemTools::ReplaceString(
       command,
       "$(CMAKE_BINARY_DIR)",
       this->GetLocalGenerator()->ConvertToOutputFormat(
         this->GetTarget()->GetMakefile()->GetHomeOutputDirectory(),
-        cmLocalGenerator::SHELL).c_str());
+        cmLocalGenerator::SHELL));
     cmSystemTools::ReplaceString(command, "$(ARGS)", "");
 
     if (command.find('$') != std::string::npos)

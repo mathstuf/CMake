@@ -58,7 +58,7 @@ int cmCPackDebGenerator::PackageOnePack(std::string initialTopLevel,
   // Begin the archive for this pack
   std::string localToplevel(initialTopLevel);
   std::string packageFileName(
-      cmSystemTools::GetParentDirectory(toplevel.c_str())
+      cmSystemTools::GetParentDirectory(toplevel)
   );
   std::string outputFileName(
       std::string(this->GetOption("CPACK_PACKAGE_FILE_NAME"))
@@ -186,7 +186,7 @@ int cmCPackDebGenerator::PackageComponentsAllInOne()
   // The ALL GROUPS in ONE package case
   std::string localToplevel(initialTopLevel);
   std::string packageFileName(
-      cmSystemTools::GetParentDirectory(toplevel.c_str())
+      cmSystemTools::GetParentDirectory(toplevel)
                              );
   std::string outputFileName(
             std::string(this->GetOption("CPACK_PACKAGE_FILE_NAME"))
@@ -390,7 +390,7 @@ int cmCPackDebGenerator::createDeb()
               packageFiles.begin();
               fileIt != packageFiles.end(); ++ fileIt )
         {
-        totalSize += cmSystemTools::FileLength(fileIt->c_str());
+        totalSize += cmSystemTools::FileLength(*fileIt);
         }
     }
     out << "Installed-Size: " << (totalSize + 1023) / 1024 << "\n";
@@ -511,7 +511,7 @@ int cmCPackDebGenerator::createDeb()
       // 014f3604694729f3bf19263bac599765  usr/bin/ccmake
       // thus strip the full path (with the trailing slash)
       cmSystemTools::ReplaceString(output,
-                                   topLevelWithTrailingSlash.c_str(), "");
+                                   topLevelWithTrailingSlash, "");
       out << output;
       }
     // each line contains a eol.
@@ -539,8 +539,7 @@ int cmCPackDebGenerator::createDeb()
       localcopy += "/";
       localcopy += filenamename;
       // if we can copy the file, it means it does exist, let's add it:
-      if( cmsys::SystemTools::CopyFileIfDifferent(
-            i->c_str(), localcopy.c_str()) )
+      if( cmsys::SystemTools::CopyFileIfDifferent(*i, localcopy) )
         {
         // debian is picky and need relative to ./ path in the tar.*
         cmd += " ./";

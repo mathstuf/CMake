@@ -712,7 +712,7 @@ void CCONV cmSourceFileSetName(void *arg, const char* name, const char* dir,
   // First try and see whether the listed file can be found
   // as is without extensions added on.
   std::string hname = pathname;
-  if(cmSystemTools::FileExists(hname.c_str()))
+  if(cmSystemTools::FileExists(hname))
     {
     sf->SourceName = cmSystemTools::GetFilenamePath(name);
     if ( sf->SourceName.size() > 0 )
@@ -745,7 +745,7 @@ void CCONV cmSourceFileSetName(void *arg, const char* name, const char* dir,
     hname = pathname;
     hname += ".";
     hname += *ext;
-    if(cmSystemTools::FileExists(hname.c_str()))
+    if(cmSystemTools::FileExists(hname))
       {
       sf->SourceExtension = *ext;
       sf->FullPath = hname;
@@ -760,7 +760,7 @@ void CCONV cmSourceFileSetName(void *arg, const char* name, const char* dir,
     hname = pathname;
     hname += ".";
     hname += *ext;
-    if(cmSystemTools::FileExists(hname.c_str()))
+    if(cmSystemTools::FileExists(hname))
       {
       sf->SourceExtension = *ext;
       sf->FullPath = hname;
@@ -809,7 +809,7 @@ void CCONV cmSourceFileSetName2(void *arg, const char* name, const char* dir,
     fname += ".";
     fname += ext;
     }
-  sf->FullPath = cmSystemTools::CollapseFullPath(fname.c_str(), dir);
+  sf->FullPath = cmSystemTools::CollapseFullPath(fname, dir);
   cmSystemTools::ConvertToUnixSlashes(sf->FullPath);
   sf->SourceExtension = ext;
 }

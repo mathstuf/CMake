@@ -53,14 +53,14 @@ bool cmWriteFileCommand
     }
 
   std::string dir = cmSystemTools::GetFilenamePath(fileName);
-  cmSystemTools::MakeDirectory(dir.c_str());
+  cmSystemTools::MakeDirectory(dir);
 
   mode_t mode = 0;
 
   // Set permissions to writable
-  if ( cmSystemTools::GetPermissions(fileName.c_str(), mode) )
+  if ( cmSystemTools::GetPermissions(fileName, mode) )
     {
-    cmSystemTools::SetPermissions(fileName.c_str(),
+    cmSystemTools::SetPermissions(fileName,
 #if defined( _MSC_VER ) || defined( __MINGW32__ )
       mode | S_IWRITE
 #elif defined( __BORLANDC__ )
@@ -86,7 +86,7 @@ bool cmWriteFileCommand
   file.close();
   if(mode)
     {
-    cmSystemTools::SetPermissions(fileName.c_str(), mode);
+    cmSystemTools::SetPermissions(fileName, mode);
     }
 
   return true;

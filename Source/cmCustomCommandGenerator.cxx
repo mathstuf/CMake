@@ -109,7 +109,7 @@ std::vector<std::string> const& cmCustomCommandGenerator::GetDepends() const
       for (std::vector<std::string>::iterator it = result.begin();
           it != result.end(); ++it)
         {
-        if (cmSystemTools::FileIsFullPath(it->c_str()))
+        if (cmSystemTools::FileIsFullPath(*it))
           {
           *it = cmSystemTools::CollapseFullPath(*it);
           }

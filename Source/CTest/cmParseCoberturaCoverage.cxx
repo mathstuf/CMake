@@ -75,7 +75,7 @@ protected:
           for(size_t i=0;i < FilePaths.size();i++)
             {
             finalpath = FilePaths[i] + "/" + filename;
-            if(cmSystemTools::FileExists(finalpath.c_str()))
+            if(cmSystemTools::FileExists(finalpath))
               {
               this->CurFileName = finalpath;
               break;

@@ -30,7 +30,7 @@ bool cmParseGTMCoverage::LoadCoverageData(const char* d)
     {
     std::string file = dir.GetFile(i);
     if(file != "." && file != ".."
-       && !cmSystemTools::FileIsDirectory(file.c_str()))
+       && !cmSystemTools::FileIsDirectory(file))
       {
       std::string path = d;
       path += "/";
@@ -149,7 +149,7 @@ bool cmParseGTMCoverage::FindFunctionInMumpsFile(std::string const& filepath,
   int linenum = 0;
   while(  cmSystemTools::GetLineFromStream(in, line))
     {
-    std::string::size_type pos = line.find(function.c_str());
+    std::string::size_type pos = line.find(function);
     if(pos == 0)
       {
       char nextchar = line[function.size()];

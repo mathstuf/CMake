@@ -53,8 +53,8 @@ bool cmBuildNameCommand
     if(buildname.length())
       {
       std::string RegExp = "([^ ]*) [^ ]* ([^ ]*) ";
-      cmsys::RegularExpression reg( RegExp.c_str() );
-      if(reg.find(buildname.c_str()))
+      cmsys::RegularExpression reg( RegExp );
+      if(reg.find(buildname))
         {
         buildname = reg.match(1) + "-" + reg.match(2);
         }

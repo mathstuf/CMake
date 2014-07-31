@@ -68,7 +68,7 @@ int cmCPackSTGZGenerator::PackageFiles()
   for (std::vector<std::string>::iterator it=packageFileNames.begin();
        it != packageFileNames.end(); ++it)
   {
-    retval &= cmSystemTools::SetPermissions((*it).c_str(),
+    retval &= cmSystemTools::SetPermissions(*it,
 #if defined( _MSC_VER ) || defined( __MINGW32__ )
       S_IREAD | S_IWRITE | S_IEXEC
 #elif defined( __BORLANDC__ )

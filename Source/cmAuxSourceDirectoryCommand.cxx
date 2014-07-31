@@ -28,7 +28,7 @@ bool cmAuxSourceDirectoryCommand::InitialPass
   std::string templateDirectory = args[0];
   this->Makefile->AddExtraDirectory(templateDirectory.c_str());
   std::string tdir;
-  if(!cmSystemTools::FileIsFullPath(templateDirectory.c_str()))
+  if(!cmSystemTools::FileIsFullPath(templateDirectory))
     {
     tdir = this->Makefile->GetCurrentDirectory();
     tdir += "/";
@@ -48,7 +48,7 @@ bool cmAuxSourceDirectoryCommand::InitialPass
 
   // Load all the files in the directory
   cmsys::Directory dir;
-  if(dir.Load(tdir.c_str()))
+  if(dir.Load(tdir))
     {
     size_t numfiles = dir.GetNumberOfFiles();
     for(size_t i =0; i < numfiles; ++i)

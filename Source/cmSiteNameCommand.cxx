@@ -70,8 +70,8 @@ bool cmSiteNameCommand
       {
       // remove any white space from the host name
       std::string hostRegExp = "[ \t\n\r]*([^\t\n\r ]*)[ \t\n\r]*";
-      cmsys::RegularExpression hostReg (hostRegExp.c_str());
-      if (hostReg.find(host.c_str()))
+      cmsys::RegularExpression hostReg (hostRegExp);
+      if (hostReg.find(host))
         {
         // strip whitespace
         host = hostReg.match(1);

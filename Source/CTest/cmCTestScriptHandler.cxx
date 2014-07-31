@@ -392,7 +392,7 @@ int cmCTestScriptHandler::ReadInScript(const std::string& total_script_arg)
     script_arg = total_script_arg.substr(total_script_arg.find(",")+1);
     }
   // make sure the file exists
-  if (!cmSystemTools::FileExists(script.c_str()))
+  if (!cmSystemTools::FileExists(script))
     {
     cmSystemTools::Error("Cannot find file: ", script.c_str());
     return 1;
@@ -482,8 +482,8 @@ int cmCTestScriptHandler::ExtractVariables()
     = this->Makefile->GetSafeDefinition("CTEST_BINARY_DIRECTORY");
 
   // add in translations for src and bin
-  cmSystemTools::AddKeepPath(this->SourceDir.c_str());
-  cmSystemTools::AddKeepPath(this->BinaryDir.c_str());
+  cmSystemTools::AddKeepPath(this->SourceDir);
+  cmSystemTools::AddKeepPath(this->BinaryDir);
 
   this->CTestCmd
     = this->Makefile->GetSafeDefinition("CTEST_COMMAND");
@@ -566,7 +566,7 @@ int cmCTestScriptHandler::ExtractVariables()
   // this->SourceDir
   if (this->CTestRoot.empty() )
     {
-    this->CTestRoot = cmSystemTools::GetFilenamePath(this->SourceDir).c_str();
+    this->CTestRoot = cmSystemTools::GetFilenamePath(this->SourceDir);
     }
 
   // the script may override the minimum continuous interval
@@ -706,7 +706,7 @@ int cmCTestScriptHandler::CheckOutSourceDir()
   int retVal;
   bool res;
 
-  if (!cmSystemTools::FileExists(this->SourceDir.c_str()) &&
+  if (!cmSystemTools::FileExists(this->SourceDir) &&
       !this->CVSCheckOut.empty())
     {
     // we must now checkout the src dir
@@ -741,13 +741,13 @@ int cmCTestScriptHandler::BackupDirectories()
   if (this->Backup)
     {
     // if for some reason those directories exist then first delete them
-    if (cmSystemTools::FileExists(this->BackupSourceDir.c_str()))
+    if (cmSystemTools::FileExists(this->BackupSourceDir))
       {
-      cmSystemTools::RemoveADirectory(this->BackupSourceDir.c_str());
+      cmSystemTools::RemoveADirectory(this->BackupSourceDir);
       }
-    if (cmSystemTools::FileExists(this->BackupBinaryDir.c_str()))
+    if (cmSystemTools::FileExists(this->BackupBinaryDir))
       {
-      cmSystemTools::RemoveADirectory(this->BackupBinaryDir.c_str());
+      cmSystemTools::RemoveADirectory(this->BackupBinaryDir);
       }
 
     // first rename the src and binary directories
@@ -846,10 +846,10 @@ int cmCTestScriptHandler::RunConfigurationDashboard()
     }
 
   // make sure the binary directory exists if it isn't the srcdir
-  if (!cmSystemTools::FileExists(this->BinaryDir.c_str()) &&
+  if (!cmSystemTools::FileExists(this->BinaryDir) &&
       this->SourceDir != this->BinaryDir)
     {
-    if (!cmSystemTools::MakeDirectory(this->BinaryDir.c_str()))
+    if (!cmSystemTools::MakeDirectory(this->BinaryDir))
       {
       cmSystemTools::Error("Unable to create the binary directory:\n",
                            this->BinaryDir.c_str());
@@ -921,7 +921,7 @@ int cmCTestScriptHandler::RunConfigurationDashboard()
     if ( !this->CMOutFile.empty() )
       {
       std::string cmakeOutputFile = this->CMOutFile;
-      if ( !cmSystemTools::FileIsFullPath(cmakeOutputFile.c_str()) )
+      if ( !cmSystemTools::FileIsFullPath(cmakeOutputFile) )
         {
         cmakeOutputFile = this->BinaryDir + "/" + cmakeOutputFile;
         }
@@ -991,8 +991,8 @@ int cmCTestScriptHandler::RunConfigurationDashboard()
   // if all was succesful, delete the backup dirs to free up disk space
   if (this->Backup)
     {
-    cmSystemTools::RemoveADirectory(this->BackupSourceDir.c_str());
-    cmSystemTools::RemoveADirectory(this->BackupBinaryDir.c_str());
+    cmSystemTools::RemoveADirectory(this->BackupSourceDir);
+    cmSystemTools::RemoveADirectory(this->BackupBinaryDir);
     }
 
   return 0;
@@ -1031,13 +1031,13 @@ void cmCTestScriptHandler::RestoreBackupDirectories()
   if (this->Backup)
     {
     // if for some reason those directories exist then first delete them
-    if (cmSystemTools::FileExists(this->SourceDir.c_str()))
+    if (cmSystemTools::FileExists(this->SourceDir))
       {
-      cmSystemTools::RemoveADirectory(this->SourceDir.c_str());
+      cmSystemTools::RemoveADirectory(this->SourceDir);
       }
-    if (cmSystemTools::FileExists(this->BinaryDir.c_str()))
+    if (cmSystemTools::FileExists(this->BinaryDir))
       {
-      cmSystemTools::RemoveADirectory(this->BinaryDir.c_str());
+      cmSystemTools::RemoveADirectory(this->BinaryDir);
       }
     // rename the src and binary directories
     rename(this->BackupSourceDir.c_str(), this->SourceDir.c_str());
@@ -1078,7 +1078,7 @@ bool cmCTestScriptHandler::EmptyBinaryDirectory(const char *sname)
   std::string check = sname;
   check += "/CMakeCache.txt";
 
-  if(!cmSystemTools::FileExists(check.c_str()))
+  if(!cmSystemTools::FileExists(check))
     {
     return false;
     }
@@ -1100,7 +1100,7 @@ bool cmCTestScriptHandler::TryToRemoveBinaryDirectoryOnce(
   const std::string& directoryPath)
 {
   cmsys::Directory directory;
-  directory.Load(directoryPath.c_str());
+  directory.Load(directoryPath);
 
   for(unsigned long i = 0; i < directory.GetNumberOfFiles(); ++i)
     {
@@ -1113,26 +1113,26 @@ bool cmCTestScriptHandler::TryToRemoveBinaryDirectoryOnce(
 
     std::string fullPath = directoryPath + std::string("/") + path;
 
-    bool isDirectory = cmSystemTools::FileIsDirectory(fullPath.c_str()) &&
-      !cmSystemTools::FileIsSymlink(fullPath.c_str());
+    bool isDirectory = cmSystemTools::FileIsDirectory(fullPath) &&
+      !cmSystemTools::FileIsSymlink(fullPath);
 
     if(isDirectory)
       {
-      if(!cmSystemTools::RemoveADirectory(fullPath.c_str()))
+      if(!cmSystemTools::RemoveADirectory(fullPath))
         {
         return false;
         }
       }
     else
       {
-      if(!cmSystemTools::RemoveFile(fullPath.c_str()))
+      if(!cmSystemTools::RemoveFile(fullPath))
         {
         return false;
         }
       }
   }
 
-  return cmSystemTools::RemoveADirectory(directoryPath.c_str());
+  return cmSystemTools::RemoveADirectory(directoryPath);
 }
 
 //-------------------------------------------------------------------------

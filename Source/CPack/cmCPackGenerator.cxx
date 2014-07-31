@@ -204,7 +204,7 @@ int cmCPackGenerator::InstallProject()
 
   const char* tempInstallDirectory = tempInstallDirectoryStr.c_str();
   int res = 1;
-  if ( !cmsys::SystemTools::MakeDirectory(bareTempInstallDirectory.c_str()))
+  if ( !cmsys::SystemTools::MakeDirectory(bareTempInstallDirectory))
     {
     cmCPackLogger(cmCPackLog::LOG_ERROR,
       "Problem creating temporary directory: "
@@ -217,7 +217,7 @@ int cmCPackGenerator::InstallProject()
     {
     std::string destDir = "DESTDIR=";
     destDir += tempInstallDirectory;
-    cmSystemTools::PutEnv(destDir.c_str());
+    cmSystemTools::PutEnv(destDir);
     }
   else
     {
@@ -277,7 +277,7 @@ int cmCPackGenerator::InstallProjectViaInstallCommands(
     {
     std::string tempInstallDirectoryEnv = "CMAKE_INSTALL_PREFIX=";
     tempInstallDirectoryEnv += tempInstallDirectory;
-    cmSystemTools::PutEnv(tempInstallDirectoryEnv.c_str());
+    cmSystemTools::PutEnv(tempInstallDirectoryEnv);
     std::vector<std::string> installCommandsVector;
     cmSystemTools::ExpandListArgument(installCommands,installCommandsVector);
     std::vector<std::string>::iterator it;
@@ -330,7 +330,7 @@ int cmCPackGenerator::InstallProjectViaInstalledDirectories(
       {
       cmCPackLogger(cmCPackLog::LOG_VERBOSE,
         "Create ignore files regex for: " << *it << std::endl);
-      ignoreFilesRegex.push_back(it->c_str());
+      ignoreFilesRegex.push_back(*it);
       }
     }
   const char* installDirectories
@@ -382,7 +382,7 @@ int cmCPackGenerator::InstallProjectViaInstalledDirectories(
           regIt!= ignoreFilesRegex.end();
           ++ regIt)
           {
-          if ( regIt->find(inFile.c_str()) )
+          if ( regIt->find(inFile) )
             {
             cmCPackLogger(cmCPackLog::LOG_VERBOSE, "Ignore file: "
               << inFile << std::endl);
@@ -399,12 +399,12 @@ int cmCPackGenerator::InstallProjectViaInstalledDirectories(
         cmCPackLogger(cmCPackLog::LOG_DEBUG, "Copy file: "
           << inFile << " -> " << filePath << std::endl);
         /* If the file is a symlink we will have to re-create it */
-        if ( cmSystemTools::FileIsSymlink(inFile.c_str()))
+        if ( cmSystemTools::FileIsSymlink(inFile))
           {
           std::string targetFile;
           std::string inFileRelative =
              cmSystemTools::RelativePath(top.c_str(),inFile.c_str());
-          cmSystemTools::ReadSymlink(inFile.c_str(),targetFile);
+          cmSystemTools::ReadSymlink(inFile,targetFile);
           symlinkedFiles.push_back(std::pair<std::string,
                                    std::string>(targetFile,inFileRelative));
           }
@@ -429,7 +429,7 @@ int cmCPackGenerator::InstallProjectViaInstalledDirectories(
         goToDir  += "/"+subdir;
         cmCPackLogger(cmCPackLog::LOG_DEBUG,
                       "Change dir to: " << goToDir <<std::endl);
-        cmSystemTools::ChangeDirectory(goToDir.c_str());
+        cmSystemTools::ChangeDirectory(goToDir);
         for (symlinkedIt=symlinkedFiles.begin();
              symlinkedIt != symlinkedFiles.end();
              ++symlinkedIt)
@@ -437,8 +437,8 @@ int cmCPackGenerator::InstallProjectViaInstalledDirectories(
           cmCPackLogger(cmCPackLog::LOG_DEBUG, "Will create a symlink: "
                          << symlinkedIt->second << "--> "
                          << symlinkedIt->first << std::endl);
-          if (!cmSystemTools::CreateSymlink((symlinkedIt->first).c_str(),
-                                            (symlinkedIt->second).c_str()))
+          if (!cmSystemTools::CreateSymlink(symlinkedIt->first,
+                                            symlinkedIt->second))
             {
             cmCPackLogger(cmCPackLog::LOG_ERROR, "Cannot create symlink: "
                             << symlinkedIt->second << "--> "
@@ -448,7 +448,7 @@ int cmCPackGenerator::InstallProjectViaInstalledDirectories(
           }
         cmCPackLogger(cmCPackLog::LOG_DEBUG, "Going back to: "
                       << curDir <<std::endl);
-        cmSystemTools::ChangeDirectory(curDir.c_str());
+        cmSystemTools::ChangeDirectory(curDir);
         }
       }
     }
@@ -767,7 +767,7 @@ int cmCPackGenerator::InstallProjectViaInstallCMakeProjects(
           // Make sure that DESTDIR + CPACK_INSTALL_PREFIX directory
           // exists:
           //
-          if (cmSystemTools::StringStartsWith(dir.c_str(), "/"))
+          if (cmSystemTools::StringStartsWith(dir, "/"))
             {
             dir = tempInstallDirectory + dir;
             }
@@ -786,13 +786,11 @@ int cmCPackGenerator::InstallProjectViaInstallCMakeProjects(
            *     - Because it was already used for component install
            *       in order to put things in subdirs...
            */
-          cmSystemTools::PutEnv(
-              (std::string("DESTDIR=")+tempInstallDirectory).c_str()
-                               );
+          cmSystemTools::PutEnv("DESTDIR="+tempInstallDirectory);
           cmCPackLogger(cmCPackLog::LOG_DEBUG,
                         "- Creating directory: '" << dir << "'" << std::endl);
 
-          if ( !cmsys::SystemTools::MakeDirectory(dir.c_str()))
+          if ( !cmsys::SystemTools::MakeDirectory(dir))
             {
             cmCPackLogger(cmCPackLog::LOG_ERROR,
                           "Problem creating temporary directory: "
@@ -806,7 +804,7 @@ int cmCPackGenerator::InstallProjectViaInstallCMakeProjects(
                             tempInstallDirectory.c_str());
 
           if ( !cmsys::SystemTools::MakeDirectory(
-                 tempInstallDirectory.c_str()))
+                 tempInstallDirectory))
             {
             cmCPackLogger(cmCPackLog::LOG_ERROR,
                           "Problem creating temporary directory: "

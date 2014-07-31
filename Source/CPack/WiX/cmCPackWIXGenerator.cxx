@@ -806,8 +806,8 @@ bool cmCPackWIXGenerator::CreateLicenseFile()
   if(extension == ".rtf")
     {
     cmSystemTools::CopyAFile(
-      licenseSourceFilename.c_str(),
-      licenseDestinationFilename.c_str());
+      licenseSourceFilename,
+      licenseDestinationFilename);
     }
   else if(extension == ".txt")
     {
@@ -845,7 +845,7 @@ void cmCPackWIXGenerator::AddDirectoryAndFileDefinitons(
   shortcut_map_t& shortcutMap)
 {
   cmsys::Directory dir;
-  dir.Load(topdir.c_str());
+  dir.Load(topdir);
 
   std::string relativeDirectoryPath =
     cmSystemTools::RelativePath(toplevel.c_str(), topdir.c_str());
@@ -897,12 +897,10 @@ void cmCPackWIXGenerator::AddDirectoryAndFileDefinitons(
 
     std::string fullPath = topdir + "/" + fileName;
 
-    std::string relativePath = cmSystemTools::RelativePath(
-      toplevel.c_str(), fullPath.c_str());
-
+    std::string relativePath = cmSystemTools::RelativePath(toplevel, fullPath);
     std::string id = PathToId(relativePath);
 
-    if(cmSystemTools::FileIsDirectory(fullPath.c_str()))
+    if(cmSystemTools::FileIsDirectory(fullPath))
       {
       std::string subDirectoryId = std::string("CM_D") + id;
 

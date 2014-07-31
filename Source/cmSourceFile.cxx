@@ -179,7 +179,7 @@ bool cmSourceFile::FindFullPath(std::string* error)
       tryPath += "/";
       }
     tryPath += this->Location.GetName();
-    tryPath = cmSystemTools::CollapseFullPath(tryPath.c_str(), *di);
+    tryPath = cmSystemTools::CollapseFullPath(tryPath, *di);
     if(this->TryFullPath(tryPath, ""))
       {
       return true;
@@ -242,7 +242,7 @@ bool cmSourceFile::TryFullPath(const std::string& path,
     tryPath += ".";
     tryPath += ext;
     }
-  if(cmSystemTools::FileExists(tryPath.c_str()))
+  if(cmSystemTools::FileExists(tryPath))
     {
     this->FullPath = tryPath;
     return true;

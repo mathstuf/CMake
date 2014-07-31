@@ -68,8 +68,8 @@ cmDependsC::cmDependsC(cmLocalGenerator* lg,
   }
 
   this->IncludeRegexLine.compile(INCLUDE_REGEX_LINE);
-  this->IncludeRegexScan.compile(scanRegex.c_str());
-  this->IncludeRegexComplain.compile(complainRegex.c_str());
+  this->IncludeRegexScan.compile(scanRegex);
+  this->IncludeRegexComplain.compile(complainRegex);
   this->IncludeRegexLineString = INCLUDE_REGEX_LINE_MARKER INCLUDE_REGEX_LINE;
   this->IncludeRegexScanString = INCLUDE_REGEX_SCAN_MARKER;
   this->IncludeRegexScanString += scanRegex;
@@ -165,15 +165,15 @@ bool cmDependsC::WriteDependencies(const std::set<std::string>& sources,
       // If not a full path, find the file in the include path.
       std::string fullName;
       if((srcFiles>0)
-         || cmSystemTools::FileIsFullPath(current.FileName.c_str()))
+         || cmSystemTools::FileIsFullPath(current.FileName))
         {
-        if(cmSystemTools::FileExists(current.FileName.c_str(), true))
+        if(cmSystemTools::FileExists(current.FileName, true))
           {
           fullName = current.FileName;
           }
         }
       else if(!current.QuotedLocation.empty() &&
-              cmSystemTools::FileExists(current.QuotedLocation.c_str(), true))
+              cmSystemTools::FileExists(current.QuotedLocation, true))
         {
         // The include statement producing this entry was a double-quote
         // include and the included file is present in the directory of
@@ -198,7 +198,7 @@ bool cmDependsC::WriteDependencies(const std::set<std::string>& sources,
             cmSystemTools::CollapseCombinedPath(*i, current.FileName);
 
           // Look for the file in this location.
-          if(cmSystemTools::FileExists(tempPathStr.c_str(), true))
+          if(cmSystemTools::FileExists(tempPathStr, true))
             {
             fullName = tempPathStr;
             HeaderLocationCache[current.FileName]=fullName;
@@ -210,7 +210,7 @@ bool cmDependsC::WriteDependencies(const std::set<std::string>& sources,
       // Complain if the file cannot be found and matches the complain
       // regex.
       if(fullName.empty() &&
-        this->IncludeRegexComplain.find(current.FileName.c_str()))
+        this->IncludeRegexComplain.find(current.FileName))
         {
         cmSystemTools::Error("Cannot find file \"",
                             current.FileName.c_str(), "\".");
@@ -444,14 +444,14 @@ void cmDependsC::Scan(std::istream& is, const char* directory,
       }
 
     // Match include directives.
-    if(this->IncludeRegexLine.find(line.c_str()))
+    if(this->IncludeRegexLine.find(line))
       {
       // Get the file being included.
       UnscannedEntry entry;
       entry.FileName = this->IncludeRegexLine.match(2);
       cmSystemTools::ConvertToUnixSlashes(entry.FileName);
       if(this->IncludeRegexLine.match(3) == "\"" &&
-         !cmSystemTools::FileIsFullPath(entry.FileName.c_str()))
+         !cmSystemTools::FileIsFullPath(entry.FileName))
         {
         // This was a double-quoted include with a relative path.  We
         // must check for the file in the directory containing the
@@ -470,7 +470,7 @@ void cmDependsC::Scan(std::istream& is, const char* directory,
       // file their own directory by simply using "filename.h" (#12619)
       // This kind of problem will be fixed when a more
       // preprocessor-like implementation of this scanner is created.
-      if (this->IncludeRegexScan.find(entry.FileName.c_str()))
+      if (this->IncludeRegexScan.find(entry.FileName))
         {
         newCacheEntry->UnscannedEntries.push_back(entry);
         if(this->Encountered.find(entry.FileName) == this->Encountered.end())
@@ -515,7 +515,7 @@ void cmDependsC::SetupTransforms()
       sep = "|";
       }
     xform += ")[ \t]*\\(([^),]*)\\)";
-    this->IncludeRegexTransform.compile(xform.c_str());
+    this->IncludeRegexTransform.compile(xform);
 
     // Build a string that encodes all transformation rules and will
     // change when rules are changed.
@@ -550,7 +550,7 @@ void cmDependsC::ParseTransform(std::string const& xform)
 void cmDependsC::TransformLine(std::string& line)
 {
   // Check for a transform rule match.  Return if none.
-  if(!this->IncludeRegexTransform.find(line.c_str()))
+  if(!this->IncludeRegexTransform.find(line))
     {
     return;
     }

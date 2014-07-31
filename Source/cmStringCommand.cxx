@@ -313,7 +313,7 @@ bool cmStringCommand::RegexMatch(std::vector<std::string> const& args)
   this->Makefile->ClearMatches();
   // Compile the regular expression.
   cmsys::RegularExpression re;
-  if(!re.compile(regex.c_str()))
+  if(!re.compile(regex))
     {
     std::string e =
       "sub-command REGEX, mode MATCH failed to compile regex \""+regex+"\".";
@@ -323,7 +323,7 @@ bool cmStringCommand::RegexMatch(std::vector<std::string> const& args)
 
   // Scan through the input for all matches.
   std::string output;
-  if(re.find(input.c_str()))
+  if(re.find(input))
     {
     this->Makefile->StoreMatches(re);
     std::string::size_type l = re.start();
@@ -362,7 +362,7 @@ bool cmStringCommand::RegexMatchAll(std::vector<std::string> const& args)
   this->Makefile->ClearMatches();
   // Compile the regular expression.
   cmsys::RegularExpression re;
-  if(!re.compile(regex.c_str()))
+  if(!re.compile(regex))
     {
     std::string e =
       "sub-command REGEX, mode MATCHALL failed to compile regex \""+
@@ -466,7 +466,7 @@ bool cmStringCommand::RegexReplace(std::vector<std::string> const& args)
   this->Makefile->ClearMatches();
   // Compile the regular expression.
   cmsys::RegularExpression re;
-  if(!re.compile(regex.c_str()))
+  if(!re.compile(regex))
     {
     std::string e =
       "sub-command REGEX, mode REPLACE failed to compile regex \""+
@@ -679,8 +679,8 @@ bool cmStringCommand::HandleReplaceCommand(std::vector<std::string> const&
     input += args[i];
     }
 
-  cmsys::SystemTools::ReplaceString(input, matchExpression.c_str(),
-                                    replaceExpression.c_str());
+  cmsys::SystemTools::ReplaceString(input, matchExpression,
+                                    replaceExpression);
 
   this->Makefile->AddDefinition(variableName, input.c_str());
   return true;
@@ -782,7 +782,7 @@ bool cmStringCommand
   const std::string& variableName = args[2];
 
   this->Makefile->AddDefinition(variableName,
-                      cmSystemTools::MakeCidentifier(input.c_str()).c_str());
+                      cmSystemTools::MakeCidentifier(input).c_str());
   return true;
 }
 

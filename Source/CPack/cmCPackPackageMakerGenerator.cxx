@@ -50,8 +50,8 @@ int cmCPackPackageMakerGenerator::CopyInstallScript(const std::string& resdir,
   std::string dst = resdir;
   dst += "/";
   dst += name;
-  cmSystemTools::CopyFileAlways(script.c_str(), dst.c_str());
-  cmSystemTools::SetPermissions(dst.c_str(),0777);
+  cmSystemTools::CopyFileAlways(script, dst);
+  cmSystemTools::SetPermissions(dst,0777);
   cmCPackLogger(cmCPackLog::LOG_VERBOSE,
                 "copy script : " << script << "\ninto " << dst.c_str() <<
                 std::endl);
@@ -77,7 +77,7 @@ int cmCPackPackageMakerGenerator::PackageFiles()
   else
     {
     packageDirFileName += ".mpkg";
-    if ( !cmsys::SystemTools::MakeDirectory(packageDirFileName.c_str()))
+    if ( !cmsys::SystemTools::MakeDirectory(packageDirFileName))
       {
       cmCPackLogger(cmCPackLog::LOG_ERROR,
                     "unable to create package directory "
@@ -87,7 +87,7 @@ int cmCPackPackageMakerGenerator::PackageFiles()
 
     resDir = packageDirFileName;
     resDir += "/Contents";
-    if ( !cmsys::SystemTools::MakeDirectory(resDir.c_str()))
+    if ( !cmsys::SystemTools::MakeDirectory(resDir))
       {
       cmCPackLogger(cmCPackLog::LOG_ERROR,
                     "unable to create package subdirectory " << resDir
@@ -96,7 +96,7 @@ int cmCPackPackageMakerGenerator::PackageFiles()
       }
 
     resDir += "/Resources";
-    if ( !cmsys::SystemTools::MakeDirectory(resDir.c_str()))
+    if ( !cmsys::SystemTools::MakeDirectory(resDir))
       {
       cmCPackLogger(cmCPackLog::LOG_ERROR,
                     "unable to create package subdirectory " << resDir
@@ -120,7 +120,7 @@ int cmCPackPackageMakerGenerator::PackageFiles()
     // of the same name, I think this makes it work
     if(!preflight)
       {
-      if ( !cmsys::SystemTools::MakeDirectory(preflightDirName.c_str()))
+      if ( !cmsys::SystemTools::MakeDirectory(preflightDirName))
         {
         cmCPackLogger(cmCPackLog::LOG_ERROR,
                       "Problem creating installer directory: "
@@ -130,7 +130,7 @@ int cmCPackPackageMakerGenerator::PackageFiles()
       }
     if(!postflight)
       {
-      if ( !cmsys::SystemTools::MakeDirectory(postflightDirName.c_str()))
+      if ( !cmsys::SystemTools::MakeDirectory(postflightDirName))
         {
         cmCPackLogger(cmCPackLog::LOG_ERROR,
                       "Problem creating installer directory: "
@@ -170,7 +170,7 @@ int cmCPackPackageMakerGenerator::PackageFiles()
 
     // empty directory for pkg contents
     std::string packageDir = toplevel + "/" + PostFlightComponent.Name;
-    if (!cmsys::SystemTools::MakeDirectory(packageDir.c_str()))
+    if (!cmsys::SystemTools::MakeDirectory(packageDir))
       {
       cmCPackLogger(cmCPackLog::LOG_ERROR,
                     "Problem creating component packages directory: "
@@ -180,7 +180,7 @@ int cmCPackPackageMakerGenerator::PackageFiles()
 
     // create package
     std::string packageFileDir = packageDirFileName + "/Contents/Packages/";
-    if (!cmsys::SystemTools::MakeDirectory(packageFileDir.c_str()))
+    if (!cmsys::SystemTools::MakeDirectory(packageFileDir))
       {
       cmCPackLogger(cmCPackLog::LOG_ERROR,
                    "Problem creating component PostFlight Packages directory: "
@@ -208,7 +208,7 @@ int cmCPackPackageMakerGenerator::PackageFiles()
     // Create the directory where component packages will be built.
     std::string basePackageDir = packageDirFileName;
     basePackageDir += "/Contents/Packages";
-    if (!cmsys::SystemTools::MakeDirectory(basePackageDir.c_str()))
+    if (!cmsys::SystemTools::MakeDirectory(basePackageDir))
       {
       cmCPackLogger(cmCPackLog::LOG_ERROR,
                     "Problem creating component packages directory: "
@@ -247,9 +247,9 @@ int cmCPackPackageMakerGenerator::PackageFiles()
           // Build this package within the upload directory.
           packageFile = uploadDirectory;
 
-          if(!cmSystemTools::FileExists(uploadDirectory.c_str()))
+          if(!cmSystemTools::FileExists(uploadDirectory))
             {
-            if (!cmSystemTools::MakeDirectory(uploadDirectory.c_str()))
+            if (!cmSystemTools::MakeDirectory(uploadDirectory))
               {
               cmCPackLogger(cmCPackLog::LOG_ERROR,
                             "Unable to create package upload directory "
@@ -451,7 +451,7 @@ int cmCPackPackageMakerGenerator::InitializeInternal()
     }
 
   // Get path to the real PackageMaker, not a symlink:
-  pkgPath = cmSystemTools::GetRealPath(pkgPath.c_str());
+  pkgPath = cmSystemTools::GetRealPath(pkgPath);
   // Up from there to find the version.plist file in the "Contents" dir:
   std::string contents_dir;
   contents_dir = cmSystemTools::GetFilenamePath(pkgPath);
@@ -459,7 +459,7 @@ int cmCPackPackageMakerGenerator::InitializeInternal()
 
   std::string versionFile = contents_dir + "/version.plist";
 
-  if ( !cmSystemTools::FileExists(versionFile.c_str()) )
+  if ( !cmSystemTools::FileExists(versionFile) )
     {
     cmCPackLogger(cmCPackLog::LOG_ERROR,
       "Cannot find PackageMaker compiler version file: "

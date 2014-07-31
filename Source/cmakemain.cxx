@@ -452,7 +452,7 @@ static int do_build(int ac, char const* const* av)
 
   // Hack for vs6 that passes ".\Debug" as "$(IntDir)" value:
   //
-  if (cmSystemTools::StringStartsWith(config.c_str(), ".\\"))
+  if (cmSystemTools::StringStartsWith(config, ".\\"))
     {
     config = config.substr(2);
     }

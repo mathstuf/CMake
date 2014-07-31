@@ -177,7 +177,7 @@ std::string cmWIXFilesSourceWriter::EmitComponentFile(
   AddAttribute("KeyPath", "yes");
 
   mode_t fileMode = 0;
-  cmSystemTools::GetPermissions(filePath.c_str(), fileMode);
+  cmSystemTools::GetPermissions(filePath, fileMode);
 
   if(!(fileMode & S_IWRITE))
     {

@@ -205,7 +205,7 @@ bool cmVisualStudioSlnParser::State::Process(
     {
     case FileStateStart:
       if (!cmSystemTools::StringStartsWith(
-        line.GetTag().c_str(), "Microsoft Visual Studio Solution File"))
+        line.GetTag(), "Microsoft Visual Studio Solution File"))
         {
         result.SetError(ResultErrorInputStructure, this->GetCurrentLine());
         return false;

@@ -82,7 +82,7 @@ bool cmCTestSubdirCommand
     {
     std::string fname;
 
-    if(cmSystemTools::FileIsFullPath(it->c_str()))
+    if(cmSystemTools::FileIsFullPath(*it))
       {
       fname = *it;
       }
@@ -93,12 +93,12 @@ bool cmCTestSubdirCommand
       fname += *it;
       }
 
-    if ( !cmSystemTools::FileIsDirectory(fname.c_str()) )
+    if ( !cmSystemTools::FileIsDirectory(fname) )
       {
       // No subdirectory? So what...
       continue;
       }
-    cmSystemTools::ChangeDirectory(fname.c_str());
+    cmSystemTools::ChangeDirectory(fname);
     const char* testFilename;
     if( cmSystemTools::FileExists("CTestTestfile.cmake") )
       {
@@ -120,7 +120,7 @@ bool cmCTestSubdirCommand
     bool readit =
       this->Makefile->ReadListFile(this->Makefile->GetCurrentListFile(),
                                    fname.c_str());
-    cmSystemTools::ChangeDirectory(cwd.c_str());
+    cmSystemTools::ChangeDirectory(cwd);
     if(!readit)
       {
       std::string m = "Could not find include file: ";
@@ -129,7 +129,7 @@ bool cmCTestSubdirCommand
       return false;
       }
     }
-  cmSystemTools::ChangeDirectory(cwd.c_str());
+  cmSystemTools::ChangeDirectory(cwd);
   return true;
 }
 
@@ -175,17 +175,17 @@ bool cmCTestAddSubdirectoryCommand
     }
 
   std::string cwd = cmSystemTools::GetCurrentWorkingDirectory();
-  cmSystemTools::ChangeDirectory(cwd.c_str());
+  cmSystemTools::ChangeDirectory(cwd);
   std::string fname = cwd;
   fname += "/";
   fname += args[1];
 
-  if ( !cmSystemTools::FileExists(fname.c_str()) )
+  if ( !cmSystemTools::FileExists(fname) )
     {
     // No subdirectory? So what...
     return true;
     }
-  cmSystemTools::ChangeDirectory(fname.c_str());
+  cmSystemTools::ChangeDirectory(fname);
   const char* testFilename;
   if( cmSystemTools::FileExists("CTestTestfile.cmake") )
     {
@@ -200,7 +200,7 @@ bool cmCTestAddSubdirectoryCommand
   else
     {
     // No CTestTestfile? Who cares...
-    cmSystemTools::ChangeDirectory(cwd.c_str());
+    cmSystemTools::ChangeDirectory(cwd);
     return true;
     }
   fname += "/";
@@ -208,7 +208,7 @@ bool cmCTestAddSubdirectoryCommand
   bool readit =
     this->Makefile->ReadListFile(this->Makefile->GetCurrentListFile(),
                                  fname.c_str());
-  cmSystemTools::ChangeDirectory(cwd.c_str());
+  cmSystemTools::ChangeDirectory(cwd);
   if(!readit)
     {
     std::string m = "Could not find include file: ";
@@ -1497,8 +1497,8 @@ std::string cmCTestTestHandler
       ai < attempted.size() && fullPath.size() == 0; ++ai)
     {
     // first check without exe extension
-    if(cmSystemTools::FileExists(attempted[ai].c_str())
-       && !cmSystemTools::FileIsDirectory(attempted[ai].c_str()))
+    if(cmSystemTools::FileExists(attempted[ai])
+       && !cmSystemTools::FileIsDirectory(attempted[ai]))
       {
       fullPath = cmSystemTools::CollapseFullPath(attempted[ai].c_str());
       resultingConfig = attemptedConfigs[ai];
@@ -1509,8 +1509,8 @@ std::string cmCTestTestHandler
       failed.push_back(attempted[ai]);
       tempPath = attempted[ai];
       tempPath += cmSystemTools::GetExecutableExtension();
-      if(cmSystemTools::FileExists(tempPath.c_str())
-         && !cmSystemTools::FileIsDirectory(tempPath.c_str()))
+      if(cmSystemTools::FileExists(tempPath)
+         && !cmSystemTools::FileIsDirectory(tempPath))
         {
         fullPath = cmSystemTools::CollapseFullPath(tempPath.c_str());
         resultingConfig = attemptedConfigs[ai];
@@ -1526,7 +1526,7 @@ std::string cmCTestTestHandler
   // wasn't specified
   if (fullPath.size() == 0 && filepath.size() == 0)
     {
-    std::string path = cmSystemTools::FindProgram(filename.c_str());
+    std::string path = cmSystemTools::FindProgram(filename);
     if (path != "")
       {
       resultingConfig = "";
@@ -1556,20 +1556,20 @@ void cmCTestTestHandler::GetListOfTests()
   if ( !this->IncludeLabelRegExp.empty() )
     {
     this->IncludeLabelRegularExpression.
-      compile(this->IncludeLabelRegExp.c_str());
+      compile(this->IncludeLabelRegExp);
     }
   if ( !this->ExcludeLabelRegExp.empty() )
     {
     this->ExcludeLabelRegularExpression.
-      compile(this->ExcludeLabelRegExp.c_str());
+      compile(this->ExcludeLabelRegExp);
     }
   if ( !this->IncludeRegExp.empty() )
     {
-    this->IncludeTestsRegularExpression.compile(this->IncludeRegExp.c_str());
+    this->IncludeTestsRegularExpression.compile(this->IncludeRegExp);
     }
   if ( !this->ExcludeRegExp.empty() )
     {
-    this->ExcludeTestsRegularExpression.compile(this->ExcludeRegExp.c_str());
+    this->ExcludeTestsRegularExpression.compile(this->ExcludeRegExp);
     }
   cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT,
     "Constructing a list of tests" << std::endl);
@@ -1746,7 +1746,7 @@ void cmCTestTestHandler::ExpandTestsToRunInformationForRerunFailed()
   std::string dirName = this->CTest->GetBinaryDir() + "/Testing/Temporary";
 
   cmsys::Directory directory;
-  if (directory.Load(dirName.c_str()) == 0)
+  if (directory.Load(dirName) == 0)
     {
     cmCTestLog(this->CTest, ERROR_MESSAGE, "Unable to read the contents of "
       << dirName << std::endl);
@@ -1754,7 +1754,7 @@ void cmCTestTestHandler::ExpandTestsToRunInformationForRerunFailed()
     }
 
   int numFiles = static_cast<int>
-    (cmsys::Directory::GetNumberOfFilesInDirectory(dirName.c_str()));
+    (cmsys::Directory::GetNumberOfFilesInDirectory(dirName));
   std::string pattern = "LastTestsFailed";
   std::string logName = "";
 
@@ -1777,7 +1777,7 @@ void cmCTestTestHandler::ExpandTestsToRunInformationForRerunFailed()
       // if multiple matching logs were found we use the most recently
       // modified one.
       int res;
-      cmSystemTools::FileTimeCompare(logName.c_str(), fileName.c_str(), &res);
+      cmSystemTools::FileTimeCompare(logName, fileName, &res);
       if (res == -1)
         {
         logName = fileName;
@@ -1788,7 +1788,7 @@ void cmCTestTestHandler::ExpandTestsToRunInformationForRerunFailed()
   std::string lastTestsFailedLog = this->CTest->GetBinaryDir()
     + "/Testing/Temporary/" + logName;
 
-  if ( !cmSystemTools::FileExists(lastTestsFailedLog.c_str()) )
+  if ( !cmSystemTools::FileExists(lastTestsFailedLog) )
     {
     if ( !this->CTest->GetShowOnly() && !this->CTest->ShouldPrintLabels() )
       {
@@ -1937,9 +1937,9 @@ std::string cmCTestTestHandler::GenerateRegressionImages(
       {
       const std::string& filename =
         cmCTest::CleanString(measurementfile.match(5));
-      if ( cmSystemTools::FileExists(filename.c_str()) )
+      if ( cmSystemTools::FileExists(filename) )
         {
-        long len = cmSystemTools::FileLength(filename.c_str());
+        long len = cmSystemTools::FileLength(filename);
         if ( len == 0 )
           {
           std::string k1 = measurementfile.match(1);
@@ -2217,7 +2217,7 @@ bool cmCTestTestHandler::SetTestsProperties(
               {
               rtit->ErrorRegularExpressions.push_back(
                 std::pair<cmsys::RegularExpression, std::string>(
-                  cmsys::RegularExpression(crit->c_str()),
+                  cmsys::RegularExpression(*crit),
                   std::string(*crit)));
               }
             }
@@ -2290,7 +2290,7 @@ bool cmCTestTestHandler::SetTestsProperties(
               {
               rtit->RequiredRegularExpressions.push_back(
                 std::pair<cmsys::RegularExpression, std::string>(
-                  cmsys::RegularExpression(crit->c_str()),
+                  cmsys::RegularExpression(*crit),
                   std::string(*crit)));
               }
             }
@@ -2313,7 +2313,7 @@ bool cmCTestTestHandler::AddTest(const std::vector<std::string>& args)
 
   if (this->UseExcludeRegExpFlag &&
     this->UseExcludeRegExpFirst &&
-    this->ExcludeTestsRegularExpression.find(testname.c_str()))
+    this->ExcludeTestsRegularExpression.find(testname))
     {
     return true;
     }
@@ -2375,13 +2375,13 @@ bool cmCTestTestHandler::AddTest(const std::vector<std::string>& args)
   test.SkipReturnCode = -1;
   test.PreviousRuns = 0;
   if (this->UseIncludeRegExpFlag &&
-    !this->IncludeTestsRegularExpression.find(testname.c_str()))
+    !this->IncludeTestsRegularExpression.find(testname))
     {
     test.IsInBasedOnREOptions = false;
     }
   else if (this->UseExcludeRegExpFlag &&
     !this->UseExcludeRegExpFirst &&
-    this->ExcludeTestsRegularExpression.find(testname.c_str()))
+    this->ExcludeTestsRegularExpression.find(testname))
     {
     test.IsInBasedOnREOptions = false;
     }

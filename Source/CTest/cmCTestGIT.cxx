@@ -127,7 +127,7 @@ std::string cmCTestGIT::FindGitDir()
     // are a Windows application.  Run "cygpath" to get Windows path.
     std::string cygpath_exe = cmSystemTools::GetFilenamePath(git);
     cygpath_exe += "/cygpath.exe";
-    if(cmSystemTools::FileExists(cygpath_exe.c_str()))
+    if(cmSystemTools::FileExists(cygpath_exe))
       {
       char const* cygpath[] = {cygpath_exe.c_str(), "-w", git_dir.c_str(), 0};
       OneLineParser cygpath_out(this, "cygpath-out> ", git_dir_line);
@@ -158,7 +158,7 @@ std::string cmCTestGIT::FindTopDir()
     {
     top_dir += "/";
     top_dir += cdup;
-    top_dir = cmSystemTools::CollapseFullPath(top_dir.c_str());
+    top_dir = cmSystemTools::CollapseFullPath(top_dir);
     }
   return top_dir;
 }
@@ -280,7 +280,7 @@ bool cmCTestGIT::UpdateImpl()
     {
     recursive = 0;
     // No need to require >= 1.6.5.0 if there are no submodules.
-    if(cmSystemTools::FileExists((top_dir + "/.gitmodules").c_str()))
+    if(cmSystemTools::FileExists(top_dir + "/.gitmodules"))
       {
       this->Log << "Git < 1.6.5.0 cannot update submodules recursively\n";
       }
@@ -537,11 +537,11 @@ private:
   void DoHeaderLine()
     {
     // Look for header fields that we need.
-    if(cmHasLiteralPrefix(this->Line.c_str(), "commit "))
+    if(cmHasLiteralPrefix(this->Line, "commit "))
       {
       this->Rev.Rev = this->Line.c_str()+7;
       }
-    else if(cmHasLiteralPrefix(this->Line.c_str(), "author "))
+    else if(cmHasLiteralPrefix(this->Line, "author "))
       {
       Person author;
       this->ParsePerson(this->Line.c_str()+7, author);
@@ -549,7 +549,7 @@ private:
       this->Rev.EMail = author.EMail;
       this->Rev.Date = this->FormatDateTime(author);
       }
-    else if(cmHasLiteralPrefix(this->Line.c_str(), "committer "))
+    else if(cmHasLiteralPrefix(this->Line, "committer "))
       {
       Person committer;
       this->ParsePerson(this->Line.c_str()+10, committer);

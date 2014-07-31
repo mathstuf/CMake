@@ -172,9 +172,7 @@ int cmCPackDragNDropGenerator::PackageFiles()
 bool cmCPackDragNDropGenerator::CopyFile(cmOStringStream& source,
   cmOStringStream& target)
 {
-  if(!cmSystemTools::CopyFileIfDifferent(
-    source.str().c_str(),
-    target.str().c_str()))
+  if(!cmSystemTools::CopyFileIfDifferent(source.str(), target.str()))
     {
     cmCPackLogger(cmCPackLog::LOG_ERROR,
       "Error copying "
@@ -263,7 +261,7 @@ int cmCPackDragNDropGenerator::CreateDMG(const std::string& src_dir,
   cmOStringStream application_link;
   application_link << staging.str() << "/Applications";
   cmSystemTools::CreateSymlink("/Applications",
-    application_link.str().c_str());
+    application_link.str());
 
   // Optionally add a custom volume icon ...
   if(!cpack_package_icon.empty())
@@ -386,7 +384,7 @@ int cmCPackDragNDropGenerator::CreateDMG(const std::string& src_dir,
       }
 
     cmsys::RegularExpression mountpoint_regex(".*(/Volumes/[^\n]+)\n.*");
-    mountpoint_regex.find(attach_output.c_str());
+    mountpoint_regex.find(attach_output);
     temp_mount << mountpoint_regex.match(1);
 
     cmOStringStream setfile_command;

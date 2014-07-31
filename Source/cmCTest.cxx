@@ -201,14 +201,14 @@ int cmCTest::HTTPRequest(std::string url, HTTPMethod method,
       ::curl_easy_setopt(curl, CURLOPT_POSTFIELDS, fields.c_str());
       break;
     case cmCTest::HTTP_PUT:
-      if(!cmSystemTools::FileExists(putFile.c_str()))
+      if(!cmSystemTools::FileExists(putFile))
         {
         response = "Error: File ";
         response += putFile + " does not exist.\n";
         return -1;
         }
       ::curl_easy_setopt(curl, CURLOPT_PUT, 1);
-      file = cmsys::SystemTools::Fopen(putFile.c_str(), "rb");
+      file = cmsys::SystemTools::Fopen(putFile, "rb");
       ::curl_easy_setopt(curl, CURLOPT_INFILE, file);
       //fall through to append GET fields
     case cmCTest::HTTP_GET:
@@ -522,9 +522,9 @@ int cmCTest::Initialize(const char* binary_dir, cmCTestStartCommand* command)
     // Verify "Testing" directory exists:
     //
     std::string testingDir = this->BinaryDir + "/Testing";
-    if ( cmSystemTools::FileExists(testingDir.c_str()) )
+    if ( cmSystemTools::FileExists(testingDir) )
       {
-      if ( !cmSystemTools::FileIsDirectory(testingDir.c_str()) )
+      if ( !cmSystemTools::FileIsDirectory(testingDir) )
         {
         cmCTestLog(this, ERROR_MESSAGE, "File " << testingDir
           << " is in the place of the testing directory" << std::endl);
@@ -533,7 +533,7 @@ int cmCTest::Initialize(const char* binary_dir, cmCTestStartCommand* command)
       }
     else
       {
-      if ( !cmSystemTools::MakeDirectory(testingDir.c_str()) )
+      if ( !cmSystemTools::MakeDirectory(testingDir) )
         {
         cmCTestLog(this, ERROR_MESSAGE, "Cannot create directory "
           << testingDir << std::endl);
@@ -669,11 +669,11 @@ bool cmCTest::InitializeFromCommand(cmCTestStartCommand* command)
   bld_dir_fname += "/CTestConfig.cmake";
   cmSystemTools::ConvertToUnixSlashes(bld_dir_fname);
 
-  if ( cmSystemTools::FileExists(bld_dir_fname.c_str()) )
+  if ( cmSystemTools::FileExists(bld_dir_fname) )
     {
     fname = bld_dir_fname;
     }
-  else if ( cmSystemTools::FileExists(src_dir_fname.c_str()) )
+  else if ( cmSystemTools::FileExists(src_dir_fname) )
     {
     fname = src_dir_fname;
     }
@@ -742,14 +742,14 @@ bool cmCTest::UpdateCTestConfiguration()
   if ( fileName.empty() )
     {
     fileName = this->BinaryDir + "/CTestConfiguration.ini";
-    if ( !cmSystemTools::FileExists(fileName.c_str()) )
+    if ( !cmSystemTools::FileExists(fileName) )
       {
       fileName = this->BinaryDir + "/DartConfiguration.tcl";
       }
     }
   cmCTestLog(this, HANDLER_VERBOSE_OUTPUT, "UpdateCTestConfiguration  from :"
              << fileName << "\n");
-  if ( !cmSystemTools::FileExists(fileName.c_str()) )
+  if ( !cmSystemTools::FileExists(fileName) )
     {
     // No need to exit if we are not producing XML
     if ( this->ProduceXML )
@@ -809,7 +809,7 @@ bool cmCTest::UpdateCTestConfiguration()
   if ( !this->GetCTestConfiguration("BuildDirectory").empty() )
     {
     this->BinaryDir = this->GetCTestConfiguration("BuildDirectory");
-    cmSystemTools::ChangeDirectory(this->BinaryDir.c_str());
+    cmSystemTools::ChangeDirectory(this->BinaryDir);
     }
   this->TimeOut = atoi(this->GetCTestConfiguration("TimeOut").c_str());
   if ( this->ProduceXML )
@@ -882,9 +882,9 @@ bool cmCTest::OpenOutputFile(const std::string& path,
     {
     testingDir += "/" + path;
     }
-  if ( cmSystemTools::FileExists(testingDir.c_str()) )
+  if ( cmSystemTools::FileExists(testingDir) )
     {
-    if ( !cmSystemTools::FileIsDirectory(testingDir.c_str()) )
+    if ( !cmSystemTools::FileIsDirectory(testingDir) )
       {
       cmCTestLog(this, ERROR_MESSAGE, "File " << testingDir
                 << " is in the place of the testing directory"
@@ -894,7 +894,7 @@ bool cmCTest::OpenOutputFile(const std::string& path,
     }
   else
     {
-    if ( !cmSystemTools::MakeDirectory(testingDir.c_str()) )
+    if ( !cmSystemTools::MakeDirectory(testingDir) )
       {
       cmCTestLog(this, ERROR_MESSAGE, "Cannot create directory " << testingDir
                 << std::endl);
@@ -947,7 +947,7 @@ bool cmCTest::CTestFileExists(const std::string& filename)
 {
   std::string testingDir = this->BinaryDir + "/Testing/" +
     this->CurrentTag + "/" + filename;
-  return cmSystemTools::FileExists(testingDir.c_str());
+  return cmSystemTools::FileExists(testingDir);
 }
 
 //----------------------------------------------------------------------
@@ -1061,17 +1061,17 @@ int cmCTest::ProcessTests()
   if ( !notest )
     {
     std::string notes_dir = this->BinaryDir + "/Testing/Notes";
-    if ( cmSystemTools::FileIsDirectory(notes_dir.c_str()) )
+    if ( cmSystemTools::FileIsDirectory(notes_dir) )
       {
       cmsys::Directory d;
-      d.Load(notes_dir.c_str());
+      d.Load(notes_dir);
       unsigned long kk;
       for ( kk = 0; kk < d.GetNumberOfFiles(); kk ++ )
         {
         const char* file = d.GetFile(kk);
         std::string fullname = notes_dir + "/" + file;
-        if ( cmSystemTools::FileExists(fullname.c_str()) &&
-          !cmSystemTools::FileIsDirectory(fullname.c_str()) )
+        if ( cmSystemTools::FileExists(fullname) &&
+          !cmSystemTools::FileIsDirectory(fullname) )
           {
           if ( this->NotesFiles.size() > 0 )
             {
@@ -1132,11 +1132,11 @@ int cmCTest::GetTestModelFromString(const char* str)
     return cmCTest::EXPERIMENTAL;
     }
   std::string rstr = cmSystemTools::LowerCase(str);
-  if ( cmHasLiteralPrefix(rstr.c_str(), "cont") )
+  if ( cmHasLiteralPrefix(rstr, "cont") )
     {
     return cmCTest::CONTINUOUS;
     }
-  if ( cmHasLiteralPrefix(rstr.c_str(), "nigh") )
+  if ( cmHasLiteralPrefix(rstr, "nigh") )
     {
     return cmCTest::NIGHTLY;
     }
@@ -1342,7 +1342,7 @@ int cmCTest::RunTest(std::vector<const char*> argv,
       {
       *log << *output;
       }
-    cmSystemTools::ChangeDirectory(oldpath.c_str());
+    cmSystemTools::ChangeDirectory(oldpath);
 
     cmCTestLog(this, HANDLER_VERBOSE_OUTPUT,
       "Internal cmCTest object used to run test." << std::endl
@@ -1681,14 +1681,14 @@ std::string cmCTest::Base64GzipEncodeFile(std::string file)
     return "";
     }
   std::string base64 = this->Base64EncodeFile(tarFile);
-  cmSystemTools::RemoveFile(tarFile.c_str());
+  cmSystemTools::RemoveFile(tarFile);
   return base64;
 }
 
 //----------------------------------------------------------------------
 std::string cmCTest::Base64EncodeFile(std::string file)
 {
-  long len = cmSystemTools::FileLength(file.c_str());
+  long len = cmSystemTools::FileLength(file);
   cmsys::ifstream ifs(file.c_str(), std::ios::in
 #ifdef _WIN32
     | std::ios::binary
@@ -2524,7 +2524,7 @@ int cmCTest::ReadCustomConfigurationFileTree(const char* dir, cmMakefile* mf)
   fname += "/CTestCustom.cmake";
   cmCTestLog(this, DEBUG, "* Check for file: "
     << fname << std::endl);
-  if ( cmSystemTools::FileExists(fname.c_str()) )
+  if ( cmSystemTools::FileExists(fname) )
     {
     cmCTestLog(this, DEBUG, "* Read custom CTest configuration file: "
       << fname << std::endl);
@@ -2549,7 +2549,7 @@ int cmCTest::ReadCustomConfigurationFileTree(const char* dir, cmMakefile* mf)
   rexpr += "/CTestCustom.ctest";
   cmCTestLog(this, DEBUG, "* Check for file: "
     << rexpr << std::endl);
-  if ( !found && cmSystemTools::FileExists(rexpr.c_str()) )
+  if ( !found && cmSystemTools::FileExists(rexpr) )
     {
     cmsys::Glob gl;
     gl.RecurseOn();
@@ -2860,7 +2860,7 @@ void cmCTest::SetConfigType(const char* ct)
   cmSystemTools::ReplaceString(this->ConfigType, ".\\", "");
   std::string confTypeEnv
     = "CMAKE_CONFIG_TYPE=" + this->ConfigType;
-  cmSystemTools::PutEnv(confTypeEnv.c_str());
+  cmSystemTools::PutEnv(confTypeEnv);
 }
 
 //----------------------------------------------------------------------

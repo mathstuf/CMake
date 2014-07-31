@@ -54,7 +54,7 @@ class cmParseJacocoCoverage::XMLParser: public cmXMLParser
           for(size_t i=0;i < FilePaths.size();i++)
             {
             std::string finalpath = FilePaths[i] + "/" + this->FileName;
-            if(cmSystemTools::FileExists(finalpath.c_str()))
+            if(cmSystemTools::FileExists(finalpath))
               {
               this->CurFileName = finalpath;
               break;

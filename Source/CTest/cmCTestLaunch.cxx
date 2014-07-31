@@ -48,8 +48,8 @@ cmCTestLaunch::~cmCTestLaunch()
   cmsysProcess_Delete(this->Process);
   if(!this->Passthru)
     {
-    cmSystemTools::RemoveFile(this->LogOut.c_str());
-    cmSystemTools::RemoveFile(this->LogErr.c_str());
+    cmSystemTools::RemoveFile(this->LogOut);
+    cmSystemTools::RemoveFile(this->LogErr);
     }
 }
 
@@ -432,10 +432,10 @@ void cmCTestLaunch::WriteXMLAction(std::ostream& fxml)
     cmSystemTools::ConvertToUnixSlashes(source);
 
     // If file is in source tree use its relative location.
-    if(cmSystemTools::FileIsFullPath(this->SourceDir.c_str()) &&
-       cmSystemTools::FileIsFullPath(source.c_str()) &&
-       cmSystemTools::IsSubDirectory(source.c_str(),
-                                     this->SourceDir.c_str()))
+    if(cmSystemTools::FileIsFullPath(this->SourceDir) &&
+       cmSystemTools::FileIsFullPath(source) &&
+       cmSystemTools::IsSubDirectory(source,
+                                     this->SourceDir))
       {
       source = cmSystemTools::RelativePath(this->SourceDir.c_str(),
                                            source.c_str());
@@ -657,7 +657,7 @@ cmCTestLaunch
   cmsys::RegularExpression rex;
   while(cmSystemTools::GetLineFromStream(fin, line))
     {
-    if(rex.compile(line.c_str()))
+    if(rex.compile(line))
       {
       regexps.push_back(rex);
       }
@@ -696,7 +696,7 @@ bool cmCTestLaunch::Match(std::string const& line,
   for(std::vector<cmsys::RegularExpression>::iterator ri = regexps.begin();
       ri != regexps.end(); ++ri)
     {
-    if(ri->find(line.c_str()))
+    if(ri->find(line))
       {
       return true;
       }
@@ -708,7 +708,7 @@ bool cmCTestLaunch::Match(std::string const& line,
 bool cmCTestLaunch::MatchesFilterPrefix(std::string const& line) const
 {
   if(this->OptionFilterPrefix.size() && cmSystemTools::StringStartsWith(
-      line.c_str(), this->OptionFilterPrefix.c_str()))
+      line, this->OptionFilterPrefix.c_str()))
     {
     return true;
     }
@@ -743,7 +743,7 @@ void cmCTestLaunch::LoadConfig()
   cmMakefile* mf = lg->GetMakefile();
   std::string fname = this->LogDir;
   fname += "CTestLaunchConfig.cmake";
-  if(cmSystemTools::FileExists(fname.c_str()) &&
+  if(cmSystemTools::FileExists(fname) &&
      mf->ReadListFile(0, fname.c_str()))
     {
     this->SourceDir = mf->GetSafeDefinition("CTEST_SOURCE_DIRECTORY");

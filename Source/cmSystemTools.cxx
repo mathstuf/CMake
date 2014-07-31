@@ -174,17 +174,17 @@ void cmSystemTools::ExpandRegistryValues(std::string& source, KeyWOW64 view)
     // the arguments are the second match
     std::string key = regEntry.match(1);
     std::string val;
-    if (ReadRegistryValue(key.c_str(), val, view))
+    if (ReadRegistryValue(key, val, view))
       {
       std::string reg = "[";
       reg += key + "]";
-      cmSystemTools::ReplaceString(source, reg.c_str(), val.c_str());
+      cmSystemTools::ReplaceString(source, reg, val);
       }
     else
       {
       std::string reg = "[";
       reg += key + "]";
-      cmSystemTools::ReplaceString(source, reg.c_str(), "/registry");
+      cmSystemTools::ReplaceString(source, reg, "/registry");
       }
     }
 }
@@ -199,7 +199,7 @@ void cmSystemTools::ExpandRegistryValues(std::string& source, KeyWOW64)
     std::string val;
     std::string reg = "[";
     reg += key + "]";
-    cmSystemTools::ReplaceString(source, reg.c_str(), "/registry");
+    cmSystemTools::ReplaceString(source, reg, "/registry");
     }
 
 }
@@ -853,7 +853,7 @@ bool cmSystemTools::DoesFileExistWithExtensions(
     hname = name;
     hname += ".";
     hname += *ext;
-    if(cmSystemTools::FileExists(hname.c_str()))
+    if(cmSystemTools::FileExists(hname))
       {
       return true;
       }
@@ -872,7 +872,7 @@ std::string cmSystemTools::FileExistsInParentDirectories(const char* fname,
   while(dir != prevDir)
     {
     std::string path = dir + "/" + file;
-    if ( cmSystemTools::FileExists(path.c_str()) )
+    if ( cmSystemTools::FileExists(path) )
       {
       return path;
       }
@@ -881,7 +881,7 @@ std::string cmSystemTools::FileExistsInParentDirectories(const char* fname,
       break;
       }
     prevDir = dir;
-    dir = cmSystemTools::GetParentDirectory(dir.c_str());
+    dir = cmSystemTools::GetParentDirectory(dir);
     }
   return "";
 }
@@ -1012,9 +1012,9 @@ void cmSystemTools::Glob(const std::string& directory,
                          std::vector<std::string>& files)
 {
   cmsys::Directory d;
-  cmsys::RegularExpression reg(regexp.c_str());
+  cmsys::RegularExpression reg(regexp);
 
-  if (d.Load(directory.c_str()))
+  if (d.Load(directory))
     {
     size_t numf;
         unsigned int i;
@@ -1044,7 +1044,7 @@ void cmSystemTools::GlobDirs(const std::string& path,
   std::string finishPath = path.substr(pos+2);
 
   cmsys::Directory d;
-  if (d.Load(startPath.c_str()))
+  if (d.Load(startPath))
     {
     for (unsigned int i = 0; i < d.GetNumberOfFiles(); ++i)
       {
@@ -1054,7 +1054,7 @@ void cmSystemTools::GlobDirs(const std::string& path,
         std::string fname = startPath;
         fname +="/";
         fname += d.GetFile(i);
-        if(cmSystemTools::FileIsDirectory(fname.c_str()))
+        if(cmSystemTools::FileIsDirectory(fname))
           {
           fname += finishPath;
           cmSystemTools::GlobDirs(fname, files);
@@ -1168,7 +1168,7 @@ bool cmSystemTools::SimpleGlob(const std::string& glob,
 
   bool res = false;
   cmsys::Directory d;
-  if (d.Load(path.c_str()))
+  if (d.Load(path))
     {
     for (unsigned int i = 0; i < d.GetNumberOfFiles(); ++i)
       {
@@ -1385,7 +1385,7 @@ bool cmSystemTools::UnsetEnv(const char* value)
 #if !defined(HAVE_UNSETENV)
   std::string var = value;
   var += "=";
-  return cmSystemTools::PutEnv(var.c_str());
+  return cmSystemTools::PutEnv(var);
 #else
   unsetenv(value);
   return true;
@@ -1410,7 +1410,7 @@ void cmSystemTools::AppendEnv(std::vector<std::string> const& env)
   for(std::vector<std::string>::const_iterator eit = env.begin();
       eit != env.end(); ++eit)
     {
-    cmSystemTools::PutEnv(eit->c_str());
+    cmSystemTools::PutEnv(*eit);
     }
 }
 
@@ -1504,7 +1504,7 @@ bool cmSystemTools::CreateTar(const char* outFileName,
       i != files.end(); ++i)
     {
     std::string path = *i;
-    if(cmSystemTools::FileIsFullPath(path.c_str()))
+    if(cmSystemTools::FileIsFullPath(path))
       {
       // Get the relative path to the file.
       path = cmSystemTools::RelativePath(cwd.c_str(), path.c_str());
@@ -2160,7 +2160,7 @@ void cmSystemTools::FindCMakeResources(const char* argv0)
     // Look for ../bin (install tree) and then fall back to
     // ../../../bin (build tree).
     exe_dir = cmSystemTools::GetFilenamePath(exe_dir);
-    if(cmSystemTools::FileExists((exe_dir+"/bin/cmake").c_str()))
+    if(cmSystemTools::FileExists(exe_dir+"/bin/cmake"))
       {
       exe_dir += "/bin";
       }
@@ -2176,7 +2176,7 @@ void cmSystemTools::FindCMakeResources(const char* argv0)
   if(cmSystemTools::FindProgramPath(argv0, exe, errorMsg))
     {
     // remove symlinks
-    exe = cmSystemTools::GetRealPath(exe.c_str());
+    exe = cmSystemTools::GetRealPath(exe);
     exe_dir =
       cmSystemTools::GetFilenamePath(exe);
     }
@@ -2202,14 +2202,14 @@ void cmSystemTools::FindCMakeResources(const char* argv0)
   cmSystemToolsCMakeGUICommand = exe_dir;
   cmSystemToolsCMakeGUICommand += "/cmake-gui";
   cmSystemToolsCMakeGUICommand += cmSystemTools::GetExecutableExtension();
-  if(!cmSystemTools::FileExists(cmSystemToolsCMakeGUICommand.c_str()))
+  if(!cmSystemTools::FileExists(cmSystemToolsCMakeGUICommand))
     {
     cmSystemToolsCMakeGUICommand = "";
     }
   cmSystemToolsCMakeCursesCommand = exe_dir;
   cmSystemToolsCMakeCursesCommand += "/ccmake";
   cmSystemToolsCMakeCursesCommand += cmSystemTools::GetExecutableExtension();
-  if(!cmSystemTools::FileExists(cmSystemToolsCMakeCursesCommand.c_str()))
+  if(!cmSystemTools::FileExists(cmSystemToolsCMakeCursesCommand))
     {
     cmSystemToolsCMakeCursesCommand = "";
     }
@@ -2219,7 +2219,7 @@ void cmSystemTools::FindCMakeResources(const char* argv0)
   std::string dir = cmSystemTools::GetFilenamePath(exe_dir);
   cmSystemToolsCMakeRoot = dir + CMAKE_DATA_DIR;
   if(!cmSystemTools::FileExists(
-       (cmSystemToolsCMakeRoot+"/Modules/CMake.cmake").c_str()))
+       cmSystemToolsCMakeRoot+"/Modules/CMake.cmake"))
     {
     // Build tree has "<build>/bin[/<config>]/cmake" and
     // "<build>/CMakeFiles/CMakeSourceDir.txt".
@@ -2227,7 +2227,7 @@ void cmSystemTools::FindCMakeResources(const char* argv0)
     cmsys::ifstream fin(src_dir_txt.c_str());
     std::string src_dir;
     if(fin && cmSystemTools::GetLineFromStream(fin, src_dir) &&
-       cmSystemTools::FileIsDirectory(src_dir.c_str()))
+       cmSystemTools::FileIsDirectory(src_dir))
       {
       cmSystemToolsCMakeRoot = src_dir;
       }
@@ -2237,7 +2237,7 @@ void cmSystemTools::FindCMakeResources(const char* argv0)
       src_dir_txt = dir + "/CMakeFiles/CMakeSourceDir.txt";
       cmsys::ifstream fin2(src_dir_txt.c_str());
       if(fin2 && cmSystemTools::GetLineFromStream(fin2, src_dir) &&
-         cmSystemTools::FileIsDirectory(src_dir.c_str()))
+         cmSystemTools::FileIsDirectory(src_dir))
         {
         cmSystemToolsCMakeRoot = src_dir;
         }
@@ -2333,11 +2333,11 @@ bool cmSystemTools::GuessLibrarySOName(std::string const& fullPath,
 #endif
 
   // If the file is not a symlink we have no guess for its soname.
-  if(!cmSystemTools::FileIsSymlink(fullPath.c_str()))
+  if(!cmSystemTools::FileIsSymlink(fullPath))
     {
     return false;
     }
-  if(!cmSystemTools::ReadSymlink(fullPath.c_str(), soname))
+  if(!cmSystemTools::ReadSymlink(fullPath, soname))
     {
     return false;
     }
@@ -2423,7 +2423,7 @@ std::string::size_type cmSystemToolsFindRPath(std::string const& have,
   regex_str += ")(:|$)";
 
   // Look for the separated path.
-  cmsys::RegularExpression regex(regex_str.c_str());
+  cmsys::RegularExpression regex(regex_str);
   if(regex.find(have))
     {
     // Return the position of the path portion.

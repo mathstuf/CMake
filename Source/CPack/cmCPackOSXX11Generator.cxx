@@ -110,7 +110,7 @@ int cmCPackOSXX11Generator::PackageFiles()
     }
 
   std::string applicationsLinkName = diskImageDirectory + "/Applications";
-  cmSystemTools::CreateSymlink("/Applications", applicationsLinkName.c_str());
+  cmSystemTools::CreateSymlink("/Applications", applicationsLinkName);
 
   if (
     !this->CopyResourcePlistFile("VolumeIcon.icns",
@@ -146,18 +146,18 @@ int cmCPackOSXX11Generator::PackageFiles()
   appScriptName += this->GetOption("CPACK_PACKAGE_FILE_NAME");
 
   mode_t mode;
-  if (cmsys::SystemTools::GetPermissions(runTimeScript.c_str(), mode))
+  if (cmsys::SystemTools::GetPermissions(runTimeScript, mode))
     {
     mode |= (S_IXUSR | S_IXGRP | S_IXOTH);
-    cmsys::SystemTools::SetPermissions(runTimeScript.c_str(), mode);
+    cmsys::SystemTools::SetPermissions(runTimeScript, mode);
     cmCPackLogger(cmCPackLog::LOG_OUTPUT, "Setting: " << runTimeScript
       << " to permission: " << mode << std::endl);
     }
 
-  if (cmsys::SystemTools::GetPermissions(appScriptName.c_str(), mode))
+  if (cmsys::SystemTools::GetPermissions(appScriptName, mode))
     {
     mode |= (S_IXUSR | S_IXGRP | S_IXOTH);
-    cmsys::SystemTools::SetPermissions(appScriptName.c_str(), mode);
+    cmsys::SystemTools::SetPermissions(appScriptName, mode);
     cmCPackLogger(cmCPackLog::LOG_OUTPUT,  "Setting: " << appScriptName
       << " to permission: " << mode << std::endl);
     }

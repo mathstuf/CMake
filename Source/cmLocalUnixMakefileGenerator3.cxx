@@ -2190,7 +2190,7 @@ cmLocalUnixMakefileGenerator3
 
 //----------------------------------------------------------------------------
 std::string
-cmLocalUnixMakefileGenerator3::ConvertToQuotedOutputPath(const std::string& p,
+cmLocalUnixMakefileGenerator3::ConvertToQuotedOutputPath(const char* p,
                                                          bool useWatcomQuote)
 {
   // Split the path into its components.

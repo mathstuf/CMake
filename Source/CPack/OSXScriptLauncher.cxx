@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
   delete [] path;
 
 
-  if (! cmsys::SystemTools::FileExists(fullScriptPath.c_str()))
+  if (! cmsys::SystemTools::FileExists(fullScriptPath))
     {
     return 1;
     }

@@ -145,7 +145,7 @@ bool cmAddCustomCommandCommand
         {
         case doing_output:
         case doing_outputs:
-          if (!cmSystemTools::FileIsFullPath(copy.c_str()))
+          if (!cmSystemTools::FileIsFullPath(copy))
             {
             // This is an output to be generated, so it should be
             // under the build tree.  CMake 2.4 placed this under the
@@ -173,7 +173,7 @@ bool cmAddCustomCommandCommand
           break;
         }
 
-      if (cmSystemTools::FileIsFullPath(filename.c_str()))
+      if (cmSystemTools::FileIsFullPath(filename))
         {
         filename = cmSystemTools::CollapseFullPath(filename);
         }
@@ -300,7 +300,7 @@ bool cmAddCustomCommandCommand
   if(!working.empty())
     {
     const char* build_dir = this->Makefile->GetCurrentOutputDirectory();
-    working = cmSystemTools::CollapseFullPath(working.c_str(), build_dir);
+    working = cmSystemTools::CollapseFullPath(working, build_dir);
     }
 
   // Choose which mode of the command to use.

@@ -305,7 +305,7 @@ std::string cmCTestBuildHandler::GetMakeCommand()
     }
 
   cmSystemTools::ReplaceString(makeCommand,
-    "${CTEST_CONFIGURATION_TYPE}", configType.c_str());
+    "${CTEST_CONFIGURATION_TYPE}", configType);
 
   return makeCommand;
 }
@@ -410,7 +410,7 @@ int cmCTestBuildHandler::ProcessHandler()
     { \
     cmCTestLog(this->CTest, DEBUG, "Add " #strings ": " \
     << *it << std::endl); \
-    regexes.push_back(it->c_str()); \
+    regexes.push_back(*it); \
     }
   cmCTestBuildHandlerPopulateRegexVector(
     this->CustomErrorMatches, this->ErrorMatchRegex);
@@ -493,11 +493,11 @@ int cmCTestBuildHandler::ProcessHandler()
       ++ evit )
       {
       cmSystemTools::ReplaceString(
-        evit->Text, this->SimplifySourceDir.c_str(), "/.../");
+        evit->Text, this->SimplifySourceDir, "/.../");
       cmSystemTools::ReplaceString(
-        evit->PreContext, this->SimplifySourceDir.c_str(), "/.../");
+        evit->PreContext, this->SimplifySourceDir, "/.../");
       cmSystemTools::ReplaceString(
-        evit->PostContext, this->SimplifySourceDir.c_str(), "/.../");
+        evit->PostContext, this->SimplifySourceDir, "/.../");
       }
     }
 
@@ -508,11 +508,11 @@ int cmCTestBuildHandler::ProcessHandler()
       ++ evit )
       {
       cmSystemTools::ReplaceString(
-        evit->Text, this->SimplifyBuildDir.c_str(), "/.../");
+        evit->Text, this->SimplifyBuildDir, "/.../");
       cmSystemTools::ReplaceString(
-        evit->PreContext, this->SimplifyBuildDir.c_str(), "/.../");
+        evit->PreContext, this->SimplifyBuildDir, "/.../");
       cmSystemTools::ReplaceString(
-        evit->PostContext, this->SimplifyBuildDir.c_str(), "/.../");
+        evit->PostContext, this->SimplifyBuildDir, "/.../");
       }
     }
 
@@ -610,7 +610,7 @@ void cmCTestBuildHandler::GenerateXMLLaunched(std::ostream& os)
   int numWarningsAllowed = this->MaxWarnings;
   // Identify fragments on disk.
   cmsys::Directory launchDir;
-  launchDir.Load(this->CTestLaunchDir.c_str());
+  launchDir.Load(this->CTestLaunchDir);
   unsigned long n = launchDir.GetNumberOfFiles();
   for(unsigned long i=0; i < n; ++i)
     {
@@ -649,7 +649,7 @@ void cmCTestBuildHandler::GenerateXMLLogScraped(std::ostream& os)
   std::string srcdir = this->CTest->GetCTestConfiguration("SourceDirectory");
   // make sure the source dir is in the correct case on windows
   // via a call to collapse full path.
-  srcdir = cmSystemTools::CollapseFullPath(srcdir.c_str());
+  srcdir = cmSystemTools::CollapseFullPath(srcdir);
   srcdir += "/";
   for ( it = ew.begin();
         it != ew.end() && (numErrorsAllowed || numWarningsAllowed); it++ )
@@ -675,7 +675,7 @@ void cmCTestBuildHandler::GenerateXMLLogScraped(std::ostream& os)
             rit != this->ErrorWarningFileLineRegex.end(); ++ rit )
         {
         cmsys::RegularExpression* re = &rit->RegularExpression;
-        if ( re->find(cm->Text.c_str() ) )
+        if ( re->find(cm->Text ) )
           {
           cm->SourceFile = re->match(rit->FileIndex);
           // At this point we need to make this->SourceFile relative to
@@ -695,9 +695,9 @@ void cmCTestBuildHandler::GenerateXMLLogScraped(std::ostream& os)
             {
             // make sure it is a full path with the correct case
             cm->SourceFile = cmSystemTools::CollapseFullPath(
-              cm->SourceFile.c_str());
+              cm->SourceFile);
             cmSystemTools::ReplaceString(
-              cm->SourceFile, srcdir.c_str(), "");
+              cm->SourceFile, srcdir, "");
             }
           cm->LineNumber = atoi(re->match(rit->LineIndex).c_str());
           break;
@@ -822,16 +822,16 @@ cmCTestBuildHandler::LaunchHelper::LaunchHelper(cmCTestBuildHandler* handler):
     launchDir += "/Build";
 
     // Clean out any existing launcher fragments.
-    cmSystemTools::RemoveADirectory(launchDir.c_str());
+    cmSystemTools::RemoveADirectory(launchDir);
 
     if(this->Handler->UseCTestLaunch)
       {
       // Enable launcher fragments.
-      cmSystemTools::MakeDirectory(launchDir.c_str());
+      cmSystemTools::MakeDirectory(launchDir);
       this->WriteLauncherConfig();
       std::string launchEnv = "CTEST_LAUNCH_LOGS=";
       launchEnv += launchDir;
-      cmSystemTools::PutEnv(launchEnv.c_str());
+      cmSystemTools::PutEnv(launchEnv);
       }
     }
 

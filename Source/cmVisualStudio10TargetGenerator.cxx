@@ -803,11 +803,11 @@ cmVisualStudio10TargetGenerator::WriteCustomRule(cmSourceFile const* source,
   // file that doesn't exist so create the file explicitly.
   if (source->GetPropertyAsBool("__CMAKE_RULE"))
     {
-    if(!cmSystemTools::FileExists(sourcePath.c_str()))
+    if(!cmSystemTools::FileExists(sourcePath))
       {
       // Make sure the path exists for the file
       std::string path = cmSystemTools::GetFilenamePath(sourcePath);
-      cmSystemTools::MakeDirectory(path.c_str());
+      cmSystemTools::MakeDirectory(path);
       cmsys::ofstream fout(sourcePath.c_str());
       if(fout)
         {
@@ -889,7 +889,7 @@ cmVisualStudio10TargetGenerator::ConvertPath(std::string const& path,
 {
   return forceRelative
     ? cmSystemTools::RelativePath(
-      this->Makefile->GetCurrentOutputDirectory(), path.c_str())
+      this->Makefile->GetCurrentOutputDirectory(), path)
     : this->LocalGenerator->Convert(path.c_str(),
                                     cmLocalGenerator::START_OUTPUT,
                                     cmLocalGenerator::UNCHANGED,
@@ -1317,7 +1317,7 @@ void cmVisualStudio10TargetGenerator::WriteSource(
   bool forceRelative = false;
   std::string sourceFile = this->ConvertPath(sf->GetFullPath(), false);
   if(this->LocalGenerator->GetVersion() == cmLocalVisualStudioGenerator::VS10
-     && cmSystemTools::FileIsFullPath(sourceFile.c_str()))
+     && cmSystemTools::FileIsFullPath(sourceFile))
     {
     // Normal path conversion resulted in a full path.  VS 10 (but not 11)
     // refuses to show the property page in the IDE for a source file with a

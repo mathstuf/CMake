@@ -215,7 +215,7 @@ int cmCoreTryCompile::TryCompileCode(std::vector<std::string> const& argv)
       }
     }
   // make sure the binary directory exists
-  cmSystemTools::MakeDirectory(this->BinaryDirectory.c_str());
+  cmSystemTools::MakeDirectory(this->BinaryDirectory);
 
   // do not allow recursive try Compiles
   if (this->BinaryDirectory == this->Makefile->GetHomeOutputDirectory())
@@ -233,7 +233,7 @@ int cmCoreTryCompile::TryCompileCode(std::vector<std::string> const& argv)
     {
     // remove any CMakeCache.txt files so we will have a clean test
     std::string ccFile = this->BinaryDirectory + "/CMakeCache.txt";
-    cmSystemTools::RemoveFile(ccFile.c_str());
+    cmSystemTools::RemoveFile(ccFile);
 
     // Choose sources.
     if(!useSources)
@@ -279,7 +279,7 @@ int cmCoreTryCompile::TryCompileCode(std::vector<std::string> const& argv)
     sourceDirectory = this->BinaryDirectory.c_str();
 
     // now create a CMakeLists.txt file in that directory
-    FILE *fout = cmsys::SystemTools::Fopen(outFileName.c_str(),"w");
+    FILE *fout = cmsys::SystemTools::Fopen(outFileName,"w");
     if (!fout)
       {
       cmOStringStream e;
@@ -514,8 +514,8 @@ int cmCoreTryCompile::TryCompileCode(std::vector<std::string> const& argv)
     if ((res==0) && (copyFile.size()))
       {
       if(this->OutputFile.empty() ||
-         !cmSystemTools::CopyFileAlways(this->OutputFile.c_str(),
-                                        copyFile.c_str()))
+         !cmSystemTools::CopyFileAlways(this->OutputFile,
+                                        copyFile))
         {
         cmOStringStream emsg;
         emsg << "Cannot copy output executable\n"
@@ -580,10 +580,10 @@ void cmCoreTryCompile::CleanupFiles(const char* binDir)
         std::string fullPath = binDir;
         fullPath += "/";
         fullPath += dir.GetFile(static_cast<unsigned long>(fileNum));
-        if(cmSystemTools::FileIsDirectory(fullPath.c_str()))
+        if(cmSystemTools::FileIsDirectory(fullPath))
           {
           this->CleanupFiles(fullPath.c_str());
-          cmSystemTools::RemoveADirectory(fullPath.c_str());
+          cmSystemTools::RemoveADirectory(fullPath);
           }
         else
           {
@@ -592,14 +592,14 @@ void cmCoreTryCompile::CleanupFiles(const char* binDir)
           // cannot delete them immediately.  Try a few times.
           cmSystemTools::WindowsFileRetry retry =
             cmSystemTools::GetWindowsFileRetry();
-          while(!cmSystemTools::RemoveFile(fullPath.c_str()) &&
-                --retry.Count && cmSystemTools::FileExists(fullPath.c_str()))
+          while(!cmSystemTools::RemoveFile(fullPath) &&
+                --retry.Count && cmSystemTools::FileExists(fullPath))
             {
             cmSystemTools::Delay(retry.Delay);
             }
           if(retry.Count == 0)
 #else
-          if(!cmSystemTools::RemoveFile(fullPath.c_str()))
+          if(!cmSystemTools::RemoveFile(fullPath))
 #endif
             {
             std::string m = "Remove failed on file: " + fullPath;
@@ -647,9 +647,9 @@ void cmCoreTryCompile::FindOutputFile(const std::string& targetName)
     std::string command = this->BinaryDirectory;
     command += *it;
     command += tmpOutputFile;
-    if(cmSystemTools::FileExists(command.c_str()))
+    if(cmSystemTools::FileExists(command))
       {
-      tmpOutputFile = cmSystemTools::CollapseFullPath(command.c_str());
+      tmpOutputFile = cmSystemTools::CollapseFullPath(command);
       this->OutputFile = tmpOutputFile;
       return;
       }

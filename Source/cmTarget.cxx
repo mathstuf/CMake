@@ -2020,7 +2020,7 @@ static void processIncludeDirectories(cmTarget const* tgt,
           li = entryIncludes.begin(); li != entryIncludes.end(); ++li)
       {
       if (fromImported
-          && !cmSystemTools::FileExists(li->c_str()))
+          && !cmSystemTools::FileExists(*li))
         {
         cmOStringStream e;
         cmake::MessageType messageType = cmake::FATAL_ERROR;
@@ -2053,7 +2053,7 @@ static void processIncludeDirectories(cmTarget const* tgt,
         return;
         }
 
-      if (!cmSystemTools::FileIsFullPath(li->c_str()))
+      if (!cmSystemTools::FileIsFullPath(*li))
         {
         cmOStringStream e;
         bool noMessage = false;
@@ -2171,7 +2171,7 @@ cmTarget::GetIncludeDirectories(const std::string& config) const
         it = impl->Libraries.begin();
         it != impl->Libraries.end(); ++it)
       {
-      std::string libDir = cmSystemTools::CollapseFullPath(it->c_str());
+      std::string libDir = cmSystemTools::CollapseFullPath(*it);
 
       static cmsys::RegularExpression
         frameworkCheck("(.*\\.framework)(/Versions/[^/]+)?/[^/]+$");
@@ -4555,7 +4555,7 @@ bool cmTarget::ComputeOutputDir(const std::string& config,
   // specified as a relative path.  Treat a relative path as
   // relative to the current output directory for this makefile.
   out = (cmSystemTools::CollapseFullPath
-         (out.c_str(), this->Makefile->GetStartOutputDirectory()));
+         (out, this->Makefile->GetStartOutputDirectory()));
 
   // The generator may add the configuration's subdirectory.
   if(!conf.empty())
@@ -4621,7 +4621,7 @@ bool cmTarget::ComputePDBOutputDir(const std::string& kind,
   // specified as a relative path.  Treat a relative path as
   // relative to the current output directory for this makefile.
   out = (cmSystemTools::CollapseFullPath
-         (out.c_str(), this->Makefile->GetStartOutputDirectory()));
+         (out, this->Makefile->GetStartOutputDirectory()));
 
   // The generator may add the configuration's subdirectory.
   if(!conf.empty())
@@ -6625,7 +6625,7 @@ void checkPropertyConsistency(cmTarget const* depender,
     {
     std::string pname = cmSystemTools::HelpFileName(*pi);
     std::string pfile = pdir + pname + ".rst";
-    if(cmSystemTools::FileExists(pfile.c_str(), true))
+    if(cmSystemTools::FileExists(pfile, true))
       {
       cmOStringStream e;
       e << "Target \"" << dependee->GetName() << "\" has property \""

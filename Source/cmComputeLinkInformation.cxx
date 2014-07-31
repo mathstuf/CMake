@@ -673,9 +673,9 @@ void cmComputeLinkInformation::AddItem(std::string const& item,
   else
     {
     // This is not a CMake target.  Use the name given.
-    if(cmSystemTools::FileIsFullPath(item.c_str()))
+    if(cmSystemTools::FileIsFullPath(item))
       {
-      if(cmSystemTools::FileIsDirectory(item.c_str()))
+      if(cmSystemTools::FileIsDirectory(item))
         {
         // This is a directory.
         this->AddDirectoryItem(item);
@@ -721,14 +721,14 @@ void cmComputeLinkInformation::AddSharedDepItem(std::string const& item,
     {
     // Skip items that are not full paths.  We will not be able to
     // reliably specify them.
-    if(!cmSystemTools::FileIsFullPath(item.c_str()))
+    if(!cmSystemTools::FileIsFullPath(item))
       {
       return;
       }
 
     // Get the name of the library from the file name.
     std::string file = cmSystemTools::GetFilenameName(item);
-    if(!this->ExtractSharedLibraryName.find(file.c_str()))
+    if(!this->ExtractSharedLibraryName.find(file))
       {
       // This is not the name of a shared library.
       return;
@@ -914,7 +914,7 @@ void cmComputeLinkInformation::ComputeItemParserInfo()
 #ifdef CM_COMPUTE_LINK_INFO_DEBUG
   fprintf(stderr, "any regex [%s]\n", reg_any.c_str());
 #endif
-  this->ExtractAnyLibraryName.compile(reg_any.c_str());
+  this->ExtractAnyLibraryName.compile(reg_any);
 
   // Create a regex to match static library names.
   if(!this->StaticLinkExtensions.empty())
@@ -925,7 +925,7 @@ void cmComputeLinkInformation::ComputeItemParserInfo()
 #ifdef CM_COMPUTE_LINK_INFO_DEBUG
   fprintf(stderr, "static regex [%s]\n", reg_static.c_str());
 #endif
-    this->ExtractStaticLibraryName.compile(reg_static.c_str());
+    this->ExtractStaticLibraryName.compile(reg_static);
     }
 
   // Create a regex to match shared library names.
@@ -938,7 +938,7 @@ void cmComputeLinkInformation::ComputeItemParserInfo()
 #ifdef CM_COMPUTE_LINK_INFO_DEBUG
   fprintf(stderr, "shared regex [%s]\n", reg_shared.c_str());
 #endif
-    this->ExtractSharedLibraryName.compile(reg_shared.c_str());
+    this->ExtractSharedLibraryName.compile(reg_shared);
     }
 }
 
@@ -1129,7 +1129,7 @@ void cmComputeLinkInformation::AddFullItem(std::string const& item)
       generator.find("Xcode") != generator.npos))
     {
     std::string file = cmSystemTools::GetFilenameName(item);
-    if(!this->ExtractAnyLibraryName.find(file.c_str()))
+    if(!this->ExtractAnyLibraryName.find(file))
       {
       this->HandleBadFullItem(item, file);
       return;
@@ -1340,7 +1340,7 @@ void cmComputeLinkInformation::AddUserItem(std::string const& item,
 void cmComputeLinkInformation::AddFrameworkItem(std::string const& item)
 {
   // Try to separate the framework name and path.
-  if(!this->SplitFramework.find(item.c_str()))
+  if(!this->SplitFramework.find(item))
     {
     cmOStringStream e;
     e << "Could not parse framework path \"" << item << "\" "
@@ -1814,7 +1814,7 @@ cmComputeLinkInformation::AddLibraryRuntimeInfo(std::string const& fullPath)
     // On some platforms (AIX) a shared library may look static.
     if(this->ArchivesMayBeShared)
       {
-      if(this->ExtractStaticLibraryName.find(file.c_str()))
+      if(this->ExtractStaticLibraryName.find(file))
         {
         // This is the name of a shared library or archive.
         is_shared_library = true;
@@ -1937,10 +1937,10 @@ void cmComputeLinkInformation::GetRPath(std::vector<std::string>& runtimeDirs,
         // Do not add any path inside the source or build tree.
         const char* topSourceDir = this->Makefile->GetHomeDirectory();
         const char* topBinaryDir = this->Makefile->GetHomeOutputDirectory();
-        if(!cmSystemTools::ComparePath(ri->c_str(), topSourceDir) &&
-           !cmSystemTools::ComparePath(ri->c_str(), topBinaryDir) &&
-           !cmSystemTools::IsSubDirectory(ri->c_str(), topSourceDir) &&
-           !cmSystemTools::IsSubDirectory(ri->c_str(), topBinaryDir))
+        if(!cmSystemTools::ComparePath(*ri, topSourceDir) &&
+           !cmSystemTools::ComparePath(*ri, topBinaryDir) &&
+           !cmSystemTools::IsSubDirectory(*ri, topSourceDir) &&
+           !cmSystemTools::IsSubDirectory(*ri, topBinaryDir))
           {
           std::string d = *ri;
           if (!rootPath.empty() && d.find(rootPath) == 0)

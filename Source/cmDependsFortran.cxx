@@ -615,7 +615,7 @@ bool cmDependsFortran::FindModule(std::string const& name,
     fullName = *i;
     fullName += "/";
     fullName += mod_lower;
-    if(cmSystemTools::FileExists(fullName.c_str(), true))
+    if(cmSystemTools::FileExists(fullName, true))
       {
       module = fullName;
       return true;
@@ -625,7 +625,7 @@ bool cmDependsFortran::FindModule(std::string const& name,
     fullName = *i;
     fullName += "/";
     fullName += mod_upper;
-    if(cmSystemTools::FileExists(fullName.c_str(), true))
+    if(cmSystemTools::FileExists(fullName, true))
       {
       module = fullName;
       return true;
@@ -663,12 +663,12 @@ bool cmDependsFortran::CopyModule(const std::vector<std::string>& args)
   mod += ".mod";
   mod_upper += ".mod";
   mod_lower += ".mod";
-  if(cmSystemTools::FileExists(mod_upper.c_str(), true))
+  if(cmSystemTools::FileExists(mod_upper, true))
     {
     if(cmDependsFortran::ModulesDiffer(mod_upper.c_str(), stamp.c_str(),
                                        compilerId.c_str()))
       {
-      if(!cmSystemTools::CopyFileAlways(mod_upper.c_str(), stamp.c_str()))
+      if(!cmSystemTools::CopyFileAlways(mod_upper, stamp))
         {
         std::cerr << "Error copying Fortran module from \""
                   << mod_upper << "\" to \"" << stamp
@@ -678,12 +678,12 @@ bool cmDependsFortran::CopyModule(const std::vector<std::string>& args)
       }
     return true;
     }
-  else if(cmSystemTools::FileExists(mod_lower.c_str(), true))
+  else if(cmSystemTools::FileExists(mod_lower, true))
     {
     if(cmDependsFortran::ModulesDiffer(mod_lower.c_str(), stamp.c_str(),
                                        compilerId.c_str()))
       {
-      if(!cmSystemTools::CopyFileAlways(mod_lower.c_str(), stamp.c_str()))
+      if(!cmSystemTools::CopyFileAlways(mod_lower, stamp))
         {
         std::cerr << "Error copying Fortran module from \""
                   << mod_lower << "\" to \"" << stamp
@@ -897,7 +897,7 @@ bool cmDependsFortran::FindIncludeFile(const char* dir,
   if(cmSystemTools::FileIsFullPath(includeName))
     {
     fileName = includeName;
-    return cmSystemTools::FileExists(fileName.c_str(), true);
+    return cmSystemTools::FileExists(fileName, true);
     }
   else
     {
@@ -906,7 +906,7 @@ bool cmDependsFortran::FindIncludeFile(const char* dir,
     std::string fullName = dir;
     fullName += "/";
     fullName += includeName;
-    if(cmSystemTools::FileExists(fullName.c_str(), true))
+    if(cmSystemTools::FileExists(fullName, true))
       {
       fileName = fullName;
       return true;
@@ -919,7 +919,7 @@ bool cmDependsFortran::FindIncludeFile(const char* dir,
       fullName = *i;
       fullName += "/";
       fullName += includeName;
-      if(cmSystemTools::FileExists(fullName.c_str(), true))
+      if(cmSystemTools::FileExists(fullName, true))
         {
         fileName = fullName;
         return true;

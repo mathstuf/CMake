@@ -35,7 +35,7 @@ bool cmTryCompileCommand
     {
     if(!this->Makefile->GetCMakeInstance()->GetDebugTryCompile())
       {
-      this->CleanupFiles(this->BinaryDirectory.c_str());
+      this->CleanupFiles(this->BinaryDirectory);
       }
     }
   return true;

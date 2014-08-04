@@ -547,19 +547,13 @@ int cmCoreTryCompile::TryCompileCode(std::vector<std::string> const& argv)
   return res;
 }
 
-void cmCoreTryCompile::CleanupFiles(const char* binDir)
+void cmCoreTryCompile::CleanupFiles(const std::string& binDir)
 {
-  if ( !binDir )
-    {
-    return;
-    }
-
-  std::string bdir = binDir;
-  if(bdir.find("CMakeTmp") == std::string::npos)
+  if(binDir.find("CMakeTmp") == std::string::npos)
     {
     cmSystemTools::Error(
       "TRY_COMPILE attempt to remove -rf directory that does not contain "
-      "CMakeTmp:", binDir);
+      "CMakeTmp:", binDir.c_str());
     return;
     }
 
@@ -582,7 +576,7 @@ void cmCoreTryCompile::CleanupFiles(const char* binDir)
         fullPath += dir.GetFile(static_cast<unsigned long>(fileNum));
         if(cmSystemTools::FileIsDirectory(fullPath))
           {
-          this->CleanupFiles(fullPath.c_str());
+          this->CleanupFiles(fullPath);
           cmSystemTools::RemoveADirectory(fullPath);
           }
         else

@@ -185,7 +185,7 @@ bool cmTryRunCommand
   // if we created a directory etc, then cleanup after ourselves
   if(!this->Makefile->GetCMakeInstance()->GetDebugTryCompile())
     {
-    this->CleanupFiles(this->BinaryDirectory.c_str());
+    this->CleanupFiles(this->BinaryDirectory);
     }
   return true;
 }

@@ -352,7 +352,7 @@ void cmCPackWIXGenerator::CreateWiXPropertiesIncludeFile()
        name.substr(0, prefix.length()) == prefix)
       {
       std::string id = name.substr(prefix.length());
-      std::string value = GetOption(name.c_str());
+      std::string value = GetOption(name);
 
       includeFile.BeginElement("Property");
       includeFile.AddAttribute("Id", id);
@@ -388,7 +388,7 @@ void cmCPackWIXGenerator::CreateWiXPropertiesIncludeFile()
 void cmCPackWIXGenerator::CopyDefinition(
   cmWIXSourceWriter &source, std::string const& name)
 {
-  const char* value = GetOption(name.c_str());
+  const char* value = GetOption(name);
   if(value)
     {
     AddDefinition(source, name, value);
@@ -959,7 +959,7 @@ void cmCPackWIXGenerator::AddDirectoryAndFileDefinitons(
 bool cmCPackWIXGenerator::RequireOption(
   std::string const& name, std::string &value) const
 {
-  const char* tmp = GetOption(name.c_str());
+  const char* tmp = GetOption(name);
   if(tmp)
     {
     value = tmp;
@@ -1143,7 +1143,7 @@ bool cmCPackWIXGenerator::IsLegalIdCharacter(char c)
 void cmCPackWIXGenerator::CollectExtensions(
      std::string const& variableName, extension_set_t& extensions)
 {
-  const char *variableContent = GetOption(variableName.c_str());
+  const char *variableContent = GetOption(variableName);
   if(!variableContent) return;
 
   std::vector<std::string> list;
@@ -1159,7 +1159,7 @@ void cmCPackWIXGenerator::CollectExtensions(
 void cmCPackWIXGenerator::AddCustomFlags(
   std::string const& variableName, std::ostream& stream)
 {
-  const char *variableContent = GetOption(variableName.c_str());
+  const char *variableContent = GetOption(variableName);
   if(!variableContent) return;
 
   std::vector<std::string> list;

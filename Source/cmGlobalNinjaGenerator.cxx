@@ -834,8 +834,9 @@ void
 cmGlobalNinjaGenerator
 ::AppendTargetOutputs(cmTarget const* target, cmNinjaDeps& outputs)
 {
+  static const std::string varCMAKE_BUILD_TYPE = "CMAKE_BUILD_TYPE";
   std::string configName =
-    target->GetMakefile()->GetSafeDefinition("CMAKE_BUILD_TYPE");
+    target->GetMakefile()->GetSafeDefinition(varCMAKE_BUILD_TYPE);
   cmLocalNinjaGenerator *ng =
     static_cast<cmLocalNinjaGenerator *>(this->LocalGenerators[0]);
 

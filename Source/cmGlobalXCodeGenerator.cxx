@@ -2688,14 +2688,14 @@ std::string cmGlobalXCodeGenerator::GetOrCreateId(const std::string& name,
   std::string guidStoreName = name;
   guidStoreName += "_GUID_CMAKE";
   const char* storedGUID =
-    this->CMakeInstance->GetCacheDefinition(guidStoreName.c_str());
+    this->CMakeInstance->GetCacheDefinition(guidStoreName);
 
   if(storedGUID)
     {
     return storedGUID;
     }
 
-  this->CMakeInstance->AddCacheEntry(guidStoreName.c_str(),
+  this->CMakeInstance->AddCacheEntry(guidStoreName,
     id.c_str(), "Stored Xcode object GUID", cmCacheManager::INTERNAL);
 
   return id;
@@ -3393,7 +3393,7 @@ void cmGlobalXCodeGenerator
       {
         buildSettings->AddAttribute(i->substr(22),
           this->CreateString(
-            this->CurrentMakefile->GetDefinition(i->c_str())));
+            this->CurrentMakefile->GetDefinition(*i)));
       }
     }
   }
@@ -3828,7 +3828,7 @@ std::string cmGlobalXCodeGenerator::LookupFlags(
     varName += varNameLang;
     varName += varNameSuffix;
     if(const char* varValue =
-       this->CurrentMakefile->GetDefinition(varName.c_str()))
+       this->CurrentMakefile->GetDefinition(varName))
       {
       if(*varValue)
         {

@@ -606,10 +606,11 @@ bool cmTarget::HasImportLibrary() const
 //----------------------------------------------------------------------------
 bool cmTarget::IsFrameworkOnApple() const
 {
+  static const std::string varAPPLE = "APPLE";
   static const std::string propFRAMEWORK = "FRAMEWORK";
 
   return (this->GetType() == cmTarget::SHARED_LIBRARY &&
-          this->Makefile->IsOn("APPLE") &&
+          this->Makefile->IsOn(varAPPLE) &&
           this->GetPropertyAsBool(propFRAMEWORK));
 }
 
@@ -3958,8 +3959,8 @@ void cmTarget::GetFullNameInternal(const std::string& config,
 
   // Return an empty name for the import library if this platform
   // does not support import libraries.
-  if(implib &&
-     !this->Makefile->GetDefinition("CMAKE_IMPORT_LIBRARY_SUFFIX"))
+  static const std::string varIMPORT_SUFFIX = "CMAKE_IMPORT_LIBRARY_SUFFIX";
+  if(implib && !this->Makefile->GetDefinition(varIMPORT_SUFFIX))
     {
     outPrefix = "";
     outBase = "";

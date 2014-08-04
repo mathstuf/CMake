@@ -941,7 +941,7 @@ std::string cmGlobalVisualStudio7Generator::GetGUID(const std::string& name)
   std::string guidStoreName = name;
   guidStoreName += "_GUID_CMAKE";
   const char* storedGUID =
-    this->CMakeInstance->GetCacheDefinition(guidStoreName.c_str());
+    this->CMakeInstance->GetCacheDefinition(guidStoreName);
   if(storedGUID)
     {
     return std::string(storedGUID);
@@ -956,7 +956,7 @@ void cmGlobalVisualStudio7Generator::CreateGUID(const std::string& name)
 {
   std::string guidStoreName = name;
   guidStoreName += "_GUID_CMAKE";
-  if(this->CMakeInstance->GetCacheDefinition(guidStoreName.c_str()))
+  if(this->CMakeInstance->GetCacheDefinition(guidStoreName))
     {
     return;
     }
@@ -968,7 +968,7 @@ void cmGlobalVisualStudio7Generator::CreateGUID(const std::string& name)
   ret = cmsys::Encoding::ToNarrow(reinterpret_cast<wchar_t*>(uidstr));
   RpcStringFreeW(&uidstr);
   ret = cmSystemTools::UpperCase(ret);
-  this->CMakeInstance->AddCacheEntry(guidStoreName.c_str(),
+  this->CMakeInstance->AddCacheEntry(guidStoreName,
                                      ret.c_str(), "Stored GUID",
                                      cmCacheManager::INTERNAL);
 }

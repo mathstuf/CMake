@@ -1303,7 +1303,7 @@ void cmLocalVisualStudio6Generator
 
     // Add standard libraries.
     if(const char* stdLibs =
-       this->Makefile->GetDefinition(standardLibsVar.c_str()))
+       this->Makefile->GetDefinition(standardLibsVar))
       {
       extraLinkOptions += " ";
       extraLinkOptions += stdLibs;
@@ -1733,22 +1733,22 @@ void cmLocalVisualStudio6Generator
       std::string baseFlagVar = "CMAKE_";
       baseFlagVar += linkLanguage;
       baseFlagVar += "_FLAGS";
-      flags = this->Makefile->GetSafeDefinition(baseFlagVar.c_str());
+      flags = this->Makefile->GetSafeDefinition(baseFlagVar);
 
       std::string flagVar = baseFlagVar + "_RELEASE";
-      flagsRelease = this->Makefile->GetSafeDefinition(flagVar.c_str());
+      flagsRelease = this->Makefile->GetSafeDefinition(flagVar);
       flagsRelease += " -DCMAKE_INTDIR=\\\"Release\\\" ";
 
       flagVar = baseFlagVar + "_MINSIZEREL";
-      flagsMinSizeRel = this->Makefile->GetSafeDefinition(flagVar.c_str());
+      flagsMinSizeRel = this->Makefile->GetSafeDefinition(flagVar);
       flagsMinSizeRel += " -DCMAKE_INTDIR=\\\"MinSizeRel\\\" ";
 
       flagVar = baseFlagVar + "_DEBUG";
-      flagsDebug = this->Makefile->GetSafeDefinition(flagVar.c_str());
+      flagsDebug = this->Makefile->GetSafeDefinition(flagVar);
       flagsDebug += " -DCMAKE_INTDIR=\\\"Debug\\\" ";
 
       flagVar = baseFlagVar + "_RELWITHDEBINFO";
-      flagsRelWithDebInfo = this->Makefile->GetSafeDefinition(flagVar.c_str());
+      flagsRelWithDebInfo = this->Makefile->GetSafeDefinition(flagVar);
       flagsRelWithDebInfo += " -DCMAKE_INTDIR=\\\"RelWithDebInfo\\\" ";
 
       this->AddCompileOptions(flags, &target, linkLanguage, "");

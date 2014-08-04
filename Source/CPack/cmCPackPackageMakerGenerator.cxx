@@ -559,7 +559,7 @@ bool cmCPackPackageMakerGenerator::CopyCreateResourceFile(
 {
   std::string uname = cmSystemTools::UpperCase(name);
   std::string cpackVar = "CPACK_RESOURCE_FILE_" + uname;
-  const char* inFileName = this->GetOption(cpackVar.c_str());
+  const char* inFileName = this->GetOption(cpackVar);
   if ( !inFileName )
     {
     cmCPackLogger(cmCPackLog::LOG_ERROR, "CPack option: " << cpackVar
@@ -591,7 +591,7 @@ bool cmCPackPackageMakerGenerator::CopyCreateResourceFile(
 
   // Set this so that distribution.dist gets the right name (without
   // the path).
-  this->SetOption(("CPACK_RESOURCE_FILE_" + uname + "_NOPATH").c_str(),
+  this->SetOption("CPACK_RESOURCE_FILE_" + uname + "_NOPATH",
                   (name + ext).c_str());
 
   cmCPackLogger(cmCPackLog::LOG_VERBOSE, "Configure file: "

@@ -716,11 +716,11 @@ void cmLocalVisualStudio7Generator::WriteConfiguration(std::ostream& fout,
       std::string baseFlagVar = "CMAKE_";
       baseFlagVar += linkLanguage;
       baseFlagVar += "_FLAGS";
-      flags = this->Makefile->GetRequiredDefinition(baseFlagVar.c_str());
+      flags = this->Makefile->GetRequiredDefinition(baseFlagVar);
       std::string flagVar = baseFlagVar + std::string("_") +
         cmSystemTools::UpperCase(configName);
       flags += " ";
-      flags += this->Makefile->GetRequiredDefinition(flagVar.c_str());
+      flags += this->Makefile->GetRequiredDefinition(flagVar);
       }
     // set the correct language
     if(linkLanguage == "C")
@@ -1006,7 +1006,7 @@ cmLocalVisualStudio7Generator
 
   std::string extraLinkOptionsBuildType =
     this->Makefile->GetRequiredDefinition
-    (extraLinkOptionsBuildTypeDef.c_str());
+    (extraLinkOptionsBuildTypeDef);
 
   return extraLinkOptionsBuildType;
 }
@@ -1158,7 +1158,7 @@ void cmLocalVisualStudio7Generator::OutputBuildTool(std::ostream& fout,
     // Use the NOINHERIT macro to avoid getting VS project default
     // libraries which may be set by the user to something bad.
     fout << "\t\t\t\tAdditionalDependencies=\"$(NOINHERIT) "
-         << this->Makefile->GetSafeDefinition(standardLibsVar.c_str());
+         << this->Makefile->GetSafeDefinition(standardLibsVar);
     if(this->GetVersion() < VS8 || this->FortranProject)
       {
       this->Internal->OutputObjects(fout, &target, " ");
@@ -1199,7 +1199,7 @@ void cmLocalVisualStudio7Generator::OutputBuildTool(std::ostream& fout,
     std::string stackVar = "CMAKE_";
     stackVar += linkLanguage;
     stackVar += "_STACK_SIZE";
-    const char* stackVal = this->Makefile->GetDefinition(stackVar.c_str());
+    const char* stackVal = this->Makefile->GetDefinition(stackVar);
     if(stackVal)
       {
       fout << "\t\t\t\tStackReserveSize=\"" << stackVal  << "\"\n";
@@ -1256,7 +1256,7 @@ void cmLocalVisualStudio7Generator::OutputBuildTool(std::ostream& fout,
     // Use the NOINHERIT macro to avoid getting VS project default
     // libraries which may be set by the user to something bad.
     fout << "\t\t\t\tAdditionalDependencies=\"$(NOINHERIT) "
-         << this->Makefile->GetSafeDefinition(standardLibsVar.c_str());
+         << this->Makefile->GetSafeDefinition(standardLibsVar);
     if(this->GetVersion() < VS8 || this->FortranProject)
       {
       this->Internal->OutputObjects(fout, &target, " ");
@@ -1317,7 +1317,7 @@ void cmLocalVisualStudio7Generator::OutputBuildTool(std::ostream& fout,
     std::string stackVar = "CMAKE_";
     stackVar += linkLanguage;
     stackVar += "_STACK_SIZE";
-    const char* stackVal = this->Makefile->GetDefinition(stackVar.c_str());
+    const char* stackVal = this->Makefile->GetDefinition(stackVar);
     if(stackVal)
       {
       fout << "\t\t\t\tStackReserveSize=\"" << stackVal << "\"";
@@ -2297,7 +2297,7 @@ void cmLocalVisualStudio7Generator::ReadAndStoreExternalGUID(
   guidStoreName += "_GUID_CMAKE";
   // save the GUID in the cache
   this->GlobalGenerator->GetCMakeInstance()->
-    AddCacheEntry(guidStoreName.c_str(),
+    AddCacheEntry(guidStoreName,
                   parser.GUID.c_str(),
                   "Stored GUID",
                   cmCacheManager::INTERNAL);

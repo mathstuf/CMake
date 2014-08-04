@@ -3475,7 +3475,7 @@ void cmMakefile::SetArgcArgv(const std::vector<std::string>& args)
     cmOStringStream tmpStream;
     tmpStream << "CMAKE_ARGV" << t;
     this->AddDefinition(tmpStream.str(), args[t].c_str());
-    //this->MarkVariableAsUsed(tmpStream.str().c_str());
+    //this->MarkVariableAsUsed(tmpStream.str());
   }
 }
 

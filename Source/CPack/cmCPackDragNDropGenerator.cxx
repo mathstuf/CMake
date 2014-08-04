@@ -592,7 +592,7 @@ cmCPackDragNDropGenerator::GetComponentInstallDirNameSuffix(
     // the current COMPONENT belongs to.
     std::string groupVar = "CPACK_COMPONENT_" +
                          cmSystemTools::UpperCase(componentName) + "_GROUP";
-    const char* _groupName = GetOption(groupVar.c_str());
+    const char* _groupName = GetOption(groupVar);
     if (_groupName)
       {
       std::string groupName = _groupName;

@@ -1781,12 +1781,12 @@ bool cmVisualStudio10TargetGenerator::ComputeClOptions(
     baseFlagVar += linkLanguage;
     baseFlagVar += "_FLAGS";
     flags = this->
-      Target->GetMakefile()->GetRequiredDefinition(baseFlagVar.c_str());
+      Target->GetMakefile()->GetRequiredDefinition(baseFlagVar);
     std::string flagVar = baseFlagVar + std::string("_") +
       cmSystemTools::UpperCase(configName);
     flags += " ";
     flags += this->
-      Target->GetMakefile()->GetRequiredDefinition(flagVar.c_str());
+      Target->GetMakefile()->GetRequiredDefinition(flagVar);
     }
   // set the correct language
   if(linkLanguage == "C")
@@ -2170,11 +2170,11 @@ cmVisualStudio10TargetGenerator::ComputeLinkOptions(std::string const& config)
   linkFlagVarBase += "_LINKER_FLAGS";
   flags += " ";
   flags += this->
-    Target->GetMakefile()->GetRequiredDefinition(linkFlagVarBase.c_str());
+    Target->GetMakefile()->GetRequiredDefinition(linkFlagVarBase);
   std::string linkFlagVar = linkFlagVarBase + "_" + CONFIG;
   flags += " ";
   flags += this->
-    Target->GetMakefile()->GetRequiredDefinition(linkFlagVar.c_str());
+    Target->GetMakefile()->GetRequiredDefinition(linkFlagVar);
   const char* targetLinkFlags = this->Target->GetProperty("LINK_FLAGS");
   if(targetLinkFlags)
     {
@@ -2192,7 +2192,7 @@ cmVisualStudio10TargetGenerator::ComputeLinkOptions(std::string const& config)
   standardLibsVar += linkLanguage;
   standardLibsVar += "_STANDARD_LIBRARIES";
   std::string
-    libs = this->Makefile->GetSafeDefinition(standardLibsVar.c_str());
+    libs = this->Makefile->GetSafeDefinition(standardLibsVar);
   // Remove trailing spaces from libs
   std::string::size_type pos = libs.size()-1;
   if(libs.size() != 0)

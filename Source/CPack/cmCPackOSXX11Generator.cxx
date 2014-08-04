@@ -231,7 +231,7 @@ bool cmCPackOSXX11Generator::CopyCreateResourceFile(const std::string& name)
 {
   std::string uname = cmSystemTools::UpperCase(name);
   std::string cpackVar = "CPACK_RESOURCE_FILE_" + uname;
-  const char* inFileName = this->GetOption(cpackVar.c_str());
+  const char* inFileName = this->GetOption(cpackVar);
   if ( !inFileName )
     {
     cmCPackLogger(cmCPackLog::LOG_ERROR, "CPack option: " << cpackVar

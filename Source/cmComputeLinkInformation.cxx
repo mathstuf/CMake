@@ -869,7 +869,7 @@ void cmComputeLinkInformation::ComputeItemParserInfo()
     for(std::vector<std::string>::iterator i = linkSuffixVec.begin();
         i != linkSuffixVec.end(); ++i)
       {
-      this->AddLinkExtension(i->c_str(), LinkUnknown);
+      this->AddLinkExtension(*i, LinkUnknown);
       }
     }
   if(const char* sharedSuffixes =
@@ -880,7 +880,7 @@ void cmComputeLinkInformation::ComputeItemParserInfo()
     for(std::vector<std::string>::iterator i = sharedSuffixVec.begin();
         i != sharedSuffixVec.end(); ++i)
       {
-      this->AddLinkExtension(i->c_str(), LinkShared);
+      this->AddLinkExtension(*i, LinkShared);
       }
     }
 
@@ -954,7 +954,18 @@ void cmComputeLinkInformation::AddLinkPrefix(const char* p)
 //----------------------------------------------------------------------------
 void cmComputeLinkInformation::AddLinkExtension(const char* e, LinkType type)
 {
-  if(e && *e)
+  if(!e)
+    {
+    return;
+    }
+  this->AddLinkExtension(std::string(e), type);
+}
+
+//----------------------------------------------------------------------------
+void cmComputeLinkInformation::AddLinkExtension(const std::string& e,
+                                                LinkType type)
+{
+  if(!e.empty())
     {
     if(type == LinkStatic)
       {
@@ -986,7 +997,7 @@ cmComputeLinkInformation
     // Store this extension choice with the "." escaped.
     libext += "\\";
 #if defined(_WIN32) && !defined(__CYGWIN__)
-    libext += this->NoCaseExpression(i->c_str());
+    libext += this->NoCaseExpression(*i);
 #else
     libext += *i;
 #endif
@@ -1010,10 +1021,10 @@ cmComputeLinkInformation
 }
 
 //----------------------------------------------------------------------------
-std::string cmComputeLinkInformation::NoCaseExpression(const char* str)
+std::string cmComputeLinkInformation::NoCaseExpression(const std::string& str)
 {
   std::string ret;
-  const char* s = str;
+  const char* s = str.c_str();
   while(*s)
     {
     if(*s == '.')

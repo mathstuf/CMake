@@ -65,7 +65,7 @@ private:
   bool FindFrameworkConfig();
   bool FindAppBundleConfig();
   enum PolicyScopeRule { NoPolicyScope, DoPolicyScope };
-  bool ReadListFile(const char* f, PolicyScopeRule psr);
+  bool ReadListFile(const std::string& f, PolicyScopeRule psr);
   void StoreVersionFound();
 
   void ComputePrefixes();

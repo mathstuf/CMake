@@ -595,7 +595,7 @@ bool cmFindPackageCommand::FindModule(bool& found)
     std::string var = this->Name;
     var += "_FIND_MODULE";
     this->Makefile->AddDefinition(var, "1");
-    bool result = this->ReadListFile(mfile.c_str(), DoPolicyScope);
+    bool result = this->ReadListFile(mfile, DoPolicyScope);
     this->Makefile->RemoveDefinition(var);
     return result;
     }
@@ -687,7 +687,7 @@ bool cmFindPackageCommand::HandlePackageMode()
     this->StoreVersionFound();
 
     // Parse the configuration file.
-    if(this->ReadListFile(this->FileFound.c_str(), DoPolicyScope))
+    if(this->ReadListFile(this->FileFound, DoPolicyScope))
       {
       // The package has been found.
       found = true;
@@ -970,9 +970,11 @@ bool cmFindPackageCommand::FindAppBundleConfig()
 }
 
 //----------------------------------------------------------------------------
-bool cmFindPackageCommand::ReadListFile(const char* f, PolicyScopeRule psr)
+bool cmFindPackageCommand::ReadListFile(const std::string& f,
+                                        PolicyScopeRule psr)
 {
-  if(this->Makefile->ReadListFile(this->Makefile->GetCurrentListFile(), f, 0,
+  if(this->Makefile->ReadListFile(this->Makefile->GetCurrentListFile(),
+                                  f.c_str(), 0,
                                   !this->PolicyScope || psr == NoPolicyScope))
     {
     return true;

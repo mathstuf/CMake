@@ -89,7 +89,7 @@ cmExtraKateGenerator::WriteTargets(const cmMakefile* mf,
   const std::string make = mf->GetRequiredDefinition("CMAKE_MAKE_PROGRAM");
   const std::string makeArgs = mf->GetSafeDefinition(
     "CMAKE_KATE_MAKE_ARGUMENTS");
-  const char* homeOutputDir = mf->GetHomeOutputDirectory();
+  const std::string& homeOutputDir = mf->GetHomeOutputDirectory();
 
   fout <<
   "\t\"build\": {\n"
@@ -217,7 +217,7 @@ cmExtraKateGenerator::AppendTarget(cmGeneratedFileStream& fout,
                                    const std::string&     make,
                                    const std::string&     makeArgs,
                                    const std::string&     path,
-                                   const char*            homeOutputDir
+                                   const std::string&     homeOutputDir
                                   ) const
 {
   static char JsonSep = ' ';
@@ -225,7 +225,7 @@ cmExtraKateGenerator::AppendTarget(cmGeneratedFileStream& fout,
   fout <<
     "\t\t\t" << JsonSep << "{\"name\":\"" << target << "\", "
     "\"build_cmd\":\"" << make
-               << " -C \\\"" << (this->UseNinja ? homeOutputDir : path.c_str())
+               << " -C \\\"" << (this->UseNinja ? homeOutputDir : path)
                << "\\\" " << makeArgs << " "
                << target << "\"}\n";
 

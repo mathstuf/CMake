@@ -47,7 +47,7 @@ private:
                     const std::string&     make,
                     const std::string&     makeArgs,
                     const std::string&     path,
-                    const char*            homeOutputDir) const;
+                    const std::string&     homeOutputDir) const;
 
   std::string GenerateFilesString(const cmMakefile* mf) const;
   std::string GetPathBasename(const std::string& path) const;

@@ -313,7 +313,7 @@ void cmExtraCodeBlocksGenerator
         "      "<<virtualFolders<<"\n"
         "      <Build>\n";
 
-  this->AppendTarget(fout, "all", 0, make.c_str(), mf, compiler.c_str());
+  this->AppendTarget(fout, "all", 0, make, mf, compiler);
 
   // add all executable and library targets and some of the GLOBAL
   // and UTILITY targets
@@ -335,7 +335,7 @@ void cmExtraCodeBlocksGenerator
                      makefile->GetHomeOutputDirectory())==0)
             {
             this->AppendTarget(fout, ti->first, 0,
-                               make.c_str(), makefile, compiler.c_str());
+                               make, makefile, compiler);
             }
           }
           break;
@@ -351,7 +351,7 @@ void cmExtraCodeBlocksGenerator
             }
 
           this->AppendTarget(fout, ti->first, 0,
-                                 make.c_str(), makefile, compiler.c_str());
+                                 make, makefile, compiler);
           break;
         case cmTarget::EXECUTABLE:
         case cmTarget::STATIC_LIBRARY:
@@ -360,11 +360,11 @@ void cmExtraCodeBlocksGenerator
         case cmTarget::OBJECT_LIBRARY:
           {
           this->AppendTarget(fout, ti->first, &ti->second,
-                             make.c_str(), makefile, compiler.c_str());
+                             make, makefile, compiler);
           std::string fastTarget = ti->first;
           fastTarget += "/fast";
           this->AppendTarget(fout, fastTarget, &ti->second,
-                             make.c_str(), makefile, compiler.c_str());
+                             make, makefile, compiler);
           }
           break;
         default:
@@ -541,9 +541,9 @@ std::string cmExtraCodeBlocksGenerator::CreateDummyTargetFile(
 void cmExtraCodeBlocksGenerator::AppendTarget(cmGeneratedFileStream& fout,
                                               const std::string& targetName,
                                               cmTarget* target,
-                                              const char* make,
+                                              const std::string& make,
                                               const cmMakefile* makefile,
-                                              const char* compiler)
+                                              const std::string& compiler)
 {
   std::string makefileName = makefile->GetStartOutputDirectory();
   makefileName += "/Makefile";
@@ -668,16 +668,16 @@ void cmExtraCodeBlocksGenerator::AppendTarget(cmGeneratedFileStream& fout,
 
   fout<<"         <MakeCommands>\n"
         "            <Build command=\""
-      << this->BuildMakeCommand(make, makefileName.c_str(), targetName)
+      << this->BuildMakeCommand(make, makefileName, targetName)
       << "\" />\n"
         "            <CompileFile command=\""
-      << this->BuildMakeCommand(make, makefileName.c_str(),"&quot;$file&quot;")
+      << this->BuildMakeCommand(make, makefileName,"&quot;$file&quot;")
       << "\" />\n"
         "            <Clean command=\""
-      << this->BuildMakeCommand(make, makefileName.c_str(), "clean")
+      << this->BuildMakeCommand(make, makefileName, "clean")
       << "\" />\n"
         "            <DistClean command=\""
-      << this->BuildMakeCommand(make, makefileName.c_str(), "clean")
+      << this->BuildMakeCommand(make, makefileName, "clean")
       << "\" />\n"
         "         </MakeCommands>\n"
         "      </Target>\n";
@@ -759,7 +759,7 @@ int cmExtraCodeBlocksGenerator::GetCBTargetType(cmTarget* target)
 // Create the command line for building the given target using the selected
 // make
 std::string cmExtraCodeBlocksGenerator::BuildMakeCommand(
-             const std::string& make, const char* makefile,
+             const std::string& make, const std::string& makefile,
              const std::string& target)
 {
   std::string command = make;

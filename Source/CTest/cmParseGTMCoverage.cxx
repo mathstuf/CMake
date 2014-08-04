@@ -15,7 +15,7 @@ cmParseGTMCoverage::cmParseGTMCoverage(cmCTestCoverageHandlerContainer& cont,
 }
 
 
-bool cmParseGTMCoverage::LoadCoverageData(const char* d)
+bool cmParseGTMCoverage::LoadCoverageData(const std::string& d)
 {
   // load all the .mcov files in the specified directory
   cmsys::Directory dir;
@@ -37,7 +37,7 @@ bool cmParseGTMCoverage::LoadCoverageData(const char* d)
       path += file;
       if(cmSystemTools::GetFilenameLastExtension(path) == ".mcov")
         {
-        if(!this->ReadMCovFile(path.c_str()))
+        if(!this->ReadMCovFile(path))
           {
           return false;
           }
@@ -47,9 +47,9 @@ bool cmParseGTMCoverage::LoadCoverageData(const char* d)
   return true;
 }
 
-bool cmParseGTMCoverage::ReadMCovFile(const char* file)
+bool cmParseGTMCoverage::ReadMCovFile(const std::string& file)
 {
-  cmsys::ifstream in(file);
+  cmsys::ifstream in(file.c_str());
   if(!in)
     {
     return false;

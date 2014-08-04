@@ -28,10 +28,10 @@ class cmParsePHPCoverage
 public:
   cmParsePHPCoverage(cmCTestCoverageHandlerContainer& cont,
     cmCTest* ctest);
-  bool ReadPHPCoverageDirectory(const char* dir);
+  bool ReadPHPCoverageDirectory(const std::string& dir);
   void PrintCoverage();
 private:
-  bool ReadPHPData(const char* file);
+  bool ReadPHPData(const std::string& file);
   bool ReadArraySize(std::istream& in, int& size);
   bool ReadFileInformation(std::istream& in);
   bool ReadInt(std::istream& in, int& v);

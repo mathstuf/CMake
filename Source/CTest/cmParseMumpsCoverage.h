@@ -30,16 +30,16 @@ public:
   virtual ~cmParseMumpsCoverage();
   // This is the toplevel coverage file locating the coverage files
   // and the mumps source code package tree.
-  bool ReadCoverageFile(const char* file);
+  bool ReadCoverageFile(const std::string& file);
 protected:
   // sub classes will use this to
   // load all coverage files found in the given directory
-  virtual bool LoadCoverageData(const char* d) = 0;
+  virtual bool LoadCoverageData(const std::string& d) = 0;
   // search the package directory for mumps files and fill
   // in the RoutineToDirectory map
-  bool LoadPackages(const char* dir);
+  bool LoadPackages(const std::string& dir);
   // initialize the coverage information for a single mumps file
-  void InitializeMumpsFile(std::string& file);
+  void InitializeMumpsFile(std::string const& file);
   // Find mumps file for routine
   bool FindMumpsFile(std::string const& routine,
                      std::string& filepath);

@@ -41,14 +41,14 @@ private:
   // remove files with no coverage
   void RemoveUnCoveredFiles();
   // Read a single mcov file
-  bool ReadJacocoXML(const char* f);
+  bool ReadJacocoXML(const std::string& f);
   // split a string based on ,
   bool SplitString(std::vector<std::string>& args,
     std::string const& line);
   bool FindJavaFile(std::string const& routine,
     std::string& filepath);
   void InitializeJavaFile(std::string& file);
-  bool LoadSource(std::string d);
+  bool LoadSource(std::string const& d);
 
   class XMLParser;
   std::map<std::string, std::string> RoutineToDirectory;

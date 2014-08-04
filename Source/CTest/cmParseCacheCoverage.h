@@ -28,11 +28,11 @@ public:
     cmCTest* ctest);
 protected:
   // implement virtual from parent
-  bool LoadCoverageData(const char* dir);
+  bool LoadCoverageData(const std::string& dir);
   // remove files with no coverage
   void RemoveUnCoveredFiles();
   // Read a single mcov file
-  bool ReadCMCovFile(const char* f);
+  bool ReadCMCovFile(const std::string& f);
   // split a string based on ,
   bool SplitString(std::vector<std::string>& args,
                    std::string const& line);

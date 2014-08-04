@@ -19,12 +19,12 @@ cmParseMumpsCoverage::~cmParseMumpsCoverage()
 {
 }
 
-bool cmParseMumpsCoverage::ReadCoverageFile(const char* file)
+bool cmParseMumpsCoverage::ReadCoverageFile(const std::string& file)
 {
   // Read the gtm_coverage.mcov file, that has two lines of data:
   // packages:/full/path/to/Vista/Packages
   // coverage_dir:/full/path/to/dir/with/*.mcov
-  cmsys::ifstream in(file);
+  cmsys::ifstream in(file.c_str());
   if(!in)
     {
     return false;
@@ -40,11 +40,11 @@ bool cmParseMumpsCoverage::ReadCoverageFile(const char* file)
       std::string path = line.substr(pos+1);
       if(type == "packages")
         {
-        this->LoadPackages(path.c_str());
+        this->LoadPackages(path);
         }
       else if(type == "coverage_dir")
         {
-        this->LoadCoverageData(path.c_str());
+        this->LoadCoverageData(path);
         }
       else
         {
@@ -59,7 +59,7 @@ bool cmParseMumpsCoverage::ReadCoverageFile(const char* file)
   return true;
 }
 
-void cmParseMumpsCoverage::InitializeMumpsFile(std::string& file)
+void cmParseMumpsCoverage::InitializeMumpsFile(std::string const& file)
 {
   // initialize the coverage information for a given mumps file
   cmsys::ifstream in(file.c_str());
@@ -118,7 +118,7 @@ void cmParseMumpsCoverage::InitializeMumpsFile(std::string& file)
     }
 }
 
-bool cmParseMumpsCoverage::LoadPackages(const char* d)
+bool cmParseMumpsCoverage::LoadPackages(const std::string& d)
 {
   cmsys::Glob glob;
   glob.RecurseOn();

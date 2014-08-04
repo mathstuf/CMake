@@ -28,9 +28,9 @@ public:
     cmCTest* ctest);
 protected:
   // implement virtual from parent
-  bool LoadCoverageData(const char* dir);
+  bool LoadCoverageData(const std::string& dir);
   // Read a single mcov file
-  bool ReadMCovFile(const char* f);
+  bool ReadMCovFile(const std::string& f);
   // find out what line in a mumps file (filepath) the given entry point
   // or function is.  lineoffset is set by this method.
   bool FindFunctionInMumpsFile(std::string const& filepath,

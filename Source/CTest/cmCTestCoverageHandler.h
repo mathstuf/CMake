@@ -58,8 +58,8 @@ public:
   void SetLabelFilter(std::set<std::string> const& labels);
 
 private:
-  bool ShouldIDoCoverage(const char* file, const char* srcDir,
-    const char* binDir);
+  bool ShouldIDoCoverage(const std::string& file, const std::string& srcDir,
+    const std::string& binDir);
   void CleanCoverageLogFiles(std::ostream& log);
   bool StartCoverageLogFile(cmGeneratedFileStream& ostr, int logFileCount);
   void EndCoverageLogFile(cmGeneratedFileStream& ostr, int logFileCount);
@@ -115,7 +115,7 @@ private:
   // Find the source file based on the source and build tree. This is used for
   // Trace.py mode, since that one does not tell us where the source file is.
   std::string FindFile(cmCTestCoverageHandlerContainer* cont,
-    std::string fileName);
+    std::string const& fileName);
 
   std::set<std::string> FindUncoveredFiles(
     cmCTestCoverageHandlerContainer* cont);
@@ -138,7 +138,7 @@ private:
 
   // Label reading and writing methods.
   void LoadLabels();
-  void LoadLabels(const char* dir);
+  void LoadLabels(const std::string& dir);
   void WriteXMLLabels(std::ostream& os, std::string const& source);
 
   // Label-based filtering.

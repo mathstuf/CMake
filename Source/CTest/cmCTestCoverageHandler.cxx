@@ -213,9 +213,9 @@ void cmCTestCoverageHandler::EndCoverageLogFile(cmGeneratedFileStream& ostr,
 }
 
 //----------------------------------------------------------------------
-bool cmCTestCoverageHandler::ShouldIDoCoverage(const char* file,
-  const char* srcDir,
-  const char* binDir)
+bool cmCTestCoverageHandler::ShouldIDoCoverage(const std::string& file,
+  const std::string& srcDir,
+  const std::string& binDir)
 {
   if(this->IsFilteredOut(file))
     {
@@ -482,8 +482,8 @@ int cmCTestCoverageHandler::ProcessHandler()
 
     const std::string fullFileName = fileIterator->first;
     bool shouldIDoCoverage
-      = this->ShouldIDoCoverage(fullFileName.c_str(),
-        sourceDir.c_str(), binaryDir.c_str());
+      = this->ShouldIDoCoverage(fullFileName,
+        sourceDir, binaryDir);
     if ( !shouldIDoCoverage )
       {
       cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT,
@@ -778,7 +778,7 @@ int cmCTestCoverageHandler::HandlePHPCoverage(
   std::string coverageDir = this->CTest->GetBinaryDir() + "/xdebugCoverage";
   if(cmSystemTools::FileIsDirectory(coverageDir))
     {
-    cov.ReadPHPCoverageDirectory(coverageDir.c_str());
+    cov.ReadPHPCoverageDirectory(coverageDir);
     }
   return static_cast<int>(cont->TotalCoverage.size());
 }
@@ -797,7 +797,7 @@ int cmCTestCoverageHandler::HandleCoberturaCoverage(
     cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT,
                "Parsing Cobertura XML file: " << coverageXMLFile
                << std::endl);
-    cov.ReadCoverageXML(coverageXMLFile.c_str());
+    cov.ReadCoverageXML(coverageXMLFile);
     }
   else
     {
@@ -821,7 +821,7 @@ int cmCTestCoverageHandler::HandleMumpsCoverage(
     cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT,
                "Parsing Cache Coverage: " << coverageFile
                << std::endl);
-    cov.ReadCoverageFile(coverageFile.c_str());
+    cov.ReadCoverageFile(coverageFile);
     return static_cast<int>(cont->TotalCoverage.size());
     }
   else
@@ -838,7 +838,7 @@ int cmCTestCoverageHandler::HandleMumpsCoverage(
     cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT,
                "Parsing Cache Coverage: " << coverageFile
                << std::endl);
-    ccov.ReadCoverageFile(coverageFile.c_str());
+    ccov.ReadCoverageFile(coverageFile);
     }
   else
     {
@@ -1806,7 +1806,7 @@ int cmCTestCoverageHandler::HandleTracePyCoverage(
 //----------------------------------------------------------------------
 std::string cmCTestCoverageHandler::FindFile(
   cmCTestCoverageHandlerContainer* cont,
-  std::string fileName)
+  std::string const& fileName)
 {
   std::string fileNameNoE
     = cmSystemTools::GetFilenameWithoutLastExtension(fileName);
@@ -2131,9 +2131,9 @@ int cmCTestCoverageHandler::RunBullseyeSourceSummary(
         }
       file = cmSystemTools::CollapseFullPath(file);
       bool shouldIDoCoverage
-        = this->ShouldIDoCoverage(file.c_str(),
-                                  cont->SourceDir.c_str(),
-                                  cont->BinaryDir.c_str());
+        = this->ShouldIDoCoverage(file,
+                                  cont->SourceDir,
+                                  cont->BinaryDir);
       if ( !shouldIDoCoverage )
         {
         cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT,
@@ -2365,12 +2365,12 @@ void cmCTestCoverageHandler::LoadLabels()
   std::string line;
   while(cmSystemTools::GetLineFromStream(finList, line))
     {
-    this->LoadLabels(line.c_str());
+    this->LoadLabels(line);
     }
 }
 
 //----------------------------------------------------------------------
-void cmCTestCoverageHandler::LoadLabels(const char* dir)
+void cmCTestCoverageHandler::LoadLabels(const std::string& dir)
 {
   LabelSet& dirLabels = this->TargetDirs[dir];
   std::string fname = dir;
@@ -2512,8 +2512,8 @@ std::set<std::string> cmCTestCoverageHandler::FindUncoveredFiles(
     for(std::vector<std::string>::iterator f = files.begin();
         f != files.end(); ++f)
       {
-      if(this->ShouldIDoCoverage(f->c_str(),
-         cont->SourceDir.c_str(), cont->BinaryDir.c_str()))
+      if(this->ShouldIDoCoverage(*f,
+         cont->SourceDir, cont->BinaryDir))
         {
         extraMatches.insert(this->CTest->GetShortPathToFile(
           f->c_str()));

@@ -152,7 +152,7 @@ bool cmParseJacocoCoverage::LoadCoverageData(
       "Reading XML File " << path  << std::endl);
     if(cmSystemTools::GetFilenameLastExtension(path) == ".xml")
       {
-      if(!this->ReadJacocoXML(path.c_str()))
+      if(!this->ReadJacocoXML(path))
         {
         return false;
         }
@@ -161,10 +161,10 @@ bool cmParseJacocoCoverage::LoadCoverageData(
   return true;
 }
 
-bool cmParseJacocoCoverage::ReadJacocoXML(const char* file)
+bool cmParseJacocoCoverage::ReadJacocoXML(const std::string& file)
 {
   cmParseJacocoCoverage::XMLParser
     parser(this->CTest, this->Coverage);
-  parser.ParseFile(file);
+  parser.ParseFile(file.c_str());
   return true;
 }

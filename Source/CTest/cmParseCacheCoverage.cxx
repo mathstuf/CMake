@@ -16,7 +16,7 @@ cmParseCacheCoverage::cmParseCacheCoverage(
 }
 
 
-bool cmParseCacheCoverage::LoadCoverageData(const char* d)
+bool cmParseCacheCoverage::LoadCoverageData(const std::string& d)
 {
   // load all the .mcov files in the specified directory
   cmsys::Directory dir;
@@ -38,7 +38,7 @@ bool cmParseCacheCoverage::LoadCoverageData(const char* d)
       path += file;
       if(cmSystemTools::GetFilenameLastExtension(path) == ".cmcov")
         {
-        if(!this->ReadCMCovFile(path.c_str()))
+        if(!this->ReadCMCovFile(path))
           {
           return false;
           }
@@ -105,9 +105,9 @@ bool cmParseCacheCoverage::SplitString(std::vector<std::string>& args,
   return true;
 }
 
-bool cmParseCacheCoverage::ReadCMCovFile(const char* file)
+bool cmParseCacheCoverage::ReadCMCovFile(const std::string& file)
 {
-  cmsys::ifstream in(file);
+  cmsys::ifstream in(file.c_str());
   if(!in)
     {
     cmCTestLog(this->CTest, ERROR_MESSAGE,

@@ -44,7 +44,7 @@ protected:
   virtual const char* GetOutputExtension() { return ".exe"; }
   virtual const char* GetOutputPostfix() { return "win32"; }
 
-  bool GetListOfSubdirectories(const char* dir,
+  bool GetListOfSubdirectories(const std::string& dir,
     std::vector<std::string>& dirs);
 
   enum cmCPackGenerator::CPackSetDestdirSupport SupportsSetDestdir() const;

@@ -88,7 +88,7 @@ int cmCPackNSISGenerator::PackageFiles()
     << str.str() << std::endl);
   this->SetOptionIfNotSet("CPACK_NSIS_DELETE_FILES", str.str());
   std::vector<std::string> dirs;
-  this->GetListOfSubdirectories(toplevel.c_str(), dirs);
+  this->GetListOfSubdirectories(toplevel, dirs);
   std::vector<std::string>::const_iterator sit;
   cmOStringStream dstr;
   for ( sit = dirs.begin(); sit != dirs.end(); ++ sit )
@@ -641,7 +641,7 @@ void cmCPackNSISGenerator::CreateMenuLinks( cmOStringStream& str,
 }
 
 //----------------------------------------------------------------------
-bool cmCPackNSISGenerator::GetListOfSubdirectories(const char* topdir,
+bool cmCPackNSISGenerator::GetListOfSubdirectories(const std::string& topdir,
   std::vector<std::string>& dirs)
 {
   cmsys::Directory dir;
@@ -658,7 +658,7 @@ bool cmCPackNSISGenerator::GetListOfSubdirectories(const char* topdir,
       if(cmsys::SystemTools::FileIsDirectory(fullPath) &&
         !cmsys::SystemTools::FileIsSymlink(fullPath))
         {
-        if (!this->GetListOfSubdirectories(fullPath.c_str(), dirs))
+        if (!this->GetListOfSubdirectories(fullPath, dirs))
           {
           return false;
           }

@@ -1626,7 +1626,7 @@ cmLocalUnixMakefileGenerator3
     }
 
   // create the file stream for the depends file
-  std::string dir = targetDir;
+  std::string const& dir = targetDir;
 
   // Open the make depends file.  This should be copy-if-different
   // because the make tool may try to reload it needlessly otherwise.

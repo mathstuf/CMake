@@ -442,7 +442,7 @@ bool cmListCommand
   for ( it = varArgsExpanded.rbegin(); it != varArgsExpanded.rend(); ++ it )
     {
     value += sep;
-    value += it->c_str();
+    value += *it;
     sep = ";";
     }
 
@@ -486,7 +486,7 @@ bool cmListCommand
       }
     unique.insert(*it);
     value += sep;
-    value += it->c_str();
+    value += *it;
     sep = ";";
     }
 
@@ -524,7 +524,7 @@ bool cmListCommand
   for ( it = varArgsExpanded.begin(); it != varArgsExpanded.end(); ++ it )
     {
     value += sep;
-    value += it->c_str();
+    value += *it;
     sep = ";";
     }
 

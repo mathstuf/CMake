@@ -1132,8 +1132,8 @@ void cmLocalVisualStudio6Generator
         }
       else
         {
-        lib = j->first.c_str();
-        libDebug = j->first.c_str();
+        lib = j->first;
+        libDebug = j->first;
         if(j->first.find(".lib") == std::string::npos)
           {
           lib += ".lib";

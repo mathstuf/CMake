@@ -1957,7 +1957,7 @@ void cmMakefile::CheckForUnused(const char* reason,
       {
       const cmListFileContext* file = this->CallStack.back().Context;
       bt.push_back(*file);
-      path = file->FilePath.c_str();
+      path = file->FilePath;
       }
     else
       {

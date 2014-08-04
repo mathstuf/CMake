@@ -77,7 +77,7 @@ bool cmWriteFileCommand
   if ( !file )
     {
     std::string error = "Internal CMake error when trying to open file: ";
-    error += fileName.c_str();
+    error += fileName;
     error += " for writing.";
     this->SetError(error);
     return false;

@@ -412,7 +412,7 @@ struct CompilerIdNode : public cmGeneratorExpressionNode
       return parameters.front().empty() ? "1" : "0";
       }
 
-    if (strcmp(parameters.begin()->c_str(), compilerId) == 0)
+    if (*parameters.begin() == compilerId)
       {
       return "1";
       }
@@ -583,7 +583,7 @@ struct PlatformIdNode : public cmGeneratorExpressionNode
   {
     const char *platformId =
       context->Makefile->GetSafeDefinition("CMAKE_SYSTEM_NAME");
-    if (parameters.size() == 0)
+    if (parameters.empty())
       {
       return platformId ? platformId : "";
       }
@@ -593,7 +593,7 @@ struct PlatformIdNode : public cmGeneratorExpressionNode
       return parameters.front().empty() ? "1" : "0";
       }
 
-    if (strcmp(parameters.begin()->c_str(), platformId) == 0)
+    if (*parameters.begin() == platformId)
       {
       return "1";
       }

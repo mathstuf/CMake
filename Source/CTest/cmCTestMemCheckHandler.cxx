@@ -498,7 +498,7 @@ bool cmCTestMemCheckHandler::InitializeMemoryChecking()
         "MemoryCheckCommand")) )
     {
     this->MemoryTester
-      = this->CTest->GetCTestConfiguration("MemoryCheckCommand").c_str();
+      = this->CTest->GetCTestConfiguration("MemoryCheckCommand");
     std::string testerName =
       cmSystemTools::GetFilenameName(this->MemoryTester);
     // determine the checker type
@@ -525,28 +525,28 @@ bool cmCTestMemCheckHandler::InitializeMemoryChecking()
         "PurifyCommand")) )
     {
     this->MemoryTester
-      = this->CTest->GetCTestConfiguration("PurifyCommand").c_str();
+      = this->CTest->GetCTestConfiguration("PurifyCommand");
     this->MemoryTesterStyle = cmCTestMemCheckHandler::PURIFY;
     }
   else if ( cmSystemTools::FileExists(this->CTest->GetCTestConfiguration(
         "ValgrindCommand")) )
     {
     this->MemoryTester
-      = this->CTest->GetCTestConfiguration("ValgrindCommand").c_str();
+      = this->CTest->GetCTestConfiguration("ValgrindCommand");
     this->MemoryTesterStyle = cmCTestMemCheckHandler::VALGRIND;
     }
   else if ( cmSystemTools::FileExists(this->CTest->GetCTestConfiguration(
         "BoundsCheckerCommand")) )
     {
     this->MemoryTester
-      = this->CTest->GetCTestConfiguration("BoundsCheckerCommand").c_str();
+      = this->CTest->GetCTestConfiguration("BoundsCheckerCommand");
     this->MemoryTesterStyle = cmCTestMemCheckHandler::BOUNDS_CHECKER;
     }
   if ( this->CTest->GetCTestConfiguration("MemoryCheckType")
        == "AddressSanitizer")
     {
     this->MemoryTester
-      = this->CTest->GetCTestConfiguration("CMakeCommand").c_str();
+      = this->CTest->GetCTestConfiguration("CMakeCommand");
     this->MemoryTesterStyle = cmCTestMemCheckHandler::ADDRESS_SANITIZER;
     this->LogWithPID = true; // even if we give the log file the pid is added
     }
@@ -554,7 +554,7 @@ bool cmCTestMemCheckHandler::InitializeMemoryChecking()
        == "ThreadSanitizer")
     {
     this->MemoryTester
-      = this->CTest->GetCTestConfiguration("CMakeCommand").c_str();
+      = this->CTest->GetCTestConfiguration("CMakeCommand");
     this->MemoryTesterStyle = cmCTestMemCheckHandler::THREAD_SANITIZER;
     this->LogWithPID = true; // even if we give the log file the pid is added
     }
@@ -562,7 +562,7 @@ bool cmCTestMemCheckHandler::InitializeMemoryChecking()
        == "MemorySanitizer")
     {
     this->MemoryTester
-      = this->CTest->GetCTestConfiguration("CMakeCommand").c_str();
+      = this->CTest->GetCTestConfiguration("CMakeCommand");
     this->MemoryTesterStyle = cmCTestMemCheckHandler::MEMORY_SANITIZER;
     this->LogWithPID = true; // even if we give the log file the pid is added
     }
@@ -570,7 +570,7 @@ bool cmCTestMemCheckHandler::InitializeMemoryChecking()
        == "UndefinedBehaviorSanitizer")
     {
     this->MemoryTester
-      = this->CTest->GetCTestConfiguration("CMakeCommand").c_str();
+      = this->CTest->GetCTestConfiguration("CMakeCommand");
     this->MemoryTesterStyle = cmCTestMemCheckHandler::UB_SANITIZER;
     this->LogWithPID = true; // even if we give the log file the pid is added
     }

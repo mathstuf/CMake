@@ -551,11 +551,12 @@ int cmCTestScriptHandler::ExtractVariables()
       this->CTestCmd.empty())
     {
     std::string msg = "CTEST_SOURCE_DIRECTORY = ";
-    msg += (!this->SourceDir.empty()) ? this->SourceDir.c_str() : "(Null)";
+    static const std::string nullStr = "(Null)";
+    msg += (!this->SourceDir.empty()) ? this->SourceDir : nullStr;
     msg += "\nCTEST_BINARY_DIRECTORY = ";
-    msg += (!this->BinaryDir.empty()) ? this->BinaryDir.c_str() : "(Null)";
+    msg += (!this->BinaryDir.empty()) ? this->BinaryDir : nullStr;
     msg += "\nCTEST_COMMAND = ";
-    msg += (!this->CTestCmd.empty()) ? this->CTestCmd.c_str() : "(Null)";
+    msg += (!this->CTestCmd.empty()) ? this->CTestCmd : nullStr;
     cmSystemTools::Error(
       "Some required settings in the configuration file were missing:\n",
       msg.c_str());

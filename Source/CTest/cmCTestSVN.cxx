@@ -568,10 +568,10 @@ private:
     // Get local path relative to the source directory
     std::string local_path;
     if(path.size() > this->SVN->SourceDirectory.size() &&
-       strncmp(path.c_str(), this->SVN->SourceDirectory.c_str(),
-               this->SVN->SourceDirectory.size()) == 0)
+       cmSystemTools::StringStartsWith(path,
+                                       this->SVN->SourceDirectory.c_str()))
       {
-      local_path = path.c_str() + this->SVN->SourceDirectory.size() + 1;
+      local_path = path.substr(this->SVN->SourceDirectory.size() + 1);
       }
     else
       {
@@ -606,9 +606,9 @@ std::string cmCTestSVN::SVNInfo::BuildLocalPath(std::string const& path) const
 
   // Add path with base prefix removed
   if(path.size() > this->Base.size() &&
-     strncmp(path.c_str(), this->Base.c_str(), this->Base.size()) == 0)
+     cmSystemTools::StringStartsWith(path, this->Base.c_str()))
     {
-    local_path += (path.c_str() + this->Base.size());
+    local_path += path.substr(this->Base.size());
     }
   else
     {

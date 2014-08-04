@@ -605,7 +605,7 @@ void cmExtraCodeBlocksGenerator::AppendTarget(cmGeneratedFileStream& fout,
     for(std::vector<std::string>::const_iterator di = cdefs.begin();
         di != cdefs.end(); ++di)
       {
-      cmXMLSafe safedef(di->c_str());
+      cmXMLSafe safedef(*di);
       fout <<"            <Add option=\"-D" << safedef.str() << "\" />\n";
       }
 

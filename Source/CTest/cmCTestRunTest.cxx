@@ -502,7 +502,7 @@ void cmCTestRunTest::ComputeArguments()
     {
     cmCTestMemCheckHandler * handler = static_cast<cmCTestMemCheckHandler*>
       (this->TestHandler);
-    this->ActualCommand = handler->MemoryTester.c_str();
+    this->ActualCommand = handler->MemoryTester;
     this->TestProperties->Args[1] = this->TestHandler->FindTheExecutable(
       this->TestProperties->Args[1].c_str());
     }

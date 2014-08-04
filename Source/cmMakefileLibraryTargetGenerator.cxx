@@ -363,7 +363,7 @@ void cmMakefileLibraryTargetGenerator::WriteLibraryRules
         buildEcho += " library ";
         break;
       }
-    buildEcho += targetOutPath.c_str();
+    buildEcho += targetOutPath;
     this->LocalGenerator->AppendEcho(commands, buildEcho.c_str(),
                                      cmLocalUnixMakefileGenerator3::EchoLink);
     }

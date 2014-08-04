@@ -44,7 +44,7 @@ cmMakefileTargetGenerator::cmMakefileTargetGenerator(cmTarget* target)
   this->LocalGenerator =
     static_cast<cmLocalUnixMakefileGenerator3*>(
       this->Makefile->GetLocalGenerator());
-  this->ConfigName = this->LocalGenerator->ConfigurationName.c_str();
+  this->ConfigName = this->LocalGenerator->ConfigurationName;
   this->GlobalGenerator =
     static_cast<cmGlobalUnixMakefileGenerator3*>(
       this->LocalGenerator->GetGlobalGenerator());

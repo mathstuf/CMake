@@ -2337,7 +2337,7 @@ const char *cmake::GetProperty(const std::string& prop,
         {
         output += ";";
         }
-      output += cmds->first.c_str();
+      output += cmds->first;
       cc++;
       }
     this->SetProperty("COMMANDS",output);

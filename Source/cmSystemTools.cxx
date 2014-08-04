@@ -1458,7 +1458,7 @@ cmSystemTools::SaveRestoreEnvironment::~SaveRestoreEnvironment()
     {
     std::string var(*eit);
 
-    std::string::size_type pos = var.find("=");
+    std::string::size_type pos = var.find('=');
     if (pos != std::string::npos)
       {
       var = var.substr(0, pos);
@@ -1498,8 +1498,7 @@ bool cmSystemTools::IsPathToFramework(const std::string& path)
 {
   if(cmSystemTools::FileIsFullPath(path))
     {
-    std::string libname = path;
-    if(libname.find(".framework") == libname.size()+1-sizeof(".framework"))
+    if(cmHasLiteralSuffix(path, ".framework"))
       {
       return true;
       }

@@ -635,7 +635,7 @@ int cmCTestCoverageHandler::ProcessHandler()
 
     total_untested += untested;
     covSumFile << "\t<File Name=\"" << cmXMLSafe(fileName)
-      << "\" FullPath=\"" << cmXMLSafe(i->c_str())
+      << "\" FullPath=\"" << cmXMLSafe(*i)
       << "\" Covered=\"true\">\n"
       << "\t\t<LOCTested>0</LOCTested>\n"
       << "\t\t<LOCUnTested>" << untested << "</LOCUnTested>\n"

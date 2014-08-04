@@ -429,7 +429,7 @@ void cmQtAutoGenerators::SetupAutoGenerateTarget(cmTarget const* target)
     if ( !infoFile )
       {
       std::string error = "Internal CMake error when trying to open file: ";
-      error += outputFile.c_str();
+      error += outputFile;
       error += " for writing.";
       cmSystemTools::Error(error.c_str());
       return;
@@ -498,7 +498,7 @@ void cmQtAutoGenerators::SetupSourceFiles(cmTarget const* target)
       skipUicSep = ";";
       }
 
-    std::string ext = sf->GetExtension();
+    std::string const& ext = sf->GetExtension();
 
     if (target->GetPropertyAsBool("AUTORCC"))
       {
@@ -883,7 +883,7 @@ void cmQtAutoGenerators::SetupAutoRccTarget(cmTarget const* target)
       ++fileIt)
     {
     cmSourceFile* sf = *fileIt;
-    std::string ext = sf->GetExtension();
+    std::string const& ext = sf->GetExtension();
     if (ext == "qrc")
       {
       std::string absFile = cmsys::SystemTools::GetRealPath(sf->GetFullPath());

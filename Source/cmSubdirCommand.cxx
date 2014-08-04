@@ -41,12 +41,12 @@ bool cmSubdirCommand
     // if they specified a relative path then compute the full
     std::string srcPath =
       std::string(this->Makefile->GetCurrentDirectory()) +
-        "/" + i->c_str();
+        "/" + *i;
     if (cmSystemTools::FileIsDirectory(srcPath))
       {
       std::string binPath =
         std::string(this->Makefile->GetCurrentOutputDirectory()) +
-        "/" + i->c_str();
+        "/" + *i;
       this->Makefile->AddSubDirectory(srcPath, binPath,
                                   excludeFromAll, preorder, false);
       }

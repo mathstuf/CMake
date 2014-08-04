@@ -241,7 +241,7 @@ void cmMakeDepend::DependWalk(cmDependInformation* info)
           std::string message = "Skipping ";
           message += includeFile;
           message += " for file ";
-          message += info->FullPath.c_str();
+          message += info->FullPath;
           cmSystemTools::Error(message.c_str(), 0);
           }
         continue;

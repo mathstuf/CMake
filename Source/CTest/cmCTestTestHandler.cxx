@@ -2273,7 +2273,7 @@ bool cmCTestTestHandler::SetTestsProperties(
             if ( pos != val.npos )
               {
               std::string mKey = val.substr(0, pos);
-              const char* mVal = val.c_str() + pos + 1;
+              std::string mVal = val.substr(pos + 1);
               rtit->Measurements[mKey] = mVal;
               }
             else

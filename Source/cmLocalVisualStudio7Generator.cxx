@@ -864,7 +864,7 @@ void cmLocalVisualStudio7Generator::WriteConfiguration(std::ostream& fout,
     // a ConfigurationName on the end of it.
     if(this->FortranProject)
       {
-      ipath = i->c_str();
+      ipath = *i;
       ipath += "/$(ConfigurationName)";
       ipath = this->ConvertToXMLOutputPath(ipath);
       fout << ipath << ";";

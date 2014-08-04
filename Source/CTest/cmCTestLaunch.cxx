@@ -504,7 +504,7 @@ void cmCTestLaunch::WriteXMLCommand(std::ostream& fxml)
       ai != this->RealArgs.end(); ++ai)
     {
     fxml << "\t\t\t<Argument>"
-         << cmXMLSafe(ai->c_str())
+         << cmXMLSafe(*ai)
          << "</Argument>\n";
     }
   fxml << "\t\t</Command>\n";

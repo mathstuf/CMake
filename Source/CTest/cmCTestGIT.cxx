@@ -539,7 +539,7 @@ private:
     // Look for header fields that we need.
     if(cmHasLiteralPrefix(this->Line, "commit "))
       {
-      this->Rev.Rev = this->Line.c_str()+7;
+      this->Rev.Rev = this->Line.substr(7);
       }
     else if(cmHasLiteralPrefix(this->Line, "author "))
       {

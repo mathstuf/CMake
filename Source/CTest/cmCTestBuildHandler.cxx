@@ -434,7 +434,7 @@ int cmCTestBuildHandler::ProcessHandler()
       {
       if ( srcdir[cc] == '/' )
         {
-        srcdirrep = srcdir.c_str() + cc;
+        srcdirrep = srcdir.substr(cc);
         srcdirrep = "/..." + srcdirrep;
         srcdir = srcdir.substr(0, cc+1);
         break;
@@ -451,7 +451,7 @@ int cmCTestBuildHandler::ProcessHandler()
       {
       if ( bindir[cc] == '/' )
         {
-        bindirrep = bindir.c_str() + cc;
+        bindirrep = bindir.substr(cc);
         bindirrep = "/..." + bindirrep;
         bindir = bindir.substr(0, cc+1);
         break;

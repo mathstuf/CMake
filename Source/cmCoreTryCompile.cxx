@@ -21,12 +21,12 @@
 
 int cmCoreTryCompile::TryCompileCode(std::vector<std::string> const& argv)
 {
-  this->BinaryDirectory = argv[1].c_str();
+  this->BinaryDirectory = argv[1];
   this->OutputFile = "";
   // which signature were we called with ?
   this->SrcFileSignature = true;
 
-  const char* sourceDirectory = argv[2].c_str();
+  std::string sourceDirectory = argv[2];
   const char* projectName = 0;
   std::string targetName;
   std::vector<std::string> cmakeFlags;
@@ -276,7 +276,7 @@ int cmCoreTryCompile::TryCompileCode(std::vector<std::string> const& argv)
 
     // we need to create a directory and CMakeLists file etc...
     // first create the directories
-    sourceDirectory = this->BinaryDirectory.c_str();
+    sourceDirectory = this->BinaryDirectory;
 
     // now create a CMakeLists.txt file in that directory
     FILE *fout = cmsys::SystemTools::Fopen(outFileName,"w");

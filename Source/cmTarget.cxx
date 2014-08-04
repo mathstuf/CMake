@@ -937,9 +937,8 @@ void cmTarget::AddSources(std::vector<std::string> const& srcs)
       i != srcs.end(); ++i)
     {
     std::string filename = *i;
-    const char* src = filename.c_str();
 
-    if(!(src[0] == '$' && src[1] == '<'))
+    if(!cmHasLiteralPrefix(filename, "$<"))
       {
       if(!filename.empty())
         {
@@ -4569,7 +4568,7 @@ bool cmTarget::ComputeOutputDir(const std::string& config,
 
   // Look for a target property defining the target output directory
   // based on the target type.
-  std::string targetTypeName = this->GetOutputTargetType(implib);
+  std::string const& targetTypeName = this->GetOutputTargetType(implib);
   const char* propertyName = 0;
   std::string propertyNameStr = targetTypeName;
   if(!propertyNameStr.empty())
@@ -4716,7 +4715,7 @@ std::string cmTarget::GetOutputName(const std::string& config,
                                     bool implib) const
 {
   std::vector<std::string> props;
-  std::string type = this->GetOutputTargetType(implib);
+  std::string const& type = this->GetOutputTargetType(implib);
   std::string configUpper = cmSystemTools::UpperCase(config);
   if(!type.empty() && !configUpper.empty())
     {

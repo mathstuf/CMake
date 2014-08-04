@@ -87,7 +87,7 @@ std::string cmFindProgramCommand
       name != names.end() ; ++name)
     {
 
-    std::string appName = *name + std::string(".app");
+    std::string appName = *name + ".app";
     std::string appPath = cmSystemTools::FindDirectory(appName,
                                                        this->SearchPaths,
                                                        true);

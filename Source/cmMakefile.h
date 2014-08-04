@@ -202,8 +202,8 @@ public:
    * Add a define flag to the build.
    */
   void AddDefineFlag(const char* definition);
-  void RemoveDefineFlag(const char* definition);
-  void AddCompileOption(const char* option);
+  void RemoveDefineFlag(const std::string& definition);
+  void AddCompileOption(const std::string& option);
 
   /** Create a new imported target with the name and type given.  */
   cmTarget* AddImportedTarget(const std::string& name,
@@ -1010,7 +1010,7 @@ protected:
 
   // Track the value of the computed DEFINITIONS property.
   void AddDefineFlag(const char*, std::string&);
-  void RemoveDefineFlag(const char*, std::string::size_type, std::string&);
+  void RemoveDefineFlag(const std::string&, std::string::size_type, std::string&);
   std::string DefineFlagsOrig;
 
 #if defined(CMAKE_BUILD_WITH_CMAKE)

@@ -1328,10 +1328,10 @@ void cmMakefile::AddDefineFlag(const char* flag, std::string& dflags)
 }
 
 
-void cmMakefile::RemoveDefineFlag(const char* flag)
+void cmMakefile::RemoveDefineFlag(const std::string& flag)
 {
   // Check the length of the flag to remove.
-  std::string::size_type len = strlen(flag);
+  std::string::size_type len = flag.size();
   if(len < 1)
     {
     return;
@@ -1350,7 +1350,7 @@ void cmMakefile::RemoveDefineFlag(const char* flag)
   this->RemoveDefineFlag(flag, len, this->DefineFlags);
 }
 
-void cmMakefile::RemoveDefineFlag(const char* flag,
+void cmMakefile::RemoveDefineFlag(const std::string& flag,
                                   std::string::size_type len,
                                   std::string& dflags)
 {
@@ -1372,7 +1372,7 @@ void cmMakefile::RemoveDefineFlag(const char* flag,
     }
 }
 
-void cmMakefile::AddCompileOption(const char* option)
+void cmMakefile::AddCompileOption(const std::string& option)
 {
   this->AppendProperty("COMPILE_OPTIONS", option);
 }

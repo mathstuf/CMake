@@ -105,12 +105,12 @@ bool cmExecProgramCommand
   if(args.size() - count == 2)
     {
     cmSystemTools::MakeDirectory(args[1]);
-    result = cmExecProgramCommand::RunCommand(command.c_str(), output, retVal,
+    result = cmExecProgramCommand::RunCommand(command, output, retVal,
                                               args[1].c_str(), verbose);
     }
   else
     {
-    result = cmExecProgramCommand::RunCommand(command.c_str(), output,
+    result = cmExecProgramCommand::RunCommand(command, output,
                                               retVal, 0, verbose);
     }
   if(!result)
@@ -145,7 +145,7 @@ bool cmExecProgramCommand
   return true;
 }
 
-bool cmExecProgramCommand::RunCommand(const char* command,
+bool cmExecProgramCommand::RunCommand(const std::string& inCommand,
                                       std::string& output,
                                       int &retVal,
                                       const char* dir,
@@ -156,6 +156,7 @@ bool cmExecProgramCommand::RunCommand(const char* command,
     verbose = false;
     }
 
+  const char* command = inCommand.c_str();
 #if defined(WIN32) && !defined(__CYGWIN__)
   // if the command does not start with a quote, then
   // try to find the program, and if the program can not be

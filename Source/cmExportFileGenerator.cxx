@@ -216,7 +216,7 @@ bool cmExportFileGenerator::PopulateInterfaceLinkLibrariesProperty(
 }
 
 //----------------------------------------------------------------------------
-static bool isSubDirectory(const char* a, const char* b)
+static bool isSubDirectory(const std::string& a, const std::string& b)
 {
   return (cmSystemTools::ComparePath(a, b) ||
           cmSystemTools::IsSubDirectory(a, b));
@@ -277,9 +277,9 @@ static bool checkInterfaceDirs(const std::string &prepro,
            "  \"" << *li << "\"";
       target->GetMakefile()->IssueMessage(messageType, e.str());
       }
-    bool inBinary = isSubDirectory(li->c_str(), topBinaryDir);
-    bool inSource = isSubDirectory(li->c_str(), topSourceDir);
-    if (isSubDirectory(li->c_str(), installDir))
+    bool inBinary = isSubDirectory(*li, topBinaryDir);
+    bool inSource = isSubDirectory(*li, topSourceDir);
+    if (isSubDirectory(*li, installDir))
       {
       // The include directory is inside the install tree.  If the
       // install tree is not inside the source tree or build tree then

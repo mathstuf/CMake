@@ -1490,7 +1490,7 @@ bool cmLocalUnixMakefileGenerator3::UpdateDependencies(const char* tgtInfo,
     this->GlobalGenerator->GetCMakeInstance()->GetFileComparison();
   {
   int result;
-  if(!ftc->FileTimeCompare(internalDependFile.c_str(), tgtInfo, &result) ||
+  if(!ftc->FileTimeCompare(internalDependFile, tgtInfo, &result) ||
      result < 0)
     {
     if(verbose)
@@ -1513,8 +1513,8 @@ bool cmLocalUnixMakefileGenerator3::UpdateDependencies(const char* tgtInfo,
   dirInfoFile += "/CMakeDirectoryInformation.cmake";
   {
   int result;
-  if(!ftc->FileTimeCompare(internalDependFile.c_str(),
-                           dirInfoFile.c_str(), &result) || result < 0)
+  if(!ftc->FileTimeCompare(internalDependFile,
+                           dirInfoFile, &result) || result < 0)
     {
     if(verbose)
       {

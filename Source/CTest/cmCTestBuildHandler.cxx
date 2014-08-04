@@ -577,7 +577,7 @@ public:
     // Order files by modification time.  Use lexicographic order
     // among files with the same time.
     int result;
-    if(this->FTC->FileTimeCompare(l.c_str(), r.c_str(), &result) &&
+    if(this->FTC->FileTimeCompare(l, r, &result) &&
        result != 0)
       {
       return result < 0;

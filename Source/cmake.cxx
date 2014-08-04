@@ -2093,8 +2093,8 @@ int cmake::CheckBuildSystem()
   for(;dep != depends.end(); ++dep)
     {
     int result = 0;
-    if(this->FileComparison->FileTimeCompare(dep_newest.c_str(),
-                                             dep->c_str(), &result))
+    if(this->FileComparison->FileTimeCompare(dep_newest,
+                                             *dep, &result))
       {
       if(result < 0)
         {
@@ -2119,8 +2119,8 @@ int cmake::CheckBuildSystem()
   for(;out != outputs.end(); ++out)
     {
     int result = 0;
-    if(this->FileComparison->FileTimeCompare(out_oldest.c_str(),
-                                             out->c_str(), &result))
+    if(this->FileComparison->FileTimeCompare(out_oldest,
+                                             *out, &result))
       {
       if(result > 0)
         {
@@ -2142,8 +2142,8 @@ int cmake::CheckBuildSystem()
   // If any output is older than any dependency then rerun.
   {
   int result = 0;
-  if(!this->FileComparison->FileTimeCompare(out_oldest.c_str(),
-                                            dep_newest.c_str(),
+  if(!this->FileComparison->FileTimeCompare(out_oldest,
+                                            dep_newest,
                                             &result) ||
      result < 0)
     {
@@ -2581,7 +2581,7 @@ static bool cmakeCheckStampFile(const char* stampName)
     {
     int result;
     if(dep.length() >= 1 && dep[0] != '#' &&
-       (!ftc.FileTimeCompare(stampDepends.c_str(), dep.c_str(), &result)
+       (!ftc.FileTimeCompare(stampDepends, dep, &result)
         || result < 0))
       {
       // The stamp depends file is older than this dependency.  The

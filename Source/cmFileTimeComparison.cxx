@@ -33,9 +33,10 @@ class cmFileTimeComparisonInternal
 {
 public:
   // Internal comparison method.
-  inline bool FileTimeCompare(const char* f1, const char* f2, int* result);
+  inline bool FileTimeCompare(const std::string& f1, const std::string& f2,
+                              int* result);
 
-  bool FileTimesDiffer(const char* f1, const char* f2);
+  bool FileTimesDiffer(const std::string& f1, const std::string& f2);
 
 private:
 #if defined(CMAKE_BUILD_WITH_CMAKE)
@@ -55,7 +56,7 @@ private:
 #endif
 
   // Internal methods to lookup and compare modification times.
-  inline bool Stat(const char* fname, cmFileTimeComparison_Type* st);
+  inline bool Stat(const std::string& fname, cmFileTimeComparison_Type* st);
   inline int Compare(cmFileTimeComparison_Type* st1,
                      cmFileTimeComparison_Type* st2);
   inline bool TimesDiffer(cmFileTimeComparison_Type* st1,
@@ -63,7 +64,7 @@ private:
 };
 
 //----------------------------------------------------------------------------
-bool cmFileTimeComparisonInternal::Stat(const char* fname,
+bool cmFileTimeComparisonInternal::Stat(const std::string& fname,
                                         cmFileTimeComparison_Type* st)
 {
 #if defined(CMAKE_BUILD_WITH_CMAKE)
@@ -79,7 +80,7 @@ bool cmFileTimeComparisonInternal::Stat(const char* fname,
 
 #if !defined(_WIN32) || defined(__CYGWIN__)
   // POSIX version.  Use the stat function.
-  int res = ::stat(fname, st);
+  int res = ::stat(fname.c_str(), st);
   if ( res != 0 )
     {
     return false;
@@ -119,14 +120,15 @@ cmFileTimeComparison::~cmFileTimeComparison()
 }
 
 //----------------------------------------------------------------------------
-bool cmFileTimeComparison::FileTimeCompare(const char* f1,
-                                           const char* f2, int* result)
+bool cmFileTimeComparison::FileTimeCompare(const std::string& f1,
+                                           const std::string& f2, int* result)
 {
   return this->Internals->FileTimeCompare(f1, f2, result);
 }
 
 //----------------------------------------------------------------------------
-bool cmFileTimeComparison::FileTimesDiffer(const char* f1, const char* f2)
+bool cmFileTimeComparison::FileTimesDiffer(const std::string& f1,
+                                           const std::string& f2)
 {
   return this->Internals->FileTimesDiffer(f1, f2);
 }
@@ -234,8 +236,8 @@ bool cmFileTimeComparisonInternal::TimesDiffer(cmFileTimeComparison_Type* s1,
 }
 
 //----------------------------------------------------------------------------
-bool cmFileTimeComparisonInternal::FileTimeCompare(const char* f1,
-                                                   const char* f2,
+bool cmFileTimeComparisonInternal::FileTimeCompare(const std::string& f1,
+                                                   const std::string& f2,
                                                    int* result)
 {
   // Get the modification time for each file.
@@ -257,8 +259,8 @@ bool cmFileTimeComparisonInternal::FileTimeCompare(const char* f1,
 }
 
 //----------------------------------------------------------------------------
-bool cmFileTimeComparisonInternal::FileTimesDiffer(const char* f1,
-                                                   const char* f2)
+bool cmFileTimeComparisonInternal::FileTimesDiffer(const std::string& f1,
+                                                   const std::string& f2)
 {
   // Get the modification time for each file.
   cmFileTimeComparison_Type s1;

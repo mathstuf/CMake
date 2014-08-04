@@ -322,8 +322,8 @@ void cmDependsC::ReadCacheFile()
       haveFileName=true;
       int newer=0;
       cmFileTimeComparison comp;
-      bool res=comp.FileTimeCompare(this->CacheFileName.c_str(),
-                                    line.c_str(), &newer);
+      bool res=comp.FileTimeCompare(this->CacheFileName,
+                                    line, &newer);
 
       if ((res==true) && (newer==1)) //cache is newer than the parsed file
         {

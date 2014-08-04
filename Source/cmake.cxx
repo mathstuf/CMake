@@ -1769,7 +1769,7 @@ int cmake::Generate()
   if ( !this->GraphVizFile.empty() )
     {
     std::cout << "Generate graphviz: " << this->GraphVizFile << std::endl;
-    this->GenerateGraphViz(this->GraphVizFile.c_str());
+    this->GenerateGraphViz(this->GraphVizFile);
     }
   if(this->WarnUnusedCli)
     {
@@ -2201,7 +2201,7 @@ void cmake::MarkCliAsUsed(const std::string& variable)
   this->UsedCliVariables[variable] = true;
 }
 
-void cmake::GenerateGraphViz(const char* fileName) const
+void cmake::GenerateGraphViz(const std::string& fileName) const
 {
 #ifdef CMAKE_BUILD_WITH_CMAKE
   cmsys::auto_ptr<cmGraphVizWriter> gvWriter(
@@ -2212,7 +2212,7 @@ void cmake::GenerateGraphViz(const char* fileName) const
   std::string fallbackSettingsFile = this->GetHomeDirectory();
   fallbackSettingsFile += "/CMakeGraphVizOptions.cmake";
 
-  gvWriter->ReadSettings(settingsFile.c_str(), fallbackSettingsFile.c_str());
+  gvWriter->ReadSettings(settingsFile, fallbackSettingsFile);
 
   gvWriter->WritePerTargetFiles(fileName);
   gvWriter->WriteTargetDependersFiles(fileName);

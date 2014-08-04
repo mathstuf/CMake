@@ -440,7 +440,7 @@ protected:
   /// macros.
   void CleanupCommandsAndMacros();
 
-  void GenerateGraphViz(const char* fileName) const;
+  void GenerateGraphViz(const std::string& fileName) const;
 
   cmVariableWatch* VariableWatch;
 

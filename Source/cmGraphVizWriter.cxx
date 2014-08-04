@@ -61,8 +61,8 @@ cmGraphVizWriter::cmGraphVizWriter(const std::vector<cmLocalGenerator*>&
 }
 
 
-void cmGraphVizWriter::ReadSettings(const char* settingsFileName,
-                                    const char* fallbackSettingsFileName)
+void cmGraphVizWriter::ReadSettings(const std::string& settingsFileName,
+                                  const std::string& fallbackSettingsFileName)
 {
   cmake cm;
   cmGlobalGenerator ggi;
@@ -70,7 +70,7 @@ void cmGraphVizWriter::ReadSettings(const char* settingsFileName,
   cmsys::auto_ptr<cmLocalGenerator> lg(ggi.CreateLocalGenerator());
   cmMakefile *mf = lg->GetMakefile();
 
-  const char* inFileName = settingsFileName;
+  std::string inFileName = settingsFileName;
 
   if ( !cmSystemTools::FileExists(inFileName) )
     {
@@ -81,10 +81,10 @@ void cmGraphVizWriter::ReadSettings(const char* settingsFileName,
       }
     }
 
-  if ( !mf->ReadListFile(0, inFileName) )
+  if ( !mf->ReadListFile(0, inFileName.c_str()) )
     {
     cmSystemTools::Error("Problem opening GraphViz options file: ",
-                         inFileName);
+                         inFileName.c_str());
     return;
     }
 
@@ -151,7 +151,7 @@ void cmGraphVizWriter::ReadSettings(const char* settingsFileName,
 
 // Iterate over all targets and write for each one a graph which shows
 // which other targets depend on it.
-void cmGraphVizWriter::WriteTargetDependersFiles(const char* fileName)
+void cmGraphVizWriter::WriteTargetDependersFiles(const std::string& fileName)
 {
   if(this->GenerateDependers == false)
     {
@@ -202,7 +202,7 @@ void cmGraphVizWriter::WriteTargetDependersFiles(const char* fileName)
 
 // Iterate over all targets and write for each one a graph which shows
 // on which targets it depends.
-void cmGraphVizWriter::WritePerTargetFiles(const char* fileName)
+void cmGraphVizWriter::WritePerTargetFiles(const std::string& fileName)
 {
   if(this->GeneratePerTarget == false)
     {
@@ -249,7 +249,7 @@ void cmGraphVizWriter::WritePerTargetFiles(const char* fileName)
 }
 
 
-void cmGraphVizWriter::WriteGlobalFile(const char* fileName)
+void cmGraphVizWriter::WriteGlobalFile(const std::string& fileName)
 {
   this->CollectTargetsAndLibs();
 

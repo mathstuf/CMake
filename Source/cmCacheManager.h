@@ -89,6 +89,10 @@ public:
         this->Find(key);
         }
       }
+    CacheIterator(cmCacheManager &cm, const std::string& key) : Container(cm)
+      {
+      this->Find(key);
+      }
   private:
     CacheEntry const& GetEntry() const { return this->Position->second; }
     CacheEntry& GetEntry() { return this->Position->second; }
@@ -107,9 +111,9 @@ public:
    * text entry box, FILEPATH is a full path to a file which
    * can be different than just a path input
    */
-  static CacheEntryType StringToType(const char*);
+  static CacheEntryType StringToType(const std::string&);
   static const char* TypeToString(CacheEntryType);
-  static bool IsType(const char*);
+  static bool IsType(const std::string&);
 
   ///! Load a cache for given makefile.  Loads from ouput home.
   bool LoadCache(cmMakefile*);
@@ -132,6 +136,7 @@ public:
   void PrintCache(std::ostream&) const;
 
   ///! Get the iterator for an entry with a given key.
+  cmCacheManager::CacheIterator GetCacheIterator(const std::string& key);
   cmCacheManager::CacheIterator GetCacheIterator(const char *key=0);
 
   ///! Remove an entry from the cache

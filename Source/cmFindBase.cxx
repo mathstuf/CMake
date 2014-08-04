@@ -470,7 +470,7 @@ bool cmFindBase::CheckForVariableInCache()
     {
     cmCacheManager::CacheIterator it =
       this->Makefile->GetCacheManager()->
-      GetCacheIterator(this->VariableName.c_str());
+      GetCacheIterator(this->VariableName);
     bool found = !cmSystemTools::IsNOTFOUND(cacheValue);
     bool cached = !it.IsAtEnd();
     if(found)

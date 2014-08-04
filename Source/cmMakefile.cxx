@@ -1836,7 +1836,7 @@ void cmMakefile::AddCacheDefinition(const std::string& name,
 {
   std::string val = value;
   cmCacheManager::CacheIterator it =
-    this->GetCacheManager()->GetCacheIterator(name.c_str());
+    this->GetCacheManager()->GetCacheIterator(name);
   if(!it.IsAtEnd() && (it.GetType() == cmCacheManager::UNINITIALIZED) &&
      it.Initialized())
     {

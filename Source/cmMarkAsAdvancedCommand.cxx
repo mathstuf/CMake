@@ -38,7 +38,7 @@ bool cmMarkAsAdvancedCommand
     std::string variable = args[i];
     cmCacheManager* manager = this->Makefile->GetCacheManager();
     cmCacheManager::CacheIterator it =
-      manager->GetCacheIterator(variable.c_str());
+      manager->GetCacheIterator(variable);
     if ( it.IsAtEnd() )
       {
       this->Makefile->GetCacheManager()

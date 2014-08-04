@@ -425,7 +425,7 @@ bool cmSetPropertyCommand::HandleCacheMode()
     }
   else if(this->PropertyName == "TYPE")
     {
-    if(!cmCacheManager::IsType(this->PropertyValue.c_str()))
+    if(!cmCacheManager::IsType(this->PropertyValue))
       {
       cmOStringStream e;
       e << "given invalid CACHE entry TYPE \"" << this->PropertyValue << "\"";
@@ -452,7 +452,7 @@ bool cmSetPropertyCommand::HandleCacheMode()
     cmMakefile* mf = this->GetMakefile();
     cmake* cm = mf->GetCMakeInstance();
     cmCacheManager::CacheIterator it =
-      cm->GetCacheManager()->GetCacheIterator(ni->c_str());
+      cm->GetCacheManager()->GetCacheIterator(*ni);
     if(!it.IsAtEnd())
       {
       if(!this->HandleCacheEntry(it))

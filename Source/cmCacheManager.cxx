@@ -50,12 +50,13 @@ const char* cmCacheManager::TypeToString(cmCacheManager::CacheEntryType type)
   return cmCacheManagerTypes[type];
 }
 
-cmCacheManager::CacheEntryType cmCacheManager::StringToType(const char* s)
+cmCacheManager::CacheEntryType cmCacheManager::StringToType(
+                                                          const std::string& s)
 {
   int i = 0;
   while(cmCacheManagerTypes[i])
     {
-    if(strcmp(s, cmCacheManagerTypes[i]) == 0)
+    if(strcmp(s.c_str(), cmCacheManagerTypes[i]) == 0)
       {
       return static_cast<CacheEntryType>(i);
       }
@@ -64,11 +65,11 @@ cmCacheManager::CacheEntryType cmCacheManager::StringToType(const char* s)
   return STRING;
 }
 
-bool cmCacheManager::IsType(const char* s)
+bool cmCacheManager::IsType(const std::string& s)
 {
   for(int i=0; cmCacheManagerTypes[i]; ++i)
     {
-    if(strcmp(s, cmCacheManagerTypes[i]) == 0)
+    if(strcmp(s.c_str(), cmCacheManagerTypes[i]) == 0)
       {
       return true;
       }
@@ -147,14 +148,14 @@ bool cmCacheManager::ParseEntry(const std::string& entry,
   if(regQuoted.find(entry))
     {
     var = regQuoted.match(1);
-    type = cmCacheManager::StringToType(regQuoted.match(2).c_str());
+    type = cmCacheManager::StringToType(regQuoted.match(2));
     value = regQuoted.match(3);
     flag = true;
     }
   else if (reg.find(entry))
     {
     var = reg.match(1);
-    type = cmCacheManager::StringToType(reg.match(2).c_str());
+    type = cmCacheManager::StringToType(reg.match(2));
     value = reg.match(3);
     flag = true;
     }
@@ -378,7 +379,7 @@ bool cmCacheManager::ReadPropertyEntry(std::string const& entryKey,
        strcmp(end-plen+1, *p) == 0)
       {
       std::string key = entryKey.substr(0, entryKey.size() - plen);
-      cmCacheManager::CacheIterator it = this->GetCacheIterator(key.c_str());
+      cmCacheManager::CacheIterator it = this->GetCacheIterator(key);
       if(it.IsAtEnd())
         {
         // Create an entry and store the property.
@@ -672,6 +673,12 @@ cmCacheManager::CacheEntry *cmCacheManager::GetCacheEntry(
 }
 
 cmCacheManager::CacheIterator cmCacheManager::GetCacheIterator(
+  const std::string& key)
+{
+  return CacheIterator(*this, key);
+}
+
+cmCacheManager::CacheIterator cmCacheManager::GetCacheIterator(
   const char *key)
 {
   return CacheIterator(*this, key);
@@ -859,7 +866,7 @@ void cmCacheManager::CacheEntry::SetProperty(const std::string& prop,
 {
   if(prop == "TYPE")
     {
-    this->Type = cmCacheManager::StringToType(value.c_str());
+    this->Type = cmCacheManager::StringToType(value);
     }
   else if(prop == "VALUE")
     {
@@ -894,7 +901,7 @@ void cmCacheManager::CacheEntry::AppendProperty(const std::string& prop,
 {
   if(prop == "TYPE")
     {
-    this->Type = cmCacheManager::StringToType(value.c_str());
+    this->Type = cmCacheManager::StringToType(value);
     }
   else if(prop == "VALUE")
     {

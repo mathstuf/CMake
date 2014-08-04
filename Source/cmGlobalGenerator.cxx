@@ -1589,7 +1589,7 @@ void cmGlobalGenerator::CheckLocalGenerators()
           {
           std::string varName = lib->first.substr(0, lib->first.size()-9);
           cmCacheManager::CacheIterator it =
-            manager->GetCacheIterator(varName.c_str());
+            manager->GetCacheIterator(varName);
           if(it.GetPropertyAsBool("ADVANCED"))
             {
             varName += " (ADVANCED)";
@@ -1622,7 +1622,7 @@ void cmGlobalGenerator::CheckLocalGenerators()
           {
           std::string varName = incDir->substr(0, incDir->size()-9);
           cmCacheManager::CacheIterator it =
-            manager->GetCacheIterator(varName.c_str());
+            manager->GetCacheIterator(varName);
           if(it.GetPropertyAsBool("ADVANCED"))
             {
             varName += " (ADVANCED)";

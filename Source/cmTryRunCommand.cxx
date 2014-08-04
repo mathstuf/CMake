@@ -264,7 +264,7 @@ void cmTryRunCommand::DoNotRunExecutable(const std::string& runArgs,
                                        cmCacheManager::STRING);
 
     cmCacheManager::CacheIterator it = this->Makefile->GetCacheManager()->
-                             GetCacheIterator(this->RunResultVariable.c_str());
+                             GetCacheIterator(this->RunResultVariable);
     if ( !it.IsAtEnd() )
       {
       it.SetProperty("ADVANCED", "1");
@@ -290,7 +290,7 @@ void cmTryRunCommand::DoNotRunExecutable(const std::string& runArgs,
                                          comment.c_str(),
                                          cmCacheManager::STRING);
       cmCacheManager::CacheIterator it = this->Makefile->GetCacheManager()->
-                               GetCacheIterator(internalRunOutputName.c_str());
+                               GetCacheIterator(internalRunOutputName);
       if ( !it.IsAtEnd() )
         {
         it.SetProperty("ADVANCED", "1");

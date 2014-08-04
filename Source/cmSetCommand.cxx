@@ -141,7 +141,7 @@ bool cmSetCommand
   if(cache)
     {
     std::string::size_type cacheStart = args.size() - 3 - (force ? 1 : 0);
-    type = cmCacheManager::StringToType(args[cacheStart+1].c_str());
+    type = cmCacheManager::StringToType(args[cacheStart+1]);
     docstring = args[cacheStart+2].c_str();
     }
 

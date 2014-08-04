@@ -470,8 +470,8 @@ int cmCTestBuildHandler::ProcessHandler()
   int res = cmsysProcess_State_Exited;
   if ( !this->CTest->GetShowOnly() )
     {
-    res = this->RunMakeCommand(makeCommand.c_str(), &retVal,
-      buildDirectory.c_str(), 0, ofs);
+    res = this->RunMakeCommand(makeCommand, &retVal,
+      buildDirectory, 0, ofs);
     }
   else
     {
@@ -890,8 +890,8 @@ cmCTestBuildHandler::LaunchHelper
 }
 
 //----------------------------------------------------------------------
-int cmCTestBuildHandler::RunMakeCommand(const char* command,
-  int* retVal, const char* dir, int timeout, std::ostream& ofs)
+int cmCTestBuildHandler::RunMakeCommand(const std::string& command,
+  int* retVal, const std::string& dir, int timeout, std::ostream& ofs)
 {
   // First generate the command and arguments
   std::vector<std::string> args = cmSystemTools::ParseArguments(command);
@@ -924,7 +924,7 @@ int cmCTestBuildHandler::RunMakeCommand(const char* command,
   // Now create process object
   cmsysProcess* cp = cmsysProcess_New();
   cmsysProcess_SetCommand(cp, &*argv.begin());
-  cmsysProcess_SetWorkingDirectory(cp, dir);
+  cmsysProcess_SetWorkingDirectory(cp, dir.c_str());
   cmsysProcess_SetOption(cp, cmsysProcess_Option_HideWindow, 1);
   cmsysProcess_SetTimeout(cp, timeout);
   cmsysProcess_Execute(cp);

@@ -52,8 +52,8 @@ private:
 
   //! Run command specialized for make and configure. Returns process status
   // and retVal is return value or exception.
-  int RunMakeCommand(const char* command,
-    int* retVal, const char* dir, int timeout,
+  int RunMakeCommand(const std::string& command,
+    int* retVal, const std::string& dir, int timeout,
     std::ostream& ofs);
 
   enum {

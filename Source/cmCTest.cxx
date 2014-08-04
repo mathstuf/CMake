@@ -1149,8 +1149,8 @@ int cmCTest::GetTestModelFromString(const char* str)
 //######################################################################
 
 //----------------------------------------------------------------------
-int cmCTest::RunMakeCommand(const char* command, std::string& output,
-  int* retVal, const char* dir, int timeout, std::ostream& ofs)
+int cmCTest::RunMakeCommand(const std::string& command, std::string& output,
+  int* retVal, const std::string& dir, int timeout, std::ostream& ofs)
 {
   // First generate the command and arguments
   std::vector<std::string> args = cmSystemTools::ParseArguments(command);
@@ -1180,7 +1180,7 @@ int cmCTest::RunMakeCommand(const char* command, std::string& output,
   // Now create process object
   cmsysProcess* cp = cmsysProcess_New();
   cmsysProcess_SetCommand(cp, &*argv.begin());
-  cmsysProcess_SetWorkingDirectory(cp, dir);
+  cmsysProcess_SetWorkingDirectory(cp, dir.c_str());
   cmsysProcess_SetOption(cp, cmsysProcess_Option_HideWindow, 1);
   cmsysProcess_SetTimeout(cp, timeout);
   cmsysProcess_Execute(cp);

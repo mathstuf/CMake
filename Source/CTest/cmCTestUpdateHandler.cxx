@@ -120,11 +120,12 @@ void cmCTestUpdateHandler::Initialize()
 }
 
 //----------------------------------------------------------------------
-int cmCTestUpdateHandler::DetermineType(const char* cmd, const char* type)
+int cmCTestUpdateHandler::DetermineType(const std::string& cmd,
+                                        const std::string& type)
 {
   cmCTestLog(this->CTest, DEBUG, "Determine update type from command: " << cmd
     << " and type: " << type << std::endl);
-  if ( type && *type )
+  if ( !type.empty() )
     {
     cmCTestLog(this->CTest, DEBUG, "Type specified: " << type << std::endl);
     std::string stype = cmSystemTools::LowerCase(type);
@@ -389,8 +390,8 @@ bool cmCTestUpdateHandler::SelectVCS()
     {
     // The source tree does not have a recognized VCS.  Check the
     // configuration value or command name.
-    this->UpdateType = this->DetermineType(this->UpdateCommand.c_str(),
-      this->CTest->GetCTestConfiguration("UpdateType").c_str());
+    this->UpdateType = this->DetermineType(this->UpdateCommand,
+      this->CTest->GetCTestConfiguration("UpdateType"));
     }
 
   // If no update command was specified, lookup one for this VCS tool.

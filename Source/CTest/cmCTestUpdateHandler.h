@@ -60,7 +60,7 @@ private:
   struct UpdateFiles : public std::vector<StringPair>{};
 
   // Determine the type of version control
-  int DetermineType(const char* cmd, const char* type);
+  int DetermineType(const std::string& cmd, const std::string& type);
 
   // The VCS command to update the working tree.
   std::string UpdateCommand;

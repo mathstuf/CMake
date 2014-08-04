@@ -572,7 +572,7 @@ jp_IMPORT Name jp_DOT jp_TIMES jp_SEMICOL
   jpElementStart(5);
   std::string str = $<str>2;
   str += ".*";
-  yyGetParser->AddPackagesImport(str.c_str());
+  yyGetParser->AddPackagesImport(str);
   yyGetParser->DeallocateParserType(&($<str>2));
   yyGetParser->SetCurrentCombine("");
   $<str>$ = 0;

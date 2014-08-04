@@ -29,7 +29,7 @@ class cmDepends
 public:
   /** Instances need to know the build directory name and the relative
       path from the build directory to the target file.  */
-  cmDepends(cmLocalGenerator* lg=0, const char* targetDir="");
+  cmDepends(cmLocalGenerator* lg=0, const std::string& targetDir="");
 
   /** at what level will the compile be done from */
   void SetCompileDirectory(const char *dir) {this->CompileDirectory = dir;}
@@ -44,7 +44,8 @@ public:
   void SetLanguage(const std::string& lang) { this->Language = lang; }
 
   /** Set the target build directory.  */
-  void SetTargetDirectory(const char* dir) { this->TargetDirectory = dir; }
+  void SetTargetDirectory(const std::string& dir)
+    { this->TargetDirectory = dir; }
 
   /** should this be verbose in its output */
   void SetVerbose(bool verb) { this->Verbose = verb; }
@@ -62,11 +63,11 @@ public:
       they must be generated Clear has already been called to wipe out
       the old dependencies.
       Dependencies which are still valid will be stored in validDeps. */
-  bool Check(const char *makeFile, const char* internalFile,
+  bool Check(const std::string& makeFile, const std::string& internalFile,
              std::map<std::string, DependencyVector>& validDeps);
 
   /** Clear dependencies for the target file so they will be regenerated.  */
-  void Clear(const char *file);
+  void Clear(const std::string& file);
 
   /** Set the file comparison object */
   void SetFileComparison(cmFileTimeComparison* fc) {
@@ -85,7 +86,7 @@ protected:
   // Return false if dependencies must be regenerated and true
   // otherwise.
   virtual bool CheckDependencies(std::istream& internalDepends,
-                                 const char* internalDependsFileName,
+                                 const std::string& internalDependsFileName,
                            std::map<std::string, DependencyVector>& validDeps);
 
   // Finalize the dependency information for the target.

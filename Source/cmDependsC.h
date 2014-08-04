@@ -25,7 +25,7 @@ public:
   /** Checking instances need to know the build directory name and the
       relative path from the build directory to the target file.  */
   cmDependsC();
-  cmDependsC(cmLocalGenerator* lg, const char* targetDir,
+  cmDependsC(cmLocalGenerator* lg, const std::string& targetDir,
              const std::string& lang,
              const std::map<std::string, DependencyVector>* validDeps);
 

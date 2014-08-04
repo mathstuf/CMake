@@ -1550,8 +1550,8 @@ bool cmLocalUnixMakefileGenerator3::UpdateDependencies(
     // dependency vector. This means that in the normal case, when only
     // few or one file have been edited, then also only this one file is
     // actually scanned again, instead of all files for this target.
-    needRescanDependencies = !checker.Check(dependFile.c_str(),
-                                            internalDependFile.c_str(),
+    needRescanDependencies = !checker.Check(dependFile,
+                                            internalDependFile,
                                             validDependencies);
     }
 
@@ -1670,7 +1670,7 @@ cmLocalUnixMakefileGenerator3
     if(lang == "C" || lang == "CXX" || lang == "RC" || lang == "ASM")
       {
       // TODO: Handle RC (resource files) dependencies correctly.
-      scanner = new cmDependsC(this, targetDir.c_str(), lang, &validDeps);
+      scanner = new cmDependsC(this, targetDir, lang, &validDeps);
       }
 #ifdef CMAKE_BUILD_WITH_CMAKE
     else if(lang == "Fortran")
@@ -1689,7 +1689,7 @@ cmLocalUnixMakefileGenerator3
       scanner->SetFileComparison
         (this->GlobalGenerator->GetCMakeInstance()->GetFileComparison());
       scanner->SetLanguage(lang);
-      scanner->SetTargetDirectory(dir.c_str());
+      scanner->SetTargetDirectory(dir);
       scanner->Write(ruleFileStream, internalRuleFileStream);
 
       // free the scanner for this language
@@ -1984,7 +1984,7 @@ void cmLocalUnixMakefileGenerator3::ClearDependencies(cmMakefile* mf,
 
     // Clear the implicit dependency makefile.
     std::string dependFile = dir + "/depend.make";
-    clearer.Clear(dependFile.c_str());
+    clearer.Clear(dependFile);
 
     // Remove the internal dependency check file to force
     // regeneration.

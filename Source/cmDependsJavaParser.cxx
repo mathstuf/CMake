@@ -3087,7 +3087,7 @@ yyreduce:
   jpElementStart(5);
   std::string str = (yyvsp[(2) - (5)].str);
   str += ".*";
-  yyGetParser->AddPackagesImport(str.c_str());
+  yyGetParser->AddPackagesImport(str);
   yyGetParser->DeallocateParserType(&((yyvsp[(2) - (5)].str)));
   yyGetParser->SetCurrentCombine("");
   (yyval.str) = 0;

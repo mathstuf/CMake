@@ -89,7 +89,7 @@ void cmDependsJavaParserHelper::AddClassFound(const char* sclass)
   this->ClassesFound.push_back(sclass);
 }
 
-void cmDependsJavaParserHelper::AddPackagesImport(const char* sclass)
+void cmDependsJavaParserHelper::AddPackagesImport(const std::string& sclass)
 {
   std::vector<std::string>::iterator it;
   for ( it = this->PackagesImport.begin();
@@ -407,13 +407,13 @@ void cmDependsJavaParserHelper::UpdateCombine(const char* str1,
   this->CurrentCombine += str2;
 }
 
-int cmDependsJavaParserHelper::ParseFile(const char* file)
+int cmDependsJavaParserHelper::ParseFile(const std::string& file)
 {
   if ( !cmSystemTools::FileExists(file))
     {
     return 0;
     }
-  cmsys::ifstream ifs(file);
+  cmsys::ifstream ifs(file.c_str());
   if ( !ifs )
     {
     return 0;

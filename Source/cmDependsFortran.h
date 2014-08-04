@@ -43,13 +43,14 @@ public:
 
   /** Determine if a mod file and the corresponding mod.stamp file
       are representing  different module information. */
-  static bool  ModulesDiffer(const char* modFile, const char* stampFile,
-                             const char* compilerId);
+  static bool  ModulesDiffer(const std::string& modFile,
+                             const std::string& stampFile,
+                             const std::string& compilerId);
 
   /** Method to find an included file in the include path.  Fortran
       always searches the directory containing the including source
       first.  */
-  bool FindIncludeFile(const char* dir, const char* includeName,
+  bool FindIncludeFile(const std::string& dir, const char* includeName,
                        std::string& fileName);
 
 protected:
@@ -60,8 +61,8 @@ protected:
   // Find all the modules required by the target.
   void LocateModules();
   void MatchLocalModules();
-  void MatchRemoteModules(std::istream& fin, const char* stampDir);
-  void ConsiderModule(const char* name, const char* stampDir);
+  void MatchRemoteModules(std::istream& fin, const std::string& stampDir);
+  void ConsiderModule(const std::string& name, const std::string& stampDir);
   bool FindModule(std::string const& name, std::string& module);
 
   // Implement writing/checking methods required by superclass.
@@ -70,9 +71,10 @@ protected:
     std::ostream& makeDepends, std::ostream& internalDepends);
 
   // Actually write the depenencies to the streams.
-  bool WriteDependenciesReal(const char *obj,
+  bool WriteDependenciesReal(const std::string& obj,
                              cmDependsFortranSourceInfo const& info,
-                             const char* mod_dir, const char* stamp_dir,
+                             const std::string& mod_dir,
+                             const std::string& stamp_dir,
                              std::ostream& makeDepends,
                              std::ostream& internalDepends);
 

@@ -108,8 +108,8 @@ public:
   typedef std::map<std::string, cmDependsFortranSourceInfo> ObjectInfoMap;
   ObjectInfoMap ObjectInfo;
 
-  cmDependsFortranSourceInfo& CreateObjectInfo(const char* obj,
-                                               const char* src)
+  cmDependsFortranSourceInfo& CreateObjectInfo(const std::string& obj,
+                                               const std::string& src)
     {
     std::map<std::string, cmDependsFortranSourceInfo>::iterator i =
       this->ObjectInfo.find(obj);
@@ -193,7 +193,7 @@ bool cmDependsFortran::WriteDependencies(
     const std::string& src = *it;
     // Get the information object for this source.
     cmDependsFortranSourceInfo& info =
-      this->Internal->CreateObjectInfo(obj.c_str(), src.c_str());
+      this->Internal->CreateObjectInfo(obj, src);
 
     // Make a copy of the macros defined via ADD_DEFINITIONS
     std::set<std::string> ppDefines(this->PPDefinitions.begin(),
@@ -204,7 +204,7 @@ bool cmDependsFortran::WriteDependencies(
     cmDependsFortranParser parser(this, ppDefines, info);
 
     // Push on the starting file.
-    cmDependsFortranParser_FilePush(&parser, src.c_str());
+    cmDependsFortranParser_FilePush(&parser, src);
 
     // Parse the translation unit.
     if(cmDependsFortran_yyparse(parser.Scanner) != 0)
@@ -246,7 +246,7 @@ bool cmDependsFortran::Finalize(std::ostream& makeDepends,
   for(ObjectInfoMap::const_iterator i = objInfo.begin();
       i != objInfo.end(); ++i)
     {
-    if(!this->WriteDependenciesReal(i->first.c_str(), i->second,
+    if(!this->WriteDependenciesReal(i->first, i->second,
                                     mod_dir, stamp_dir,
                                     makeDepends, internalDepends))
       {
@@ -359,7 +359,7 @@ void cmDependsFortran::LocateModules()
     cmsys::ifstream fin(fname.c_str());
     if(fin)
       {
-      this->MatchRemoteModules(fin, targetDir.c_str());
+      this->MatchRemoteModules(fin, targetDir);
       }
     }
 }
@@ -372,13 +372,13 @@ void cmDependsFortran::MatchLocalModules()
   for(std::set<std::string>::const_iterator i = provides.begin();
       i != provides.end(); ++i)
     {
-    this->ConsiderModule(i->c_str(), stampDir);
+    this->ConsiderModule(*i, stampDir);
     }
 }
 
 //----------------------------------------------------------------------------
 void cmDependsFortran::MatchRemoteModules(std::istream& fin,
-                                          const char* stampDir)
+                                          const std::string& stampDir)
 {
   std::string line;
   bool doing_provides = false;
@@ -394,7 +394,7 @@ void cmDependsFortran::MatchRemoteModules(std::istream& fin,
       {
       if(doing_provides)
         {
-        this->ConsiderModule(line.c_str()+1, stampDir);
+        this->ConsiderModule(line.substr(1), stampDir);
         }
       }
     else if(line == "provides")
@@ -409,8 +409,8 @@ void cmDependsFortran::MatchRemoteModules(std::istream& fin,
 }
 
 //----------------------------------------------------------------------------
-void cmDependsFortran::ConsiderModule(const char* name,
-                                      const char* stampDir)
+void cmDependsFortran::ConsiderModule(const std::string& name,
+                                      const std::string& stampDir)
 {
   // Locate each required module.
   typedef cmDependsFortranInternals::TargetRequiresMap TargetRequiresMap;
@@ -431,9 +431,10 @@ void cmDependsFortran::ConsiderModule(const char* name,
 //----------------------------------------------------------------------------
 bool
 cmDependsFortran
-::WriteDependenciesReal(const char *obj,
+::WriteDependenciesReal(const std::string& obj,
                         cmDependsFortranSourceInfo const& info,
-                        const char* mod_dir, const char* stamp_dir,
+                        const std::string& mod_dir,
+                        const std::string& stamp_dir,
                         std::ostream& makeDepends,
                         std::ostream& internalDepends)
 {
@@ -665,8 +666,8 @@ bool cmDependsFortran::CopyModule(const std::vector<std::string>& args)
   mod_lower += ".mod";
   if(cmSystemTools::FileExists(mod_upper, true))
     {
-    if(cmDependsFortran::ModulesDiffer(mod_upper.c_str(), stamp.c_str(),
-                                       compilerId.c_str()))
+    if(cmDependsFortran::ModulesDiffer(mod_upper, stamp,
+                                       compilerId))
       {
       if(!cmSystemTools::CopyFileAlways(mod_upper, stamp))
         {
@@ -680,8 +681,8 @@ bool cmDependsFortran::CopyModule(const std::vector<std::string>& args)
     }
   else if(cmSystemTools::FileExists(mod_lower, true))
     {
-    if(cmDependsFortran::ModulesDiffer(mod_lower.c_str(), stamp.c_str(),
-                                       compilerId.c_str()))
+    if(cmDependsFortran::ModulesDiffer(mod_lower, stamp,
+                                       compilerId))
       {
       if(!cmSystemTools::CopyFileAlways(mod_lower, stamp))
         {
@@ -765,9 +766,9 @@ static bool cmDependsFortranStreamsDiffer(std::istream& ifs1,
 }
 
 //----------------------------------------------------------------------------
-bool cmDependsFortran::ModulesDiffer(const char* modFile,
-                                     const char* stampFile,
-                                     const char* compilerId)
+bool cmDependsFortran::ModulesDiffer(const std::string& modFile,
+                                     const std::string& stampFile,
+                                     const std::string& compilerId)
 {
   /*
   gnu >= 4.9:
@@ -802,17 +803,18 @@ bool cmDependsFortran::ModulesDiffer(const char* modFile,
    * source is compiled twice
    *   -SunPro
    */
-  if(strcmp(compilerId, "SunPro") == 0)
+  if(compilerId == "SunPro")
     {
     return cmSystemTools::FilesDiffer(modFile, stampFile);
     }
 
 #if defined(_WIN32) || defined(__CYGWIN__)
-  cmsys::ifstream finModFile(modFile, std::ios::in | std::ios::binary);
-  cmsys::ifstream finStampFile(stampFile, std::ios::in | std::ios::binary);
+  cmsys::ifstream finModFile(modFile.c_str(), std::ios::in | std::ios::binary);
+  cmsys::ifstream finStampFile(stampFile.c_str(),
+                               std::ios::in | std::ios::binary);
 #else
-  cmsys::ifstream finModFile(modFile, std::ios::in);
-  cmsys::ifstream finStampFile(stampFile, std::ios::in);
+  cmsys::ifstream finModFile(modFile.c_str(), std::ios::in);
+  cmsys::ifstream finStampFile(stampFile.c_str(), std::ios::in);
 #endif
   if(!finModFile || !finStampFile)
     {
@@ -828,7 +830,7 @@ bool cmDependsFortran::ModulesDiffer(const char* modFile,
    * Eat the stream content until all recompile only related changes
    * are left behind.
    */
-  if (strcmp(compilerId, "GNU") == 0 )
+  if (compilerId == "GNU")
     {
     // GNU Fortran 4.9 and later compress .mod files with gzip
     // but also do not include a date so we can fall through to
@@ -856,7 +858,7 @@ bool cmDependsFortran::ModulesDiffer(const char* modFile,
         }
       }
     }
-  else if(strcmp(compilerId, "Intel") == 0)
+  else if(compilerId == "Intel")
     {
     const char seq[2] = {'\n', '\0'};
     const int seqlen = 2;
@@ -889,7 +891,7 @@ bool cmDependsFortran::ModulesDiffer(const char* modFile,
 }
 
 //----------------------------------------------------------------------------
-bool cmDependsFortran::FindIncludeFile(const char* dir,
+bool cmDependsFortran::FindIncludeFile(const std::string& dir,
                                        const char* includeName,
                                        std::string& fileName)
 {
@@ -958,7 +960,7 @@ cmDependsFortranParser_s::~cmDependsFortranParser_s()
 
 //----------------------------------------------------------------------------
 bool cmDependsFortranParser_FilePush(cmDependsFortranParser* parser,
-                                    const char* fname)
+                                    const std::string& fname)
 {
   // Open the new file and push it onto the stack.  Save the old
   // buffer with it on the stack.
@@ -1022,9 +1024,10 @@ void cmDependsFortranParser_StringStart(cmDependsFortranParser* parser)
 }
 
 //----------------------------------------------------------------------------
-const char* cmDependsFortranParser_StringEnd(cmDependsFortranParser* parser)
+const std::string& cmDependsFortranParser_StringEnd(
+    cmDependsFortranParser* parser)
 {
-  return parser->TokenString.c_str();
+  return parser->TokenString;
 }
 
 //----------------------------------------------------------------------------
@@ -1104,13 +1107,13 @@ void cmDependsFortranParser_RuleInclude(cmDependsFortranParser* parser,
   // problem because either the source will not compile or the user
   // does not care about depending on this included source.
   std::string fullName;
-  if(parser->Self->FindIncludeFile(dir.c_str(), name, fullName))
+  if(parser->Self->FindIncludeFile(dir, name, fullName))
     {
     // Found the included file.  Save it in the set of included files.
     parser->Info.Includes.insert(fullName);
 
     // Parse it immediately to translate the source inline.
-    cmDependsFortranParser_FilePush(parser, fullName.c_str());
+    cmDependsFortranParser_FilePush(parser, fullName);
     }
 }
 

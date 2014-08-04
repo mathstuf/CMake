@@ -13,13 +13,14 @@
 #define cmDependsFortranParser_h
 
 #include <stddef.h> /* size_t */
+#include <string>
 
 /* Forward declare parser object type.  */
 typedef struct cmDependsFortranParser_s cmDependsFortranParser;
 
 /* Functions to enter/exit #include'd files in order.  */
 bool cmDependsFortranParser_FilePush(cmDependsFortranParser* parser,
-                                    const char* fname);
+                                    const std::string& fname);
 bool cmDependsFortranParser_FilePop(cmDependsFortranParser* parser);
 
 /* Callbacks for lexer.  */
@@ -28,7 +29,8 @@ int cmDependsFortranParser_Input(cmDependsFortranParser* parser,
 
 
 void cmDependsFortranParser_StringStart(cmDependsFortranParser* parser);
-const char* cmDependsFortranParser_StringEnd(cmDependsFortranParser* parser);
+const std::string& cmDependsFortranParser_StringEnd(
+                                              cmDependsFortranParser* parser);
 void cmDependsFortranParser_StringAppend(cmDependsFortranParser* parser,
                                          char c);
 

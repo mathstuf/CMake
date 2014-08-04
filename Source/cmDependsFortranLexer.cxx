@@ -1011,7 +1011,7 @@ YY_RULE_SETUP
 #line 87 "cmDependsFortranLexer.in.l"
 {
   BEGIN(cmDependsFortranParser_GetOldStartcond(yyextra) );
-  yylvalp->string = strdup(cmDependsFortranParser_StringEnd(yyextra));
+  yylvalp->string = strdup(cmDependsFortranParser_StringEnd(yyextra).c_str());
   return STRING;
 }
 case 5:

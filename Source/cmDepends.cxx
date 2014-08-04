@@ -20,7 +20,7 @@
 #include <cmsys/FStream.hxx>
 
 //----------------------------------------------------------------------------
-cmDepends::cmDepends(cmLocalGenerator* lg, const char* targetDir):
+cmDepends::cmDepends(cmLocalGenerator* lg, const std::string& targetDir):
   CompileDirectory(),
   LocalGenerator(lg),
   Verbose(false),
@@ -84,7 +84,8 @@ bool cmDepends::Finalize(std::ostream&,
 }
 
 //----------------------------------------------------------------------------
-bool cmDepends::Check(const char *makeFile, const char *internalFile,
+bool cmDepends::Check(const std::string& makeFile,
+                      const std::string& internalFile,
                       std::map<std::string, DependencyVector>& validDeps)
 {
   // Dependency checks must be done in proper working directory.
@@ -99,7 +100,7 @@ bool cmDepends::Check(const char *makeFile, const char *internalFile,
 
   // Check whether dependencies must be regenerated.
   bool okay = true;
-  cmsys::ifstream fin(internalFile);
+  cmsys::ifstream fin(internalFile.c_str());
   if(!(fin && this->CheckDependencies(fin, internalFile, validDeps)))
     {
     // Clear all dependencies so they will be regenerated.
@@ -118,7 +119,7 @@ bool cmDepends::Check(const char *makeFile, const char *internalFile,
 }
 
 //----------------------------------------------------------------------------
-void cmDepends::Clear(const char *file)
+void cmDepends::Clear(const std::string& file)
 {
   // Print verbose output.
   if(this->Verbose)
@@ -146,7 +147,7 @@ bool cmDepends::WriteDependencies(
 
 //----------------------------------------------------------------------------
 bool cmDepends::CheckDependencies(std::istream& internalDepends,
-                                  const char* internalDependsFileName,
+                                  const std::string& internalDependsFileName,
                             std::map<std::string, DependencyVector>& validDeps)
 {
   // Parse dependencies from the stream.  If any dependee is missing
@@ -186,7 +187,7 @@ bool cmDepends::CheckDependencies(std::istream& internalDepends,
       }
     /*
     // Parse the dependency line.
-    if(!this->ParseDependency(line.c_str()))
+    if(!this->ParseDependency(line))
       {
       continue;
       }

@@ -36,7 +36,7 @@ public:
   ~cmDependsJavaParserHelper();
 
   int ParseString(const char* str, int verb);
-  int ParseFile(const char* file);
+  int ParseFile(const std::string& file);
 
   // For the lexer:
   void AllocateParserType(cmDependsJavaParserHelper::ParserType* pt,
@@ -52,7 +52,7 @@ public:
   void CheckEmpty(int line, int cnt, ParserType* pt);
   void StartClass(const char* cls);
   void EndClass();
-  void AddPackagesImport(const char* sclass);
+  void AddPackagesImport(const std::string& sclass);
   void SetCurrentPackage(const char* pkg) { this->CurrentPackage = pkg; }
   const char* GetCurrentPackage() { return this->CurrentPackage.c_str(); }
   void SetCurrentCombine(const char* cmb) { this->CurrentCombine = cmb; }

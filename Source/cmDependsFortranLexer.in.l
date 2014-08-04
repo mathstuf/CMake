@@ -86,7 +86,7 @@ Modify cmDependsFortranLexer.h:
 <str_dq>\" |
 <str_sq>'  {
   BEGIN(cmDependsFortranParser_GetOldStartcond(yyextra) );
-  yylvalp->string = strdup(cmDependsFortranParser_StringEnd(yyextra));
+  yylvalp->string = strdup(cmDependsFortranParser_StringEnd(yyextra).c_str());
   return STRING;
 }
 

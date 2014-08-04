@@ -1815,7 +1815,7 @@ void cmGlobalXCodeGenerator::CreateBuildSettings(cmTarget& target,
       {
       std::string linkFlagsVar = "LINK_FLAGS_";
       linkFlagsVar += cmSystemTools::UpperCase(configName);
-      if(const char* linkFlags = target.GetProperty(linkFlagsVar.c_str()))
+      if(const char* linkFlags = target.GetProperty(linkFlagsVar))
         {
         this->CurrentLocalGenerator->
           AppendFlags(extraLinkOptions, linkFlags);

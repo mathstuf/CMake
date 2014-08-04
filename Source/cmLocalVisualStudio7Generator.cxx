@@ -1050,7 +1050,7 @@ void cmLocalVisualStudio7Generator::OutputBuildTool(std::ostream& fout,
   std::string configTypeUpper = cmSystemTools::UpperCase(configName);
   std::string linkFlagsConfig = "LINK_FLAGS_";
   linkFlagsConfig += configTypeUpper;
-  targetLinkFlags = target.GetProperty(linkFlagsConfig.c_str());
+  targetLinkFlags = target.GetProperty(linkFlagsConfig);
   if(targetLinkFlags)
     {
     extraLinkOptions += " ";
@@ -1586,7 +1586,7 @@ cmLocalVisualStudio7GeneratorFCInfo
       }
     std::string defPropName = "COMPILE_DEFINITIONS_";
     defPropName += configUpper;
-    if(const char* ccdefs = sf.GetProperty(defPropName.c_str()))
+    if(const char* ccdefs = sf.GetProperty(defPropName))
       {
       fc.CompileDefsConfig = ccdefs;
       needfc = true;

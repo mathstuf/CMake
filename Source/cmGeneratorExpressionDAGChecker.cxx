@@ -184,19 +184,19 @@ bool cmGeneratorExpressionDAGChecker::EvaluatingLinkLibraries(const char *tgt)
     parent = parent->Parent;
     }
 
-  const char *prop = top->Property.c_str();
+  const std::string& prop = top->Property;
 
   if (tgt)
     {
-    return top->Target == tgt && strcmp(prop, "LINK_LIBRARIES") == 0;
+    return top->Target == tgt && prop == "LINK_LIBRARIES";
     }
 
-  return (strcmp(prop, "LINK_LIBRARIES") == 0
-       || strcmp(prop, "LINK_INTERFACE_LIBRARIES") == 0
-       || strcmp(prop, "IMPORTED_LINK_INTERFACE_LIBRARIES") == 0
+  return (prop == "LINK_LIBRARIES"
+       || prop == "LINK_INTERFACE_LIBRARIES"
+       || prop == "IMPORTED_LINK_INTERFACE_LIBRARIES"
        || cmHasLiteralPrefix(prop, "LINK_INTERFACE_LIBRARIES_")
        || cmHasLiteralPrefix(prop, "IMPORTED_LINK_INTERFACE_LIBRARIES_"))
-       || strcmp(prop, "INTERFACE_LINK_LIBRARIES") == 0;
+       || prop == "INTERFACE_LINK_LIBRARIES";
 }
 
 std::string cmGeneratorExpressionDAGChecker::TopTarget() const
@@ -219,13 +219,13 @@ enum TransitiveProperty {
 };
 
 template<TransitiveProperty>
-bool additionalTest(const char* const)
+bool additionalTest(const std::string&)
 {
   return false;
 }
 
 template<>
-bool additionalTest<COMPILE_DEFINITIONS>(const char* const prop)
+bool additionalTest<COMPILE_DEFINITIONS>(const std::string& prop)
 {
   return cmHasLiteralPrefix(prop, "COMPILE_DEFINITIONS_");
 }
@@ -233,9 +233,9 @@ bool additionalTest<COMPILE_DEFINITIONS>(const char* const prop)
 #define DEFINE_TRANSITIVE_PROPERTY_METHOD(METHOD, PROPERTY) \
 bool cmGeneratorExpressionDAGChecker::METHOD() const \
 { \
-  const char* const prop = this->Property.c_str(); \
-  if (strcmp(prop, #PROPERTY) == 0 \
-      || strcmp(prop, "INTERFACE_" #PROPERTY) == 0) \
+  const std::string& prop = this->Property; \
+  if (prop == #PROPERTY \
+      || prop == "INTERFACE_" #PROPERTY) \
     { \
     return true; \
     } \

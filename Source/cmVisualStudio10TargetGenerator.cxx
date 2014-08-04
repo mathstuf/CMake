@@ -1564,7 +1564,7 @@ bool cmVisualStudio10TargetGenerator::OutputSourceSpecificFlags(
     std::string configDefines = defines;
     std::string defPropName = "COMPILE_DEFINITIONS_";
     defPropName += configUpper;
-    if(const char* ccdefs = sf.GetProperty(defPropName.c_str()))
+    if(const char* ccdefs = sf.GetProperty(defPropName))
       {
       if(configDefines.size())
         {
@@ -2183,7 +2183,7 @@ cmVisualStudio10TargetGenerator::ComputeLinkOptions(std::string const& config)
     }
   std::string flagsProp = "LINK_FLAGS_";
   flagsProp += CONFIG;
-  if(const char* flagsConfig = this->Target->GetProperty(flagsProp.c_str()))
+  if(const char* flagsConfig = this->Target->GetProperty(flagsProp))
     {
     flags += " ";
     flags += flagsConfig;

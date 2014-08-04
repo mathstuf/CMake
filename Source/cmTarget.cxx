@@ -606,9 +606,11 @@ bool cmTarget::HasImportLibrary() const
 //----------------------------------------------------------------------------
 bool cmTarget::IsFrameworkOnApple() const
 {
+  static const std::string propFRAMEWORK = "FRAMEWORK";
+
   return (this->GetType() == cmTarget::SHARED_LIBRARY &&
           this->Makefile->IsOn("APPLE") &&
-          this->GetPropertyAsBool("FRAMEWORK"));
+          this->GetPropertyAsBool(propFRAMEWORK));
 }
 
 //----------------------------------------------------------------------------
@@ -3975,12 +3977,16 @@ void cmTarget::GetFullNameInternal(const std::string& config,
     }
 
   // Compute the full name for main target types.
+  static const std::string propIMPORT_PREFIX = "IMPORT_PREFIX";
+  static const std::string propPREFIX = "PREFIX";
+  static const std::string propIMPORT_SUFFIX = "IMPORT_SUFFIX";
+  static const std::string propSUFFIX = "SUFFIX";
   const char* targetPrefix = (implib
-                              ? this->GetProperty("IMPORT_PREFIX")
-                              : this->GetProperty("PREFIX"));
+                              ? this->GetProperty(propIMPORT_PREFIX)
+                              : this->GetProperty(propPREFIX));
   const char* targetSuffix = (implib
-                              ? this->GetProperty("IMPORT_SUFFIX")
-                              : this->GetProperty("SUFFIX"));
+                              ? this->GetProperty(propIMPORT_SUFFIX)
+                              : this->GetProperty(propSUFFIX));
   const char* configPostfix = 0;
   if(!config.empty())
     {

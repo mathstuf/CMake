@@ -31,8 +31,9 @@
   do { \
     cmOStringStream cmCPackLog_msg; \
     cmCPackLog_msg << msg; \
+    std::string const& msg_str = cmCPackLog_msg.str(); \
     this->Logger->Log(logType, __FILE__, __LINE__,\
-                      cmCPackLog_msg.str().c_str());\
+                      msg_str.c_str(),msg_str.size());\
   } while ( 0 )
 
 #ifdef cerr

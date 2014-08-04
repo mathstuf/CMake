@@ -19,7 +19,8 @@
   do { \
   cmOStringStream cmCPackLog_msg; \
   cmCPackLog_msg << msg; \
-  (ctSelf)->Log(logType, __FILE__, __LINE__, cmCPackLog_msg.str().c_str());\
+  std::string const& msg_str = cmCPackLog_msg.str(); \
+  (ctSelf)->Log(logType, __FILE__, __LINE__, msg_str.c_str(), msg_str.size());\
   } while ( 0 )
 
 #ifdef cerr

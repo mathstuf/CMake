@@ -24,7 +24,7 @@ class cmDocumentationSection
 {
 public:
   /** Create a cmSection, with a special name for man-output mode. */
-  cmDocumentationSection(const char* name, const char*)
+  cmDocumentationSection(const std::string& name, const std::string&)
     :Name(name) {}
 
   /** Has any content been added to this section or is it empty ? */

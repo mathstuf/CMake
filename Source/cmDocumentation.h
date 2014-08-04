@@ -60,27 +60,27 @@ public:
 
   /** Set a section of the documentation. Typical sections include Name,
       Usage, Description, Options */
-  void SetSection(const char *sectionName,
+  void SetSection(const std::string& sectionName,
                   cmDocumentationSection *section);
-  void SetSection(const char *sectionName,
+  void SetSection(const std::string& sectionName,
                   std::vector<cmDocumentationEntry> &docs);
-  void SetSection(const char *sectionName,
+  void SetSection(const std::string& sectionName,
                   const char *docs[][2]);
   void SetSections(std::map<std::string,cmDocumentationSection *>
                    &sections);
 
   /** Add the documentation to the beginning/end of the section */
-  void PrependSection(const char *sectionName,
+  void PrependSection(const std::string& sectionName,
                       const char *docs[][2]);
-  void PrependSection(const char *sectionName,
+  void PrependSection(const std::string& sectionName,
                       std::vector<cmDocumentationEntry> &docs);
-  void PrependSection(const char *sectionName,
+  void PrependSection(const std::string& sectionName,
                       cmDocumentationEntry &docs);
-  void AppendSection(const char *sectionName,
+  void AppendSection(const std::string& sectionName,
                      const char *docs[][2]);
-  void AppendSection(const char *sectionName,
+  void AppendSection(const std::string& sectionName,
                      std::vector<cmDocumentationEntry> &docs);
-  void AppendSection(const char *sectionName,
+  void AppendSection(const std::string& sectionName,
                      cmDocumentationEntry &docs);
 
   /** Add common (to all tools) documentation section(s) */

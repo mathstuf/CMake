@@ -489,7 +489,7 @@ void cmDocumentation::SetName(const std::string& name)
 }
 
 //----------------------------------------------------------------------------
-void cmDocumentation::SetSection(const char *name,
+void cmDocumentation::SetSection(const std::string& name,
                                  cmDocumentationSection *section)
 {
   if (this->AllSections.find(name) != this->AllSections.end())
@@ -500,23 +500,23 @@ void cmDocumentation::SetSection(const char *name,
 }
 
 //----------------------------------------------------------------------------
-void cmDocumentation::SetSection(const char *name,
+void cmDocumentation::SetSection(const std::string& name,
                                  std::vector<cmDocumentationEntry> &docs)
 {
   cmDocumentationSection *sec =
     new cmDocumentationSection(name,
-                               cmSystemTools::UpperCase(name).c_str());
+                               cmSystemTools::UpperCase(name));
   sec->Append(docs);
   this->SetSection(name,sec);
 }
 
 //----------------------------------------------------------------------------
-void cmDocumentation::SetSection(const char *name,
+void cmDocumentation::SetSection(const std::string& name,
                                  const char *docs[][2])
 {
   cmDocumentationSection *sec =
     new cmDocumentationSection(name,
-                               cmSystemTools::UpperCase(name).c_str());
+                               cmSystemTools::UpperCase(name));
   sec->Append(docs);
   this->SetSection(name,sec);
 }
@@ -528,19 +528,19 @@ void cmDocumentation
   for (std::map<std::string,cmDocumentationSection *>::const_iterator
          it = sections.begin(); it != sections.end(); ++it)
     {
-    this->SetSection(it->first.c_str(),it->second);
+    this->SetSection(it->first,it->second);
     }
 }
 
 //----------------------------------------------------------------------------
-void cmDocumentation::PrependSection(const char *name,
+void cmDocumentation::PrependSection(const std::string& name,
                                      const char *docs[][2])
 {
   cmDocumentationSection *sec = 0;
   if (this->AllSections.find(name) == this->AllSections.end())
     {
     sec = new cmDocumentationSection
-      (name, cmSystemTools::UpperCase(name).c_str());
+      (name, cmSystemTools::UpperCase(name));
     this->SetSection(name,sec);
     }
   else
@@ -551,14 +551,14 @@ void cmDocumentation::PrependSection(const char *name,
 }
 
 //----------------------------------------------------------------------------
-void cmDocumentation::PrependSection(const char *name,
+void cmDocumentation::PrependSection(const std::string& name,
                                      std::vector<cmDocumentationEntry> &docs)
 {
   cmDocumentationSection *sec = 0;
   if (this->AllSections.find(name) == this->AllSections.end())
     {
     sec = new cmDocumentationSection
-      (name, cmSystemTools::UpperCase(name).c_str());
+      (name, cmSystemTools::UpperCase(name));
     this->SetSection(name,sec);
     }
   else
@@ -569,14 +569,14 @@ void cmDocumentation::PrependSection(const char *name,
 }
 
 //----------------------------------------------------------------------------
-void cmDocumentation::AppendSection(const char *name,
+void cmDocumentation::AppendSection(const std::string& name,
                                     const char *docs[][2])
 {
   cmDocumentationSection *sec = 0;
   if (this->AllSections.find(name) == this->AllSections.end())
     {
     sec = new cmDocumentationSection
-      (name, cmSystemTools::UpperCase(name).c_str());
+      (name, cmSystemTools::UpperCase(name));
     this->SetSection(name,sec);
     }
   else
@@ -587,14 +587,14 @@ void cmDocumentation::AppendSection(const char *name,
 }
 
 //----------------------------------------------------------------------------
-void cmDocumentation::AppendSection(const char *name,
+void cmDocumentation::AppendSection(const std::string& name,
                                     std::vector<cmDocumentationEntry> &docs)
 {
   cmDocumentationSection *sec = 0;
   if (this->AllSections.find(name) == this->AllSections.end())
     {
     sec = new cmDocumentationSection
-      (name, cmSystemTools::UpperCase(name).c_str());
+      (name, cmSystemTools::UpperCase(name));
     this->SetSection(name,sec);
     }
   else
@@ -605,7 +605,7 @@ void cmDocumentation::AppendSection(const char *name,
 }
 
 //----------------------------------------------------------------------------
-void cmDocumentation::AppendSection(const char *name,
+void cmDocumentation::AppendSection(const std::string& name,
                                     cmDocumentationEntry &docs)
 {
 
@@ -615,7 +615,7 @@ void cmDocumentation::AppendSection(const char *name,
 }
 
 //----------------------------------------------------------------------------
-void cmDocumentation::PrependSection(const char *name,
+void cmDocumentation::PrependSection(const std::string& name,
                                      cmDocumentationEntry &docs)
 {
 

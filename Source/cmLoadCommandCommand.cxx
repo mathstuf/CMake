@@ -235,7 +235,7 @@ bool cmLoadCommandCommand
 
   // try loading the shared library / dll
   cmsys::DynamicLoader::LibraryHandle lib
-    = cmDynamicLoader::OpenLibrary(fullPath.c_str());
+    = cmDynamicLoader::OpenLibrary(fullPath);
   if(!lib)
     {
     std::string err = "Attempt to load the library ";

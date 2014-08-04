@@ -15,10 +15,11 @@ class cmDynamicLoaderCache
 {
 public:
   ~cmDynamicLoaderCache();
-  void CacheFile(const char* path,
+  void CacheFile(const std::string& path,
     const cmsys::DynamicLoader::LibraryHandle&);
-  bool GetCacheFile(const char* path, cmsys::DynamicLoader::LibraryHandle&);
-  bool FlushCache(const char* path);
+  bool GetCacheFile(const std::string& path,
+                    cmsys::DynamicLoader::LibraryHandle&);
+  bool FlushCache(const std::string& path);
   void FlushCache();
   static cmDynamicLoaderCache* GetInstance();
 
@@ -33,7 +34,7 @@ cmDynamicLoaderCache::~cmDynamicLoaderCache()
 {
 }
 
-void cmDynamicLoaderCache::CacheFile(const char* path,
+void cmDynamicLoaderCache::CacheFile(const std::string& path,
   const cmsys::DynamicLoader::LibraryHandle& p)
 {
   cmsys::DynamicLoader::LibraryHandle h;
@@ -44,7 +45,7 @@ void cmDynamicLoaderCache::CacheFile(const char* path,
   this->CacheMap[path] = p;
 }
 
-bool cmDynamicLoaderCache::GetCacheFile(const char* path,
+bool cmDynamicLoaderCache::GetCacheFile(const std::string& path,
   cmsys::DynamicLoader::LibraryHandle& p)
 {
   std::map<std::string, cmsys::DynamicLoader::LibraryHandle>::iterator it
@@ -57,7 +58,7 @@ bool cmDynamicLoaderCache::GetCacheFile(const char* path,
   return false;
 }
 
-bool cmDynamicLoaderCache::FlushCache(const char* path)
+bool cmDynamicLoaderCache::FlushCache(const std::string& path)
 {
   std::map<std::string, cmsys::DynamicLoader::LibraryHandle>::iterator it
     = this->CacheMap.find(path);
@@ -94,7 +95,7 @@ cmDynamicLoaderCache* cmDynamicLoaderCache::GetInstance()
 }
 
 cmsys::DynamicLoader::LibraryHandle cmDynamicLoader::OpenLibrary(
-  const char* libname )
+  const std::string& libname )
 {
   cmsys::DynamicLoader::LibraryHandle lh;
   if ( cmDynamicLoaderCache::GetInstance()->GetCacheFile(libname, lh) )

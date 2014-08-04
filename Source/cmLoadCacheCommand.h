@@ -49,7 +49,7 @@ protected:
   std::string Prefix;
 
   bool ReadWithPrefix(std::vector<std::string> const& args);
-  void CheckLine(const char* line);
+  void CheckLine(const std::string& line);
 };
 
 

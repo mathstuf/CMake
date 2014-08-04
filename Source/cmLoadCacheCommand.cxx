@@ -151,7 +151,7 @@ bool cmLoadCacheCommand::ReadWithPrefix(std::vector<std::string> const& args)
         if(i != end)
           {
           // Completed a line.
-          this->CheckLine(line.c_str());
+          this->CheckLine(line);
           line = "";
 
           // Skip the newline character.
@@ -163,14 +163,14 @@ bool cmLoadCacheCommand::ReadWithPrefix(std::vector<std::string> const& args)
   if(line.length())
     {
     // Partial last line.
-    this->CheckLine(line.c_str());
+    this->CheckLine(line);
     }
 
   return true;
 }
 
 //----------------------------------------------------------------------------
-void cmLoadCacheCommand::CheckLine(const char* line)
+void cmLoadCacheCommand::CheckLine(const std::string& line)
 {
   // Check one line of the cache file.
   std::string var;

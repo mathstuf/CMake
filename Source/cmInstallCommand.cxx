@@ -877,7 +877,7 @@ bool cmInstallCommand::HandleFilesMode(std::vector<std::string> const& args)
     }
 
   std::vector<std::string> absFiles;
-  if (!this->MakeFilesFullPath(args[0].c_str(), files.GetVector(), absFiles))
+  if (!this->MakeFilesFullPath(args[0], files.GetVector(), absFiles))
     {
     return false;
     }
@@ -1375,7 +1375,7 @@ bool cmInstallCommand::HandleExportMode(std::vector<std::string> const& args)
   return true;
 }
 
-bool cmInstallCommand::MakeFilesFullPath(const char* modeName,
+bool cmInstallCommand::MakeFilesFullPath(const std::string& modeName,
                                       const std::vector<std::string>& relFiles,
                                       std::vector<std::string>& absFiles)
 {

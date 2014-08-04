@@ -51,7 +51,7 @@ private:
   bool HandleFilesMode(std::vector<std::string> const& args);
   bool HandleDirectoryMode(std::vector<std::string> const& args);
   bool HandleExportMode(std::vector<std::string> const& args);
-  bool MakeFilesFullPath(const char* modeName,
+  bool MakeFilesFullPath(const std::string& modeName,
                          const std::vector<std::string>& relFiles,
                          std::vector<std::string>& absFiles);
   bool CheckCMP0006(bool& failure);

@@ -97,7 +97,7 @@ public:
   /**
    * Used by main program
    */
-  int LoadCache(const char *dir);
+  int LoadCache();
 
   /**
    * Progress callback
@@ -123,7 +123,7 @@ protected:
   void RemoveEntry(const char* value);
 
   // Jump to the cache entry whose name matches the string.
-  void JumpToCacheEntry(const char* str);
+  void JumpToCacheEntry(const std::string& str);
 
   // Copies of cache entries stored in the user interface
   std::vector<cmCursesCacheEntryComposite*>* Entries;

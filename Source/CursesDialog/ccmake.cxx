@@ -181,7 +181,7 @@ int main(int argc, char const* const* argv)
   cmCursesMainForm* myform;
 
   myform = new cmCursesMainForm(args, x);
-  if(myform->LoadCache(cacheDir.c_str()))
+  if(myform->LoadCache())
     {
     curses_clear();
     touchwin(stdscr);

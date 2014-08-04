@@ -649,7 +649,7 @@ int cmCursesMainForm::Configure(int noconfigure)
   this->FillCacheManagerFromUI();
   this->CMakeInstance->GetCacheManager()->SaveCache(
     this->CMakeInstance->GetHomeOutputDirectory());
-  this->LoadCache(0);
+  this->LoadCache();
 
   // Get rid of previous errors
   this->Errors = std::vector<std::string>();
@@ -904,7 +904,7 @@ void cmCursesMainForm::HandleInput()
         this->SearchMode = false;
         if ( this->SearchString.size() > 0 )
           {
-          this->JumpToCacheEntry(this->SearchString.c_str());
+          this->JumpToCacheEntry(this->SearchString);
           this->OldSearchString = this->SearchString;
           }
         this->SearchString = "";
@@ -1078,7 +1078,7 @@ void cmCursesMainForm::HandleInput()
         {
         if ( this->OldSearchString.size() > 0 )
           {
-          this->JumpToCacheEntry(this->OldSearchString.c_str());
+          this->JumpToCacheEntry(this->OldSearchString);
           }
         }
       // switch advanced on/off
@@ -1180,8 +1180,7 @@ void cmCursesMainForm::HandleInput()
     }
 }
 
-int cmCursesMainForm::LoadCache(const char *)
-
+int cmCursesMainForm::LoadCache()
 {
   int r = this->CMakeInstance->LoadCache();
   if(r < 0)
@@ -1193,13 +1192,9 @@ int cmCursesMainForm::LoadCache(const char *)
   return r;
 }
 
-void cmCursesMainForm::JumpToCacheEntry(const char* astr)
+void cmCursesMainForm::JumpToCacheEntry(const std::string& astr)
 {
-  std::string str;
-  if ( astr )
-    {
-    str = cmSystemTools::LowerCase(astr);
-    }
+  std::string str = cmSystemTools::LowerCase(astr);
 
   if(str.empty())
     {

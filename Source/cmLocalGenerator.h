@@ -221,7 +221,7 @@ public:
                                  bool /* verbose */) {}
 
   /** Called from command-line hook to update dependencies.  */
-  virtual bool UpdateDependencies(const char* /* tgtInfo */,
+  virtual bool UpdateDependencies(const std::string& /* tgtInfo */,
                                   bool /*verbose*/,
                                   bool /*color*/)
     { return true; }
@@ -346,14 +346,14 @@ public:
    * Generate a Mac OS X application bundle Info.plist file.
    */
   void GenerateAppleInfoPList(cmTarget* target, const std::string& targetName,
-                              const char* fname);
+                              const std::string& fname);
 
   /**
    * Generate a Mac OS X framework Info.plist file.
    */
   void GenerateFrameworkInfoPList(cmTarget* target,
                                   const std::string& targetName,
-                                  const char* fname);
+                                  const std::string& fname);
   /** Construct a comment for a custom command.  */
   std::string ConstructComment(cmCustomCommandGenerator const& ccg,
                                const char* default_comment = "");
@@ -408,7 +408,7 @@ protected:
   void AddBuildTargetRule(const std::string& llang,
                           cmGeneratorTarget& target);
   ///! add a custom command to build a .o file that is part of a target
-  void AddCustomCommandToCreateObject(const char* ofname,
+  void AddCustomCommandToCreateObject(const std::string& ofname,
                                       const std::string& lang,
                                       cmSourceFile& source,
                                       cmGeneratorTarget& target);

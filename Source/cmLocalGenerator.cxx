@@ -570,7 +570,8 @@ void cmLocalGenerator::GenerateTargetManifest()
     }
 }
 
-void cmLocalGenerator::AddCustomCommandToCreateObject(const char* ofname,
+void cmLocalGenerator::AddCustomCommandToCreateObject(
+                                                    const std::string& ofname,
                                                     const std::string& lang,
                                                     cmSourceFile& source,
                                                     cmGeneratorTarget& target)
@@ -679,7 +680,7 @@ void cmLocalGenerator::AddBuildTargetRule(const std::string& llang,
         ofname += "/";
         ofname += obj;
         objVector.push_back(ofname);
-        this->AddCustomCommandToCreateObject(ofname.c_str(),
+        this->AddCustomCommandToCreateObject(ofname,
                                              llang, *(*i), target);
         objs += this->Convert(ofname,START_OUTPUT,SHELL);
         objs += " ";
@@ -3680,7 +3681,7 @@ static void cmLGInfoProp(cmMakefile* mf, cmTarget* target,
 //----------------------------------------------------------------------------
 void cmLocalGenerator::GenerateAppleInfoPList(cmTarget* target,
                                               const std::string& targetName,
-                                              const char* fname)
+                                              const std::string& fname)
 {
   // Find the Info.plist template.
   const char* in = target->GetProperty("MACOSX_BUNDLE_INFO_PLIST");
@@ -3724,7 +3725,7 @@ void cmLocalGenerator::GenerateAppleInfoPList(cmTarget* target,
 //----------------------------------------------------------------------------
 void cmLocalGenerator::GenerateFrameworkInfoPList(cmTarget* target,
                                                 const std::string& targetName,
-                                                const char* fname)
+                                                const std::string& fname)
 {
   // Find the Info.plist template.
   const char* in = target->GetProperty("MACOSX_FRAMEWORK_INFO_PLIST");

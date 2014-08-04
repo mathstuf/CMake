@@ -1980,7 +1980,7 @@ void cmGlobalXCodeGenerator::CreateBuildSettings(cmTarget& target,
       // is very similar to the application bundle plist
       this->CurrentLocalGenerator
         ->GenerateAppleInfoPList(&target, "$(EXECUTABLE_NAME)",
-                                 plist.c_str());
+                                 plist);
       std::string path =
         this->ConvertToRelativeForXCode(plist);
       buildSettings->AddAttribute("INFOPLIST_FILE",
@@ -2029,7 +2029,7 @@ void cmGlobalXCodeGenerator::CreateBuildSettings(cmTarget& target,
       // a per-configuration Info.plist file.
       this->CurrentLocalGenerator
         ->GenerateFrameworkInfoPList(&target, "$(EXECUTABLE_NAME)",
-                                     plist.c_str());
+                                     plist);
       std::string path =
         this->ConvertToRelativeForXCode(plist);
       buildSettings->AddAttribute("INFOPLIST_FILE",
@@ -2072,7 +2072,7 @@ void cmGlobalXCodeGenerator::CreateBuildSettings(cmTarget& target,
       // a per-configuration Info.plist file.
       this->CurrentLocalGenerator
         ->GenerateAppleInfoPList(&target, "$(EXECUTABLE_NAME)",
-                                 plist.c_str());
+                                 plist);
       std::string path =
         this->ConvertToRelativeForXCode(plist);
       buildSettings->AddAttribute("INFOPLIST_FILE",

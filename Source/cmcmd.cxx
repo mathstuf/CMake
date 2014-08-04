@@ -676,7 +676,7 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
         lgd->GetMakefile()->MakeStartDirectoriesCurrent();
 
         // Actually scan dependencies.
-        return lgd->UpdateDependencies(depInfo.c_str(),
+        return lgd->UpdateDependencies(depInfo,
                                        verbose, color)? 0 : 2;
         }
       return 1;

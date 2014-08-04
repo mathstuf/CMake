@@ -195,7 +195,7 @@ public:
 
   /** Called from command-line hook to bring dependencies up to date
       for a target.  */
-  virtual bool UpdateDependencies(const char* tgtInfo,
+  virtual bool UpdateDependencies(const std::string& tgtInfo,
                                   bool verbose, bool color);
 
   /** Called from command-line hook to clear dependencies.  */

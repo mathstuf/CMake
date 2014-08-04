@@ -1463,12 +1463,13 @@ cmLocalUnixMakefileGenerator3
 }
 
 //----------------------------------------------------------------------------
-bool cmLocalUnixMakefileGenerator3::UpdateDependencies(const char* tgtInfo,
-                                                       bool verbose,
-                                                       bool color)
+bool cmLocalUnixMakefileGenerator3::UpdateDependencies(
+                                                  const std::string& tgtInfo,
+                                                  bool verbose,
+                                                  bool color)
 {
   // read in the target info file
-  if(!this->Makefile->ReadListFile(0, tgtInfo) ||
+  if(!this->Makefile->ReadListFile(0, tgtInfo.c_str()) ||
      cmSystemTools::GetErrorOccuredFlag())
     {
     cmSystemTools::Error("Target DependInfo.cmake file not found");

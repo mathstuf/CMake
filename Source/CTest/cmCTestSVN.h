@@ -39,7 +39,7 @@ private:
   // Information about an SVN repository (root repository or external)
   struct SVNInfo {
 
-    SVNInfo(const char* path) : LocalPath(path) {}
+    SVNInfo(const std::string& path) : LocalPath(path) {}
     // Remove base from the filename
     std::string BuildLocalPath(std::string const& path) const;
 

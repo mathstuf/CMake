@@ -577,7 +577,7 @@ private:
       {
       local_path = path;
       }
-    this->SVN->Repositories.push_back( SVNInfo(local_path.c_str()) );
+    this->SVN->Repositories.push_back( SVNInfo(local_path) );
     }
 };
 

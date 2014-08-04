@@ -209,7 +209,7 @@ struct TagVisitor
       {
       DoAccept<IsSameTag<Tag, HeaderSourcesTag>::Result>::Do(this->Data, sf);
       }
-    else if(this->GlobalGenerator->IgnoreFile(sf->GetExtension().c_str()))
+    else if(this->GlobalGenerator->IgnoreFile(sf->GetExtension()))
       {
       DoAccept<IsSameTag<Tag, ExtraSourcesTag>::Result>::Do(this->Data, sf);
       }

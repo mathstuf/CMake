@@ -939,16 +939,20 @@ cmGlobalGenerator::GetLanguageOutputExtension(cmSourceFile const& source) const
 }
 
 
-std::string cmGlobalGenerator::GetLanguageFromExtension(const char* ext) const
+std::string cmGlobalGenerator::GetLanguageFromExtension(
+                                                  const std::string& ext) const
 {
   // if there is an extension and it starts with . then move past the
   // . because the extensions are not stored with a .  in the map
-  if(ext && *ext == '.')
+  std::map<std::string, std::string>::const_iterator it;
+  if(ext[0] == '.')
     {
-    ++ext;
+    it = this->ExtensionToLanguage.find(ext.substr(1));
     }
-  std::map<std::string, std::string>::const_iterator it
-                                        = this->ExtensionToLanguage.find(ext);
+  else
+    {
+    it = this->ExtensionToLanguage.find(ext);
+    }
   if(it != this->ExtensionToLanguage.end())
     {
     return it->second;
@@ -1078,7 +1082,7 @@ void cmGlobalGenerator::FillExtensionToLanguageMap(const std::string& l,
     }
 }
 
-bool cmGlobalGenerator::IgnoreFile(const char* ext) const
+bool cmGlobalGenerator::IgnoreFile(const std::string& ext) const
 {
   if(!this->GetLanguageFromExtension(ext).empty())
     {
@@ -1887,9 +1891,9 @@ void cmGlobalGenerator::AddLocalGenerator(cmLocalGenerator *lg)
   this->CMakeInstance->UpdateProgress("Configuring", prog);
 }
 
-void cmGlobalGenerator::AddInstallComponent(const char* component)
+void cmGlobalGenerator::AddInstallComponent(const std::string& component)
 {
-  if(component && *component)
+  if(!component.empty())
     {
     this->InstallComponents.insert(component);
     }

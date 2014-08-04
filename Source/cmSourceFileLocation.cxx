@@ -124,7 +124,7 @@ void cmSourceFileLocation::UpdateExtension(const std::string& name)
   cmMakefile const* mf = this->Makefile;
   const std::vector<std::string>& srcExts = mf->GetSourceExtensions();
   const std::vector<std::string>& hdrExts = mf->GetHeaderExtensions();
-  if(!gg->GetLanguageFromExtension(ext.c_str()).empty() ||
+  if(!gg->GetLanguageFromExtension(ext).empty() ||
      std::find(srcExts.begin(), srcExts.end(), ext) != srcExts.end() ||
      std::find(hdrExts.begin(), hdrExts.end(), ext) != hdrExts.end())
     {

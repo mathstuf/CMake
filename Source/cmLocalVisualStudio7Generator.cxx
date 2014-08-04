@@ -1609,8 +1609,7 @@ cmLocalVisualStudio7GeneratorFCInfo
       }
 
     std::string lang =
-      lg->GlobalGenerator->GetLanguageFromExtension
-      (sf.GetExtension().c_str());
+      lg->GlobalGenerator->GetLanguageFromExtension(sf.GetExtension());
     const std::string& sourceLang = lg->GetSourceFileLanguage(sf);
     const std::string& linkLanguage = target.GetLinkerLanguage(*i);
     bool needForceLang = false;

@@ -177,7 +177,7 @@ public:
 
   std::string GetExtraGeneratorName() const;
 
-  void AddInstallComponent(const char* component);
+  void AddInstallComponent(const std::string& component);
 
   const std::set<std::string>* GetInstallComponents() const
     { return &this->InstallComponents; }
@@ -195,9 +195,9 @@ public:
   bool GetToolSupportsColor() const { return this->ToolSupportsColor; }
 
   ///! return the language for the given extension
-  std::string GetLanguageFromExtension(const char* ext) const;
+  std::string GetLanguageFromExtension(const std::string& ext) const;
   ///! is an extension to be ignored
-  bool IgnoreFile(const char* ext) const;
+  bool IgnoreFile(const std::string& ext) const;
   ///! What is the preference for linkers and this language (None or Preferred)
   int GetLinkerPreference(const std::string& lang) const;
   ///! What is the object file extension for a given source file?

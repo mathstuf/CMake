@@ -1513,8 +1513,7 @@ bool cmVisualStudio10TargetGenerator::OutputSourceSpecificFlags(
     defines += cdefs;
     }
   std::string lang =
-    this->GlobalGenerator->GetLanguageFromExtension
-    (sf.GetExtension().c_str());
+    this->GlobalGenerator->GetLanguageFromExtension(sf.GetExtension());
   std::string sourceLang = this->LocalGenerator->GetSourceFileLanguage(sf);
   const std::string& linkLanguage = this->Target->GetLinkerLanguage();
   bool needForceLang = false;

@@ -633,7 +633,7 @@ void cmCTestBuildHandler::GenerateXMLLaunched(std::ostream& os)
   for(Fragments::const_iterator fi = fragments.begin();
       fi != fragments.end(); ++fi)
     {
-    this->GenerateXMLLaunchedFragment(os, fi->c_str());
+    this->GenerateXMLLaunchedFragment(os, *fi);
     }
 }
 
@@ -755,9 +755,9 @@ void cmCTestBuildHandler::GenerateXMLFooter(std::ostream& os,
 
 //----------------------------------------------------------------------------
 void cmCTestBuildHandler::GenerateXMLLaunchedFragment(std::ostream& os,
-                                                      const char* fname)
+                                                      const std::string& fname)
 {
-  cmsys::ifstream fin(fname, std::ios::in | std::ios::binary);
+  cmsys::ifstream fin(fname.c_str(), std::ios::in | std::ios::binary);
   std::string line;
   while(cmSystemTools::GetLineFromStream(fin, line))
     {
@@ -766,19 +766,19 @@ void cmCTestBuildHandler::GenerateXMLLaunchedFragment(std::ostream& os,
 }
 
 //----------------------------------------------------------------------------
-bool cmCTestBuildHandler::IsLaunchedErrorFile(const char* fname)
+bool cmCTestBuildHandler::IsLaunchedErrorFile(const std::string& fname)
 {
   // error-{hash}.xml
   return (cmHasLiteralPrefix(fname, "error-") &&
-          strcmp(fname+strlen(fname)-4, ".xml") == 0);
+          cmHasLiteralSuffix(fname, ".xml"));
 }
 
 //----------------------------------------------------------------------------
-bool cmCTestBuildHandler::IsLaunchedWarningFile(const char* fname)
+bool cmCTestBuildHandler::IsLaunchedWarningFile(const std::string& fname)
 {
   // warning-{hash}.xml
   return (cmHasLiteralPrefix(fname, "warning-") &&
-          strcmp(fname+strlen(fname)-4, ".xml") == 0);
+          cmHasLiteralSuffix(fname, ".xml"));
 }
 
 //######################################################################

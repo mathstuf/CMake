@@ -88,9 +88,9 @@ private:
   void GenerateXMLLaunched(std::ostream& os);
   void GenerateXMLLogScraped(std::ostream& os);
   void GenerateXMLFooter(std::ostream& os, double elapsed_build_time);
-  void GenerateXMLLaunchedFragment(std::ostream& os, const char* fname);
-  bool IsLaunchedErrorFile(const char* fname);
-  bool IsLaunchedWarningFile(const char* fname);
+  void GenerateXMLLaunchedFragment(std::ostream& os, const std::string& fname);
+  bool IsLaunchedErrorFile(const std::string& fname);
+  bool IsLaunchedWarningFile(const std::string& fname);
 
   std::string             StartBuild;
   std::string             EndBuild;

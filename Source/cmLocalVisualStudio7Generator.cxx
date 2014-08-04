@@ -316,7 +316,7 @@ cmSourceFile* cmLocalVisualStudio7Generator::CreateVCProjBuildRule()
                   START_OUTPUT, UNCHANGED, true);
   commandLine.push_back(args);
   commandLine.push_back("--check-stamp-file");
-  std::string stampFilename = this->Convert(stampName.c_str(), FULL,
+  std::string stampFilename = this->Convert(stampName, FULL,
                                             SHELL);
   commandLine.push_back(stampFilename.c_str());
 
@@ -325,7 +325,7 @@ cmSourceFile* cmLocalVisualStudio7Generator::CreateVCProjBuildRule()
   cmCustomCommandLines commandLines;
   commandLines.push_back(commandLine);
   const char* no_working_directory = 0;
-  std::string fullpathStampName = this->Convert(stampName.c_str(), FULL,
+  std::string fullpathStampName = this->Convert(stampName, FULL,
                                             UNCHANGED);
   this->Makefile->AddCustomCommandToOutput(fullpathStampName,
                                            listFiles, makefileIn,
@@ -790,7 +790,7 @@ void cmLocalVisualStudio7Generator::WriteConfiguration(std::ostream& fout,
   intermediateDir += "/";
   intermediateDir += configName;
   fout << "\t\t\tIntermediateDirectory=\""
-       << this->ConvertToXMLOutputPath(intermediateDir.c_str())
+       << this->ConvertToXMLOutputPath(intermediateDir)
        << "\"\n"
        << "\t\t\tConfigurationType=\"" << configType << "\"\n"
        << "\t\t\tUseOfMFC=\"" << mfcFlag << "\"\n"
@@ -847,7 +847,7 @@ void cmLocalVisualStudio7Generator::WriteConfiguration(std::ostream& fout,
       modDir = ".";
       }
     fout << "\t\t\t\tModulePath=\""
-         << this->ConvertToXMLOutputPath(modDir.c_str())
+         << this->ConvertToXMLOutputPath(modDir)
          << "\\$(ConfigurationName)\"\n";
     }
   targetOptions.OutputAdditionalOptions(fout, "\t\t\t\t", "\n");
@@ -858,7 +858,7 @@ void cmLocalVisualStudio7Generator::WriteConfiguration(std::ostream& fout,
   for(;i != includes.end(); ++i)
     {
     // output the include path
-    std::string ipath = this->ConvertToXMLOutputPath(i->c_str());
+    std::string ipath = this->ConvertToXMLOutputPath(*i);
     fout << ipath << ";";
     // if this is fortran then output the include with
     // a ConfigurationName on the end of it.
@@ -866,7 +866,7 @@ void cmLocalVisualStudio7Generator::WriteConfiguration(std::ostream& fout,
       {
       ipath = i->c_str();
       ipath += "/$(ConfigurationName)";
-      ipath = this->ConvertToXMLOutputPath(ipath.c_str());
+      ipath = this->ConvertToXMLOutputPath(ipath);
       fout << ipath << ";";
       }
     }
@@ -881,7 +881,7 @@ void cmLocalVisualStudio7Generator::WriteConfiguration(std::ostream& fout,
     if(!pdb.empty())
       {
       fout <<  "\t\t\t\tProgramDataBaseFileName=\""
-           << this->ConvertToXMLOutputPathSingle(pdb.c_str())
+           << this->ConvertToXMLOutputPathSingle(pdb)
            << "\"\n";
       }
     }
@@ -926,7 +926,7 @@ void cmLocalVisualStudio7Generator::WriteConfiguration(std::ostream& fout,
        << "\t\t\t\tAdditionalIncludeDirectories=\"";
   for(i = includes.begin();i != includes.end(); ++i)
     {
-    std::string ipath = this->ConvertToXMLOutputPath(i->c_str());
+    std::string ipath = this->ConvertToXMLOutputPath(*i);
     fout << ipath << ";";
     }
   // add the -D flags to the RC tool
@@ -942,7 +942,7 @@ void cmLocalVisualStudio7Generator::WriteConfiguration(std::ostream& fout,
   fout << "\t\t\t\tAdditionalIncludeDirectories=\"";
   for(i = includes.begin(); i != includes.end(); ++i)
     {
-    std::string ipath = this->ConvertToXMLOutputPath(i->c_str());
+    std::string ipath = this->ConvertToXMLOutputPath(*i);
     fout << ipath << ";";
     }
   fout << "\"\n";
@@ -1082,7 +1082,7 @@ void cmLocalVisualStudio7Generator::OutputBuildTool(std::ostream& fout,
       fout << "\t\t\t<Tool\n"
            << "\t\t\t\tName=\"" << tool << "\"\n";
       fout << "\t\t\t\tOutputFile=\""
-           << this->ConvertToXMLOutputPathSingle(libpath.c_str()) << "\"/>\n";
+           << this->ConvertToXMLOutputPathSingle(libpath) << "\"/>\n";
       break;
       }
     case cmTarget::STATIC_LIBRARY:
@@ -1115,7 +1115,7 @@ void cmLocalVisualStudio7Generator::OutputBuildTool(std::ostream& fout,
       fout << "\t\t\t\tAdditionalOptions=\"" << libflags << "\"\n";
       }
     fout << "\t\t\t\tOutputFile=\""
-         << this->ConvertToXMLOutputPathSingle(libpath.c_str()) << "\"/>\n";
+         << this->ConvertToXMLOutputPathSingle(libpath) << "\"/>\n";
     break;
     }
     case cmTarget::SHARED_LIBRARY:
@@ -1170,7 +1170,7 @@ void cmLocalVisualStudio7Generator::OutputBuildTool(std::ostream& fout,
     temp += "/";
     temp += targetNameFull;
     fout << "\t\t\t\tOutputFile=\""
-         << this->ConvertToXMLOutputPathSingle(temp.c_str()) << "\"\n";
+         << this->ConvertToXMLOutputPathSingle(temp) << "\"\n";
     this->WriteTargetVersionAttribute(fout, target);
     linkOptions.OutputFlagMap(fout, "\t\t\t\t");
     fout << "\t\t\t\tAdditionalLibraryDirectories=\"";
@@ -1180,7 +1180,7 @@ void cmLocalVisualStudio7Generator::OutputBuildTool(std::ostream& fout,
     temp += "/";
     temp += targetNamePDB;
     fout << "\t\t\t\tProgramDatabaseFile=\"" <<
-      this->ConvertToXMLOutputPathSingle(temp.c_str()) << "\"\n";
+      this->ConvertToXMLOutputPathSingle(temp) << "\"\n";
     if(targetOptions.IsDebug())
       {
       fout << "\t\t\t\tGenerateDebugInformation=\"true\"\n";
@@ -1208,7 +1208,7 @@ void cmLocalVisualStudio7Generator::OutputBuildTool(std::ostream& fout,
     temp += "/";
     temp += targetNameImport;
     fout << "\t\t\t\tImportLibrary=\""
-         << this->ConvertToXMLOutputPathSingle(temp.c_str()) << "\"";
+         << this->ConvertToXMLOutputPathSingle(temp) << "\"";
     if(this->FortranProject)
       {
       fout << "\n\t\t\t\tLinkDLL=\"true\"";
@@ -1268,14 +1268,14 @@ void cmLocalVisualStudio7Generator::OutputBuildTool(std::ostream& fout,
     temp += "/";
     temp += targetNameFull;
     fout << "\t\t\t\tOutputFile=\""
-         << this->ConvertToXMLOutputPathSingle(temp.c_str()) << "\"\n";
+         << this->ConvertToXMLOutputPathSingle(temp) << "\"\n";
     this->WriteTargetVersionAttribute(fout, target);
     linkOptions.OutputFlagMap(fout, "\t\t\t\t");
     fout << "\t\t\t\tAdditionalLibraryDirectories=\"";
     this->OutputLibraryDirectories(fout, cli.GetDirectories());
     fout << "\"\n";
     std::string path = this->ConvertToXMLOutputPathSingle(
-      target.GetPDBDirectory(configName).c_str());
+      target.GetPDBDirectory(configName));
     fout << "\t\t\t\tProgramDatabaseFile=\""
          << path << "/" << targetNamePDB
          << "\"\n";
@@ -1326,7 +1326,7 @@ void cmLocalVisualStudio7Generator::OutputBuildTool(std::ostream& fout,
     temp += "/";
     temp += targetNameImport;
     fout << "\t\t\t\tImportLibrary=\""
-         << this->ConvertToXMLOutputPathSingle(temp.c_str()) << "\"/>\n";
+         << this->ConvertToXMLOutputPathSingle(temp) << "\"/>\n";
     break;
     }
     case cmTarget::UTILITY:
@@ -1357,10 +1357,10 @@ cmLocalVisualStudio7GeneratorInternals
     {
     if(l->IsPath)
       {
-      std::string rel = lg->Convert(l->Value.c_str(),
+      std::string rel = lg->Convert(l->Value,
                                     cmLocalGenerator::START_OUTPUT,
                                     cmLocalGenerator::UNCHANGED);
-      fout << lg->ConvertToXMLOutputPath(rel.c_str()) << " ";
+      fout << lg->ConvertToXMLOutputPath(rel) << " ";
       }
     else if (!l->Target
         || l->Target->GetType() != cmTarget::INTERFACE_LIBRARY)
@@ -1386,10 +1386,10 @@ cmLocalVisualStudio7GeneratorInternals
   for(std::vector<std::string>::const_iterator
         oi = objs.begin(); oi != objs.end(); ++oi)
     {
-    std::string rel = lg->Convert(oi->c_str(),
+    std::string rel = lg->Convert(*oi,
                                   cmLocalGenerator::START_OUTPUT,
                                   cmLocalGenerator::UNCHANGED);
-    fout << sep << lg->ConvertToXMLOutputPath(rel.c_str());
+    fout << sep << lg->ConvertToXMLOutputPath(rel);
     sep = " ";
     }
 }
@@ -1418,7 +1418,7 @@ cmLocalVisualStudio7Generator
     // Switch to a relative path specification if it is shorter.
     if(cmSystemTools::FileIsFullPath(dir))
       {
-      std::string rel = this->Convert(dir.c_str(), START_OUTPUT, UNCHANGED);
+      std::string rel = this->Convert(dir, START_OUTPUT, UNCHANGED);
       if(rel.size() < dir.size())
         {
         dir = rel;
@@ -1427,8 +1427,8 @@ cmLocalVisualStudio7Generator
 
     // First search a configuration-specific subdirectory and then the
     // original directory.
-    fout << comma << this->ConvertToXMLOutputPath((dir+"/$(OutDir)").c_str())
-         << "," << this->ConvertToXMLOutputPath(dir.c_str());
+    fout << comma << this->ConvertToXMLOutputPath((dir+"/$(OutDir)"))
+         << "," << this->ConvertToXMLOutputPath(dir);
     comma = ",";
     }
 }
@@ -1500,7 +1500,7 @@ void cmLocalVisualStudio7Generator::WriteVCProjFile(std::ostream& fout,
       for(std::vector<std::string>::const_iterator
             oi = objs.begin(); oi != objs.end(); ++oi)
         {
-        std::string o = this->ConvertToXMLOutputPathSingle(oi->c_str());
+        std::string o = this->ConvertToXMLOutputPathSingle(*oi);
         fout << "\t\t\t<File RelativePath=\"" << o << "\" />\n";
         }
       fout << "\t\t</Filter>\n";
@@ -1602,7 +1602,7 @@ cmLocalVisualStudio7GeneratorFCInfo
           j != depends.end(); ++j)
         {
         fc.AdditionalDeps += sep;
-        fc.AdditionalDeps += lg->ConvertToXMLOutputPath(j->c_str());
+        fc.AdditionalDeps += lg->ConvertToXMLOutputPath(*j);
         sep = ";";
         needfc = true;
         }
@@ -1733,7 +1733,7 @@ bool cmLocalVisualStudio7Generator
       target.GetType() == cmTarget::GLOBAL_TARGET )
       {
       fout << "\t\t\t<File\n";
-      std::string d = this->ConvertToXMLOutputPathSingle(source.c_str());
+      std::string d = this->ConvertToXMLOutputPathSingle(source);
       // Tell MS-Dev what the source is.  If the compiler knows how to
       // build it, then it will.
       fout << "\t\t\t\tRelativePath=\"" << d << "\">\n";
@@ -1928,7 +1928,7 @@ WriteCustomRule(std::ostream& fout,
         std::string dep;
         if(this->GetRealDependency(*d, *i, dep))
           {
-          fout << this->ConvertToXMLOutputPath(dep.c_str())
+          fout << this->ConvertToXMLOutputPath(dep)
                << ";";
           }
         }
@@ -1948,7 +1948,7 @@ WriteCustomRule(std::ostream& fout,
           o != ccg.GetOutputs().end();
           ++o)
         {
-        fout << sep << this->ConvertToXMLOutputPathSingle(o->c_str());
+        fout << sep << this->ConvertToXMLOutputPathSingle(*o);
         sep = ";";
         }
       }

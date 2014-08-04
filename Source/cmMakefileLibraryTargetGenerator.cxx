@@ -426,7 +426,7 @@ void cmMakefileLibraryTargetGenerator::WriteLibraryRules
   if(this->Target->GetType() != cmTarget::STATIC_LIBRARY)
     {
     libCleanFiles.push_back(
-      this->Convert((targetFullPath+".manifest").c_str(),
+      this->Convert(targetFullPath+".manifest",
                     cmLocalGenerator::START_OUTPUT,
                     cmLocalGenerator::UNCHANGED));
     }

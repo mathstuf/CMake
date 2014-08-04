@@ -469,7 +469,7 @@ void cmGlobalVisualStudio7Generator::WriteTargetsToSolution(
         {
         cmMakefile* tmf = target->GetMakefile();
         std::string dir = tmf->GetStartOutputDirectory();
-        dir = root->Convert(dir.c_str(),
+        dir = root->Convert(dir,
                             cmLocalGenerator::START_OUTPUT);
         if(dir == ".")
           {

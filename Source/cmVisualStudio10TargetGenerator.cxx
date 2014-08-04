@@ -890,7 +890,7 @@ cmVisualStudio10TargetGenerator::ConvertPath(std::string const& path,
   return forceRelative
     ? cmSystemTools::RelativePath(
       this->Makefile->GetCurrentOutputDirectory(), path)
-    : this->LocalGenerator->Convert(path.c_str(),
+    : this->LocalGenerator->Convert(path,
                                     cmLocalGenerator::START_OUTPUT,
                                     cmLocalGenerator::UNCHANGED,
                                     /* optional = */ true);
@@ -2395,7 +2395,7 @@ void cmVisualStudio10TargetGenerator::AddLibraries(
     if(l->IsPath)
       {
       std::string path = this->LocalGenerator->
-        Convert(l->Value.c_str(),
+        Convert(l->Value,
                 cmLocalGenerator::START_OUTPUT,
                 cmLocalGenerator::UNCHANGED);
       this->ConvertToWindowsSlash(path);

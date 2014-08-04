@@ -238,7 +238,7 @@ void cmMakefileExecutableTargetGenerator::WriteExecutableRule(bool relink)
 #ifdef _WIN32
   // There may be a manifest file for this target.  Add it to the
   // clean set just in case.
-  exeCleanFiles.push_back(this->Convert((targetFullPath+".manifest").c_str(),
+  exeCleanFiles.push_back(this->Convert(targetFullPath+".manifest",
                                         cmLocalGenerator::START_OUTPUT,
                                         cmLocalGenerator::UNCHANGED));
 #endif

@@ -1837,7 +1837,7 @@ std::string cmLocalGenerator::ConvertToLinkReference(std::string const& lib,
         sp += lib.substr(pos);
 
         // Convert to an output path.
-        return this->Convert(sp.c_str(), NONE, format);
+        return this->Convert(sp, NONE, format);
         }
       }
     }

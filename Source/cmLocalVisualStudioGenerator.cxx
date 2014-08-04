@@ -211,7 +211,7 @@ cmLocalVisualStudioGenerator
         }
       }
 
-    script += this->Convert(cmd.c_str(), relativeRoot, SHELL);
+    script += this->Convert(cmd, relativeRoot, SHELL);
     ccg.AppendArguments(c, script);
 
     // After each custom command, check for an error result.

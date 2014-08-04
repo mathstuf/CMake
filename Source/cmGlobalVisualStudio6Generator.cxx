@@ -224,7 +224,7 @@ void cmGlobalVisualStudio6Generator
       {
       std::string dspname = GetVS6TargetName(target->GetName());
       std::string dir = target->GetMakefile()->GetStartOutputDirectory();
-      dir = root->Convert(dir.c_str(), cmLocalGenerator::START_OUTPUT);
+      dir = root->Convert(dir, cmLocalGenerator::START_OUTPUT);
       this->WriteProject(fout, dspname, dir.c_str(), *target);
       }
     }

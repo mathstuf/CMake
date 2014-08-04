@@ -89,7 +89,7 @@ struct cmListFile
     :ModifiedTime(0)
     {
     }
-  bool ParseFile(const char* path,
+  bool ParseFile(const std::string& path,
                  bool topLevel,
                  cmMakefile *mf);
 

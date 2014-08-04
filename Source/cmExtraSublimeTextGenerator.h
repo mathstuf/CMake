@@ -59,7 +59,8 @@ private:
   /** Returns the build command that needs to be executed to build the
    *  specified target.
    */
-  std::string BuildMakeCommand(const std::string& make, const char* makefile,
+  std::string BuildMakeCommand(const std::string& make,
+                               const std::string& makefile,
                                const std::string& target);
   /** Appends the specified target to the generated project file as a Sublime
    *  Text build system.
@@ -68,9 +69,9 @@ private:
                     const std::string& targetName,
                     cmLocalGenerator* lg,
                     cmTarget* target,
-                    const char* make,
+                    const std::string& make,
                     const cmMakefile* makefile,
-                    const char* compiler,
+                    const std::string& compiler,
                     MapSourceFileFlags& sourceFileFlags, bool firstTarget);
   /**
    * Compute the flags for compilation of object files for a given @a language.

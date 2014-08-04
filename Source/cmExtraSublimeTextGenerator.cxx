@@ -152,10 +152,10 @@ void cmExtraSublimeTextGenerator::
   std::string compiler = "";
   if (!lgs.empty())
     {
-      this->AppendTarget(fout, "all", lgs[0], 0, make.c_str(), mf,
-                         compiler.c_str(), sourceFileFlags, true);
-      this->AppendTarget(fout, "clean", lgs[0], 0, make.c_str(), mf,
-                         compiler.c_str(), sourceFileFlags, false);
+      this->AppendTarget(fout, "all", lgs[0], 0, make, mf,
+                         compiler, sourceFileFlags, true);
+      this->AppendTarget(fout, "clean", lgs[0], 0, make, mf,
+                         compiler, sourceFileFlags, false);
     }
 
   // add all executable and library targets and some of the GLOBAL
@@ -178,7 +178,7 @@ void cmExtraSublimeTextGenerator::
                      makefile->GetHomeOutputDirectory())==0)
             {
             this->AppendTarget(fout, ti->first, *lg, 0,
-                               make.c_str(), makefile, compiler.c_str(),
+                               make, makefile, compiler,
                                sourceFileFlags, false);
             }
           }
@@ -195,7 +195,7 @@ void cmExtraSublimeTextGenerator::
             }
 
           this->AppendTarget(fout, ti->first, *lg, 0,
-                             make.c_str(), makefile, compiler.c_str(),
+                             make, makefile, compiler,
                              sourceFileFlags, false);
           break;
         case cmTarget::EXECUTABLE:
@@ -205,12 +205,12 @@ void cmExtraSublimeTextGenerator::
         case cmTarget::OBJECT_LIBRARY:
           {
           this->AppendTarget(fout, ti->first, *lg, &ti->second,
-                             make.c_str(), makefile, compiler.c_str(),
+                             make, makefile, compiler,
                              sourceFileFlags, false);
           std::string fastTarget = ti->first;
           fastTarget += "/fast";
           this->AppendTarget(fout, fastTarget, *lg, &ti->second,
-                             make.c_str(), makefile, compiler.c_str(),
+                             make, makefile, compiler,
                              sourceFileFlags, false);
           }
           break;
@@ -226,9 +226,9 @@ void cmExtraSublimeTextGenerator::
                const std::string& targetName,
                cmLocalGenerator* lg,
                cmTarget* target,
-               const char* make,
+               const std::string& make,
                const cmMakefile* makefile,
-               const char*, //compiler
+               const std::string&, //compiler
                MapSourceFileFlags& sourceFileFlags,
                bool firstTarget)
 {
@@ -306,7 +306,7 @@ void cmExtraSublimeTextGenerator::
   fout << "\t{\n\t\t\t\"name\": \"" << makefile->GetProjectName() << " - " <<
           targetName << "\",\n";
   fout << "\t\t\t\"cmd\": [" <<
-          this->BuildMakeCommand(make, makefileName.c_str(), targetName) <<
+          this->BuildMakeCommand(make, makefileName, targetName) <<
           "],\n";
   fout << "\t\t\t\"working_dir\": \"${project_path}\",\n";
   fout << "\t\t\t\"file_regex\": \"^(..[^:]*):([0-9]+):?([0-9]+)?:? (.*)$\"\n";
@@ -316,7 +316,7 @@ void cmExtraSublimeTextGenerator::
 // Create the command line for building the given target using the selected
 // make
 std::string cmExtraSublimeTextGenerator::BuildMakeCommand(
-             const std::string& make, const char* makefile,
+             const std::string& make, const std::string& makefile,
              const std::string& target)
 {
   std::string command = "\"";

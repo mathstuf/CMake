@@ -206,7 +206,7 @@ bool cmExportCommand
 
   // Setup export file generation.
   cmExportBuildFileGenerator *ebfg = new cmExportBuildFileGenerator;
-  ebfg->SetExportFile(fname.c_str());
+  ebfg->SetExportFile(fname);
   ebfg->SetNamespace(this->Namespace.GetString());
   ebfg->SetAppendMode(this->Append.IsEnabled());
   if (this->ExportSet)

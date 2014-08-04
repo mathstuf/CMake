@@ -138,7 +138,7 @@ void cmInstallExportGenerator::GenerateScript(std::ostream& os)
   this->MainImportFile += this->FileName;
 
   // Generate the import file for this export set.
-  this->EFGen->SetExportFile(this->MainImportFile.c_str());
+  this->EFGen->SetExportFile(this->MainImportFile);
   this->EFGen->SetNamespace(this->Namespace);
   this->EFGen->SetExportOld(this->ExportOld);
   if(this->ConfigurationTypes->empty())

@@ -41,7 +41,7 @@ void cmExportFileGenerator::AddConfiguration(const std::string& config)
 }
 
 //----------------------------------------------------------------------------
-void cmExportFileGenerator::SetExportFile(const char* mainFile)
+void cmExportFileGenerator::SetExportFile(const std::string& mainFile)
 {
   this->MainImportFile = mainFile;
   this->FileDir =

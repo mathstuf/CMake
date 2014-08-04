@@ -46,7 +46,7 @@ public:
   virtual ~cmExportFileGenerator() {}
 
   /** Set the full path to the export file to generate.  */
-  void SetExportFile(const char* mainFile);
+  void SetExportFile(const std::string& mainFile);
   const char *GetMainExportFileName() const;
 
   /** Set the namespace in which to place exported target names.  */

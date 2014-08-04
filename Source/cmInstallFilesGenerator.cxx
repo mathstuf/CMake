@@ -19,12 +19,12 @@
 cmInstallFilesGenerator
 ::cmInstallFilesGenerator(cmMakefile* mf,
                           std::vector<std::string> const& files,
-                          const char* dest, bool programs,
-                          const char* file_permissions,
+                          const std::string& dest, bool programs,
+                          const std::string& file_permissions,
                           std::vector<std::string> const& configurations,
-                          const char* component,
+                          const std::string& component,
                           MessageLevel message,
-                          const char* rename,
+                          const std::string& rename,
                           bool optional):
   cmInstallGenerator(dest, configurations, component, message),
   Makefile(mf),
@@ -55,15 +55,15 @@ void cmInstallFilesGenerator::AddFilesInstallRule(
   std::vector<std::string> const& files)
 {
   // Write code to install the files.
-  const char* no_dir_permissions = 0;
+  static const std::string no_dir_permissions = "";
   this->AddInstallRule(os,
                        (this->Programs
                         ? cmInstallType_PROGRAMS
                         : cmInstallType_FILES),
                        files,
                        this->Optional,
-                       this->FilePermissions.c_str(), no_dir_permissions,
-                       this->Rename.c_str(), 0, indent);
+                       this->FilePermissions, no_dir_permissions,
+                       this->Rename, "", indent);
 }
 
 //----------------------------------------------------------------------------

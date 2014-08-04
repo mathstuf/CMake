@@ -216,14 +216,14 @@ public:
    * INSTALL_PREFIX
    */
   std::string GetInstallPath() const {return this->InstallPath;}
-  void SetInstallPath(const char *name) {this->InstallPath = name;}
+  void SetInstallPath(const std::string& name) {this->InstallPath = name;}
 
   /**
    * Set the path where this target (if it has a runtime part) should be
    * installed. This is relative to INSTALL_PREFIX
    */
   std::string GetRuntimeInstallPath() const {return this->RuntimeInstallPath;}
-  void SetRuntimeInstallPath(const char *name) {
+  void SetRuntimeInstallPath(const std::string& name) {
     this->RuntimeInstallPath = name; }
 
   /**

@@ -62,7 +62,7 @@ public:
 
 protected:
   void CreateInstallGenerator() const;
-  std::string FindInstallSource(const char* name) const;
+  std::string FindInstallSource(const std::string& name) const;
 
  private:
   std::vector<std::string> FinalArgs;

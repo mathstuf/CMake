@@ -23,10 +23,10 @@ class cmInstallTargetGenerator: public cmInstallGenerator
 {
 public:
   cmInstallTargetGenerator(
-    cmTarget& t, const char* dest, bool implib,
-    const char* file_permissions,
+    cmTarget& t, const std::string& dest, bool implib,
+    const std::string& file_permissions,
     std::vector<std::string> const& configurations,
-    const char* component,
+    const std::string& component,
     MessageLevel message,
     bool optional
     );

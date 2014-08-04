@@ -27,9 +27,9 @@ static cmInstallTargetGenerator* CreateInstallTargetGenerator(cmTarget& target,
 {
   cmInstallGenerator::MessageLevel message =
     cmInstallGenerator::SelectMessageLevel(target.GetMakefile());
-  return new cmInstallTargetGenerator(target, args.GetDestination().c_str(),
-                        impLib, args.GetPermissions().c_str(),
-                        args.GetConfigurations(), args.GetComponent().c_str(),
+  return new cmInstallTargetGenerator(target, args.GetDestination(),
+                        impLib, args.GetPermissions(),
+                        args.GetConfigurations(), args.GetComponent(),
                         message,
                         args.GetOptional() || forceOpt);
 }
@@ -42,11 +42,11 @@ static cmInstallFilesGenerator* CreateInstallFilesGenerator(
   cmInstallGenerator::MessageLevel message =
     cmInstallGenerator::SelectMessageLevel(mf);
   return new cmInstallFilesGenerator(mf,
-                        absFiles, args.GetDestination().c_str(),
-                        programs, args.GetPermissions().c_str(),
-                        args.GetConfigurations(), args.GetComponent().c_str(),
+                        absFiles, args.GetDestination(),
+                        programs, args.GetPermissions(),
+                        args.GetConfigurations(), args.GetComponent(),
                         message,
-                        args.GetRename().c_str(), args.GetOptional());
+                        args.GetRename(), args.GetOptional());
 }
 
 
@@ -173,16 +173,16 @@ bool cmInstallCommand::HandleScriptMode(std::vector<std::string> const& args)
         return false;
         }
       this->Makefile->AddInstallGenerator(
-        new cmInstallScriptGenerator(script.c_str(), false,
-                                     component.c_str()));
+        new cmInstallScriptGenerator(script, false,
+                                     component));
       }
     else if(doing_code)
       {
       doing_code = false;
       std::string code = args[i];
       this->Makefile->AddInstallGenerator(
-        new cmInstallScriptGenerator(code.c_str(), true,
-                                     component.c_str()));
+        new cmInstallScriptGenerator(code, true,
+                                     component));
       }
     }
 
@@ -1236,12 +1236,12 @@ cmInstallCommand::HandleDirectoryMode(std::vector<std::string> const& args)
   // Create the directory install generator.
   this->Makefile->AddInstallGenerator(
     new cmInstallDirectoryGenerator(dirs, destination,
-                                    permissions_file.c_str(),
-                                    permissions_dir.c_str(),
+                                    permissions_file,
+                                    permissions_dir,
                                     configurations,
-                                    component.c_str(),
+                                    component,
                                     message,
-                                    literal_args.c_str(),
+                                    literal_args,
                                     optional));
 
   // Tell the global generator about any installation component names
@@ -1366,10 +1366,10 @@ bool cmInstallCommand::HandleExportMode(std::vector<std::string> const& args)
   cmInstallExportGenerator* exportGenerator =
     new cmInstallExportGenerator(
       exportSet,
-      ica.GetDestination().c_str(),
-      ica.GetPermissions().c_str(), ica.GetConfigurations(),
-      ica.GetComponent().c_str(), message, fname.c_str(),
-      name_space.GetCString(), exportOld.IsEnabled(), this->Makefile);
+      ica.GetDestination(),
+      ica.GetPermissions(), ica.GetConfigurations(),
+      ica.GetComponent(), message, fname,
+      name_space.GetString(), exportOld.IsEnabled(), this->Makefile);
   this->Makefile->AddInstallGenerator(exportGenerator);
 
   return true;

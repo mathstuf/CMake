@@ -61,7 +61,7 @@ void cmInstallProgramsCommand::FinalPass()
     for(;s != this->FinalArgs.end(); ++s)
       {
       // add to the result
-      this->Files.push_back(this->FindInstallSource(s->c_str()));
+      this->Files.push_back(this->FindInstallSource(*s));
       }
     }
   else     // reg exp list
@@ -74,7 +74,7 @@ void cmInstallProgramsCommand::FinalPass()
     // for each argument, get the programs
     for (;s != programs.end(); ++s)
       {
-      this->Files.push_back(this->FindInstallSource(s->c_str()));
+      this->Files.push_back(this->FindInstallSource(*s));
       }
     }
 
@@ -97,9 +97,9 @@ void cmInstallProgramsCommand::FinalPass()
     cmInstallGenerator::SelectMessageLevel(this->Makefile);
   this->Makefile->AddInstallGenerator(
     new cmInstallFilesGenerator(this->Makefile, this->Files,
-                                destination.c_str(), true,
+                                destination, true,
                                 no_permissions, no_configurations,
-                                no_component.c_str(), message, no_rename));
+                                no_component, message, no_rename));
 }
 
 /**
@@ -109,7 +109,7 @@ void cmInstallProgramsCommand::FinalPass()
  * returned.
  */
 std::string cmInstallProgramsCommand
-::FindInstallSource(const char* name) const
+::FindInstallSource(const std::string& name) const
 {
   if(cmSystemTools::FileIsFullPath(name) ||
      cmGeneratorExpression::Find(name) == 0)

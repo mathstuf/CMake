@@ -3011,7 +3011,8 @@ cmLocalGenerator::ConvertToRelativePath(const std::vector<std::string>& local,
 class cmInstallTargetGeneratorLocal: public cmInstallTargetGenerator
 {
 public:
-  cmInstallTargetGeneratorLocal(cmTarget& t, const char* dest, bool implib):
+  cmInstallTargetGeneratorLocal(cmTarget& t, const std::string& dest,
+                                bool implib):
     cmInstallTargetGenerator(
       t, dest, implib, "", std::vector<std::string>(), "Unspecified",
       cmInstallGenerator::SelectMessageLevel(t.GetMakefile()),
@@ -3038,7 +3039,7 @@ cmLocalGenerator
     // Include the user-specified pre-install script for this target.
     if(const char* preinstall = l->second.GetProperty("PRE_INSTALL_SCRIPT"))
       {
-      cmInstallScriptGenerator g(preinstall, false, 0);
+      cmInstallScriptGenerator g(preinstall, false, "");
       g.Generate(os, config, configurationTypes);
       }
 
@@ -3064,7 +3065,7 @@ cmLocalGenerator
           {
           // Use a target install generator.
           cmInstallTargetGeneratorLocal
-            g(l->second, destination.c_str(), false);
+            g(l->second, destination, false);
           g.Generate(os, config, configurationTypes);
           }
           break;
@@ -3075,18 +3076,18 @@ cmLocalGenerator
           // to the normal destination and the DLL to the runtime
           // destination.
           cmInstallTargetGeneratorLocal
-            g1(l->second, destination.c_str(), true);
+            g1(l->second, destination, true);
           g1.Generate(os, config, configurationTypes);
           // We also skip over the leading slash given by the user.
           destination = l->second.GetRuntimeInstallPath().substr(1);
           cmSystemTools::ConvertToUnixSlashes(destination);
           cmInstallTargetGeneratorLocal
-            g2(l->second, destination.c_str(), false);
+            g2(l->second, destination, false);
           g2.Generate(os, config, configurationTypes);
 #else
           // Use a target install generator.
           cmInstallTargetGeneratorLocal
-            g(l->second, destination.c_str(), false);
+            g(l->second, destination, false);
           g.Generate(os, config, configurationTypes);
 #endif
           }
@@ -3099,7 +3100,7 @@ cmLocalGenerator
     // Include the user-specified post-install script for this target.
     if(const char* postinstall = l->second.GetProperty("POST_INSTALL_SCRIPT"))
       {
-      cmInstallScriptGenerator g(postinstall, false, 0);
+      cmInstallScriptGenerator g(postinstall, false, "");
       g.Generate(os, config, configurationTypes);
       }
     }

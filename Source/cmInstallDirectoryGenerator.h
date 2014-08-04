@@ -21,13 +21,13 @@ class cmInstallDirectoryGenerator: public cmInstallGenerator
 {
 public:
   cmInstallDirectoryGenerator(std::vector<std::string> const& dirs,
-                              const char* dest,
-                              const char* file_permissions,
-                              const char* dir_permissions,
+                              const std::string& dest,
+                              const std::string& file_permissions,
+                              const std::string& dir_permissions,
                               std::vector<std::string> const& configurations,
-                              const char* component,
+                              const std::string& component,
                               MessageLevel message,
-                              const char* literal_args,
+                              const std::string& literal_args,
                               bool optional = false);
   virtual ~cmInstallDirectoryGenerator();
 

@@ -1085,14 +1085,14 @@ protected:
   std::vector<MatchRule> MatchRules;
 
   // Get the properties from rules matching this input file.
-  MatchProperties CollectMatchProperties(const char* file)
+  MatchProperties CollectMatchProperties(const std::string& file)
     {
     // Match rules are case-insensitive on some platforms.
 #if defined(_WIN32) || defined(__APPLE__) || defined(__CYGWIN__)
     std::string lower = cmSystemTools::LowerCase(file);
     const char* file_to_match = lower.c_str();
 #else
-    const char* file_to_match = file;
+    const char* file_to_match = file.c_str();
 #endif
 
     // Collect properties from all matching rules.
@@ -1115,7 +1115,7 @@ protected:
     return result;
     }
 
-  bool SetPermissions(const char* toFile, mode_t permissions)
+  bool SetPermissions(const std::string& toFile, mode_t permissions)
     {
     if(permissions && !cmSystemTools::SetPermissions(toFile, permissions))
       {
@@ -1151,12 +1151,13 @@ protected:
     return true;
     }
 
-  bool InstallSymlink(const char* fromFile, const char* toFile);
-  bool InstallFile(const char* fromFile, const char* toFile,
+  bool InstallSymlink(const std::string& fromFile, const std::string& toFile);
+  bool InstallFile(const std::string& fromFile, const std::string& toFile,
                    MatchProperties const& match_properties);
-  bool InstallDirectory(const char* source, const char* destination,
+  bool InstallDirectory(const std::string& source,
+                        const std::string& destination,
                         MatchProperties const& match_properties);
-  virtual bool Install(const char* fromFile, const char* toFile);
+  virtual bool Install(const std::string& fromFile, const std::string& toFile);
   virtual std::string const& ToName(std::string const& fromName)
     { return fromName; }
 
@@ -1166,8 +1167,8 @@ protected:
     TypeDir,
     TypeLink
   };
-  virtual void ReportCopy(const char*, Type, bool) {}
-  virtual bool ReportMissing(const char* fromFile)
+  virtual void ReportCopy(const std::string&, Type, bool) {}
+  virtual bool ReportMissing(const std::string& fromFile)
     {
     // The input file does not exist and installation is not optional.
     cmOStringStream e;
@@ -1527,7 +1528,7 @@ bool cmFileCopier::Run(std::vector<std::string> const& args)
       fromFile += fromName;
       }
 
-    if(!this->Install(fromFile.c_str(), toFile.c_str()))
+    if(!this->Install(fromFile, toFile))
       {
       return false;
       }
@@ -1536,9 +1537,10 @@ bool cmFileCopier::Run(std::vector<std::string> const& args)
 }
 
 //----------------------------------------------------------------------------
-bool cmFileCopier::Install(const char* fromFile, const char* toFile)
+bool cmFileCopier::Install(const std::string& fromFile,
+                           const std::string& toFile)
 {
-  if(!*fromFile)
+  if(fromFile.empty())
     {
     cmOStringStream e;
     e << "INSTALL encountered an empty string input file name.";
@@ -1575,7 +1577,8 @@ bool cmFileCopier::Install(const char* fromFile, const char* toFile)
 }
 
 //----------------------------------------------------------------------------
-bool cmFileCopier::InstallSymlink(const char* fromFile, const char* toFile)
+bool cmFileCopier::InstallSymlink(const std::string& fromFile,
+                                  const std::string& toFile)
 {
   // Read the original symlink.
   std::string symlinkTarget;
@@ -1626,7 +1629,8 @@ bool cmFileCopier::InstallSymlink(const char* fromFile, const char* toFile)
 }
 
 //----------------------------------------------------------------------------
-bool cmFileCopier::InstallFile(const char* fromFile, const char* toFile,
+bool cmFileCopier::InstallFile(const std::string& fromFile,
+                               const std::string& toFile,
                                MatchProperties const& match_properties)
 {
   // Determine whether we will copy the file.
@@ -1686,8 +1690,8 @@ bool cmFileCopier::InstallFile(const char* fromFile, const char* toFile,
 }
 
 //----------------------------------------------------------------------------
-bool cmFileCopier::InstallDirectory(const char* source,
-                                    const char* destination,
+bool cmFileCopier::InstallDirectory(const std::string& source,
+                                    const std::string& destination,
                                     MatchProperties const& match_properties)
 {
   // Inform the user about this directory installation.
@@ -1742,7 +1746,7 @@ bool cmFileCopier::InstallDirectory(const char* source,
 
   // Load the directory contents to traverse it recursively.
   cmsys::Directory dir;
-  if(source && *source)
+  if(!source.empty())
     {
     dir.Load(source);
     }
@@ -1758,7 +1762,7 @@ bool cmFileCopier::InstallDirectory(const char* source,
       std::string toPath = destination;
       toPath += "/";
       toPath += dir.GetFile(fileNum);
-      if(!this->Install(fromPath.c_str(), toPath.c_str()))
+      if(!this->Install(fromPath, toPath))
         {
         return false;
         }
@@ -1823,7 +1827,7 @@ protected:
   virtual std::string const& ToName(std::string const& fromName)
     { return this->Rename.empty()? fromName : this->Rename; }
 
-  virtual void ReportCopy(const char* toFile, Type type, bool copy)
+  virtual void ReportCopy(const std::string& toFile, Type type, bool copy)
     {
     if(!this->MessageNever && (copy || !this->MessageLazy))
       {
@@ -1837,15 +1841,15 @@ protected:
       this->ManifestAppend(toFile);
       }
     }
-  virtual bool ReportMissing(const char* fromFile)
+  virtual bool ReportMissing(const std::string& fromFile)
     {
     return (this->Optional ||
             this->cmFileCopier::ReportMissing(fromFile));
     }
-  virtual bool Install(const char* fromFile, const char* toFile)
+  virtual bool Install(const std::string& fromFile, const std::string& toFile)
     {
     // Support installing from empty source to make a directory.
-    if(this->InstallType == cmInstallType_DIRECTORY && !*fromFile)
+    if(this->InstallType == cmInstallType_DIRECTORY && fromFile.empty())
       {
       return this->InstallDirectory(fromFile, toFile, MatchProperties());
       }

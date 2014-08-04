@@ -27,11 +27,13 @@ class cmInstallExportGenerator: public cmInstallGenerator
 {
 public:
   cmInstallExportGenerator(cmExportSet* exportSet,
-                           const char* dest, const char* file_permissions,
+                           const std::string& dest,
+                           const std::string& file_permissions,
                            const std::vector<std::string>& configurations,
-                           const char* component,
+                           const std::string& component,
                            MessageLevel message,
-                           const char* filename, const char* name_space,
+                           const std::string& filename,
+                           const std::string& name_space,
                            bool exportOld, cmMakefile* mf);
   ~cmInstallExportGenerator();
 

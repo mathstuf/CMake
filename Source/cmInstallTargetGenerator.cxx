@@ -21,10 +21,10 @@
 
 //----------------------------------------------------------------------------
 cmInstallTargetGenerator
-::cmInstallTargetGenerator(cmTarget& t, const char* dest, bool implib,
-                           const char* file_permissions,
+::cmInstallTargetGenerator(cmTarget& t, const std::string& dest, bool implib,
+                           const std::string& file_permissions,
                            std::vector<std::string> const& configurations,
-                           const char* component,
+                           const std::string& component,
                            MessageLevel message,
                            bool optional):
   cmInstallGenerator(dest, configurations, component, message), Target(&t),
@@ -319,13 +319,13 @@ void cmInstallTargetGenerator::GenerateScriptForConfig(std::ostream& os,
                  &cmInstallTargetGenerator::PreReplacementTweaks);
 
   // Write code to install the target file.
-  const char* no_dir_permissions = 0;
-  const char* no_rename = 0;
+  static const std::string& no_dir_permissions = "";
+  static const std::string& no_rename = "";
   bool optional = this->Optional || this->ImportLibrary;
   this->AddInstallRule(os, type, filesFrom,
                        optional,
-                       this->FilePermissions.c_str(), no_dir_permissions,
-                       no_rename, literal_args.c_str(),
+                       this->FilePermissions, no_dir_permissions,
+                       no_rename, literal_args,
                        indent);
 
   // Add post-installation tweaks.

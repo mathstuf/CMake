@@ -16,13 +16,13 @@
 
 //----------------------------------------------------------------------------
 cmInstallGenerator
-::cmInstallGenerator(const char* destination,
+::cmInstallGenerator(const std::string& destination,
                      std::vector<std::string> const& configurations,
-                     const char* component,
+                     const std::string& component,
                      MessageLevel message):
   cmScriptGenerator("CMAKE_INSTALL_CONFIG_NAME", configurations),
-  Destination(destination? destination:""),
-  Component(component? component:""),
+  Destination(destination),
+  Component(component),
   Message(message)
 {
 }
@@ -40,10 +40,10 @@ void cmInstallGenerator
                  cmInstallType type,
                  std::vector<std::string> const& files,
                  bool optional /* = false */,
-                 const char* permissions_file /* = 0 */,
-                 const char* permissions_dir /* = 0 */,
-                 const char* rename /* = 0 */,
-                 const char* literal_args /* = 0 */,
+                 const std::string& permissions_file /* = "" */,
+                 const std::string& permissions_dir /* = "" */,
+                 const std::string& rename /* = "" */,
+                 const std::string& literal_args /* = "" */,
                  Indent const& indent
                  )
 {
@@ -73,7 +73,7 @@ void cmInstallGenerator
                  os << ";";
                  }
                os << dest << "/";
-               if (rename && *rename)
+               if (!rename.empty())
                  {
                  os << rename;
                  }
@@ -106,15 +106,15 @@ void cmInstallGenerator
     case MessageLazy:   os << " MESSAGE_LAZY"; break;
     case MessageNever:  os << " MESSAGE_NEVER"; break;
     }
-  if(permissions_file && *permissions_file)
+  if(!permissions_file.empty())
     {
     os << " PERMISSIONS" << permissions_file;
     }
-  if(permissions_dir && *permissions_dir)
+  if(!permissions_dir.empty())
     {
     os << " DIR_PERMISSIONS" << permissions_dir;
     }
-  if(rename && *rename)
+  if(!rename.empty())
     {
     os << " RENAME \"" << rename << "\"";
     }
@@ -131,12 +131,12 @@ void cmInstallGenerator
       os << "\n" << indent << "  \"" << *fi << "\"";
       }
     os << "\n" << indent << " ";
-    if(!(literal_args && *literal_args))
+    if(literal_args.empty())
       {
       os << " ";
       }
     }
-  if(literal_args && *literal_args)
+  if(!literal_args.empty())
     {
     os << literal_args;
     }
@@ -145,7 +145,7 @@ void cmInstallGenerator
 
 //----------------------------------------------------------------------------
 std::string
-cmInstallGenerator::CreateComponentTest(const char* component)
+cmInstallGenerator::CreateComponentTest(const std::string& component)
 {
   std::string result = "NOT CMAKE_INSTALL_COMPONENT OR "
     "\"${CMAKE_INSTALL_COMPONENT}\" STREQUAL \"";
@@ -162,7 +162,7 @@ void cmInstallGenerator::GenerateScript(std::ostream& os)
 
   // Begin this block of installation.
   std::string component_test =
-    this->CreateComponentTest(this->Component.c_str());
+    this->CreateComponentTest(this->Component);
   os << indent << "if(" << component_test << ")\n";
 
   // Generate the script possibly with per-configuration code.

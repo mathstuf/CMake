@@ -20,8 +20,8 @@
 class cmInstallScriptGenerator: public cmInstallGenerator
 {
 public:
-  cmInstallScriptGenerator(const char* script, bool code,
-    const char* component);
+  cmInstallScriptGenerator(const std::string& script, bool code,
+    const std::string& component);
   virtual ~cmInstallScriptGenerator();
 
 protected:

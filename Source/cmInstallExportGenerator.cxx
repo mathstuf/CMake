@@ -28,12 +28,12 @@
 //----------------------------------------------------------------------------
 cmInstallExportGenerator::cmInstallExportGenerator(
   cmExportSet* exportSet,
-  const char* destination,
-  const char* file_permissions,
+  const std::string& destination,
+  const std::string& file_permissions,
   std::vector<std::string> const& configurations,
-  const char* component,
+  const std::string& component,
   MessageLevel message,
-  const char* filename, const char* name_space,
+  const std::string& filename, const std::string& name_space,
   bool exportOld,
   cmMakefile* mf)
   :cmInstallGenerator(destination, configurations, component, message)
@@ -186,7 +186,7 @@ cmInstallExportGenerator::GenerateScriptConfigs(std::ostream& os,
     std::string config_test = this->CreateConfigTest(i->first);
     os << indent << "if(" << config_test << ")\n";
     this->AddInstallRule(os, cmInstallType_FILES, files, false,
-                         this->FilePermissions.c_str(), 0, 0, 0,
+                         this->FilePermissions, "", "", "",
                          indent.Next());
     os << indent << "endif()\n";
     files.clear();
@@ -225,5 +225,5 @@ void cmInstallExportGenerator::GenerateScriptActions(std::ostream& os,
   std::vector<std::string> files;
   files.push_back(this->MainImportFile);
   this->AddInstallRule(os, cmInstallType_FILES, files, false,
-                       this->FilePermissions.c_str(), 0, 0, 0, indent);
+                       this->FilePermissions, "", "", "", indent);
 }

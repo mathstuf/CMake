@@ -45,8 +45,8 @@ bool cmInstallTargetsCommand
       }
     else if (tgts.find(*s) != tgts.end())
       {
-      tgts[*s].SetInstallPath(args[0].c_str());
-      tgts[*s].SetRuntimeInstallPath(runtime_dir.c_str());
+      tgts[*s].SetInstallPath(args[0]);
+      tgts[*s].SetRuntimeInstallPath(runtime_dir);
       tgts[*s].SetHaveInstallRule(true);
       }
     else

@@ -33,9 +33,9 @@ public:
     MessageNever
   };
 
-  cmInstallGenerator(const char* destination,
+  cmInstallGenerator(const std::string& destination,
                      std::vector<std::string> const& configurations,
-                     const char* component,
+                     const std::string& component,
                      MessageLevel message);
   virtual ~cmInstallGenerator();
 
@@ -43,10 +43,10 @@ public:
     std::ostream& os, cmInstallType type,
     std::vector<std::string> const& files,
     bool optional = false,
-    const char* permissions_file = 0,
-    const char* permissions_dir = 0,
-    const char* rename = 0,
-    const char* literal_args = 0,
+    const std::string& permissions_file = "",
+    const std::string& permissions_dir = "",
+    const std::string& rename = "",
+    const std::string& literal_args = "",
     Indent const& indent = Indent()
     );
 
@@ -66,7 +66,7 @@ public:
 protected:
   virtual void GenerateScript(std::ostream& os);
 
-  std::string CreateComponentTest(const char* component);
+  std::string CreateComponentTest(const std::string& component);
 
   // Information shared by most generator types.
   std::string Destination;

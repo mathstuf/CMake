@@ -16,13 +16,13 @@
 //----------------------------------------------------------------------------
 cmInstallDirectoryGenerator
 ::cmInstallDirectoryGenerator(std::vector<std::string> const& dirs,
-                              const char* dest,
-                              const char* file_permissions,
-                              const char* dir_permissions,
+                              const std::string& dest,
+                              const std::string& file_permissions,
+                              const std::string& dir_permissions,
                               std::vector<std::string> const& configurations,
-                              const char* component,
+                              const std::string& component,
                               MessageLevel message,
-                              const char* literal_args,
+                              const std::string& literal_args,
                               bool optional):
   cmInstallGenerator(dest, configurations, component, message),
   Directories(dirs),
@@ -43,12 +43,12 @@ cmInstallDirectoryGenerator::GenerateScriptActions(std::ostream& os,
                                                    Indent const& indent)
 {
   // Write code to install the directories.
-  const char* no_rename = 0;
+  static const std::string no_rename = "";
   this->AddInstallRule(os, cmInstallType_DIRECTORY,
                        this->Directories,
                        this->Optional,
-                       this->FilePermissions.c_str(),
-                       this->DirPermissions.c_str(),
-                       no_rename, this->LiteralArguments.c_str(),
+                       this->FilePermissions,
+                       this->DirPermissions,
+                       no_rename, this->LiteralArguments,
                        indent);
 }

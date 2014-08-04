@@ -39,7 +39,7 @@ bool cmInstallFilesCommand
         s != args.end(); ++s)
       {
       // Find the source location for each file listed.
-      std::string f = this->FindInstallSource(s->c_str());
+      std::string f = this->FindInstallSource(*s);
       this->Files.push_back(f);
       }
     this->CreateInstallGenerator();
@@ -94,7 +94,7 @@ void cmInstallFilesCommand::FinalPass()
         }
 
       // add to the result
-      this->Files.push_back(this->FindInstallSource(testf.c_str()));
+      this->Files.push_back(this->FindInstallSource(testf));
       }
     }
   else     // reg exp list
@@ -108,7 +108,7 @@ void cmInstallFilesCommand::FinalPass()
     // for each argument, get the files
     for (;s != files.end(); ++s)
       {
-      this->Files.push_back(this->FindInstallSource(s->c_str()));
+      this->Files.push_back(this->FindInstallSource(*s));
       }
     }
 
@@ -136,9 +136,9 @@ void cmInstallFilesCommand::CreateInstallGenerator() const
     cmInstallGenerator::SelectMessageLevel(this->Makefile);
   this->Makefile->AddInstallGenerator(
     new cmInstallFilesGenerator(this->Makefile, this->Files,
-                                destination.c_str(), false,
+                                destination, false,
                                 no_permissions, no_configurations,
-                                no_component.c_str(), message, no_rename));
+                                no_component, message, no_rename));
 }
 
 
@@ -148,7 +148,8 @@ void cmInstallFilesCommand::CreateInstallGenerator() const
  * present in the build tree.  If a full path is given, it is just
  * returned.
  */
-std::string cmInstallFilesCommand::FindInstallSource(const char* name) const
+std::string cmInstallFilesCommand::FindInstallSource(
+                                                const std::string& name) const
 {
   if(cmSystemTools::FileIsFullPath(name) ||
      cmGeneratorExpression::Find(name) == 0)

@@ -24,12 +24,12 @@ class cmInstallFilesGenerator: public cmInstallGenerator
 public:
   cmInstallFilesGenerator(cmMakefile* mf,
                           std::vector<std::string> const& files,
-                          const char* dest, bool programs,
-                          const char* file_permissions,
+                          const std::string& dest, bool programs,
+                          const std::string& file_permissions,
                           std::vector<std::string> const& configurations,
-                          const char* component,
+                          const std::string& component,
                           MessageLevel message,
-                          const char* rename,
+                          const std::string& rename,
                           bool optional = false);
   virtual ~cmInstallFilesGenerator();
 

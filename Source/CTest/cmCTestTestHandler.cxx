@@ -1351,12 +1351,12 @@ int cmCTestTestHandler::ExecuteCommands(std::vector<std::string>& vec)
 
 //----------------------------------------------------------------------
 // Find the appropriate executable to run for a test
-std::string cmCTestTestHandler::FindTheExecutable(const char *exe)
+std::string cmCTestTestHandler::FindTheExecutable(const std::string& exe)
 {
   std::string resConfig;
   std::vector<std::string> extraPaths;
   std::vector<std::string> failedPaths;
-  if(strcmp(exe, "NOT_AVAILABLE") == 0)
+  if(exe == "NOT_AVAILABLE")
     {
     return exe;
     }
@@ -1443,7 +1443,7 @@ void cmCTestTestHandler
 // Find the appropriate executable to run for a test
 std::string cmCTestTestHandler
 ::FindExecutable(cmCTest *ctest,
-                 const char *testCommand,
+                 const std::string& testCommand,
                  std::string &resultingConfig,
                  std::vector<std::string> &extraPaths,
                  std::vector<std::string> &failed)

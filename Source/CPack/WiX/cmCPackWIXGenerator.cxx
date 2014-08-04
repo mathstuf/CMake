@@ -590,7 +590,7 @@ bool cmCPackWIXGenerator::GenerateMainSourceFileFromTemplate()
 
   std::string mainSourceFilePath = this->CPackTopLevel + "/main.wxs";
 
-  if(!ConfigureFile(wixTemplate.c_str(), mainSourceFilePath .c_str()))
+  if(!ConfigureFile(wixTemplate, mainSourceFilePath))
     {
     cmCPackLogger(cmCPackLog::LOG_ERROR,
       "Failed creating '" << mainSourceFilePath  <<

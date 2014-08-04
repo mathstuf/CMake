@@ -597,7 +597,7 @@ bool cmCPackPackageMakerGenerator::CopyCreateResourceFile(
   cmCPackLogger(cmCPackLog::LOG_VERBOSE, "Configure file: "
                 << (inFileName ? inFileName : "(NULL)")
                 << " to " << destFileName << std::endl);
-  this->ConfigureFile(inFileName, destFileName.c_str());
+  this->ConfigureFile(inFileName, destFileName);
   return true;
 }
 
@@ -627,7 +627,7 @@ bool cmCPackPackageMakerGenerator::CopyResourcePlistFile(
 
   cmCPackLogger(cmCPackLog::LOG_VERBOSE, "Configure file: "
     << inFileName << " to " << destFileName << std::endl);
-  this->ConfigureFile(inFileName.c_str(), destFileName.c_str());
+  this->ConfigureFile(inFileName, destFileName);
   return true;
 }
 
@@ -855,8 +855,7 @@ WriteDistributionFile(const char* metapackageFile)
 
   // Create the distribution.dist file in the metapackage to turn it
   // into a distribution package.
-  this->ConfigureFile(distributionTemplate.c_str(),
-                      distributionFile.c_str());
+  this->ConfigureFile(distributionTemplate, distributionFile);
 }
 
 //----------------------------------------------------------------------

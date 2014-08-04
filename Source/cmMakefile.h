@@ -744,7 +744,7 @@ public:
   /**
    * Copy file but change lines acording to ConfigureString
    */
-  int ConfigureFile(const char* infile, const char* outfile,
+  int ConfigureFile(const std::string& infile, const std::string& outfile,
                     bool copyonly, bool atOnly, bool escapeQuotes,
                     const cmNewLineStyle& = cmNewLineStyle());
 

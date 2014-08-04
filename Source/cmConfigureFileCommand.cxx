@@ -113,8 +113,8 @@ bool cmConfigureFileCommand
 int cmConfigureFileCommand::ConfigureFile()
 {
   return this->Makefile->ConfigureFile(
-    this->InputFile.c_str(),
-    this->OutputFile.c_str(),
+    this->InputFile,
+    this->OutputFile,
     this->CopyOnly,
     this->AtOnly,
     this->EscapeQuotes,

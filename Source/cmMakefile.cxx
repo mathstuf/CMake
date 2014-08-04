@@ -3957,20 +3957,21 @@ void cmMakefile::ConfigureString(const std::string& input,
                                 atOnly, 0, -1, true, true);
 }
 
-int cmMakefile::ConfigureFile(const char* infile, const char* outfile,
+int cmMakefile::ConfigureFile(const std::string& infile,
+                              const std::string& outfile,
                               bool copyonly, bool atOnly, bool escapeQuotes,
                               const cmNewLineStyle& newLine)
 {
   int res = 1;
-  if ( !this->CanIWriteThisFile(outfile) )
+  if ( !this->CanIWriteThisFile(outfile.c_str()) )
     {
     cmSystemTools::Error("Attempt to write file: ",
-                         outfile, " into a source directory.");
+                         outfile.c_str(), " into a source directory.");
     return 0;
     }
   if ( !cmSystemTools::FileExists(infile) )
     {
-    cmSystemTools::Error("File ", infile, " does not exist.");
+    cmSystemTools::Error("File ", infile.c_str(), " does not exist.");
     return 0;
     }
   std::string soutfile = outfile;

@@ -3716,7 +3716,7 @@ void cmLocalGenerator::GenerateAppleInfoPList(cmTarget* target,
   cmLGInfoProp(mf, target, "MACOSX_BUNDLE_SHORT_VERSION_STRING");
   cmLGInfoProp(mf, target, "MACOSX_BUNDLE_BUNDLE_VERSION");
   cmLGInfoProp(mf, target, "MACOSX_BUNDLE_COPYRIGHT");
-  mf->ConfigureFile(inFile.c_str(), fname, false, false, false);
+  mf->ConfigureFile(inFile, fname, false, false, false);
   mf->PopScope();
 }
 
@@ -3756,6 +3756,6 @@ void cmLocalGenerator::GenerateFrameworkInfoPList(cmTarget* target,
   cmLGInfoProp(mf, target, "MACOSX_FRAMEWORK_IDENTIFIER");
   cmLGInfoProp(mf, target, "MACOSX_FRAMEWORK_SHORT_VERSION_STRING");
   cmLGInfoProp(mf, target, "MACOSX_FRAMEWORK_BUNDLE_VERSION");
-  mf->ConfigureFile(inFile.c_str(), fname, false, false, false);
+  mf->ConfigureFile(inFile, fname, false, false, false);
   mf->PopScope();
 }

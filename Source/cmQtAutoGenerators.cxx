@@ -418,7 +418,7 @@ void cmQtAutoGenerators::SetupAutoGenerateTarget(cmTarget const* target)
   inputFile += "/Modules/AutogenInfo.cmake.in";
   std::string outputFile = targetDir;
   outputFile += "/AutogenInfo.cmake";
-  makefile->ConfigureFile(inputFile.c_str(), outputFile.c_str(),
+  makefile->ConfigureFile(inputFile, outputFile,
                           false, true, false);
 
   if (!configDefines.empty()

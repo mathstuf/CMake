@@ -160,7 +160,7 @@ bool cmCreateTestSourceList
   this->Makefile->AddDefinition("CMAKE_FUNCTION_TABLE_ENTIRES",
     functionMapCode);
   bool res = true;
-  if ( !this->Makefile->ConfigureFile(configFile.c_str(), driver.c_str(),
+  if ( !this->Makefile->ConfigureFile(configFile, driver,
       false, true, false) )
     {
     res = false;

@@ -298,9 +298,9 @@ bool cmExportCommand::HandlePackage(std::vector<std::string> const& args)
   const char* outDir = this->Makefile->GetCurrentOutputDirectory();
   std::string hash = cmSystemTools::ComputeStringMD5(outDir);
 #if defined(_WIN32) && !defined(__CYGWIN__)
-  this->StorePackageRegistryWin(package, outDir, hash.c_str());
+  this->StorePackageRegistryWin(package, outDir, hash);
 #else
-  this->StorePackageRegistryDir(package, outDir, hash.c_str());
+  this->StorePackageRegistryDir(package, outDir, hash);
 #endif
 
   return true;
@@ -331,8 +331,8 @@ void cmExportCommand::ReportRegistryError(std::string const& msg,
 
 //----------------------------------------------------------------------------
 void cmExportCommand::StorePackageRegistryWin(std::string const& package,
-                                              const char* content,
-                                              const char* hash)
+                                              const std::string& content,
+                                              const std::string& hash)
 {
   std::string key = "Software\\Kitware\\CMake\\Packages\\";
   key += package;
@@ -364,8 +364,8 @@ void cmExportCommand::StorePackageRegistryWin(std::string const& package,
 #else
 //----------------------------------------------------------------------------
 void cmExportCommand::StorePackageRegistryDir(std::string const& package,
-                                              const char* content,
-                                              const char* hash)
+                                              const std::string& content,
+                                              const std::string& hash)
 {
 #if defined(__HAIKU__)
   char dir[B_PATH_NAME_LENGTH];

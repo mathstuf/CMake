@@ -65,9 +65,11 @@ private:
 
   bool HandlePackage(std::vector<std::string> const& args);
   void StorePackageRegistryWin(std::string const& package,
-                               const char* content, const char* hash);
+                               const std::string& content,
+                               const std::string& hash);
   void StorePackageRegistryDir(std::string const& package,
-                               const char* content, const char* hash);
+                               const std::string& content,
+                               const std::string& hash);
   void ReportRegistryError(std::string const& msg, std::string const& key,
                            long err);
 };

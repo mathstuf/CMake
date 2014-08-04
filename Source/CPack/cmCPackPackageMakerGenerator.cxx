@@ -964,7 +964,7 @@ cmCPackPackageMakerGenerator::CreateChoice(const cmCPackComponent& component,
   dirName += '/';
   dirName += component.Name;
   unsigned long installedSize
-    = component.GetInstalledSizeInKbytes(dirName.c_str());
+    = component.GetInstalledSizeInKbytes(dirName);
 
   out << "<pkg-ref id=\"" << packageId << "\" "
       << "version=\"" << this->GetOption("CPACK_PACKAGE_VERSION") << "\" "

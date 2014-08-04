@@ -166,7 +166,7 @@ cmCTestScriptHandler::~cmCTestScriptHandler()
 
 //----------------------------------------------------------------------
 // just adds an argument to the vector
-void cmCTestScriptHandler::AddConfigurationScript(const char *script,
+void cmCTestScriptHandler::AddConfigurationScript(const std::string& script,
                                                   bool pscope)
 {
   this->ConfigurationScripts.push_back(script);
@@ -839,7 +839,7 @@ int cmCTestScriptHandler::RunConfigurationDashboard()
   if (this->EmptyBinDir)
     {
     if ( !cmCTestScriptHandler::EmptyBinaryDirectory(
-        this->BinaryDir.c_str()) )
+        this->BinaryDir) )
       {
       cmCTestLog(this->CTest, ERROR_MESSAGE,
         "Problem removing the binary directory" << std::endl);
@@ -894,8 +894,8 @@ int cmCTestScriptHandler::RunConfigurationDashboard()
   // put the initial cache into the bin dir
   if (!this->InitialCache.empty())
     {
-    if (!this->WriteInitialCache(this->BinaryDir.c_str(),
-         this->InitialCache.c_str()))
+    if (!this->WriteInitialCache(this->BinaryDir,
+         this->InitialCache))
       {
       this->RestoreBackupDirectories();
       return 9;
@@ -1000,8 +1000,8 @@ int cmCTestScriptHandler::RunConfigurationDashboard()
 }
 
 //-------------------------------------------------------------------------
-bool cmCTestScriptHandler::WriteInitialCache(const char* directory,
-                                             const char* text)
+bool cmCTestScriptHandler::WriteInitialCache(const std::string& directory,
+                                             const std::string& text)
 {
   std::string cacheFile = directory;
   cacheFile += "/CMakeCache.txt";
@@ -1011,10 +1011,7 @@ bool cmCTestScriptHandler::WriteInitialCache(const char* directory,
     return false;
     }
 
-  if (text!=0)
-    {
-    fout.write(text, strlen(text));
-    }
+  fout << text;
 
   // Make sure the operating system has finished writing the file
   // before closing it.  This will ensure the file is finished before
@@ -1046,7 +1043,7 @@ void cmCTestScriptHandler::RestoreBackupDirectories()
     }
 }
 
-bool cmCTestScriptHandler::RunScript(cmCTest* ctest, const char *sname,
+bool cmCTestScriptHandler::RunScript(cmCTest* ctest, const std::string& sname,
                                      bool InProcess, int* returnValue)
 {
   cmCTestScriptHandler* sh = new cmCTestScriptHandler();
@@ -1061,10 +1058,10 @@ bool cmCTestScriptHandler::RunScript(cmCTest* ctest, const char *sname,
   return true;
 }
 
-bool cmCTestScriptHandler::EmptyBinaryDirectory(const char *sname)
+bool cmCTestScriptHandler::EmptyBinaryDirectory(const std::string& sname)
 {
   // try to avoid deleting root
-  if (!sname || strlen(sname) < 2)
+  if (sname.size() < 2)
     {
     return false;
     }

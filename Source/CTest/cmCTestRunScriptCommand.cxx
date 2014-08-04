@@ -52,7 +52,7 @@ bool cmCTestRunScriptCommand
     else
       {
       int ret;
-      cmCTestScriptHandler::RunScript(this->CTest, args[i].c_str(), !np,
+      cmCTestScriptHandler::RunScript(this->CTest, args[i], !np,
         &ret);
       cmOStringStream str;
       str << ret;

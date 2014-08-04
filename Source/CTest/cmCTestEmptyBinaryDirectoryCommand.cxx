@@ -22,7 +22,7 @@ bool cmCTestEmptyBinaryDirectoryCommand
     return false;
     }
 
-  if ( !cmCTestScriptHandler::EmptyBinaryDirectory(args[0].c_str()) )
+  if ( !cmCTestScriptHandler::EmptyBinaryDirectory(args[0]) )
     {
     cmOStringStream ostr;
     ostr << "problem removing the binary directory: " << args[0];

@@ -151,7 +151,7 @@ bool cmGetPropertyCommand
       {
       output = "NOTFOUND";
       }
-    this->Makefile->AddDefinition(this->Variable, output.c_str());
+    this->Makefile->AddDefinition(this->Variable, output);
     }
   else if(this->InfoType == OutFullDoc)
     {
@@ -167,7 +167,7 @@ bool cmGetPropertyCommand
       {
       output = "NOTFOUND";
       }
-    this->Makefile->AddDefinition(this->Variable, output.c_str());
+    this->Makefile->AddDefinition(this->Variable, output);
     }
   else if(this->InfoType == OutDefined)
     {

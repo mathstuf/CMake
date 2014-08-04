@@ -95,8 +95,8 @@ bool cmCTestStartCommand
 
   std::string sourceDir = cmSystemTools::CollapseFullPath(src_dir);
   std::string binaryDir = cmSystemTools::CollapseFullPath(bld_dir);
-  this->CTest->SetCTestConfiguration("SourceDirectory", sourceDir.c_str());
-  this->CTest->SetCTestConfiguration("BuildDirectory", binaryDir.c_str());
+  this->CTest->SetCTestConfiguration("SourceDirectory", sourceDir);
+  this->CTest->SetCTestConfiguration("BuildDirectory", binaryDir);
 
   cmCTestLog(this->CTest, HANDLER_OUTPUT, "Run dashboard with model "
     << smodel << std::endl

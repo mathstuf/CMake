@@ -114,14 +114,14 @@ bool cmUtilitySourceCommand
 
   // Enter the value into the cache.
   this->Makefile->AddCacheDefinition(cacheEntry,
-                                 utilityExecutable.c_str(),
+                                 utilityExecutable,
                                  "Path to an internal program.",
                                  cmCacheManager::FILEPATH);
   // add a value into the cache that maps from the
   // full path to the name of the project
   cmSystemTools::ConvertToUnixSlashes(utilityExecutable);
   this->Makefile->AddCacheDefinition(utilityExecutable,
-                                 utilityName.c_str(),
+                                 utilityName,
                                  "Executable to project name.",
                                  cmCacheManager::INTERNAL);
 

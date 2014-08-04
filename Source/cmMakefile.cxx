@@ -639,7 +639,7 @@ bool cmMakefile::ReadListFile(const char* filename_in,
   this->AddDefinition("CMAKE_CURRENT_LIST_FILE", filenametoread);
   this->MarkVariableAsUsed("CMAKE_CURRENT_LIST_FILE");
   this->AddDefinition("CMAKE_CURRENT_LIST_DIR",
-                       cmSystemTools::GetFilenamePath(filenametoread).c_str());
+                       cmSystemTools::GetFilenamePath(filenametoread));
   this->MarkVariableAsUsed("CMAKE_CURRENT_LIST_DIR");
 
   // try to see if the list file is the top most
@@ -672,12 +672,12 @@ bool cmMakefile::ReadListFile(const char* filename_in,
       {
       *fullPath = "";
       }
-    this->AddDefinition("CMAKE_PARENT_LIST_FILE", currentParentFile.c_str());
+    this->AddDefinition("CMAKE_PARENT_LIST_FILE", currentParentFile);
     this->MarkVariableAsUsed("CMAKE_PARENT_LIST_FILE");
-    this->AddDefinition("CMAKE_CURRENT_LIST_FILE", currentFile.c_str());
+    this->AddDefinition("CMAKE_CURRENT_LIST_FILE", currentFile);
     this->MarkVariableAsUsed("CMAKE_CURRENT_LIST_FILE");
     this->AddDefinition("CMAKE_CURRENT_LIST_DIR",
-                        cmSystemTools::GetFilenamePath(currentFile).c_str());
+                        cmSystemTools::GetFilenamePath(currentFile));
     this->MarkVariableAsUsed("CMAKE_CURRENT_LIST_DIR");
     return false;
     }
@@ -717,12 +717,12 @@ bool cmMakefile::ReadListFile(const char* filename_in,
     this->EnforceDirectoryLevelRules();
     }
 
-  this->AddDefinition("CMAKE_PARENT_LIST_FILE", currentParentFile.c_str());
+  this->AddDefinition("CMAKE_PARENT_LIST_FILE", currentParentFile);
   this->MarkVariableAsUsed("CMAKE_PARENT_LIST_FILE");
-  this->AddDefinition("CMAKE_CURRENT_LIST_FILE", currentFile.c_str());
+  this->AddDefinition("CMAKE_CURRENT_LIST_FILE", currentFile);
   this->MarkVariableAsUsed("CMAKE_CURRENT_LIST_FILE");
   this->AddDefinition("CMAKE_CURRENT_LIST_DIR",
-                      cmSystemTools::GetFilenamePath(currentFile).c_str());
+                      cmSystemTools::GetFilenamePath(currentFile));
   this->MarkVariableAsUsed("CMAKE_CURRENT_LIST_DIR");
 
   // pop the listfile off the stack
@@ -1781,6 +1781,12 @@ void cmMakefile::AddDefinition(const std::string& name, const char* value)
     return;
     }
 
+  this->AddDefinition(name, std::string(value));
+}
+
+void cmMakefile::AddDefinition(const std::string& name,
+                               const std::string& value)
+{
   this->Internal->VarStack.top().Set(name, value);
   if (this->Internal->VarUsageStack.size() &&
       this->VariableInitialized(name))
@@ -1796,7 +1802,7 @@ void cmMakefile::AddDefinition(const std::string& name, const char* value)
     {
     vv->VariableAccessed(name,
                          cmVariableWatch::VARIABLE_MODIFIED_ACCESS,
-                         value,
+                         value.c_str(),
                          this);
     }
 #endif
@@ -1810,6 +1816,25 @@ void cmMakefile::AddCacheDefinition(const std::string& name, const char* value,
 {
   bool haveVal = value ? true : false;
   std::string val = haveVal ? value : "";
+  return this->AddCacheDefinition(name, val, doc, type, force, haveVal);
+}
+
+void cmMakefile::AddCacheDefinition(const std::string& name,
+                                    const std::string& value,
+                                    const char* doc,
+                                    cmCacheManager::CacheEntryType type,
+                                    bool force)
+{
+  return this->AddCacheDefinition(name, value, doc, type, force, true);
+}
+
+void cmMakefile::AddCacheDefinition(const std::string& name,
+                                    const std::string& value,
+                                    const char* doc,
+                                    cmCacheManager::CacheEntryType type,
+                                    bool force, bool haveValue)
+{
+  std::string val = value;
   cmCacheManager::CacheIterator it =
     this->GetCacheManager()->GetCacheIterator(name.c_str());
   if(!it.IsAtEnd() && (it.GetType() == cmCacheManager::UNINITIALIZED) &&
@@ -1820,7 +1845,7 @@ void cmMakefile::AddCacheDefinition(const std::string& name, const char* value,
     if(!force)
       {
       val = it.GetValue();
-      haveVal = true;
+      haveValue = true;
       }
     if ( type == cmCacheManager::PATH || type == cmCacheManager::FILEPATH )
       {
@@ -1841,14 +1866,21 @@ void cmMakefile::AddCacheDefinition(const std::string& name, const char* value,
         nvalue += files[cc];
         }
 
-      this->GetCacheManager()->AddCacheEntry(name, nvalue.c_str(), doc, type);
+      this->GetCacheManager()->AddCacheEntry(name, nvalue, doc, type);
       val = it.GetValue();
-      haveVal = true;
+      haveValue = true;
       }
-
     }
-  this->GetCacheManager()->AddCacheEntry(name, haveVal ? val.c_str() : 0, doc,
-                                         type);
+  if (haveValue)
+    {
+    this->GetCacheManager()->AddCacheEntry(name, val, doc,
+                                           type);
+    }
+  else
+    {
+    this->GetCacheManager()->AddCacheEntry(name, 0, doc,
+                                           type);
+    }
   // if there was a definition then remove it
   this->Internal->VarStack.top().Set(name, 0);
 }
@@ -3467,14 +3499,14 @@ void cmMakefile::SetArgcArgv(const std::vector<std::string>& args)
 {
   cmOStringStream strStream;
   strStream << args.size();
-  this->AddDefinition("CMAKE_ARGC", strStream.str().c_str());
+  this->AddDefinition("CMAKE_ARGC", strStream.str());
   //this->MarkVariableAsUsed("CMAKE_ARGC");
 
   for (unsigned int t = 0; t < args.size(); ++t)
   {
     cmOStringStream tmpStream;
     tmpStream << "CMAKE_ARGV" << t;
-    this->AddDefinition(tmpStream.str(), args[t].c_str());
+    this->AddDefinition(tmpStream.str(), args[t]);
     //this->MarkVariableAsUsed(tmpStream.str());
   }
 }
@@ -4779,7 +4811,7 @@ void cmMakefile::StoreMatches(cmsys::RegularExpression& re)
     if(!m.empty())
       {
       std::string const& var = matchVariables[i];
-      this->AddDefinition(var, m.c_str());
+      this->AddDefinition(var, m);
       this->MarkVariableAsUsed(var);
       this->NumLastMatches = i + 1;
       }

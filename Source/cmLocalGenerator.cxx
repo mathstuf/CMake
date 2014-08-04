@@ -3700,7 +3700,7 @@ void cmLocalGenerator::GenerateAppleInfoPList(cmTarget* target,
   // back to the directory-level values set by the user.
   cmMakefile* mf = this->Makefile;
   mf->PushScope();
-  mf->AddDefinition("MACOSX_BUNDLE_EXECUTABLE_NAME", targetName.c_str());
+  mf->AddDefinition("MACOSX_BUNDLE_EXECUTABLE_NAME", targetName);
   cmLGInfoProp(mf, target, "MACOSX_BUNDLE_INFO_STRING");
   cmLGInfoProp(mf, target, "MACOSX_BUNDLE_ICON_FILE");
   cmLGInfoProp(mf, target, "MACOSX_BUNDLE_GUI_IDENTIFIER");
@@ -3744,7 +3744,7 @@ void cmLocalGenerator::GenerateFrameworkInfoPList(cmTarget* target,
   // back to the directory-level values set by the user.
   cmMakefile* mf = this->Makefile;
   mf->PushScope();
-  mf->AddDefinition("MACOSX_FRAMEWORK_NAME", targetName.c_str());
+  mf->AddDefinition("MACOSX_FRAMEWORK_NAME", targetName);
   cmLGInfoProp(mf, target, "MACOSX_FRAMEWORK_ICON_FILE");
   cmLGInfoProp(mf, target, "MACOSX_FRAMEWORK_IDENTIFIER");
   cmLGInfoProp(mf, target, "MACOSX_FRAMEWORK_SHORT_VERSION_STRING");

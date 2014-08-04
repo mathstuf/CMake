@@ -164,14 +164,14 @@ bool cmSetCommand
   if(cache)
     {
     this->Makefile->AddCacheDefinition(variable,
-                                   value.c_str(),
+                                   value,
                                    docstring,
                                    type, force);
     }
   else
     {
     // add the definition
-    this->Makefile->AddDefinition(variable, value.c_str());
+    this->Makefile->AddDefinition(variable, value);
     }
   return true;
 }

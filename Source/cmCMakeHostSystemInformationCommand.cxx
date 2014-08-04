@@ -53,7 +53,7 @@ bool cmCMakeHostSystemInformationCommand
     result_list += value;
     }
 
-  this->Makefile->AddDefinition(variable, result_list.c_str());
+  this->Makefile->AddDefinition(variable, result_list);
 
   return true;
 }

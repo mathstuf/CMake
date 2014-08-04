@@ -219,7 +219,7 @@ void cmExtraEclipseCDT4Generator::AddEnvVar(cmGeneratedFileStream& fout,
     // The variable is in the env, but not in the cache. Use it and put it
     // in the cache
     valueToUse = envVarValue;
-    mf->AddCacheDefinition(cacheEntryName, valueToUse.c_str(),
+    mf->AddCacheDefinition(cacheEntryName, valueToUse,
                            cacheEntryName.c_str(), cmCacheManager::STRING,
                            true);
     mf->GetCacheManager()->SaveCache(mf->GetHomeOutputDirectory());
@@ -240,7 +240,7 @@ void cmExtraEclipseCDT4Generator::AddEnvVar(cmGeneratedFileStream& fout,
     if (valueToUse.find(envVarValue) == std::string::npos)
       {
       valueToUse = envVarValue;
-      mf->AddCacheDefinition(cacheEntryName, valueToUse.c_str(),
+      mf->AddCacheDefinition(cacheEntryName, valueToUse,
                              cacheEntryName.c_str(), cmCacheManager::STRING,
                              true);
       mf->GetCacheManager()->SaveCache(mf->GetHomeOutputDirectory());

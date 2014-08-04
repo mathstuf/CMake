@@ -116,12 +116,12 @@ bool cmGetFilenameComponentCommand
     if(programArgs.size() && storeArgs.size())
       {
       this->Makefile->AddCacheDefinition
-        (storeArgs, programArgs.c_str(),
+        (storeArgs, programArgs,
          "", args[2] == "PATH" ? cmCacheManager::FILEPATH
          : cmCacheManager::STRING);
       }
     this->Makefile->AddCacheDefinition
-      (args[0], result.c_str(), "",
+      (args[0], result, "",
        args[2] == "PATH" ? cmCacheManager::FILEPATH
        : cmCacheManager::STRING);
     }
@@ -129,9 +129,9 @@ bool cmGetFilenameComponentCommand
     {
     if(programArgs.size() && storeArgs.size())
       {
-      this->Makefile->AddDefinition(storeArgs, programArgs.c_str());
+      this->Makefile->AddDefinition(storeArgs, programArgs);
       }
-    this->Makefile->AddDefinition(args[0], result.c_str());
+    this->Makefile->AddDefinition(args[0], result);
     }
 
   return true;

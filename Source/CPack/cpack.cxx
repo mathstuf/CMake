@@ -261,7 +261,7 @@ int main (int argc, char const* const* argv)
 
     if ( !cpackBuildConfig.empty() )
       {
-      globalMF->AddDefinition("CPACK_BUILD_CONFIG", cpackBuildConfig.c_str());
+      globalMF->AddDefinition("CPACK_BUILD_CONFIG", cpackBuildConfig);
       }
 
     if ( cmSystemTools::FileExists(cpackConfigFile) )
@@ -289,28 +289,28 @@ int main (int argc, char const* const* argv)
 
     if ( !generator.empty() )
       {
-      globalMF->AddDefinition("CPACK_GENERATOR", generator.c_str());
+      globalMF->AddDefinition("CPACK_GENERATOR", generator);
       }
     if ( !cpackProjectName.empty() )
       {
-      globalMF->AddDefinition("CPACK_PACKAGE_NAME", cpackProjectName.c_str());
+      globalMF->AddDefinition("CPACK_PACKAGE_NAME", cpackProjectName);
       }
     if ( !cpackProjectVersion.empty() )
       {
       globalMF->AddDefinition("CPACK_PACKAGE_VERSION",
-        cpackProjectVersion.c_str());
+        cpackProjectVersion);
       }
     if ( !cpackProjectVendor.empty() )
       {
       globalMF->AddDefinition("CPACK_PACKAGE_VENDOR",
-        cpackProjectVendor.c_str());
+        cpackProjectVendor);
       }
     // if this is not empty it has been set on the command line
     // go for it. Command line override values set in config file.
     if ( !cpackProjectDirectory.empty() )
       {
       globalMF->AddDefinition("CPACK_PACKAGE_DIRECTORY",
-                              cpackProjectDirectory.c_str());
+                              cpackProjectDirectory);
       }
     // The value has not been set on the command line
     else
@@ -321,7 +321,7 @@ int main (int argc, char const* const* argv)
       if (!globalMF->IsSet("CPACK_PACKAGE_DIRECTORY"))
         {
         globalMF->AddDefinition("CPACK_PACKAGE_DIRECTORY",
-                                cpackProjectDirectory.c_str());
+                                cpackProjectDirectory);
         }
       }
     cpackDefinitions::MapType::iterator cdit;
@@ -329,7 +329,7 @@ int main (int argc, char const* const* argv)
       cdit != definitions.Map.end();
       ++cdit )
       {
-      globalMF->AddDefinition(cdit->first, cdit->second.c_str());
+      globalMF->AddDefinition(cdit->first, cdit->second);
       }
 
     const char* cpackModulesPath =
@@ -430,7 +430,7 @@ int main (int argc, char const* const* argv)
               ostr << projVersionMajor << "." << projVersionMinor << "."
                 << projVersionPatch;
               mf->AddDefinition("CPACK_PACKAGE_VERSION",
-                                ostr.str().c_str());
+                                ostr.str());
               }
 
             int res = cpackGenerator->DoPackage();

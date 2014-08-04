@@ -148,17 +148,17 @@ bool cmCreateTestSourceList
   if(extraInclude.size())
     {
     this->Makefile->AddDefinition("CMAKE_TESTDRIVER_EXTRA_INCLUDES",
-                                  extraInclude.c_str());
+                                  extraInclude);
     }
   if(function.size())
     {
     this->Makefile->AddDefinition("CMAKE_TESTDRIVER_ARGVC_FUNCTION",
-                                  function.c_str());
+                                  function);
     }
   this->Makefile->AddDefinition("CMAKE_FORWARD_DECLARE_TESTS",
-    forwardDeclareCode.c_str());
+    forwardDeclareCode);
   this->Makefile->AddDefinition("CMAKE_FUNCTION_TABLE_ENTIRES",
-    functionMapCode.c_str());
+    functionMapCode);
   bool res = true;
   if ( !this->Makefile->ConfigureFile(configFile.c_str(), driver.c_str(),
       false, true, false) )
@@ -181,7 +181,7 @@ bool cmCreateTestSourceList
     sourceListValue += *i;
     }
 
-  this->Makefile->AddDefinition(sourceList, sourceListValue.c_str());
+  this->Makefile->AddDefinition(sourceList, sourceListValue);
   return res;
 }
 

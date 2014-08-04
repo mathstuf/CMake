@@ -144,7 +144,7 @@ cmCTestGenericHandler* cmCTestBuildCommand::InitializeHandler()
       cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT,
                  "SetMakeCommand:"
                  << buildCommand << "\n");
-      this->CTest->SetCTestConfiguration("MakeCommand", buildCommand.c_str());
+      this->CTest->SetCTestConfiguration("MakeCommand", buildCommand);
       }
     else
       {
@@ -184,7 +184,7 @@ bool cmCTestBuildCommand::InitialPass(std::vector<std::string> const& args,
     cmOStringStream str;
     str << this->Handler->GetTotalErrors();
     this->Makefile->AddDefinition(
-      this->Values[ctb_NUMBER_ERRORS], str.str().c_str());
+      this->Values[ctb_NUMBER_ERRORS], str.str());
     }
   if ( this->Values[ctb_NUMBER_WARNINGS]
        && *this->Values[ctb_NUMBER_WARNINGS])
@@ -192,7 +192,7 @@ bool cmCTestBuildCommand::InitialPass(std::vector<std::string> const& args,
     cmOStringStream str;
     str << this->Handler->GetTotalWarnings();
     this->Makefile->AddDefinition(
-      this->Values[ctb_NUMBER_WARNINGS], str.str().c_str());
+      this->Values[ctb_NUMBER_WARNINGS], str.str());
     }
   return ret;
 }

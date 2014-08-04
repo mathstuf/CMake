@@ -1368,7 +1368,7 @@ void cmTarget::AddLinkLibrary(cmMakefile& mf,
     dependencies += ";";
     dependencies += lib;
     dependencies += ";";
-    mf.AddCacheDefinition( targetEntry, dependencies.c_str(),
+    mf.AddCacheDefinition( targetEntry, dependencies,
                            "Dependencies for the target",
                            cmCacheManager::STATIC );
     }

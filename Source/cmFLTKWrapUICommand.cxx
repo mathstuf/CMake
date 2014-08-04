@@ -110,7 +110,7 @@ bool cmFLTKWrapUICommand
     }
   std::string varName = this->Target;
   varName += "_FLTK_UI_SRCS";
-  this->Makefile->AddDefinition(varName, sourceListValue.c_str());
+  this->Makefile->AddDefinition(varName, sourceListValue);
 
   return true;
 }

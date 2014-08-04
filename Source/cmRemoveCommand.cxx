@@ -69,7 +69,7 @@ bool cmRemoveCommand
     }
 
   // add the definition
-  this->Makefile->AddDefinition(variable, value.c_str());
+  this->Makefile->AddDefinition(variable, value);
 
   return true;
 }

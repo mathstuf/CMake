@@ -306,7 +306,7 @@ void cmGlobalGenerator::FindMakeProgram(cmMakefile* mf)
     makeProgram = dir;
     makeProgram += "/";
     makeProgram += saveFile;
-    mf->AddCacheDefinition("CMAKE_MAKE_PROGRAM", makeProgram.c_str(),
+    mf->AddCacheDefinition("CMAKE_MAKE_PROGRAM", makeProgram,
                            "make program",
                            cmCacheManager::FILEPATH);
     }
@@ -325,7 +325,7 @@ void cmGlobalGenerator::FindMakeProgram(cmMakefile* mf)
     cmakexbuild += "cmakexbuild";
 
     mf->AddCacheDefinition("CMAKE_MAKE_PROGRAM",
-                           cmakexbuild.c_str(),
+                           cmakexbuild,
                            "make program",
                            cmCacheManager::FILEPATH);
     }
@@ -431,7 +431,7 @@ cmGlobalGenerator::EnableLanguage(std::vector<std::string>const& languages,
   rootBin += cmVersion::GetCMakeVersion();
 
   // set the dir for parent files so they can be used by modules
-  mf->AddDefinition("CMAKE_PLATFORM_INFO_DIR",rootBin.c_str());
+  mf->AddDefinition("CMAKE_PLATFORM_INFO_DIR",rootBin);
 
   // find and make sure CMAKE_MAKE_PROGRAM is defined
   this->FindMakeProgram(mf);
@@ -461,7 +461,7 @@ cmGlobalGenerator::EnableLanguage(std::vector<std::string>const& languages,
     windowsVersionString << osvi.dwMajorVersion << "." << osvi.dwMinorVersion;
     windowsVersionString.str();
     mf->AddDefinition("CMAKE_HOST_SYSTEM_VERSION",
-                      windowsVersionString.str().c_str());
+                      windowsVersionString.str());
 #endif
     // Read the DetermineSystem file
     std::string systemFile = mf->GetModulesFile("CMakeDetermineSystem.cmake");
@@ -2479,9 +2479,9 @@ void cmGlobalGenerator::EnableMinGWLanguage(cmMakefile *mf)
     {
     rc = trc;
     }
-  mf->AddDefinition("CMAKE_GENERATOR_CC", gcc.c_str());
-  mf->AddDefinition("CMAKE_GENERATOR_CXX", gxx.c_str());
-  mf->AddDefinition("CMAKE_GENERATOR_RC", rc.c_str());
+  mf->AddDefinition("CMAKE_GENERATOR_CC", gcc);
+  mf->AddDefinition("CMAKE_GENERATOR_CXX", gxx);
+  mf->AddDefinition("CMAKE_GENERATOR_RC", rc);
 }
 
 //----------------------------------------------------------------------------

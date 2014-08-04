@@ -109,7 +109,7 @@ bool cmBuildCommand
     ->GetGlobalGenerator()->GenerateCMakeBuildCommand(target, configuration,
                                                       "", true);
 
-  this->Makefile->AddDefinition(variable, makecommand.c_str());
+  this->Makefile->AddDefinition(variable, makecommand);
 
   return true;
 }
@@ -144,7 +144,7 @@ bool cmBuildCommand
     return true;
     }
   this->Makefile->AddCacheDefinition(define,
-                                 makecommand.c_str(),
+                                 makecommand,
                                  "Command used to build entire project "
                                  "from the command line.",
                                  cmCacheManager::STRING);

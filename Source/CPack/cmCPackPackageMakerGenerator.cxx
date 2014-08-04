@@ -447,7 +447,7 @@ int cmCPackPackageMakerGenerator::InitializeInternal()
         << std::endl);
       return 0;
       }
-    this->SetOptionIfNotSet("CPACK_INSTALLER_PROGRAM", pkgPath.c_str());
+    this->SetOptionIfNotSet("CPACK_INSTALLER_PROGRAM", pkgPath);
     }
 
   // Get path to the real PackageMaker, not a symlink:
@@ -547,7 +547,7 @@ int cmCPackPackageMakerGenerator::InitializeInternal()
     return 0;
     }
   this->SetOptionIfNotSet("CPACK_INSTALLER_PROGRAM_DISK_IMAGE",
-                          pkgPath.c_str());
+                          pkgPath);
 
   return this->Superclass::InitializeInternal();
 }
@@ -592,7 +592,7 @@ bool cmCPackPackageMakerGenerator::CopyCreateResourceFile(
   // Set this so that distribution.dist gets the right name (without
   // the path).
   this->SetOption("CPACK_RESOURCE_FILE_" + uname + "_NOPATH",
-                  (name + ext).c_str());
+                  name + ext);
 
   cmCPackLogger(cmCPackLog::LOG_VERBOSE, "Configure file: "
                 << (inFileName ? inFileName : "(NULL)")
@@ -741,7 +741,7 @@ GenerateComponentPackage(const char *packageFile,
     std::string moduleVersionSuffix = ".";
     moduleVersionSuffix += component.Name;
     this->SetOption("CPACK_MODULE_VERSION_SUFFIX",
-                    moduleVersionSuffix.c_str());
+                    moduleVersionSuffix);
     std::string infoFileName = component.Name;
     infoFileName += "-Info.plist";
     if (!this->CopyResourcePlistFile("Info.plist", infoFileName))
@@ -851,7 +851,7 @@ WriteDistributionFile(const char* metapackageFile)
     CreateChoice(PostFlightComponent, choiceOut);
     }
 
-  this->SetOption("CPACK_PACKAGEMAKER_CHOICES", choiceOut.str().c_str());
+  this->SetOption("CPACK_PACKAGEMAKER_CHOICES", choiceOut.str());
 
   // Create the distribution.dist file in the metapackage to turn it
   // into a distribution package.

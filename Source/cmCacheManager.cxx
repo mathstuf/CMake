@@ -468,7 +468,7 @@ bool cmCacheManager::SaveCache(const std::string& path)
     currentcwd[0] = static_cast<char>(currentcwd[0] - 'A' + 'a');
     }
   cmSystemTools::ConvertToUnixSlashes(currentcwd);
-  this->AddCacheEntry("CMAKE_CACHEFILE_DIR", currentcwd.c_str(),
+  this->AddCacheEntry("CMAKE_CACHEFILE_DIR", currentcwd,
                       "This is the directory where this CMakeCache.txt"
                       " was created", cmCacheManager::INTERNAL);
 
@@ -714,17 +714,28 @@ void cmCacheManager::AddCacheEntry(const std::string& key,
                                    const char* helpString,
                                    CacheEntryType type)
 {
+  this->AddCacheEntry(key, value ? value : "", helpString, type,
+                      value ? true : false);
+}
+
+void cmCacheManager::AddCacheEntry(const std::string& key,
+                                   const std::string& value,
+                                   const char* helpString,
+                                   CacheEntryType type)
+{
+  this->AddCacheEntry(key, value, helpString, type, true);
+}
+
+void cmCacheManager::AddCacheEntry(const std::string& key,
+                                   const std::string& value,
+                                   const char* helpString,
+                                   CacheEntryType type,
+                                   bool initialized)
+{
   CacheEntry& e = this->Cache[key];
   e.Properties.SetCMakeInstance(this->CMakeInstance);
-  if ( value )
-    {
-    e.Value = value;
-    e.Initialized = true;
-    }
-  else
-    {
-    e.Value = "";
-    }
+  e.Value = value;
+  e.Initialized = initialized;
   e.Type = type;
   // make sure we only use unix style paths
   if(type == FILEPATH || type == PATH)

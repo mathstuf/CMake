@@ -154,7 +154,7 @@ void cmGlobalVisualStudio8Generator::AddPlatformDefinitions(cmMakefile* mf)
   if(this->TargetsWindowsCE())
   {
     mf->AddDefinition("CMAKE_VS_WINCE_VERSION",
-      this->WindowsCEVersion.c_str());
+      this->WindowsCEVersion);
   }
 }
 

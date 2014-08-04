@@ -211,7 +211,7 @@ bool cmGlobalXCodeGenerator::SetGeneratorToolset(std::string const& ts,
     if(!this->GeneratorToolset.empty())
       {
       mf->AddDefinition("CMAKE_XCODE_PLATFORM_TOOLSET",
-                        this->GeneratorToolset.c_str());
+                        this->GeneratorToolset);
       }
     return true;
     }
@@ -227,7 +227,7 @@ void cmGlobalXCodeGenerator::EnableLanguage(std::vector<std::string>const&
                                             cmMakefile * mf, bool optional)
 {
   mf->AddDefinition("XCODE","1");
-  mf->AddDefinition("XCODE_VERSION", this->VersionString.c_str());
+  mf->AddDefinition("XCODE_VERSION", this->VersionString);
   if(this->XcodeVersion == 15)
     {
     }
@@ -2696,7 +2696,7 @@ std::string cmGlobalXCodeGenerator::GetOrCreateId(const std::string& name,
     }
 
   this->CMakeInstance->AddCacheEntry(guidStoreName,
-    id.c_str(), "Stored Xcode object GUID", cmCacheManager::INTERNAL);
+    id, "Stored Xcode object GUID", cmCacheManager::INTERNAL);
 
   return id;
 }

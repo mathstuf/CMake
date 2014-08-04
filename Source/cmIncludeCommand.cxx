@@ -140,7 +140,7 @@ bool cmIncludeCommand
   if (resultVarName.size())
     {
       this->Makefile->AddDefinition(resultVarName,
-                                    readit?fullFilePath.c_str():"NOTFOUND");
+                                    readit?fullFilePath:"NOTFOUND");
     }
 
   if(!optional && !readit && !cmSystemTools::GetFatalErrorOccured())

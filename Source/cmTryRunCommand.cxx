@@ -163,7 +163,7 @@ bool cmTryRunCommand
       if(this->RunOutputVariable.size())
         {
         this->Makefile->AddDefinition(this->RunOutputVariable,
-                                      runOutputContents.c_str());
+                                      runOutputContents);
         }
 
       if(this->OutputVariable.size())
@@ -177,7 +177,7 @@ bool cmTryRunCommand
           runOutputContents = std::string(compileOutput) + runOutputContents;
           }
         this->Makefile->AddDefinition(this->OutputVariable,
-                                      runOutputContents.c_str());
+                                      runOutputContents);
         }
       }
     }

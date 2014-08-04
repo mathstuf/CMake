@@ -59,7 +59,7 @@ bool cmCMakeMinimumRequired
 
   // Save the required version string.
   this->Makefile->AddDefinition("CMAKE_MINIMUM_REQUIRED_VERSION",
-                                version_string.c_str());
+                                version_string);
 
 
   // Get the current version number.

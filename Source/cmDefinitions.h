@@ -44,6 +44,7 @@ public:
 
   /** Set (or unset if null) a value associated with a key.  */
   const char* Set(const std::string& key, const char* value);
+  const char* Set(const std::string& key, const std::string& value);
 
   /** Get the set of all local keys.  */
   std::set<std::string> LocalKeys() const;

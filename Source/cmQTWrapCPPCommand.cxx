@@ -110,6 +110,6 @@ bool cmQTWrapCPPCommand::InitialPass(std::vector<std::string> const& argsIn,
 
   // Store the final list of source files.
   this->Makefile->AddDefinition(sourceList,
-                                sourceListValue.c_str());
+                                sourceListValue);
   return true;
 }

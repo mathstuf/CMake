@@ -44,7 +44,7 @@ bool cmProjectCommand
   this->Makefile->AddDefinition(srcdir,
           this->Makefile->GetCurrentDirectory());
 
-  this->Makefile->AddDefinition("PROJECT_NAME", args[0].c_str());
+  this->Makefile->AddDefinition("PROJECT_NAME", args[0]);
 
   // Set the CMAKE_PROJECT_NAME variable to be the highest-level
   // project name in the tree. If there are two project commands
@@ -55,10 +55,10 @@ bool cmProjectCommand
   if(!this->Makefile->GetDefinition("CMAKE_PROJECT_NAME")
      || (this->Makefile->GetLocalGenerator()->GetParent() == 0) )
     {
-    this->Makefile->AddDefinition("CMAKE_PROJECT_NAME", args[0].c_str());
+    this->Makefile->AddDefinition("CMAKE_PROJECT_NAME", args[0]);
     this->Makefile->AddCacheDefinition
       ("CMAKE_PROJECT_NAME",
-       args[0].c_str(),
+       args[0],
        "Value Computed by CMake", cmCacheManager::STATIC);
     }
 
@@ -166,8 +166,8 @@ bool cmProjectCommand
 
     std::string vv;
     vv = args[0] + "_VERSION";
-    this->Makefile->AddDefinition("PROJECT_VERSION", vs.c_str());
-    this->Makefile->AddDefinition(vv, vs.c_str());
+    this->Makefile->AddDefinition("PROJECT_VERSION", vs);
+    this->Makefile->AddDefinition(vv, vs);
     vv = args[0] + "_VERSION_MAJOR";
     this->Makefile->AddDefinition("PROJECT_VERSION_MAJOR", vb[0]);
     this->Makefile->AddDefinition(vv, vb[0]);

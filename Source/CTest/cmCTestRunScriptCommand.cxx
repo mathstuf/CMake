@@ -56,7 +56,7 @@ bool cmCTestRunScriptCommand
         &ret);
       cmOStringStream str;
       str << ret;
-      this->Makefile->AddDefinition(returnVariable, str.str().c_str());
+      this->Makefile->AddDefinition(returnVariable, str.str());
       }
     }
   return true;

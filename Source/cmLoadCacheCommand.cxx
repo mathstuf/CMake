@@ -186,7 +186,7 @@ void cmLoadCacheCommand::CheckLine(const char* line)
       var = this->Prefix + var;
       if(value.length())
         {
-        this->Makefile->AddDefinition(var, value.c_str());
+        this->Makefile->AddDefinition(var, value);
         }
       else
         {

@@ -74,7 +74,7 @@ bool cmCTestHandlerCommand
     {
     this->CTest->SetCTestConfiguration("BuildDirectory",
       cmSystemTools::CollapseFullPath(
-        this->Values[ct_BUILD]).c_str());
+        this->Values[ct_BUILD]));
     }
   else
     {
@@ -84,7 +84,7 @@ bool cmCTestHandlerCommand
       {
       this->
         CTest->SetCTestConfiguration("BuildDirectory",
-          cmSystemTools::CollapseFullPath(bdir).c_str());
+          cmSystemTools::CollapseFullPath(bdir));
       }
     else
       {
@@ -98,13 +98,13 @@ bool cmCTestHandlerCommand
       "Set source directory to: " << this->Values[ct_SOURCE] << std::endl);
     this->CTest->SetCTestConfiguration("SourceDirectory",
       cmSystemTools::CollapseFullPath(
-        this->Values[ct_SOURCE]).c_str());
+        this->Values[ct_SOURCE]));
     }
   else
     {
     this->CTest->SetCTestConfiguration("SourceDirectory",
       cmSystemTools::CollapseFullPath(
-        this->Makefile->GetSafeDefinition("CTEST_SOURCE_DIRECTORY")).c_str());
+        this->Makefile->GetSafeDefinition("CTEST_SOURCE_DIRECTORY")));
     }
 
   cmCTestLog(this->CTest, DEBUG, "Initialize handler" << std::endl;);
@@ -144,7 +144,7 @@ bool cmCTestHandlerCommand
     cmOStringStream str;
     str << res;
     this->Makefile->AddDefinition(
-      this->Values[ct_RETURN_VALUE], str.str().c_str());
+      this->Values[ct_RETURN_VALUE], str.str());
     }
   cmSystemTools::ChangeDirectory(current_dir);
   return true;

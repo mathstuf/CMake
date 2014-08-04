@@ -503,7 +503,7 @@ int cmCoreTryCompile::TryCompileCode(std::vector<std::string> const& argv)
 
   if ( outputVariable.size() > 0 )
     {
-    this->Makefile->AddDefinition(outputVariable, output.c_str());
+    this->Makefile->AddDefinition(outputVariable, output);
     }
 
   if (this->SrcFileSignature)
@@ -541,7 +541,7 @@ int cmCoreTryCompile::TryCompileCode(std::vector<std::string> const& argv)
     if(!copyFileError.empty())
       {
       this->Makefile->AddDefinition(copyFileError,
-                                    copyFileErrorMessage.c_str());
+                                    copyFileErrorMessage);
       }
     }
   return res;

@@ -148,9 +148,9 @@ cmCTestGenericHandler* cmCTestSubmitCommand::InitializeHandler()
     }
 
   static_cast<cmCTestSubmitHandler*>(handler)->SetOption("RetryDelay",
-    this->RetryDelay.c_str());
+    this->RetryDelay);
   static_cast<cmCTestSubmitHandler*>(handler)->SetOption("RetryCount",
-    this->RetryCount.c_str());
+    this->RetryCount);
   static_cast<cmCTestSubmitHandler*>(handler)->SetOption("InternalTest",
     this->InternalTest ? "ON" : "OFF");
 

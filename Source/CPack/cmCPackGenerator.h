@@ -102,7 +102,9 @@ public:
 
   //! Set and get the options
   void SetOption(const std::string& op, const char* value);
+  void SetOption(const std::string& op, const std::string& value);
   void SetOptionIfNotSet(const std::string& op, const char* value);
+  void SetOptionIfNotSet(const std::string& op, const std::string& value);
   const char* GetOption(const std::string& op) const;
   std::vector<std::string> GetOptions() const;
   bool IsSet(const std::string& name) const;

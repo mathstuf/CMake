@@ -47,7 +47,7 @@ IsFunctionBlocked(const cmListFileFunction& lff, cmMakefile &mf,
       for( ; j != this->Args.end(); ++j)
         {
         // set the variable to the loop value
-        mf.AddDefinition(this->Args[0],j->c_str());
+        mf.AddDefinition(this->Args[0],*j);
         // Invoke all the functions that were collected in the block.
         cmExecutionStatus status;
         for(unsigned int c = 0; c < this->Functions.size(); ++c)
@@ -58,13 +58,13 @@ IsFunctionBlocked(const cmListFileFunction& lff, cmMakefile &mf,
             {
             inStatus.SetReturnInvoked(true);
             // restore the variable to its prior value
-            mf.AddDefinition(this->Args[0],oldDef.c_str());
+            mf.AddDefinition(this->Args[0],oldDef);
             return true;
             }
           if (status.GetBreakInvoked())
             {
             // restore the variable to its prior value
-            mf.AddDefinition(this->Args[0],oldDef.c_str());
+            mf.AddDefinition(this->Args[0],oldDef);
             return true;
             }
           if(cmSystemTools::GetFatalErrorOccured() )
@@ -74,7 +74,7 @@ IsFunctionBlocked(const cmListFileFunction& lff, cmMakefile &mf,
           }
         }
       // restore the variable to its prior value
-      mf.AddDefinition(this->Args[0],oldDef.c_str());
+      mf.AddDefinition(this->Args[0],oldDef);
       return true;
       }
     else

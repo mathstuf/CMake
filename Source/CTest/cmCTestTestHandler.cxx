@@ -1579,7 +1579,7 @@ void cmCTestTestHandler::GetListOfTests()
   cmsys::auto_ptr<cmLocalGenerator> lg(gg.CreateLocalGenerator());
   cmMakefile *mf = lg->GetMakefile();
   mf->AddDefinition("CTEST_CONFIGURATION_TYPE",
-    this->CTest->GetConfigType().c_str());
+    this->CTest->GetConfigType());
 
   // Add handler for ADD_TEST
   cmCTestAddTestCommand* newCom1 = new cmCTestAddTestCommand;

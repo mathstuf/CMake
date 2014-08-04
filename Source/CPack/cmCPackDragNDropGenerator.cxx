@@ -79,7 +79,7 @@ int cmCPackDragNDropGenerator::InitializeInternal()
       << std::endl);
     return 0;
     }
-  this->SetOptionIfNotSet("CPACK_COMMAND_HDIUTIL", hdiutil_path.c_str());
+  this->SetOptionIfNotSet("CPACK_COMMAND_HDIUTIL", hdiutil_path);
 
   const std::string setfile_path = cmSystemTools::FindProgram("SetFile",
     paths, false);
@@ -90,7 +90,7 @@ int cmCPackDragNDropGenerator::InitializeInternal()
       << std::endl);
     return 0;
     }
-  this->SetOptionIfNotSet("CPACK_COMMAND_SETFILE", setfile_path.c_str());
+  this->SetOptionIfNotSet("CPACK_COMMAND_SETFILE", setfile_path);
 
   const std::string rez_path = cmSystemTools::FindProgram("Rez",
     paths, false);
@@ -101,7 +101,7 @@ int cmCPackDragNDropGenerator::InitializeInternal()
       << std::endl);
     return 0;
     }
-  this->SetOptionIfNotSet("CPACK_COMMAND_REZ", rez_path.c_str());
+  this->SetOptionIfNotSet("CPACK_COMMAND_REZ", rez_path);
 
   return this->Superclass::InitializeInternal();
 }

@@ -159,8 +159,8 @@ bool cmQTWrapUICommand::InitialPass(std::vector<std::string> const& argsIn,
 
   // Store the final list of source files and headers.
   this->Makefile->AddDefinition(sourceList,
-                                sourceListValue.c_str());
+                                sourceListValue);
   this->Makefile->AddDefinition(headerList,
-                                headerListValue.c_str());
+                                headerListValue);
   return true;
 }

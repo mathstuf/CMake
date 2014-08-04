@@ -472,7 +472,7 @@ void cmGlobalVisualStudioGenerator::FindMakeProgram(cmMakefile* mf)
   if(cmSystemTools::IsOff(mf->GetDefinition("CMAKE_MAKE_PROGRAM")))
     {
     mf->AddDefinition("CMAKE_MAKE_PROGRAM",
-                      this->GetVSMakeProgram().c_str());
+                      this->GetVSMakeProgram());
     }
 }
 

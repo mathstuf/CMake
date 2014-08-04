@@ -65,7 +65,7 @@ bool cmSeparateArgumentsCommand
       {
       std::string value = def;
       cmSystemTools::ReplaceString(value, " ", ";");
-      this->Makefile->AddDefinition(var, value.c_str());
+      this->Makefile->AddDefinition(var, value);
       }
     }
   else
@@ -102,7 +102,7 @@ bool cmSeparateArgumentsCommand
         value += *si;
         }
       }
-    this->Makefile->AddDefinition(var, value.c_str());
+    this->Makefile->AddDefinition(var, value);
     }
 
   return true;

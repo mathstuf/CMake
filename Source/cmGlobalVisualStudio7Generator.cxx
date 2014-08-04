@@ -119,7 +119,7 @@ void cmGlobalVisualStudio7Generator::FindMakeProgram(cmMakefile* mf)
 {
   this->cmGlobalVisualStudioGenerator::FindMakeProgram(mf);
   mf->AddDefinition("CMAKE_VS_DEVENV_COMMAND",
-                    this->GetDevEnvCommand().c_str());
+                    this->GetDevEnvCommand());
 }
 
 //----------------------------------------------------------------------------
@@ -290,7 +290,7 @@ bool cmGlobalVisualStudio7Generator::SetGeneratorPlatform(std::string const& p,
     {
     mf->AddDefinition("CMAKE_FORCE_IA64", "TRUE");
     }
-  mf->AddDefinition("CMAKE_VS_PLATFORM_NAME", this->GetPlatformName().c_str());
+  mf->AddDefinition("CMAKE_VS_PLATFORM_NAME", this->GetPlatformName());
   return this->cmGlobalVisualStudioGenerator::SetGeneratorPlatform(p, mf);
 }
 
@@ -331,7 +331,7 @@ void cmGlobalVisualStudio7Generator::GenerateConfigurations(cmMakefile* mf)
 
   mf->AddCacheDefinition(
     "CMAKE_CONFIGURATION_TYPES",
-    configs.c_str(),
+    configs,
     "Semicolon separated list of supported configuration types, "
     "only supports Debug, Release, MinSizeRel, and RelWithDebInfo, "
     "anything else will be ignored.",
@@ -969,7 +969,7 @@ void cmGlobalVisualStudio7Generator::CreateGUID(const std::string& name)
   RpcStringFreeW(&uidstr);
   ret = cmSystemTools::UpperCase(ret);
   this->CMakeInstance->AddCacheEntry(guidStoreName,
-                                     ret.c_str(), "Stored GUID",
+                                     ret, "Stored GUID",
                                      cmCacheManager::INTERNAL);
 }
 

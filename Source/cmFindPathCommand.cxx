@@ -51,7 +51,7 @@ bool cmFindPathCommand
   if(result.size() != 0)
     {
     this->Makefile->AddCacheDefinition
-      (this->VariableName, result.c_str(),
+      (this->VariableName, result,
        this->VariableDocumentation.c_str(),
        (this->IncludeFileInPath) ?
        cmCacheManager::FILEPATH :cmCacheManager::PATH);
@@ -59,7 +59,7 @@ bool cmFindPathCommand
     }
   this->Makefile->AddCacheDefinition
     (this->VariableName,
-     (this->VariableName + "-NOTFOUND").c_str(),
+     this->VariableName + "-NOTFOUND",
      this->VariableDocumentation.c_str(),
      (this->IncludeFileInPath) ?
      cmCacheManager::FILEPATH :cmCacheManager::PATH);

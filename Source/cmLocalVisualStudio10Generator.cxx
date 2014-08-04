@@ -116,7 +116,7 @@ void cmLocalVisualStudio10Generator
   // save the GUID in the cache
   this->GlobalGenerator->GetCMakeInstance()->
     AddCacheEntry(guidStoreName,
-                  parser.GUID.c_str(),
+                  parser.GUID,
                   "Stored GUID",
                   cmCacheManager::INTERNAL);
 }

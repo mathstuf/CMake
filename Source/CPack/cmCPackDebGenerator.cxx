@@ -67,20 +67,20 @@ int cmCPackDebGenerator::PackageOnePack(std::string initialTopLevel,
 
   localToplevel += "/"+ packageName;
   /* replace the TEMP DIRECTORY with the component one */
-  this->SetOption("CPACK_TEMPORARY_DIRECTORY",localToplevel.c_str());
+  this->SetOption("CPACK_TEMPORARY_DIRECTORY",localToplevel);
   packageFileName += "/"+ outputFileName;
   /* replace proposed CPACK_OUTPUT_FILE_NAME */
-  this->SetOption("CPACK_OUTPUT_FILE_NAME",outputFileName.c_str());
+  this->SetOption("CPACK_OUTPUT_FILE_NAME",outputFileName);
   /* replace the TEMPORARY package file name */
   this->SetOption("CPACK_TEMPORARY_PACKAGE_FILE_NAME",
-      packageFileName.c_str());
+      packageFileName);
   // Tell CPackDeb.cmake the name of the component GROUP.
-  this->SetOption("CPACK_DEB_PACKAGE_COMPONENT",packageName.c_str());
+  this->SetOption("CPACK_DEB_PACKAGE_COMPONENT",packageName);
   // Tell CPackDeb.cmake the path where the component is.
   std::string component_path = "/";
   component_path += packageName;
   this->SetOption("CPACK_DEB_PACKAGE_COMPONENT_PART_PATH",
-                  component_path.c_str());
+                  component_path);
   if (!this->ReadListFile("CPackDeb.cmake"))
     {
     cmCPackLogger(cmCPackLog::LOG_ERROR,
@@ -196,18 +196,18 @@ int cmCPackDebGenerator::PackageComponentsAllInOne()
   localToplevel += "/"+compInstDirName;
 
   /* replace the TEMP DIRECTORY with the component one */
-  this->SetOption("CPACK_TEMPORARY_DIRECTORY",localToplevel.c_str());
+  this->SetOption("CPACK_TEMPORARY_DIRECTORY",localToplevel);
   packageFileName += "/"+ outputFileName;
   /* replace proposed CPACK_OUTPUT_FILE_NAME */
-  this->SetOption("CPACK_OUTPUT_FILE_NAME",outputFileName.c_str());
+  this->SetOption("CPACK_OUTPUT_FILE_NAME",outputFileName);
   /* replace the TEMPORARY package file name */
   this->SetOption("CPACK_TEMPORARY_PACKAGE_FILE_NAME",
-      packageFileName.c_str());
+      packageFileName);
   // Tell CPackDeb.cmake the path where the component is.
   std::string component_path = "/";
   component_path += compInstDirName;
   this->SetOption("CPACK_DEB_PACKAGE_COMPONENT_PART_PATH",
-                  component_path.c_str());
+                  component_path);
   if (!this->ReadListFile("CPackDeb.cmake"))
     {
     cmCPackLogger(cmCPackLog::LOG_ERROR,

@@ -235,7 +235,7 @@ bool cmListCommand::HandleGetCommand(std::vector<std::string> const& args)
     value += varArgsExpanded[item];
     }
 
-  this->Makefile->AddDefinition(variableName, value.c_str());
+  this->Makefile->AddDefinition(variableName, value);
   return true;
 }
 
@@ -264,7 +264,7 @@ bool cmListCommand::HandleAppendCommand(std::vector<std::string> const& args)
     listString += args[cc];
     }
 
-  this->Makefile->AddDefinition(listName, listString.c_str());
+  this->Makefile->AddDefinition(listName, listString);
   return true;
 }
 
@@ -362,7 +362,7 @@ bool cmListCommand::HandleInsertCommand(std::vector<std::string> const& args)
     sep = ";";
     }
 
-  this->Makefile->AddDefinition(listName, value.c_str());
+  this->Makefile->AddDefinition(listName, value);
   return true;
 }
 
@@ -411,7 +411,7 @@ bool cmListCommand
     sep = ";";
     }
 
-  this->Makefile->AddDefinition(listName, value.c_str());
+  this->Makefile->AddDefinition(listName, value);
   return true;
 }
 
@@ -446,7 +446,7 @@ bool cmListCommand
     sep = ";";
     }
 
-  this->Makefile->AddDefinition(listName, value.c_str());
+  this->Makefile->AddDefinition(listName, value);
   return true;
 }
 
@@ -491,7 +491,7 @@ bool cmListCommand
     }
 
 
-  this->Makefile->AddDefinition(listName, value.c_str());
+  this->Makefile->AddDefinition(listName, value);
   return true;
 }
 
@@ -528,7 +528,7 @@ bool cmListCommand
     sep = ";";
     }
 
-  this->Makefile->AddDefinition(listName, value.c_str());
+  this->Makefile->AddDefinition(listName, value);
   return true;
 }
 
@@ -602,7 +602,7 @@ bool cmListCommand::HandleRemoveAtCommand(
       }
     }
 
-  this->Makefile->AddDefinition(listName, value.c_str());
+  this->Makefile->AddDefinition(listName, value);
   return true;
 }
 

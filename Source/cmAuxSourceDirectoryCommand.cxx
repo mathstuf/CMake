@@ -83,7 +83,7 @@ bool cmAuxSourceDirectoryCommand::InitialPass
         }
       }
     }
-  this->Makefile->AddDefinition(args[1], sourceListValue.c_str());
+  this->Makefile->AddDefinition(args[1], sourceListValue);
   return true;
 }
 

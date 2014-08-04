@@ -80,7 +80,7 @@ bool cmGetDirectoryPropertyCommand
       return false;
       }
     output = dir->GetSafeDefinition(*i);
-    this->Makefile->AddDefinition(variable, output.c_str());
+    this->Makefile->AddDefinition(variable, output);
     return true;
     }
 

@@ -218,6 +218,9 @@ class cmake
   void AddCacheEntry(const std::string& key, const char* value,
                      const char* helpString,
                      int type);
+  void AddCacheEntry(const std::string& key, const std::string& value,
+                     const char* helpString,
+                     int type);
 
   /**
    * Get the system information and write it to the file specified

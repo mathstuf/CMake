@@ -86,7 +86,7 @@ int cmCPackNSISGenerator::PackageFiles()
     }
   cmCPackLogger(cmCPackLog::LOG_DEBUG, "Uninstall Files: "
     << str.str() << std::endl);
-  this->SetOptionIfNotSet("CPACK_NSIS_DELETE_FILES", str.str().c_str());
+  this->SetOptionIfNotSet("CPACK_NSIS_DELETE_FILES", str.str());
   std::vector<std::string> dirs;
   this->GetListOfSubdirectories(toplevel.c_str(), dirs);
   std::vector<std::string>::const_iterator sit;
@@ -124,7 +124,7 @@ int cmCPackNSISGenerator::PackageFiles()
   cmCPackLogger(cmCPackLog::LOG_DEBUG, "Uninstall Dirs: "
     << dstr.str() << std::endl);
   this->SetOptionIfNotSet("CPACK_NSIS_DELETE_DIRECTORIES",
-                          dstr.str().c_str());
+                          dstr.str());
 
   cmCPackLogger(cmCPackLog::LOG_VERBOSE, "Configure file: " << nsisInFileName
     << " to " << nsisFileName << std::endl);
@@ -145,7 +145,7 @@ int cmCPackNSISGenerator::PackageFiles()
       installerIconCode += "\"\n";
       }
     this->SetOptionIfNotSet("CPACK_NSIS_INSTALLER_MUI_ICON_CODE",
-                            installerIconCode.c_str());
+                            installerIconCode);
     }
   if(this->IsSet("CPACK_PACKAGE_ICON"))
     {
@@ -153,7 +153,7 @@ int cmCPackNSISGenerator::PackageFiles()
     installerIconCode += this->GetOption("CPACK_PACKAGE_ICON");
     installerIconCode += "\"\n";
     this->SetOptionIfNotSet("CPACK_NSIS_INSTALLER_ICON_CODE",
-                            installerIconCode.c_str());
+                            installerIconCode);
     }
 
   if(this->IsSet("CPACK_NSIS_MUI_FINISHPAGE_RUN"))
@@ -164,7 +164,7 @@ int cmCPackNSISGenerator::PackageFiles()
     installerRunCode += this->GetOption("CPACK_NSIS_MUI_FINISHPAGE_RUN");
     installerRunCode += "\"\n";
     this->SetOptionIfNotSet("CPACK_NSIS_INSTALLER_MUI_FINISHPAGE_RUN_CODE",
-                            installerRunCode.c_str());
+                            installerRunCode);
     }
 
   // Setup all of the component sections
@@ -286,7 +286,7 @@ int cmCPackNSISGenerator::PackageFiles()
         + groupDescriptions
         + "!insertmacro MUI_FUNCTION_DESCRIPTION_END\n";
       this->SetOptionIfNotSet("CPACK_NSIS_INSTALLER_MUI_COMPONENTS_DESC",
-                              componentDescriptions.c_str());
+                              componentDescriptions);
       }
 
     if (anyDownloadedComponents)
@@ -299,17 +299,17 @@ int cmCPackNSISGenerator::PackageFiles()
       }
 
     this->SetOptionIfNotSet("CPACK_NSIS_INSTALLATION_TYPES",
-                            installTypesCode.c_str());
+                            installTypesCode);
     this->SetOptionIfNotSet("CPACK_NSIS_PAGE_COMPONENTS",
                             "!insertmacro MUI_PAGE_COMPONENTS");
     this->SetOptionIfNotSet("CPACK_NSIS_FULL_INSTALL", "");
     this->SetOptionIfNotSet("CPACK_NSIS_COMPONENT_SECTIONS",
-                            componentCode.c_str());
+                            componentCode);
     this->SetOptionIfNotSet("CPACK_NSIS_COMPONENT_SECTION_LIST",
-                            sectionList.c_str());
+                            sectionList);
     this->SetOptionIfNotSet("CPACK_NSIS_SECTION_SELECTED_VARS",
-                            selectedVarsList.c_str());
-    this->SetOption("CPACK_NSIS_DEFINES", defines.c_str());
+                            selectedVarsList);
+    this->SetOption("CPACK_NSIS_DEFINES", defines);
     }
 
   this->ConfigureFile(nsisInInstallOptions.c_str(),
@@ -470,7 +470,7 @@ int cmCPackNSISGenerator::InitializeInternal()
     cmCPackLogger(cmCPackLog::LOG_DEBUG, "NSIS Version: CVS "
       << versionRexCVS.match(1) << std::endl);
     }
-  this->SetOptionIfNotSet("CPACK_INSTALLER_PROGRAM", nsisPath.c_str());
+  this->SetOptionIfNotSet("CPACK_INSTALLER_PROGRAM", nsisPath);
   this->SetOptionIfNotSet("CPACK_NSIS_EXECUTABLES_DIRECTORY", "bin");
   const char* cpackPackageExecutables
     = this->GetOption("CPACK_PACKAGE_EXECUTABLES");
@@ -553,9 +553,9 @@ int cmCPackNSISGenerator::InitializeInternal()
     }
 
   this->CreateMenuLinks(str, deleteStr);
-  this->SetOptionIfNotSet("CPACK_NSIS_CREATE_ICONS", str.str().c_str());
+  this->SetOptionIfNotSet("CPACK_NSIS_CREATE_ICONS", str.str());
   this->SetOptionIfNotSet("CPACK_NSIS_DELETE_ICONS",
-                          deleteStr.str().c_str());
+                          deleteStr.str());
 
   this->SetOptionIfNotSet("CPACK_NSIS_COMPRESSOR", "lzma");
 

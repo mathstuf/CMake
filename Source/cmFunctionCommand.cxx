@@ -105,7 +105,7 @@ bool cmFunctionHelperCommand::InvokeInitialPass
   // set the value of argc
   cmOStringStream strStream;
   strStream << expandedArgs.size();
-  this->Makefile->AddDefinition("ARGC",strStream.str().c_str());
+  this->Makefile->AddDefinition("ARGC",strStream.str());
   this->Makefile->MarkVariableAsUsed("ARGC");
 
   // set the values for ARGV0 ARGV1 ...
@@ -114,7 +114,7 @@ bool cmFunctionHelperCommand::InvokeInitialPass
     cmOStringStream tmpStream;
     tmpStream << "ARGV" << t;
     this->Makefile->AddDefinition(tmpStream.str(),
-                                  expandedArgs[t].c_str());
+                                  expandedArgs[t]);
     this->Makefile->MarkVariableAsUsed(tmpStream.str());
     }
 
@@ -122,7 +122,7 @@ bool cmFunctionHelperCommand::InvokeInitialPass
   for (unsigned int j = 1; j < this->Args.size(); ++j)
     {
     this->Makefile->AddDefinition(this->Args[j],
-                                  expandedArgs[j-1].c_str());
+                                  expandedArgs[j-1]);
     }
 
   // define ARGV and ARGN
@@ -147,9 +147,9 @@ bool cmFunctionHelperCommand::InvokeInitialPass
       }
     cnt ++;
     }
-  this->Makefile->AddDefinition("ARGV", argvDef.c_str());
+  this->Makefile->AddDefinition("ARGV", argvDef);
   this->Makefile->MarkVariableAsUsed("ARGV");
-  this->Makefile->AddDefinition("ARGN", argnDef.c_str());
+  this->Makefile->AddDefinition("ARGN", argnDef);
   this->Makefile->MarkVariableAsUsed("ARGN");
 
   // Invoke all the functions that were collected in the block.

@@ -70,14 +70,14 @@ bool cmFindLibraryCommand
     {
     // Save the value in the cache
     this->Makefile->AddCacheDefinition(this->VariableName,
-                                       library.c_str(),
+                                       library,
                                        this->VariableDocumentation.c_str(),
                                        cmCacheManager::FILEPATH);
     return true;
     }
   std::string notfound = this->VariableName + "-NOTFOUND";
   this->Makefile->AddCacheDefinition(this->VariableName,
-                                     notfound.c_str(),
+                                     notfound,
                                      this->VariableDocumentation.c_str(),
                                      cmCacheManager::FILEPATH);
   return true;

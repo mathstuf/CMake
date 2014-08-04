@@ -47,6 +47,13 @@ void cmCTestGenericHandler::SetOption(const std::string& op, const char* value)
 }
 
 //----------------------------------------------------------------------
+void cmCTestGenericHandler::SetOption(const std::string& op,
+                                      const std::string& value)
+{
+  this->Options[op] = value;
+}
+
+//----------------------------------------------------------------------
 void cmCTestGenericHandler::SetPersistentOption(const std::string& op,
                                                 const char* value)
 {
@@ -66,6 +73,15 @@ void cmCTestGenericHandler::SetPersistentOption(const std::string& op,
 }
 
 //----------------------------------------------------------------------
+void cmCTestGenericHandler::SetPersistentOption(const std::string& op,
+                                                const std::string& value)
+{
+  this->SetOption(op, value);
+
+  this->PersistentOptions[op] = value;
+}
+
+//----------------------------------------------------------------------
 void cmCTestGenericHandler::Initialize()
 {
   this->AppendXML = false;
@@ -75,7 +91,7 @@ void cmCTestGenericHandler::Initialize()
     it != this->PersistentOptions.end();
     ++ it )
     {
-    this->Options[it->first] = it->second.c_str();
+    this->Options[it->first] = it->second;
     }
 }
 

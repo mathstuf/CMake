@@ -72,7 +72,7 @@ bool cmIncludeExternalMSProjectCommand
       {
       std::string guidVariable = utility_name + "_GUID_CMAKE";
       this->Makefile->GetCMakeInstance()->AddCacheEntry(
-        guidVariable.c_str(), customGuid.c_str(),
+        guidVariable, customGuid.c_str(),
         "Stored GUID", cmCacheManager::INTERNAL);
       }
 

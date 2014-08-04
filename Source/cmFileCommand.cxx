@@ -361,7 +361,7 @@ bool cmFileCommand::HandleReadCommand(std::vector<std::string> const& args)
         }
       }
     }
-  this->Makefile->AddDefinition(variable, output.c_str());
+  this->Makefile->AddDefinition(variable, output);
   return true;
 }
 
@@ -383,7 +383,7 @@ bool cmFileCommand::HandleHashCommand(std::vector<std::string> const& args)
     std::string out = hash->HashFile(args[1]);
     if(!out.empty())
       {
-      this->Makefile->AddDefinition(args[2], out.c_str());
+      this->Makefile->AddDefinition(args[2], out);
       return true;
       }
     cmOStringStream e;
@@ -789,7 +789,7 @@ bool cmFileCommand::HandleStringsCommand(std::vector<std::string> const& args)
     }
 
   // Save the output in a makefile variable.
-  this->Makefile->AddDefinition(outVar, output.c_str());
+  this->Makefile->AddDefinition(outVar, output);
   return true;
 }
 
@@ -924,7 +924,7 @@ bool cmFileCommand::HandleGlobCommand(std::vector<std::string> const& args,
       }
     }
 
-  this->Makefile->AddDefinition(variable, output.c_str());
+  this->Makefile->AddDefinition(variable, output);
   return true;
 }
 
@@ -1801,7 +1801,7 @@ struct cmFileInstaller: public cmFileCopier
     {
     // Save the updated install manifest.
     this->Makefile->AddDefinition("CMAKE_INSTALL_MANIFEST_FILES",
-                                  this->Manifest.c_str());
+                                  this->Manifest);
     }
 
 protected:
@@ -2491,7 +2491,7 @@ bool cmFileCommand::HandleRelativePathCommand(
   std::string res = cmSystemTools::RelativePath(directoryName,
                                                 fileName);
   this->Makefile->AddDefinition(outVar,
-    res.c_str());
+    res);
   return true;
 }
 
@@ -2613,7 +2613,7 @@ bool cmFileCommand::HandleCMakePathCommand(std::vector<std::string>
       }
     value += *j;
     }
-  this->Makefile->AddDefinition(var, value.c_str());
+  this->Makefile->AddDefinition(var, value);
   return true;
 }
 
@@ -2964,7 +2964,7 @@ cmFileCommand::HandleDownloadCommand(std::vector<std::string> const& args)
         cmOStringStream result;
         result << (int)0 << ";\"" << msg;
         this->Makefile->AddDefinition(statusVar,
-                                      result.str().c_str());
+                                      result.str());
         }
       return true;
       }
@@ -3099,7 +3099,7 @@ cmFileCommand::HandleDownloadCommand(std::vector<std::string> const& args)
     cmOStringStream result;
     result << (int)res << ";\"" << ::curl_easy_strerror(res) << "\"";
     this->Makefile->AddDefinition(statusVar,
-                                  result.str().c_str());
+                                  result.str());
     }
 
   ::curl_global_cleanup();
@@ -3354,7 +3354,7 @@ cmFileCommand::HandleUploadCommand(std::vector<std::string> const& args)
     cmOStringStream result;
     result << (int)res << ";\"" << ::curl_easy_strerror(res) << "\"";
     this->Makefile->AddDefinition(statusVar,
-                                  result.str().c_str());
+                                  result.str());
     }
 
   ::curl_global_cleanup();
@@ -3382,7 +3382,7 @@ cmFileCommand::HandleUploadCommand(std::vector<std::string> const& args)
       log += "\n";
       }
 
-    this->Makefile->AddDefinition(logVar, log.c_str());
+    this->Makefile->AddDefinition(logVar, log);
     }
 
   return true;
@@ -3511,7 +3511,7 @@ bool cmFileCommand::HandleTimestampCommand(
   cmTimestamp timestamp;
   std::string result = timestamp.FileModificationTime(
     filename.c_str(), formatString, utcFlag);
-  this->Makefile->AddDefinition(outputVariable, result.c_str());
+  this->Makefile->AddDefinition(outputVariable, result);
 
   return true;
 }

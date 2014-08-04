@@ -173,7 +173,9 @@ public:
   static int GetTestModelFromString(const char* str);
   static std::string CleanString(const std::string& str);
   std::string GetCTestConfiguration(const std::string& name);
-  void SetCTestConfiguration(const char *name, const char* value);
+  void SetCTestConfiguration(const std::string& name, const char* value);
+  void SetCTestConfiguration(const std::string& name,
+                             const std::string& value);
   void EmptyCTestConfiguration();
 
   /**

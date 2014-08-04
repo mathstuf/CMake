@@ -404,20 +404,20 @@ int cmCTestScriptHandler::ReadInScript(const std::string& total_script_arg)
 
   // set a variable with the path to the current script
   this->Makefile->AddDefinition("CTEST_SCRIPT_DIRECTORY",
-                            cmSystemTools::GetFilenamePath(script).c_str());
+                            cmSystemTools::GetFilenamePath(script));
   this->Makefile->AddDefinition("CTEST_SCRIPT_NAME",
-                            cmSystemTools::GetFilenameName(script).c_str());
+                            cmSystemTools::GetFilenameName(script));
   this->Makefile->AddDefinition("CTEST_EXECUTABLE_NAME",
-                                cmSystemTools::GetCTestCommand().c_str());
+                                cmSystemTools::GetCTestCommand());
   this->Makefile->AddDefinition("CMAKE_EXECUTABLE_NAME",
-                                cmSystemTools::GetCMakeCommand().c_str());
+                                cmSystemTools::GetCMakeCommand());
   this->Makefile->AddDefinition("CTEST_RUN_CURRENT_SCRIPT", true);
   this->UpdateElapsedTime();
 
   // add the script arg if defined
   if (script_arg.size())
     {
-    this->Makefile->AddDefinition("CTEST_SCRIPT_ARG", script_arg.c_str());
+    this->Makefile->AddDefinition("CTEST_SCRIPT_ARG", script_arg);
     }
 
   // always add a function blocker to update the elapsed time
@@ -447,7 +447,7 @@ int cmCTestScriptHandler::ReadInScript(const std::string& total_script_arg)
   for (std::map<std::string, std::string>::const_iterator it = defs.begin();
        it != defs.end(); ++it)
     {
-    this->Makefile->AddDefinition(it->first, it->second.c_str());
+    this->Makefile->AddDefinition(it->first, it->second);
     }
 
   // finally read in the script

@@ -169,7 +169,7 @@ bool cmCPackWIXGenerator::InitializeWiXConfiguration()
   if(GetOption("CPACK_WIX_PRODUCT_GUID") == 0)
     {
     std::string guid = GenerateGUID();
-    SetOption("CPACK_WIX_PRODUCT_GUID", guid.c_str());
+    SetOption("CPACK_WIX_PRODUCT_GUID", guid);
 
     cmCPackLogger(cmCPackLog::LOG_VERBOSE,
       "CPACK_WIX_PRODUCT_GUID implicitly set to " << guid << " . "
@@ -179,7 +179,7 @@ bool cmCPackWIXGenerator::InitializeWiXConfiguration()
   if(GetOption("CPACK_WIX_UPGRADE_GUID") == 0)
     {
     std::string guid = GenerateGUID();
-    SetOption("CPACK_WIX_UPGRADE_GUID", guid.c_str());
+    SetOption("CPACK_WIX_UPGRADE_GUID", guid);
 
     cmCPackLogger(cmCPackLog::LOG_WARNING,
       "CPACK_WIX_UPGRADE_GUID implicitly set to " << guid << " . "
@@ -195,7 +195,7 @@ bool cmCPackWIXGenerator::InitializeWiXConfiguration()
   if(GetOption("CPACK_WIX_LICENSE_RTF") == 0)
     {
     std::string licenseFilename = this->CPackTopLevel + "/License.rtf";
-    SetOption("CPACK_WIX_LICENSE_RTF", licenseFilename.c_str());
+    SetOption("CPACK_WIX_LICENSE_RTF", licenseFilename);
 
     if(!CreateLicenseFile())
       {
@@ -206,7 +206,7 @@ bool cmCPackWIXGenerator::InitializeWiXConfiguration()
   if(GetOption("CPACK_PACKAGE_VENDOR") == 0)
     {
     std::string defaultVendor = "Humanity";
-    SetOption("CPACK_PACKAGE_VENDOR", defaultVendor.c_str());
+    SetOption("CPACK_PACKAGE_VENDOR", defaultVendor);
 
     cmCPackLogger(cmCPackLog::LOG_VERBOSE,
       "CPACK_PACKAGE_VENDOR implicitly set to " << defaultVendor << " . "
@@ -222,7 +222,7 @@ bool cmCPackWIXGenerator::InitializeWiXConfiguration()
       defaultRef = "WixUI_FeatureTree";
       }
 
-    SetOption("CPACK_WIX_UI_REF", defaultRef.c_str());
+    SetOption("CPACK_WIX_UI_REF", defaultRef);
     }
 
   const char* packageContact = GetOption("CPACK_PACKAGE_CONTACT");

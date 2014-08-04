@@ -141,7 +141,7 @@ cmCTestGenericHandler* cmCTestConfigureCommand::InitializeHandler()
       cmakeConfigureCommand += "\"";
 
       this->CTest->SetCTestConfiguration("ConfigureCommand",
-        cmakeConfigureCommand.c_str());
+        cmakeConfigureCommand);
       }
     else
       {

@@ -75,7 +75,9 @@ public:
 
 
   void SetPersistentOption(const std::string& op, const char* value);
+  void SetPersistentOption(const std::string& op, const std::string& value);
   void SetOption(const std::string& op, const char* value);
+  void SetOption(const std::string& op, const std::string& value);
   const char* GetOption(const std::string& op);
 
   void SetCommand(cmCTestCommand* command)

@@ -69,7 +69,7 @@ cmCTestGenericHandler* cmCTestTestCommand::InitializeHandler()
       testsToRunString << this->Values[ctt_STRIDE];
       }
     handler->SetOption("TestsToRunInformation",
-      testsToRunString.str().c_str());
+      testsToRunString.str());
     }
   if(this->Values[ctt_EXCLUDE])
     {

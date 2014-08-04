@@ -37,7 +37,7 @@ bool cmBuildNameCommand
       cmSystemTools::ReplaceString(cv,"(", "_");
       cmSystemTools::ReplaceString(cv,")", "_");
       this->Makefile->AddCacheDefinition(args[0],
-                                     cv.c_str(),
+                                     cv,
                                      "Name of build.",
                                      cmCacheManager::STRING);
       }
@@ -72,7 +72,7 @@ bool cmBuildNameCommand
                                ")", "_");
 
   this->Makefile->AddCacheDefinition(args[0],
-                                 buildname.c_str(),
+                                 buildname,
                                  "Name of build.",
                                  cmCacheManager::STRING);
   return true;

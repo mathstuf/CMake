@@ -1003,7 +1003,7 @@ int cmCTest::ProcessTests()
     {
     cmCTestGenericHandler* uphandler = this->GetHandler("update");
     uphandler->SetPersistentOption("SourceDirectory",
-      this->GetCTestConfiguration("SourceDirectory").c_str());
+      this->GetCTestConfiguration("SourceDirectory"));
     update_count = uphandler->ProcessHandler();
     if ( update_count < 0 )
       {
@@ -2138,9 +2138,9 @@ void cmCTest::HandleCommandLineArguments(size_t &i,
     {
     i++;
     this->GetHandler("test")->SetPersistentOption("TestsToRunInformation",
-                                                  args[i].c_str());
+                                                  args[i]);
     this->GetHandler("memcheck")->
-      SetPersistentOption("TestsToRunInformation",args[i].c_str());
+      SetPersistentOption("TestsToRunInformation",args[i]);
     }
   if(this->CheckArgument(arg, "-U", "--union"))
     {
@@ -2151,25 +2151,25 @@ void cmCTest::HandleCommandLineArguments(size_t &i,
     {
     i++;
     this->GetHandler("test")->
-      SetPersistentOption("IncludeRegularExpression", args[i].c_str());
+      SetPersistentOption("IncludeRegularExpression", args[i]);
     this->GetHandler("memcheck")->
-      SetPersistentOption("IncludeRegularExpression", args[i].c_str());
+      SetPersistentOption("IncludeRegularExpression", args[i]);
     }
   if(this->CheckArgument(arg, "-L", "--label-regex") && i < args.size() - 1)
     {
     i++;
     this->GetHandler("test")->
-      SetPersistentOption("LabelRegularExpression", args[i].c_str());
+      SetPersistentOption("LabelRegularExpression", args[i]);
     this->GetHandler("memcheck")->
-      SetPersistentOption("LabelRegularExpression", args[i].c_str());
+      SetPersistentOption("LabelRegularExpression", args[i]);
     }
   if(this->CheckArgument(arg, "-LE", "--label-exclude") && i < args.size() - 1)
     {
     i++;
     this->GetHandler("test")->
-      SetPersistentOption("ExcludeLabelRegularExpression", args[i].c_str());
+      SetPersistentOption("ExcludeLabelRegularExpression", args[i]);
     this->GetHandler("memcheck")->
-      SetPersistentOption("ExcludeLabelRegularExpression", args[i].c_str());
+      SetPersistentOption("ExcludeLabelRegularExpression", args[i]);
     }
 
   if(this->CheckArgument(arg, "-E", "--exclude-regex") &&
@@ -2177,9 +2177,9 @@ void cmCTest::HandleCommandLineArguments(size_t &i,
     {
     i++;
     this->GetHandler("test")->
-      SetPersistentOption("ExcludeRegularExpression", args[i].c_str());
+      SetPersistentOption("ExcludeRegularExpression", args[i]);
     this->GetHandler("memcheck")->
-      SetPersistentOption("ExcludeRegularExpression", args[i].c_str());
+      SetPersistentOption("ExcludeRegularExpression", args[i]);
     }
 
   if(this->CheckArgument(arg, "--rerun-failed"))
@@ -2746,20 +2746,27 @@ void cmCTest::DetermineNextDayStop()
 }
 
 //----------------------------------------------------------------------
-void cmCTest::SetCTestConfiguration(const char *name, const char* value)
+void cmCTest::SetCTestConfiguration(const std::string& name,
+                                    const char* value)
 {
   cmCTestLog(this, HANDLER_VERBOSE_OUTPUT, "SetCTestConfiguration:"
     << name << ":" << (value ? value : "(null)") << "\n");
 
-  if ( !name )
-    {
-    return;
-    }
   if ( !value )
     {
     this->CTestConfiguration.erase(name);
     return;
     }
+  this->CTestConfiguration[name] = value;
+}
+
+//----------------------------------------------------------------------
+void cmCTest::SetCTestConfiguration(const std::string& name,
+                                    const std::string& value)
+{
+  cmCTestLog(this, HANDLER_VERBOSE_OUTPUT, "SetCTestConfiguration:"
+    << name << ":" << value << "\n");
+
   this->CTestConfiguration[name] = value;
 }
 

@@ -288,8 +288,13 @@ public:
    * can be used in CMake to refer to lists, directories, etc.
    */
   void AddDefinition(const std::string& name, const char* value);
+  void AddDefinition(const std::string& name, const std::string& value);
   ///! Add a definition to this makefile and the global cmake cache.
   void AddCacheDefinition(const std::string& name, const char* value,
+                          const char* doc,
+                          cmCacheManager::CacheEntryType type,
+                          bool force = false);
+  void AddCacheDefinition(const std::string& name, const std::string& value,
                           const char* doc,
                           cmCacheManager::CacheEntryType type,
                           bool force = false);
@@ -418,9 +423,9 @@ public:
   void MakeStartDirectoriesCurrent()
     {
       this->AddDefinition("CMAKE_CURRENT_SOURCE_DIR",
-                          this->cmStartDirectory.c_str());
+                          this->cmStartDirectory);
       this->AddDefinition("CMAKE_CURRENT_BINARY_DIR",
-                          this->StartOutputDirectory.c_str());
+                          this->StartOutputDirectory);
     }
 
   //@{
@@ -468,7 +473,7 @@ public:
       this->cmStartDirectory =
         cmSystemTools::CollapseFullPath(this->cmStartDirectory);
       this->AddDefinition("CMAKE_CURRENT_SOURCE_DIR",
-                          this->cmStartDirectory.c_str());
+                          this->cmStartDirectory);
     }
   const char* GetStartDirectory() const
     {
@@ -482,7 +487,7 @@ public:
         cmSystemTools::CollapseFullPath(this->StartOutputDirectory);
       cmSystemTools::MakeDirectory(this->StartOutputDirectory);
       this->AddDefinition("CMAKE_CURRENT_BINARY_DIR",
-                          this->StartOutputDirectory.c_str());
+                          this->StartOutputDirectory);
     }
   const char* GetStartOutputDirectory() const
     {
@@ -1019,6 +1024,11 @@ protected:
 
 private:
   void Initialize();
+
+  void AddCacheDefinition(const std::string& name, const std::string& value,
+                          const char* doc,
+                          cmCacheManager::CacheEntryType type,
+                          bool force, bool haveValue);
 
   bool ParseDefineFlag(std::string const& definition, bool remove);
 

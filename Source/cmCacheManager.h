@@ -155,6 +155,8 @@ protected:
   ///! Add an entry into the cache
   void AddCacheEntry(const std::string& key, const char* value,
                      const char* helpString, CacheEntryType type);
+  void AddCacheEntry(const std::string& key, const std::string& value,
+                     const char* helpString, CacheEntryType type);
 
   ///! Get a cache entry object for a key
   CacheEntry *GetCacheEntry(const std::string& key);
@@ -171,6 +173,10 @@ private:
                                const std::string& helpString);
   static void OutputKey(std::ostream& fout, std::string const& key);
   static void OutputValue(std::ostream& fout, std::string const& value);
+
+  void AddCacheEntry(const std::string& key, const std::string& value,
+                     const char* helpString, CacheEntryType type,
+                     bool initialized);
 
   static const char* PersistentProperties[];
   bool ReadPropertyEntry(std::string const& key, CacheEntry& e);

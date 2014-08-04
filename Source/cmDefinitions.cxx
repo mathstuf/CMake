@@ -89,6 +89,14 @@ const char* cmDefinitions::Set(const std::string& key, const char* value)
 }
 
 //----------------------------------------------------------------------------
+const char* cmDefinitions::Set(const std::string& key,
+                               const std::string& value)
+{
+  Def const& def = this->SetInternal(key, Def(value));
+  return def.Exists? def.c_str() : 0;
+}
+
+//----------------------------------------------------------------------------
 std::set<std::string> cmDefinitions::LocalKeys() const
 {
   std::set<std::string> keys;

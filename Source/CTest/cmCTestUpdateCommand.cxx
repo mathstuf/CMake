@@ -20,13 +20,13 @@ cmCTestGenericHandler* cmCTestUpdateCommand::InitializeHandler()
     {
     this->CTest->SetCTestConfiguration("SourceDirectory",
       cmSystemTools::CollapseFullPath(
-        this->Values[ct_SOURCE]).c_str());
+        this->Values[ct_SOURCE]));
     }
   else
     {
     this->CTest->SetCTestConfiguration("SourceDirectory",
       cmSystemTools::CollapseFullPath(
-        this->Makefile->GetDefinition("CTEST_SOURCE_DIRECTORY")).c_str());
+        this->Makefile->GetDefinition("CTEST_SOURCE_DIRECTORY")));
     }
   std::string source_dir
     = this->CTest->GetCTestConfiguration("SourceDirectory");
@@ -83,7 +83,7 @@ cmCTestGenericHandler* cmCTestUpdateCommand::InitializeHandler()
     this->SetError("source directory not specified. Please use SOURCE tag");
     return 0;
     }
-  handler->SetOption("SourceDirectory", source_dir.c_str());
+  handler->SetOption("SourceDirectory", source_dir);
   return handler;
 }
 

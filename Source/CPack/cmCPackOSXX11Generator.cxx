@@ -65,7 +65,7 @@ int cmCPackOSXX11Generator::PackageFiles()
       std::string cpackExecutableName = *it;
       ++ it;
       this->SetOptionIfNotSet("CPACK_EXECUTABLE_NAME",
-        cpackExecutableName.c_str());
+        cpackExecutableName);
       }
     }
 
@@ -106,7 +106,7 @@ int cmCPackOSXX11Generator::PackageFiles()
       }
     std::string destFileName = resourcesDirectory + "/" + iconFileName;
     this->ConfigureFile(iconFile, destFileName.c_str(), true);
-    this->SetOptionIfNotSet("CPACK_APPLE_GUI_ICON", iconFileName.c_str());
+    this->SetOptionIfNotSet("CPACK_APPLE_GUI_ICON", iconFileName);
     }
 
   std::string applicationsLinkName = diskImageDirectory + "/Applications";
@@ -220,7 +220,7 @@ int cmCPackOSXX11Generator::InitializeInternal()
     return 0;
     }
   this->SetOptionIfNotSet("CPACK_INSTALLER_PROGRAM_DISK_IMAGE",
-                          pkgPath.c_str());
+                          pkgPath);
 
   return this->Superclass::InitializeInternal();
 }

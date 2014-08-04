@@ -1194,7 +1194,7 @@ int cmCTestSubmitHandler::ProcessHandler()
         gfiles[cc] = gfiles[cc].substr(glen);
         cmCTestLog(this->CTest, DEBUG, "Glob file: " << gfiles[cc]
           << std::endl);
-        this->CTest->AddSubmitFile(cmCTest::PartCoverage, gfiles[cc].c_str());
+        this->CTest->AddSubmitFile(cmCTest::PartCoverage, gfiles[cc]);
         }
       }
     else

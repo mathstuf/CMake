@@ -99,7 +99,7 @@ public:
 
   /** Get a testing part id from its string name.  Returns PartCount
       if the string does not name a valid part.  */
-  Part GetPartFromName(const char* name);
+  Part GetPartFromName(const std::string& name);
 
   typedef std::vector<cmsys::String> VectorOfStrings;
   typedef std::set<std::string> SetOfStrings;
@@ -156,12 +156,12 @@ public:
    * Check if CTest file exists
    */
   bool CTestFileExists(const std::string& filename);
-  bool AddIfExists(Part part, const char* file);
+  bool AddIfExists(Part part, const std::string& file);
 
   /**
    * Set the cmake test
    */
-  bool SetTest(const char*, bool report = true);
+  bool SetTest(const std::string&, bool report = true);
 
   /**
    * Set the cmake test mode (experimental, nightly, continuous).
@@ -170,7 +170,7 @@ public:
   int GetTestModel() { return this->TestModel; }
 
   std::string GetTestModelString();
-  static int GetTestModelFromString(const char* str);
+  static int GetTestModelFromString(const std::string& str);
   static std::string CleanString(const std::string& str);
   std::string GetCTestConfiguration(const std::string& name);
   void SetCTestConfiguration(const std::string& name, const char* value);
@@ -185,7 +185,7 @@ public:
   ~cmCTest();
 
   //! Set the notes files to be created.
-  void SetNotesFiles(const char* notes);
+  void SetNotesFiles(const std::string& notes);
 
   void PopulateCustomVector(cmMakefile* mf, const std::string& definition,
     std::vector<std::string>& vec);
@@ -196,9 +196,9 @@ public:
   std::string CurrentTime();
 
   //! tar/gzip and then base 64 encode a file
-  std::string Base64GzipEncodeFile(std::string file);
+  std::string Base64GzipEncodeFile(std::string const& file);
   //! base64 encode a file
-  std::string Base64EncodeFile(std::string file);
+  std::string Base64EncodeFile(std::string const& file);
 
   /**
    * Return the time remaining that the script is allowed to run in
@@ -257,7 +257,7 @@ public:
    * it into this function or it will not work.  The command must be correctly
    * escaped for this to with spaces.
    */
-  bool RunCommand(const char* command,
+  bool RunCommand(const std::string& command,
     std::string* stdOut, std::string* stdErr,
     int* retVal = 0, const char* dir = 0, double timeout = 0.0);
 
@@ -287,7 +287,7 @@ public:
 
   //! Get the short path to the file. This means if the file is in binary or
   //source directory, it will become /.../relative/path/to/file
-  std::string GetShortPathToFile(const char* fname);
+  std::string GetShortPathToFile(const std::string& fname);
 
   enum {
     EXPERIMENTAL,
@@ -357,14 +357,14 @@ public:
   int GenerateNotesFile(const VectorOfStrings &files);
 
   //! Submit extra files to the server
-  bool SubmitExtraFiles(const char* files);
+  bool SubmitExtraFiles(const std::string& files);
   bool SubmitExtraFiles(const VectorOfStrings &files);
 
   //! Set the output log file name
   void SetOutputLogFileName(const char* name);
 
   //! Set the visual studio or Xcode config type
-  void SetConfigType(const char* ct);
+  void SetConfigType(const std::string& ct);
 
   //! Various log types
   enum {
@@ -385,13 +385,13 @@ public:
   int GetDropSiteCDash() { return this->DropSiteCDash; }
 
   //! Add file to be submitted
-  void AddSubmitFile(Part part, const char* name);
+  void AddSubmitFile(Part part, const std::string& name);
   std::vector<std::string> const& GetSubmitFiles(Part part)
     { return this->Parts[part].SubmitFiles; }
   void ClearSubmitFiles(Part part) { this->Parts[part].SubmitFiles.clear(); }
 
   //! Read the custom configuration files and apply them to the current ctest
-  int ReadCustomConfigurationFileTree(const char* dir, cmMakefile* mf);
+  int ReadCustomConfigurationFileTree(const std::string& dir, cmMakefile* mf);
 
   std::vector<std::string> &GetInitialCommandLineArguments()
   { return this->InitialCommandLineArguments; }
@@ -444,7 +444,7 @@ private:
   bool ComputedCompressTestOutput;
   bool ComputedCompressMemCheckOutput;
 
-  int GenerateNotesFile(const char* files);
+  int GenerateNotesFile(const std::string& files);
 
   void DetermineNextDayStop();
 
@@ -515,7 +515,7 @@ private:
    * call this method because it sets CTEST_COMMAND to drive a build
    * through the ctest command line.
    */
-  int Initialize(const char* binary_dir, cmCTestStartCommand* command);
+  int Initialize(const std::string& binary_dir, cmCTestStartCommand* command);
 
   //! parse the option after -D and convert it into the appropriate steps
   bool AddTestsForDashboardType(std::string &targ);

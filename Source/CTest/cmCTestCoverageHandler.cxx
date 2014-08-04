@@ -516,7 +516,7 @@ int cmCTestCoverageHandler::ProcessHandler()
     const std::string fileName
       = cmSystemTools::GetFilenameName(fullFileName);
     std::string shortFileName =
-      this->CTest->GetShortPathToFile(fullFileName.c_str());
+      this->CTest->GetShortPathToFile(fullFileName);
     const cmCTestCoverageHandlerContainer::SingleFileCoverageVector& fcov
       = fileIterator->second;
     covLogFile << "\t<File Name=\"" << cmXMLSafe(fileName)
@@ -585,7 +585,7 @@ int cmCTestCoverageHandler::ProcessHandler()
       << "\t</File>" << std::endl;
     covSumFile << "\t<File Name=\"" << cmXMLSafe(fileName)
       << "\" FullPath=\"" << cmXMLSafe(
-        this->CTest->GetShortPathToFile(fullFileName.c_str()))
+        this->CTest->GetShortPathToFile(fullFileName))
       << "\" Covered=\"" << (tested+untested > 0 ? "true":"false") << "\">\n"
       << "\t\t<LOCTested>" << tested << "</LOCTested>\n"
       << "\t\t<LOCUnTested>" << untested << "</LOCUnTested>\n"
@@ -1011,7 +1011,7 @@ int cmCTestCoverageHandler::HandleGCovCoverage(
     int retVal = 0;
     *cont->OFS << "* Run coverage for: " << fileDir << std::endl;
     *cont->OFS << "  Command: " << command << std::endl;
-    int res = this->CTest->RunCommand(command.c_str(), &output, &errors,
+    int res = this->CTest->RunCommand(command, &output, &errors,
       &retVal, tempDir.c_str(), 0 /*this->TimeOut*/);
 
     *cont->OFS << "  Output: " << output << std::endl;
@@ -1421,7 +1421,7 @@ int cmCTestCoverageHandler::HandleLCovCoverage(
     int retVal = 0;
     *cont->OFS << "* Run coverage for: " << fileDir << std::endl;
     *cont->OFS << "  Command: " << command << std::endl;
-    int res = this->CTest->RunCommand(command.c_str(), &output, &errors,
+    int res = this->CTest->RunCommand(command, &output, &errors,
                 &retVal, fileDir.c_str(), 0 /*this->TimeOut*/);
 
     *cont->OFS << "  Output: " << output << std::endl;
@@ -1951,7 +1951,7 @@ int cmCTestCoverageHandler::RunBullseyeCoverageBranch(
                    << cmXMLSafe(i->first)
                    << "\" FullPath=\"" << cmXMLSafe(
                      this->CTest->GetShortPathToFile(
-                       i->second.c_str())) << "\">" << std::endl
+                       i->second)) << "\">" << std::endl
                    << "\t\t<Report>" << std::endl;
         // write the bullseye header
         line =0;
@@ -2158,7 +2158,7 @@ int cmCTestCoverageHandler::RunBullseyeSourceSummary(
 
       std::string fileName = cmSystemTools::GetFilenameName(file);
       std::string shortFileName =
-        this->CTest->GetShortPathToFile(file.c_str());
+        this->CTest->GetShortPathToFile(file);
 
       float cper = static_cast<float>(percentBranch + percentFunction);
       if(totalBranches > 0)
@@ -2415,7 +2415,7 @@ void cmCTestCoverageHandler::LoadLabels(const std::string& dir)
       // is the end of the target-wide labels.
       inTarget = false;
 
-      source = this->CTest->GetShortPathToFile(line.c_str());
+      source = this->CTest->GetShortPathToFile(line);
 
       // Label the source with the target labels.
       LabelSet& labelSet = this->SourceLabels[source];
@@ -2485,7 +2485,7 @@ bool cmCTestCoverageHandler::IsFilteredOut(std::string const& source)
 
   // The source is filtered out if it does not have any labels in
   // common with the filter set.
-  std::string shortSrc = this->CTest->GetShortPathToFile(source.c_str());
+  std::string shortSrc = this->CTest->GetShortPathToFile(source);
   LabelMapType::const_iterator li = this->SourceLabels.find(shortSrc);
   if(li != this->SourceLabels.end())
     {
@@ -2515,8 +2515,7 @@ std::set<std::string> cmCTestCoverageHandler::FindUncoveredFiles(
       if(this->ShouldIDoCoverage(*f,
          cont->SourceDir, cont->BinaryDir))
         {
-        extraMatches.insert(this->CTest->GetShortPathToFile(
-          f->c_str()));
+        extraMatches.insert(this->CTest->GetShortPathToFile(*f));
         }
       }
     }
@@ -2526,8 +2525,7 @@ std::set<std::string> cmCTestCoverageHandler::FindUncoveredFiles(
     for(cmCTestCoverageHandlerContainer::TotalCoverageMap::iterator i =
         cont->TotalCoverage.begin(); i != cont->TotalCoverage.end(); ++i)
       {
-      std::string shortPath = this->CTest->GetShortPathToFile(
-        i->first.c_str());
+      std::string shortPath = this->CTest->GetShortPathToFile(i->first);
       extraMatches.erase(shortPath);
       }
     }

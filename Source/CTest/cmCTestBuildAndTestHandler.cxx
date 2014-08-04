@@ -227,7 +227,7 @@ int cmCTestBuildAndTestHandler::RunCMakeAndTest(std::string* outstring)
                                          failed);
     if (fullPath.size() && resultingConfig.size())
       {
-      this->CTest->SetConfigType(resultingConfig.c_str());
+      this->CTest->SetConfigType(resultingConfig);
       }
     out << "Using config sample with results: "
         << fullPath << " and " << resultingConfig << std::endl;

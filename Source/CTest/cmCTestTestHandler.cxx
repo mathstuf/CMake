@@ -1162,7 +1162,7 @@ void cmCTestTestHandler::GenerateDartOutput(std::ostream& os)
     cmCTestTestResult *result = &this->TestResults[cc];
     std::string testPath = result->Path + "/" + result->Name;
     os << "\t\t<Test>" << cmXMLSafe(
-      this->CTest->GetShortPathToFile(testPath.c_str()))
+      this->CTest->GetShortPathToFile(testPath))
       << "</Test>" << std::endl;
     }
   os << "\t</TestList>\n";
@@ -1273,9 +1273,9 @@ void cmCTestTestHandler::WriteTestResultHeader(std::ostream& os,
   os << "\">\n"
      << "\t\t<Name>" << cmXMLSafe(result->Name) << "</Name>\n"
      << "\t\t<Path>" << cmXMLSafe(
-       this->CTest->GetShortPathToFile(result->Path.c_str())) << "</Path>\n"
+       this->CTest->GetShortPathToFile(result->Path)) << "</Path>\n"
      << "\t\t<FullName>" << cmXMLSafe(
-       this->CTest->GetShortPathToFile(testPath.c_str())) << "</FullName>\n"
+       this->CTest->GetShortPathToFile(testPath)) << "</FullName>\n"
      << "\t\t<FullCommandLine>"
      << cmXMLSafe(result->FullCommandLine)
      << "</FullCommandLine>\n";

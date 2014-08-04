@@ -24,7 +24,7 @@ bool cmCTestReadCustomFilesCommand
   std::vector<std::string>::const_iterator dit;
   for ( dit = args.begin(); dit != args.end(); ++ dit )
     {
-    this->CTest->ReadCustomConfigurationFileTree(dit->c_str(),
+    this->CTest->ReadCustomConfigurationFileTree(*dit,
       this->Makefile);
     }
 

@@ -396,7 +396,7 @@ void cmCTestMemCheckHandler::GenerateDartOutput(std::ostream& os)
     cmCTestTestResult *result = &this->TestResults[cc];
     std::string testPath = result->Path + "/" + result->Name;
     os << "\t\t<Test>" << cmXMLSafe(
-      this->CTest->GetShortPathToFile(testPath.c_str()))
+      this->CTest->GetShortPathToFile(testPath))
       << "</Test>" << std::endl;
     }
   os << "\t</TestList>\n";

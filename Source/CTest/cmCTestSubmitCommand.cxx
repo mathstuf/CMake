@@ -205,7 +205,7 @@ bool cmCTestSubmitCommand::CheckArgumentValue(std::string const& arg)
   // Handle states specific to this command.
   if(this->ArgumentDoing == ArgumentDoingParts)
     {
-    cmCTest::Part p = this->CTest->GetPartFromName(arg.c_str());
+    cmCTest::Part p = this->CTest->GetPartFromName(arg);
     if(p != cmCTest::PartCount)
       {
       this->Parts.insert(p);

@@ -58,7 +58,7 @@ public:
    * skip.  The remaining part of the input path is appended to the
    * "prefix" value to construct the final name in the archive.
    */
-  bool Add(std::string path, size_t skip = 0, const char* prefix = 0);
+  bool Add(std::string const& path, size_t skip = 0, const char* prefix = 0);
 
   /** Returns true if there has been no error.  */
   operator safe_bool() const
@@ -76,9 +76,9 @@ public:
 
 private:
   bool Okay() const { return this->Error.empty(); }
-  bool AddPath(const char* path, size_t skip, const char* prefix);
-  bool AddFile(const char* file, size_t skip, const char* prefix);
-  bool AddData(const char* file, size_t size);
+  bool AddPath(const std::string& path, size_t skip, const char* prefix);
+  bool AddFile(const std::string& file, size_t skip, const char* prefix);
+  bool AddData(const std::string& file, size_t size);
 
   struct Callback;
   friend struct Callback;

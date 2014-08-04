@@ -197,21 +197,25 @@ cmArchiveWrite::~cmArchiveWrite()
 }
 
 //----------------------------------------------------------------------------
-bool cmArchiveWrite::Add(std::string path, size_t skip, const char* prefix)
+bool cmArchiveWrite::Add(std::string const& path, size_t skip,
+                         const char* prefix)
 {
   if(this->Okay())
     {
-    if(!path.empty() && path[path.size()-1] == '/')
+    if(!path.empty() && *path.rbegin() == '/')
       {
-      path.erase(path.size()-1);
+      this->AddPath(path.substr(0, path.size() - 1), skip, prefix);
       }
-    this->AddPath(path.c_str(), skip, prefix);
+    else
+      {
+      this->AddPath(path, skip, prefix);
+      }
     }
   return this->Okay();
 }
 
 //----------------------------------------------------------------------------
-bool cmArchiveWrite::AddPath(const char* path,
+bool cmArchiveWrite::AddPath(const std::string& path,
                              size_t skip, const char* prefix)
 {
   if(!this->AddFile(path, skip, prefix))
@@ -237,7 +241,7 @@ bool cmArchiveWrite::AddPath(const char* path,
         {
         next.erase(end);
         next += file;
-        if(!this->AddPath(next.c_str(), skip, prefix))
+        if(!this->AddPath(next, skip, prefix))
           {
           return false;
           }
@@ -248,16 +252,16 @@ bool cmArchiveWrite::AddPath(const char* path,
 }
 
 //----------------------------------------------------------------------------
-bool cmArchiveWrite::AddFile(const char* file,
+bool cmArchiveWrite::AddFile(const std::string& file,
                              size_t skip, const char* prefix)
 {
   // Skip the file if we have no name for it.  This may happen on a
   // top-level directory, which does not need to be included anyway.
-  if(skip >= strlen(file))
+  if(skip >= file.size())
     {
     return true;
     }
-  const char* out = file + skip;
+  const char* out = file.c_str() + skip;
 
   // Meta-data.
   std::string dest = prefix? prefix : "";
@@ -299,9 +303,9 @@ bool cmArchiveWrite::AddFile(const char* file,
 }
 
 //----------------------------------------------------------------------------
-bool cmArchiveWrite::AddData(const char* file, size_t size)
+bool cmArchiveWrite::AddData(const std::string& file, size_t size)
 {
-  cmsys::ifstream fin(file, std::ios::in | cmsys_ios_binary);
+  cmsys::ifstream fin(file.c_str(), std::ios::in | cmsys_ios_binary);
   if(!fin)
     {
     this->Error = "Error opening \"";

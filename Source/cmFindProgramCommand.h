@@ -53,11 +53,11 @@ public:
   cmTypeMacro(cmFindProgramCommand, cmFindBase);
 
 protected:
-  std::string FindProgram(std::vector<std::string> names);
+  std::string FindProgram(std::vector<std::string> const& names);
 
 private:
-  std::string FindAppBundle(std::vector<std::string> names);
-  std::string GetBundleExecutable(std::string bundlePath);
+  std::string FindAppBundle(std::vector<std::string> const& names);
+  std::string GetBundleExecutable(std::string const& bundlePath);
 
 };
 

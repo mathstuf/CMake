@@ -99,7 +99,7 @@ void cmLocalVisualStudio10Generator::Generate()
 
 void cmLocalVisualStudio10Generator
 ::ReadAndStoreExternalGUID(const std::string& name,
-                           const char* path)
+                           const std::string& path)
 {
   cmVS10XMLParser parser;
   parser.ParseFile(path);

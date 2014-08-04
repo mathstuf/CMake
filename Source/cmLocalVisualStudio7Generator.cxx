@@ -93,11 +93,11 @@ void cmLocalVisualStudio7Generator::AddHelperCommands()
     if(path)
       {
       this->ReadAndStoreExternalGUID(
-        l->second.GetName().c_str(), path);
+        l->second.GetName(), path);
       }
     else
       {
-      gg->CreateGUID(l->first.c_str());
+      gg->CreateGUID(l->first);
       }
     }
 
@@ -2091,7 +2091,7 @@ cmLocalVisualStudio7Generator
     }
   this->WriteProjectSCC(fout, target);
   fout<< "\tKeyword=\"" << keyword << "\">\n"
-       << "\tProjectGUID=\"{" << gg->GetGUID(libName.c_str()) << "}\">\n"
+       << "\tProjectGUID=\"{" << gg->GetGUID(libName) << "}\">\n"
        << "\t<Platforms>\n"
        << "\t\t<Platform\n\t\t\tName=\"" << gg->GetPlatformName() << "\"/>\n"
        << "\t</Platforms>\n";
@@ -2138,7 +2138,7 @@ cmLocalVisualStudio7Generator::WriteProjectStart(std::ostream& fout,
   fout << "\tName=\"" << projLabel << "\"\n";
   if(this->Version >= VS8)
     {
-    fout << "\tProjectGUID=\"{" << gg->GetGUID(libName.c_str()) << "}\"\n";
+    fout << "\tProjectGUID=\"{" << gg->GetGUID(libName) << "}\"\n";
     }
   this->WriteProjectSCC(fout, target);
   if(const char* targetFrameworkVersion =
@@ -2281,7 +2281,7 @@ public:
 
 void cmLocalVisualStudio7Generator::ReadAndStoreExternalGUID(
   const std::string& name,
-  const char* path)
+  const std::string& path)
 {
   cmVS7XMLParser parser;
   parser.ParseFile(path);

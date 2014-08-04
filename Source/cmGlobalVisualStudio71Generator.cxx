@@ -259,9 +259,9 @@ void cmGlobalVisualStudio71Generator
       if(it->size() > 0)
         {
         fout << "\t\t{"
-             << this->GetGUID(it->c_str())
+             << this->GetGUID(*it)
              << "} = {"
-             << this->GetGUID(it->c_str())
+             << this->GetGUID(*it)
              << "}\n";
         }
       }

@@ -177,8 +177,8 @@ cmVisualStudio10TargetGenerator(cmTarget* target,
     (cmLocalVisualStudio7Generator*)
     this->Makefile->GetLocalGenerator();
   this->Name = this->Target->GetName();
-  this->GlobalGenerator->CreateGUID(this->Name.c_str());
-  this->GUID = this->GlobalGenerator->GetGUID(this->Name.c_str());
+  this->GlobalGenerator->CreateGUID(this->Name);
+  this->GUID = this->GlobalGenerator->GetGUID(this->Name);
   this->Platform = gg->GetPlatformName();
   this->NsightTegra = gg->IsNsightTegra();
   for(int i =
@@ -1051,10 +1051,10 @@ void cmVisualStudio10TargetGenerator::WriteGroups()
       (*this->BuildFileStream) << name << "\">\n";
       std::string guidName = "SG_Filter_";
       guidName += name;
-      this->GlobalGenerator->CreateGUID(guidName.c_str());
+      this->GlobalGenerator->CreateGUID(guidName);
       this->WriteString("<UniqueIdentifier>", 3);
       std::string guid
-        = this->GlobalGenerator->GetGUID(guidName.c_str());
+        = this->GlobalGenerator->GetGUID(guidName);
       (*this->BuildFileStream)
         << "{"
         << guid << "}"
@@ -1066,10 +1066,10 @@ void cmVisualStudio10TargetGenerator::WriteGroups()
     {
     this->WriteString("<Filter Include=\"Object Libraries\">\n", 2);
     std::string guidName = "SG_Filter_Object Libraries";
-    this->GlobalGenerator->CreateGUID(guidName.c_str());
+    this->GlobalGenerator->CreateGUID(guidName);
     this->WriteString("<UniqueIdentifier>", 3);
     std::string guid =
-      this->GlobalGenerator->GetGUID(guidName.c_str());
+      this->GlobalGenerator->GetGUID(guidName);
     (*this->BuildFileStream) << "{" << guid << "}"
                              << "</UniqueIdentifier>\n";
     this->WriteString("</Filter>\n", 2);
@@ -1079,10 +1079,10 @@ void cmVisualStudio10TargetGenerator::WriteGroups()
     {
     this->WriteString("<Filter Include=\"Resource Files\">\n", 2);
     std::string guidName = "SG_Filter_Resource Files";
-    this->GlobalGenerator->CreateGUID(guidName.c_str());
+    this->GlobalGenerator->CreateGUID(guidName);
     this->WriteString("<UniqueIdentifier>", 3);
     std::string guid =
-      this->GlobalGenerator->GetGUID(guidName.c_str());
+      this->GlobalGenerator->GetGUID(guidName);
     (*this->BuildFileStream) << "{" << guid << "}"
                              << "</UniqueIdentifier>\n";
     this->WriteString("<Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;", 3);
@@ -2589,7 +2589,7 @@ void cmVisualStudio10TargetGenerator::WriteProjectReferences()
     (*this->BuildFileStream) << cmVS10EscapeXML(path) << "\">\n";
     this->WriteString("<Project>", 3);
     (*this->BuildFileStream)
-      << this->GlobalGenerator->GetGUID(name.c_str())
+      << this->GlobalGenerator->GetGUID(name)
       << "</Project>\n";
     this->WriteString("</ProjectReference>\n", 2);
     }

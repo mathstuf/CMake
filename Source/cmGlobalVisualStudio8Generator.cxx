@@ -462,7 +462,7 @@ void cmGlobalVisualStudio8Generator::WriteProjectDepends(
       {
       continue;
       }
-    std::string guid = this->GetGUID((*i)->GetName().c_str());
+    std::string guid = this->GetGUID((*i)->GetName());
     fout << "\t\t{" << guid << "} = {" << guid << "}\n";
     }
 }

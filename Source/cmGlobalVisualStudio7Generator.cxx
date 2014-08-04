@@ -513,7 +513,7 @@ void cmGlobalVisualStudio7Generator::WriteTargetsToSolution(
             cumulativePath = cumulativePath + "/" + *iter;
             }
 
-          this->CreateGUID(cumulativePath.c_str());
+          this->CreateGUID(cumulativePath);
           }
 
         if (!cumulativePath.empty())
@@ -623,7 +623,7 @@ void cmGlobalVisualStudio7Generator::WriteFolders(std::ostream& fout)
     VisualStudioFolders.begin(); iter != VisualStudioFolders.end(); ++iter)
     {
     std::string fullName = iter->first;
-    std::string guid = this->GetGUID(fullName.c_str());
+    std::string guid = this->GetGUID(fullName);
 
     cmSystemTools::ReplaceString(fullName, "/", "\\");
     if (cmSystemTools::StringStartsWith(fullName, prefix))
@@ -649,13 +649,13 @@ void cmGlobalVisualStudio7Generator::WriteFoldersContent(std::ostream& fout)
     VisualStudioFolders.begin(); iter != VisualStudioFolders.end(); ++iter)
     {
     std::string key(iter->first);
-    std::string guidParent(this->GetGUID(key.c_str()));
+    std::string guidParent(this->GetGUID(key));
 
     for(std::set<std::string>::iterator it = iter->second.begin();
         it != iter->second.end(); ++it)
       {
       std::string value(*it);
-      std::string guid(this->GetGUID(value.c_str()));
+      std::string guid(this->GetGUID(value));
 
       fout << "\t\t{" << guid << "} = {" << guidParent << "}\n";
       }
@@ -892,8 +892,8 @@ cmGlobalVisualStudio7Generator::WriteUtilityDepend(cmTarget const* target)
   fname += ".vcproj";
   cmGeneratedFileStream fout(fname);
   fout.SetCopyIfDifferent(true);
-  this->CreateGUID(pname.c_str());
-  std::string guid = this->GetGUID(pname.c_str());
+  this->CreateGUID(pname);
+  std::string guid = this->GetGUID(pname);
 
   fout <<
     "<?xml version=\"1.0\" encoding = \""

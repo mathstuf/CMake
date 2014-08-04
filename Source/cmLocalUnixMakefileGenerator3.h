@@ -155,7 +155,7 @@ public:
     { this->BorlandMakeCurlyHack = b; }
 
   // used in writing out Cmake files such as WriteDirectoryInformation
-  static void WriteCMakeArgument(std::ostream& os, const char* s);
+  static void WriteCMakeArgument(std::ostream& os, const std::string& s);
 
   /** creates the common disclaimer text at the top of each makefile */
   void WriteDisclaimer(std::ostream& os);
@@ -164,7 +164,7 @@ public:
   void WriteDivider(std::ostream& os);
 
   /** used to create a recursive make call */
-  std::string GetRecursiveMakeCall(const char *makefile,
+  std::string GetRecursiveMakeCall(const std::string& makefile,
                                    const std::string& tgt);
 
   // append flags to a string
@@ -184,7 +184,7 @@ public:
 
     // create a command that cds to the start dir then runs the commands
   void CreateCDCommand(std::vector<std::string>& commands,
-                       const char *targetDir,
+                       const std::string& targetDir,
                        cmLocalGenerator::RelativeRoot returnDir);
 
   static std::string ConvertToQuotedOutputPath(const std::string& p,
@@ -218,7 +218,7 @@ public:
   ImplicitDependLanguageMap const& GetImplicitDepends(cmTarget const& tgt);
 
   void AddImplicitDepends(cmTarget const& tgt, const std::string& lang,
-                          const char* obj, const char* src);
+                          const std::string& obj, const std::string& src);
 
   void AppendGlobalTargetDepends(std::vector<std::string>& depends,
                                  cmTarget& target);
@@ -282,7 +282,7 @@ protected:
                                const std::vector<std::string>& objects);
 
   void AppendRuleDepend(std::vector<std::string>& depends,
-                        const char* ruleFileName);
+                        const std::string& ruleFileName);
   void AppendRuleDepends(std::vector<std::string>& depends,
                          std::vector<std::string> const& ruleFiles);
   void AppendCustomDepends(std::vector<std::string>& depends,
@@ -306,7 +306,7 @@ protected:
                           cmTarget& target, const char* filename =0);
 
   // Helper methods for dependeny updates.
-  bool ScanDependencies(const char* targetDir,
+  bool ScanDependencies(const std::string& targetDir,
                 std::map<std::string, cmDepends::DependencyVector>& validDeps);
   void CheckMultipleOutputs(bool verbose);
 
@@ -372,7 +372,8 @@ private:
                     std::map<std::string, LocalObjectInfo> &localObjectFiles);
 
   void WriteObjectConvenienceRule(std::ostream& ruleFileStream,
-                                  const char* comment, const char* output,
+                                  const char* comment,
+                                  const std::string& output,
                                   LocalObjectInfo const& info);
 
   std::vector<std::string> LocalHelp;

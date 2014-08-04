@@ -86,7 +86,7 @@ void cmMakefileUtilityTargetGenerator::WriteRuleFiles()
 
   // Add a dependency on the rule file itself.
   this->LocalGenerator->AppendRuleDepend(depends,
-                                         this->BuildFileNameFull.c_str());
+                                         this->BuildFileNameFull);
 
   // If the rule is empty add the special empty rule dependency needed
   // by some make tools.

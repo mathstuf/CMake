@@ -311,7 +311,7 @@ void cmLocalUnixMakefileGenerator3::WriteLocalMakefile()
     // Add a convenience rule for building the object file.
     this->WriteObjectConvenienceRule(ruleFileStream,
                                      "target to build an object file",
-                                     lo->first.c_str(), lo->second);
+                                     lo->first, lo->second);
 
     // Check whether preprocessing and assembly rules make sense.
     // They make sense only for C and C++ sources.
@@ -335,14 +335,14 @@ void cmLocalUnixMakefileGenerator3::WriteLocalMakefile()
         {
         this->WriteObjectConvenienceRule(
           ruleFileStream, "target to preprocess a source file",
-          (base + ".i").c_str(), lo->second);
+          base + ".i", lo->second);
           lo->second.HasPreprocessRule = true;
         }
       if(do_assembly_rules)
         {
         this->WriteObjectConvenienceRule(
           ruleFileStream, "target to generate assembly for a file",
-          (base + ".s").c_str(), lo->second);
+          base + ".s", lo->second);
           lo->second.HasAssembleRule = true;
         }
       }
@@ -363,7 +363,7 @@ void cmLocalUnixMakefileGenerator3::WriteLocalMakefile()
 void
 cmLocalUnixMakefileGenerator3
 ::WriteObjectConvenienceRule(std::ostream& ruleFileStream,
-                             const char* comment, const char* output,
+                             const char* comment, const std::string& output,
                              LocalObjectInfo const& info)
 {
   // If the rule includes the source file extension then create a
@@ -403,7 +403,7 @@ cmLocalUnixMakefileGenerator3
     targetName += "/";
     targetName += output;
     commands.push_back(
-      this->GetRecursiveMakeCall(tgtMakefileName.c_str(), targetName)
+      this->GetRecursiveMakeCall(tgtMakefileName, targetName)
       );
     }
   this->CreateCDCommand(commands,
@@ -455,7 +455,7 @@ void cmLocalUnixMakefileGenerator3
       std::string makefile2 = cmake::GetCMakeFilesDirectoryPostSlash();
       makefile2 += "Makefile2";
       commands.push_back(this->GetRecursiveMakeCall
-                         (makefile2.c_str(),localName));
+                         (makefile2,localName));
       this->CreateCDCommand(commands,
                             this->Makefile->GetHomeOutputDirectory(),
                             cmLocalGenerator::START_OUTPUT);
@@ -484,7 +484,7 @@ void cmLocalUnixMakefileGenerator3
       depends.clear();
       commands.clear();
       commands.push_back(this->GetRecursiveMakeCall
-                         (makefileName.c_str(), makeTargetName));
+                         (makefileName, makeTargetName));
       this->CreateCDCommand(commands,
                             this->Makefile->GetHomeOutputDirectory(),
                             cmLocalGenerator::START_OUTPUT);
@@ -503,7 +503,7 @@ void cmLocalUnixMakefileGenerator3
         depends.clear();
         commands.clear();
         commands.push_back(this->GetRecursiveMakeCall
-                           (makefile2.c_str(), makeTargetName));
+                           (makefile2, makeTargetName));
         this->CreateCDCommand(commands,
                               this->Makefile->GetHomeOutputDirectory(),
                               cmLocalGenerator::START_OUTPUT);
@@ -982,7 +982,7 @@ void cmLocalUnixMakefileGenerator3::AppendFlags(std::string& flags,
 void
 cmLocalUnixMakefileGenerator3
 ::AppendRuleDepend(std::vector<std::string>& depends,
-                   const char* ruleFileName)
+                   const std::string& ruleFileName)
 {
   // Add a dependency on the rule file itself unless an option to skip
   // it is specifically enabled by the user or project.
@@ -1185,7 +1185,7 @@ cmLocalUnixMakefileGenerator3
     }
 
   // Setup the proper working directory for the commands.
-  this->CreateCDCommand(commands1, dir.c_str(), relative);
+  this->CreateCDCommand(commands1, dir, relative);
 
   // push back the custom commands
   commands.insert(commands.end(), commands1.begin(), commands1.end());
@@ -1566,12 +1566,12 @@ bool cmLocalUnixMakefileGenerator3::UpdateDependencies(
     cmSystemTools::MakefileColorEcho(
       cmsysTerminal_Color_ForegroundMagenta |
       cmsysTerminal_Color_ForegroundBold,
-      message.c_str(), true, color);
+      message, true, color);
 #else
     fprintf(stdout, "%s\n", message.c_str());
 #endif
 
-    return this->ScanDependencies(dir.c_str(), validDependencies);
+    return this->ScanDependencies(dir, validDependencies);
     }
 
   // The dependencies are already up-to-date.
@@ -1581,7 +1581,7 @@ bool cmLocalUnixMakefileGenerator3::UpdateDependencies(
 //----------------------------------------------------------------------------
 bool
 cmLocalUnixMakefileGenerator3
-::ScanDependencies(const char* targetDir,
+::ScanDependencies(const std::string& targetDir,
                  std::map<std::string, cmDepends::DependencyVector>& validDeps)
 {
   // Read the directory information file.
@@ -1670,7 +1670,7 @@ cmLocalUnixMakefileGenerator3
     if(lang == "C" || lang == "CXX" || lang == "RC" || lang == "ASM")
       {
       // TODO: Handle RC (resource files) dependencies correctly.
-      scanner = new cmDependsC(this, targetDir, lang, &validDeps);
+      scanner = new cmDependsC(this, targetDir.c_str(), lang, &validDeps);
       }
 #ifdef CMAKE_BUILD_WITH_CMAKE
     else if(lang == "Fortran")
@@ -1876,7 +1876,7 @@ void cmLocalUnixMakefileGenerator3
     }
   std::string mf2Dir = cmake::GetCMakeFilesDirectoryPostSlash();
   mf2Dir += "Makefile2";
-  commands.push_back(this->GetRecursiveMakeCall(mf2Dir.c_str(),
+  commands.push_back(this->GetRecursiveMakeCall(mf2Dir,
                                                 recursiveTarget));
   this->CreateCDCommand(commands,
                         this->Makefile->GetHomeOutputDirectory(),
@@ -1898,7 +1898,7 @@ void cmLocalUnixMakefileGenerator3
   recursiveTarget += "/clean";
   commands.clear();
   depends.clear();
-  commands.push_back(this->GetRecursiveMakeCall(mf2Dir.c_str(),
+  commands.push_back(this->GetRecursiveMakeCall(mf2Dir,
                                                 recursiveTarget));
   this->CreateCDCommand(commands,
                                 this->Makefile->GetHomeOutputDirectory(),
@@ -1929,7 +1929,7 @@ void cmLocalUnixMakefileGenerator3
     depends.push_back("cmake_check_build_system");
     }
   commands.push_back
-    (this->GetRecursiveMakeCall(mf2Dir.c_str(), recursiveTarget));
+    (this->GetRecursiveMakeCall(mf2Dir, recursiveTarget));
   this->CreateCDCommand(commands,
                         this->Makefile->GetHomeOutputDirectory(),
                         cmLocalGenerator::START_OUTPUT);
@@ -2109,7 +2109,7 @@ void cmLocalUnixMakefileGenerator3::WriteDisclaimer(std::ostream& os)
 //----------------------------------------------------------------------------
 std::string
 cmLocalUnixMakefileGenerator3
-::GetRecursiveMakeCall(const char *makefile, const std::string& tgt)
+::GetRecursiveMakeCall(const std::string& makefile, const std::string& tgt)
 {
   // Call make on the given file.
   std::string cmd;
@@ -2166,12 +2166,12 @@ void cmLocalUnixMakefileGenerator3::WriteDivider(std::ostream& os)
 //----------------------------------------------------------------------------
 void
 cmLocalUnixMakefileGenerator3
-::WriteCMakeArgument(std::ostream& os, const char* s)
+::WriteCMakeArgument(std::ostream& os, const std::string& s)
 {
   // Write the given string to the stream with escaping to get it back
   // into CMake through the lexical scanner.
   os << "\"";
-  for(const char* c = s; *c; ++c)
+  for(const char* c = s.c_str(); *c; ++c)
     {
     if(*c == '\\')
       {
@@ -2297,21 +2297,22 @@ cmLocalUnixMakefileGenerator3::GetImplicitDepends(cmTarget const& tgt)
 void
 cmLocalUnixMakefileGenerator3::AddImplicitDepends(cmTarget const& tgt,
                                                   const std::string& lang,
-                                                  const char* obj,
-                                                  const char* src)
+                                                  const std::string& obj,
+                                                  const std::string& src)
 {
   this->ImplicitDepends[tgt.GetName()][lang][obj].push_back(src);
 }
 
 //----------------------------------------------------------------------------
 void cmLocalUnixMakefileGenerator3
-::CreateCDCommand(std::vector<std::string>& commands, const char *tgtDir,
+::CreateCDCommand(std::vector<std::string>& commands,
+                  const std::string& tgtDir,
                   cmLocalGenerator::RelativeRoot relRetDir)
 {
   const char* retDir = this->GetRelativeRootPath(relRetDir);
 
   // do we need to cd?
-  if (!strcmp(tgtDir,retDir))
+  if (tgtDir == retDir)
     {
     return;
     }

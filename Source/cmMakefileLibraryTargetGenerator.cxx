@@ -762,14 +762,14 @@ void cmMakefileLibraryTargetGenerator::WriteLibraryRules
   std::vector<std::string> extraOutputs;
   if(targetNameSO != targetNameReal)
     {
-    this->GenerateExtraOutput(targetFullPathSO.c_str(),
-                              targetFullPathReal.c_str());
+    this->GenerateExtraOutput(targetFullPathSO,
+                              targetFullPathReal);
     }
   if(targetName != targetNameSO &&
      targetName != targetNameReal)
     {
-    this->GenerateExtraOutput(targetFullPath.c_str(),
-                              targetFullPathReal.c_str());
+    this->GenerateExtraOutput(targetFullPath,
+                              targetFullPathReal);
     }
 
   // Write the main driver rule to build everything in this target.

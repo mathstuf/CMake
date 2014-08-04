@@ -494,8 +494,8 @@ void cmMakefileTargetGenerator
     this->Convert(source.GetFullPath(), cmLocalGenerator::FULL);
   this->LocalGenerator->
     AddImplicitDepends(*this->Target, lang,
-                       objFullPath.c_str(),
-                       srcFullPath.c_str());
+                       objFullPath,
+                       srcFullPath);
 }
 
 //----------------------------------------------------------------------------
@@ -536,7 +536,7 @@ cmMakefileTargetGenerator
                        std::vector<std::string>& depends)
 {
   this->LocalGenerator->AppendRuleDepend(depends,
-                                         this->FlagFileNameFull.c_str());
+                                         this->FlagFileNameFull);
   this->LocalGenerator->AppendRuleDepends(depends,
                                           this->FlagFileDepends[lang]);
 
@@ -764,7 +764,7 @@ cmMakefileTargetGenerator
       // Register this as an extra output for the object file rule.
       // This will cause the object file to be rebuilt if the extra
       // output is missing.
-      this->GenerateExtraOutput(eoi->c_str(), relativeObj.c_str(), false);
+      this->GenerateExtraOutput(*eoi, relativeObj, false);
 
       // Register this as an extra file to clean.
       this->CleanFiles.push_back(*eoi);
@@ -919,7 +919,7 @@ cmMakefileTargetGenerator
     this->LocalGenerator->GetRelativeTargetDirectory(*this->Target);
   tgtMakefileName += "/build.make";
   r_commands.push_back
-    (this->LocalGenerator->GetRecursiveMakeCall(tgtMakefileName.c_str(),
+    (this->LocalGenerator->GetRecursiveMakeCall(tgtMakefileName,
                                                 temp));
 
   p_depends.clear();
@@ -1288,7 +1288,7 @@ void cmMakefileTargetGenerator
         symbolic = sf->GetPropertyAsBool("SYMBOLIC");
         }
       }
-    this->GenerateExtraOutput(o->c_str(), in, symbolic);
+    this->GenerateExtraOutput(*o, in, symbolic);
     }
 
   // Setup implicit dependency scanning.
@@ -1302,15 +1302,16 @@ void cmMakefileTargetGenerator
       this->Convert(idi->second, cmLocalGenerator::FULL);
     this->LocalGenerator->
       AddImplicitDepends(*this->Target, idi->first,
-                         objFullPath.c_str(),
-                         srcFullPath.c_str());
+                         objFullPath,
+                         srcFullPath);
     }
 }
 
 //----------------------------------------------------------------------------
 void
 cmMakefileTargetGenerator
-::GenerateExtraOutput(const char* out, const char* in, bool symbolic)
+::GenerateExtraOutput(const std::string& out, const std::string& in,
+                      bool symbolic)
 {
   // Add a rule to build the primary output if the extra output needs
   // to be created.
@@ -1651,7 +1652,7 @@ void cmMakefileTargetGenerator
 
   // Add a dependency on the rule file itself.
   this->LocalGenerator->AppendRuleDepend(depends,
-                                         this->BuildFileNameFull.c_str());
+                                         this->BuildFileNameFull);
 }
 
 //----------------------------------------------------------------------------
@@ -1763,7 +1764,8 @@ void cmMakefileTargetGenerator::RemoveForbiddenFlags(const char* flagVar,
 //----------------------------------------------------------------------------
 void
 cmMakefileTargetGenerator
-::AddMultipleOutputPair(const char* depender, const char* dependee)
+::AddMultipleOutputPair(const std::string& depender,
+                        const std::string& dependee)
 {
   MultipleOutputPairsType::value_type p(depender, dependee);
   this->MultipleOutputPairs.insert(p);
@@ -1772,7 +1774,7 @@ cmMakefileTargetGenerator
 //----------------------------------------------------------------------------
 void
 cmMakefileTargetGenerator
-::CreateLinkScript(const char* name,
+::CreateLinkScript(const std::string& name,
                    std::vector<std::string> const& link_commands,
                    std::vector<std::string>& makefile_commands,
                    std::vector<std::string>& makefile_depends)
@@ -1807,7 +1809,7 @@ cmMakefileTargetGenerator
 //----------------------------------------------------------------------------
 std::string
 cmMakefileTargetGenerator
-::CreateResponseFile(const char* name, std::string const& options,
+::CreateResponseFile(const std::string& name, std::string const& options,
                      std::vector<std::string>& makefile_depends)
 {
   // Create the response file.
@@ -1974,7 +1976,7 @@ void cmMakefileTargetGenerator::AddIncludeFlags(std::string& flags,
     name += lang;
     name += ".rsp";
     std::string arg = "@" +
-      this->CreateResponseFile(name.c_str(), includeFlags,
+      this->CreateResponseFile(name, includeFlags,
                                this->FlagFileDepends[lang]);
     this->LocalGenerator->AppendFlags(flags, arg);
     }

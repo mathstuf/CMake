@@ -106,7 +106,7 @@ protected:
 
   // write a rule to drive building of more than one output from
   // another rule
-  void GenerateExtraOutput(const char* out, const char* in,
+  void GenerateExtraOutput(const std::string& out, const std::string& in,
                            bool symbolic = false);
 
   void AppendProgress(std::vector<std::string>& commands);
@@ -149,11 +149,12 @@ protected:
       remove a dependee if the depender is missing to make sure both
       are regenerated properly.  This method is used by the local
       makefile generators to register such pairs.  */
-  void AddMultipleOutputPair(const char* depender, const char* dependee);
+  void AddMultipleOutputPair(const std::string& depender,
+                             const std::string& dependee);
 
   /** Create a script to hold link rules and a command to invoke the
       script at build time.  */
-  void CreateLinkScript(const char* name,
+  void CreateLinkScript(const std::string& name,
                         std::vector<std::string> const& link_commands,
                         std::vector<std::string>& makefile_commands,
                         std::vector<std::string>& makefile_depends);
@@ -161,7 +162,7 @@ protected:
   /** Create a response file with the given set of options.  Returns
       the relative path from the target build working directory to the
       response file name.  */
-  std::string CreateResponseFile(const char* name,
+  std::string CreateResponseFile(const std::string& name,
                                  std::string const& options,
                                  std::vector<std::string>& makefile_depends);
 

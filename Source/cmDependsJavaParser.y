@@ -423,7 +423,7 @@ Name jp_DOT Identifier
   yyGetParser->AddClassFound($<str>1);
   yyGetParser->UpdateCombine($<str>1, $<str>3);
   yyGetParser->DeallocateParserType(&($<str>1));
-  $<str>$ = const_cast<char*>(yyGetParser->GetCurrentCombine());
+  $<str>$ = const_cast<char*>(yyGetParser->GetCurrentCombine().c_str());
 }
 |
 Name jp_DOT jp_CLASS

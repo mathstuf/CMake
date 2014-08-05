@@ -2893,7 +2893,7 @@ yyreduce:
   yyGetParser->AddClassFound((yyvsp[(1) - (3)].str));
   yyGetParser->UpdateCombine((yyvsp[(1) - (3)].str), (yyvsp[(3) - (3)].str));
   yyGetParser->DeallocateParserType(&((yyvsp[(1) - (3)].str)));
-  (yyval.str) = const_cast<char*>(yyGetParser->GetCurrentCombine());
+  (yyval.str) = const_cast<char*>(yyGetParser->GetCurrentCombine().c_str());
 }
     break;
 

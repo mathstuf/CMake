@@ -54,9 +54,9 @@ public:
   void EndClass();
   void AddPackagesImport(const std::string& sclass);
   void SetCurrentPackage(const char* pkg) { this->CurrentPackage = pkg; }
-  const char* GetCurrentPackage() { return this->CurrentPackage.c_str(); }
+  const std::string& GetCurrentPackage() { return this->CurrentPackage; }
   void SetCurrentCombine(const char* cmb) { this->CurrentCombine = cmb; }
-  const char* GetCurrentCombine() { return this->CurrentCombine.c_str(); }
+  const std::string& GetCurrentCombine() { return this->CurrentCombine; }
   void UpdateCombine(const char* str1, const char* str2);
 
   std::vector<std::string>& GetClassesFound() { return this->ClassesFound; }

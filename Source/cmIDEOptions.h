@@ -27,15 +27,16 @@ public:
   // Store definitions and flags.
   void AddDefine(const std::string& define);
   void AddDefines(const char* defines);
+  void AddDefines(const std::string& defines);
   void AddDefines(const std::vector<std::string> &defines);
-  void AddFlag(const char* flag, const char* value);
-  void AddFlag(const char* flag, std::vector<std::string> const& value);
+  void AddFlag(const std::string& flag, const char* value);
+  void AddFlag(const std::string& flag, std::vector<std::string> const& value);
   void AppendFlag(std::string const& flag, std::string const& value);
   void AppendFlag(std::string const& flag,
                   std::vector<std::string> const& value);
-  void RemoveFlag(const char* flag);
+  void RemoveFlag(const std::string& flag);
   bool HasFlag(std::string const& flag) const;
-  const char* GetFlag(const char* flag);
+  const char* GetFlag(const std::string& flag);
 
 protected:
   // create a map of xml tags to the values they should have in the output
@@ -75,7 +76,7 @@ protected:
   cmIDEFlagTable const* DoingFollowing;
   enum { FlagTableCount = 16 };
   cmIDEFlagTable const* FlagTable[FlagTableCount];
-  void HandleFlag(const char* flag);
+  void HandleFlag(const std::string& flag);
   bool CheckFlagTable(cmIDEFlagTable const* table, const char* flag,
                       bool& flag_handled);
   void FlagMapUpdate(cmIDEFlagTable const* entry, const char* new_value);

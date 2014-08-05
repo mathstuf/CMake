@@ -142,7 +142,7 @@ bool cmVisualStudioGeneratorOptions::UsingSBCS() const
 }
 
 //----------------------------------------------------------------------------
-void cmVisualStudioGeneratorOptions::Parse(const char* flags)
+void cmVisualStudioGeneratorOptions::Parse(const std::string& flags)
 {
   // Parse the input string as a windows command line since the string
   // is intended for writing directly into the build files.
@@ -154,7 +154,7 @@ void cmVisualStudioGeneratorOptions::Parse(const char* flags)
   for(std::vector<std::string>::iterator ai = args.begin();
       ai != args.end(); ++ai)
     {
-    this->HandleFlag(ai->c_str());
+    this->HandleFlag(*ai);
     }
 }
 
@@ -181,7 +181,7 @@ void cmVisualStudioGeneratorOptions::ParseFinish()
 }
 
 //----------------------------------------------------------------------------
-void cmVisualStudioGeneratorOptions::StoreUnknownFlag(const char* flag)
+void cmVisualStudioGeneratorOptions::StoreUnknownFlag(const std::string& flag)
 {
   // Look for Intel Fortran flags that do not map well in the flag table.
   if(this->CurrentTool == FortranCompiler)
@@ -218,7 +218,8 @@ void cmVisualStudioGeneratorOptions::StoreUnknownFlag(const char* flag)
 }
 
 //----------------------------------------------------------------------------
-void cmVisualStudioGeneratorOptions::SetConfiguration(const char* config)
+void cmVisualStudioGeneratorOptions::SetConfiguration(
+                                                    const std::string& config)
 {
   this->Configuration = config;
 }

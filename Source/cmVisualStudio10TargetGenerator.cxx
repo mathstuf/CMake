@@ -1590,14 +1590,14 @@ bool cmVisualStudio10TargetGenerator::OutputSourceSpecificFlags(
         {
         clOptions.AddFlag("CompileAsWinRT", "false");
         }
-      clOptions.Parse(flags.c_str());
+      clOptions.Parse(flags);
       if(clOptions.HasFlag("AdditionalIncludeDirectories"))
         {
         clOptions.AppendFlag("AdditionalIncludeDirectories",
                              "%(AdditionalIncludeDirectories)");
         }
-      clOptions.AddDefines(configDefines.c_str());
-      clOptions.SetConfiguration((*config).c_str());
+      clOptions.AddDefines(configDefines);
+      clOptions.SetConfiguration(*config);
       clOptions.OutputAdditionalOptions(*this->BuildFileStream, "      ", "");
       clOptions.OutputFlagMap(*this->BuildFileStream, "      ");
       clOptions.OutputPreprocessorDefinitions(*this->BuildFileStream,
@@ -1806,10 +1806,10 @@ bool cmVisualStudio10TargetGenerator::ComputeClOptions(
     clOptions.FixExceptionHandlingDefault();
     clOptions.AddFlag("PrecompiledHeader", "NotUsing");
     std::string asmLocation = configName + "/";
-    clOptions.AddFlag("AssemblerListingLocation", asmLocation.c_str());
+    clOptions.AddFlag("AssemblerListingLocation", asmLocation);
     }
-  clOptions.Parse(flags.c_str());
-  clOptions.Parse(defineFlags.c_str());
+  clOptions.Parse(flags);
+  clOptions.Parse(defineFlags);
   std::vector<std::string> targetDefines;
   this->Target->GetCompileDefinitions(targetDefines, configName);
   clOptions.AddDefines(targetDefines);
@@ -1936,7 +1936,7 @@ bool cmVisualStudio10TargetGenerator::ComputeRcOptions(
       std::string(" ") +
       std::string(this->Makefile->GetSafeDefinition(rcConfigFlagsVar));
 
-  rcOptions.Parse(flags.c_str());
+  rcOptions.Parse(flags);
   this->RcOptions[configName] = pOptions.release();
   return true;
 }
@@ -2002,7 +2002,7 @@ bool cmVisualStudio10TargetGenerator::ComputeMasmOptions(
       std::string(" ") +
       std::string(this->Makefile->GetSafeDefinition(configFlagsVar));
 
-  masmOptions.Parse(flags.c_str());
+  masmOptions.Parse(flags);
   this->MasmOptions[configName] = pOptions.release();
   return true;
 }
@@ -2049,7 +2049,7 @@ cmVisualStudio10TargetGenerator::WriteLibOptions(std::string const& config)
       libOptions(this->LocalGenerator,
                  cmVisualStudioGeneratorOptions::Linker,
                  this->GetLibFlagTable(), 0, this);
-    libOptions.Parse(libflags.c_str());
+    libOptions.Parse(libflags);
     libOptions.OutputAdditionalOptions(*this->BuildFileStream, "      ", "");
     libOptions.OutputFlagMap(*this->BuildFileStream, "      ");
     this->WriteString("</Lib>\n", 2);
@@ -2311,8 +2311,8 @@ cmVisualStudio10TargetGenerator::ComputeLinkOptions(std::string const& config)
     imLib += "/";
     imLib += targetNameImport;
 
-    linkOptions.AddFlag("ImportLibrary", imLib.c_str());
-    linkOptions.AddFlag("ProgramDataBaseFile", pdb.c_str());
+    linkOptions.AddFlag("ImportLibrary", imLib);
+    linkOptions.AddFlag("ProgramDataBaseFile", pdb);
 
     // A Windows Runtime component uses internal .NET metadata,
     // so does not have an import library.
@@ -2338,17 +2338,17 @@ cmVisualStudio10TargetGenerator::ComputeLinkOptions(std::string const& config)
     }
   else if(this->NsightTegra)
     {
-    linkOptions.AddFlag("SoName", targetNameSO.c_str());
+    linkOptions.AddFlag("SoName", targetNameSO);
     }
 
-  linkOptions.Parse(flags.c_str());
+  linkOptions.Parse(flags);
 
   if(this->MSTools)
     {
     std::string def = this->GeneratorTarget->GetModuleDefinitionFile("");
     if(!def.empty())
       {
-      linkOptions.AddFlag("ModuleDefinitionFile", def.c_str());
+      linkOptions.AddFlag("ModuleDefinitionFile", def);
       }
     linkOptions.AppendFlag("IgnoreSpecificDefaultLibraries",
                            "%(IgnoreSpecificDefaultLibraries)");

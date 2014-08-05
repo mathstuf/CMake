@@ -760,9 +760,9 @@ void cmLocalVisualStudio7Generator::WriteConfiguration(std::ostream& fout,
                         this->ExtraFlagTable);
   targetOptions.FixExceptionHandlingDefault();
   std::string asmLocation = configName + "/";
-  targetOptions.AddFlag("AssemblerListingLocation", asmLocation.c_str());
-  targetOptions.Parse(flags.c_str());
-  targetOptions.Parse(defineFlags.c_str());
+  targetOptions.AddFlag("AssemblerListingLocation", asmLocation);
+  targetOptions.Parse(flags);
+  targetOptions.Parse(defineFlags);
   targetOptions.ParseFinish();
   cmGeneratorTarget* gt =
     this->GlobalGenerator->GetGeneratorTarget(&target);
@@ -1058,12 +1058,12 @@ void cmLocalVisualStudio7Generator::OutputBuildTool(std::ostream& fout,
     }
   Options linkOptions(this, Options::Linker,
                       cmLocalVisualStudio7GeneratorLinkFlagTable);
-  linkOptions.Parse(extraLinkOptions.c_str());
+  linkOptions.Parse(extraLinkOptions);
   if(!this->ModuleDefinitionFile.empty())
     {
     std::string defFile =
       this->ConvertToOptionallyRelativeOutputPath(this->ModuleDefinitionFile);
-    linkOptions.AddFlag("ModuleDefinitionFile", defFile.c_str());
+    linkOptions.AddFlag("ModuleDefinitionFile", defFile);
     }
   switch(target.GetType())
     {
@@ -1810,9 +1810,9 @@ bool cmLocalVisualStudio7Generator
               }
             Options fileOptions(this, tool, table,
                                 this->ExtraFlagTable);
-            fileOptions.Parse(fc.CompileFlags.c_str());
-            fileOptions.AddDefines(fc.CompileDefs.c_str());
-            fileOptions.AddDefines(fc.CompileDefsConfig.c_str());
+            fileOptions.Parse(fc.CompileFlags);
+            fileOptions.AddDefines(fc.CompileDefs);
+            fileOptions.AddDefines(fc.CompileDefsConfig);
             fileOptions.OutputAdditionalOptions(fout, "\t\t\t\t\t", "\n");
             fileOptions.OutputFlagMap(fout, "\t\t\t\t\t");
             fileOptions.OutputPreprocessorDefinitions(fout,

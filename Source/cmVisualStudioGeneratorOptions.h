@@ -39,7 +39,7 @@ public:
                                  cmVisualStudio10TargetGenerator* g = 0);
 
   // Store options from command line flags.
-  void Parse(const char* flags);
+  void Parse(const std::string& flags);
   void ParseFinish();
 
   // Fix the ExceptionHandling option to default to off.
@@ -63,7 +63,7 @@ public:
   void OutputAdditionalOptions(std::ostream& fout,
                                const char* prefix,
                                const char* suffix);
-  void SetConfiguration(const char* config);
+  void SetConfiguration(const std::string& config);
 private:
   cmLocalVisualStudioGenerator* LocalGenerator;
   cmLocalVisualStudioGenerator::VSVersion Version;
@@ -76,7 +76,7 @@ private:
   bool FortranRuntimeDLL;
   bool FortranRuntimeMT;
 
-  virtual void StoreUnknownFlag(const char* flag);
+  virtual void StoreUnknownFlag(const std::string& flag);
 };
 
 #endif

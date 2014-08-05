@@ -316,7 +316,7 @@ public:
   /**
    * Specify the name of the project for this build.
    */
-  void SetProjectName(const char*);
+  void SetProjectName(const std::string&);
 
   /**
    * Get the name of the project for this build.

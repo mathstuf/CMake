@@ -2015,7 +2015,7 @@ void cmMakefile::RemoveCacheDefinition(const std::string& name)
   this->GetCacheManager()->RemoveCacheEntry(name);
 }
 
-void cmMakefile::SetProjectName(const char* p)
+void cmMakefile::SetProjectName(const std::string& p)
 {
   this->ProjectName = p;
 }

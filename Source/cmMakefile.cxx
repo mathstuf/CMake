@@ -1293,6 +1293,11 @@ void cmMakefile::AddDefineFlag(const char* flag)
     return;
     }
 
+  this->AddDefineFlag(std::string(flag));
+}
+
+void cmMakefile::AddDefineFlag(const std::string& flag)
+{
   // Update the string used for the old DEFINITIONS property.
   this->AddDefineFlag(flag, this->DefineFlagsOrig);
 
@@ -1306,7 +1311,7 @@ void cmMakefile::AddDefineFlag(const char* flag)
   this->AddDefineFlag(flag, this->DefineFlags);
 }
 
-void cmMakefile::AddDefineFlag(const char* flag, std::string& dflags)
+void cmMakefile::AddDefineFlag(const std::string& flag, std::string& dflags)
 {
   // remove any \n\r
   std::string ret = flag;

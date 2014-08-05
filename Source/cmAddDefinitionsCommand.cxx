@@ -24,7 +24,7 @@ bool cmAddDefinitionsCommand
   for(std::vector<std::string>::const_iterator i = args.begin();
       i != args.end(); ++i)
     {
-    this->Makefile->AddDefineFlag(i->c_str());
+    this->Makefile->AddDefineFlag(*i);
     }
   return true;
 }

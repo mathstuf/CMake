@@ -202,6 +202,7 @@ public:
    * Add a define flag to the build.
    */
   void AddDefineFlag(const char* definition);
+  void AddDefineFlag(const std::string& definition);
   void RemoveDefineFlag(const std::string& definition);
   void AddCompileOption(const std::string& option);
 
@@ -1009,7 +1010,7 @@ protected:
   std::vector<cmValueWithOrigin> CompileDefinitionsEntries;
 
   // Track the value of the computed DEFINITIONS property.
-  void AddDefineFlag(const char*, std::string&);
+  void AddDefineFlag(const std::string&, std::string&);
   void RemoveDefineFlag(const std::string&, std::string::size_type, std::string&);
   std::string DefineFlagsOrig;
 

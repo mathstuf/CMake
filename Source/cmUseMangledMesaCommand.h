@@ -25,8 +25,8 @@ public:
   virtual bool IsScriptable() const { return true; }
   virtual bool IsDiscouraged() const { return true; }
 protected:
-  void CopyAndFullPathMesaHeader(const char* source,
-                                 const char* outdir);
+  void CopyAndFullPathMesaHeader(const std::string& source,
+                                 const std::string& outdir);
 };
 
 #endif

@@ -56,7 +56,7 @@ bool cmUseMangledMesaCommand
     std::string path = inputDir;
     path += "/";
     path += *i;
-    this->CopyAndFullPathMesaHeader(path.c_str(), destDir);
+    this->CopyAndFullPathMesaHeader(path, destDir);
     }
 
   return true;
@@ -64,8 +64,8 @@ bool cmUseMangledMesaCommand
 
 void
 cmUseMangledMesaCommand::
-CopyAndFullPathMesaHeader(const char* source,
-                          const char* outdir)
+CopyAndFullPathMesaHeader(const std::string& source,
+                          const std::string& outdir)
 {
   std::string dir, file;
   cmSystemTools::SplitProgramPath(source, dir, file);
@@ -78,15 +78,15 @@ CopyAndFullPathMesaHeader(const char* source,
   if(!fout)
     {
     cmSystemTools::Error("Could not open file for write in copy operation: ",
-                         tempOutputFile.c_str(), outdir);
+                         tempOutputFile.c_str(), outdir.c_str());
     cmSystemTools::ReportLastSystemError("");
     return;
     }
-  cmsys::ifstream fin(source);
+  cmsys::ifstream fin(source.c_str());
   if(!fin)
     {
     cmSystemTools::Error("Could not open file for read in copy operation",
-                         source);
+                         source.c_str());
     return;
     }
   // now copy input to output and expand variables in the

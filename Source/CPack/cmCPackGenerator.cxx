@@ -1281,10 +1281,10 @@ const char* cmCPackGenerator::GetPackagingInstallPrefix()
 }
 
 //----------------------------------------------------------------------
-std::string cmCPackGenerator::FindTemplate(const char* name)
+std::string cmCPackGenerator::FindTemplate(const std::string& name)
 {
   cmCPackLogger(cmCPackLog::LOG_DEBUG, "Look for template: "
-    << (name ? name : "(NULL)") << std::endl);
+    << name << std::endl);
   std::string ffile = this->MakefileMap->GetModulesFile(name);
   cmCPackLogger(cmCPackLog::LOG_DEBUG, "Found template: "
     << ffile << std::endl);

@@ -278,7 +278,7 @@ bool cmCPackOSXX11Generator::CopyResourcePlistFile(const std::string& name,
   std::string inFName = "CPack.";
   inFName += name;
   inFName += ".in";
-  std::string inFileName = this->FindTemplate(inFName.c_str());
+  std::string inFileName = this->FindTemplate(inFName);
   if ( inFileName.empty() )
     {
     cmCPackLogger(cmCPackLog::LOG_ERROR, "Cannot find input file: "

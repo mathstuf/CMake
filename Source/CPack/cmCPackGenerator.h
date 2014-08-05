@@ -188,7 +188,7 @@ protected:
   virtual const std::string& GetInstallPath();
   virtual const char* GetPackagingInstallPrefix();
 
-  virtual std::string FindTemplate(const char* name);
+  virtual std::string FindTemplate(const std::string& name);
   virtual bool ConfigureFile(const std::string& inName,
     const std::string& outName, bool copyOnly = false);
   virtual bool ConfigureString(const std::string& input, std::string& output);

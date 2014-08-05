@@ -234,7 +234,7 @@ bool cmAddExecutableCommand
     }
 
   std::vector<std::string> srclists(s, args.end());
-  cmTarget* tgt = this->Makefile->AddExecutable(exename.c_str(), srclists,
+  cmTarget* tgt = this->Makefile->AddExecutable(exename, srclists,
                                                 excludeFromAll);
   if ( use_win32 )
     {

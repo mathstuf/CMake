@@ -2075,7 +2075,7 @@ cmTarget* cmMakefile::AddLibrary(const std::string& lname,
   return target;
 }
 
-cmTarget* cmMakefile::AddExecutable(const char *exeName,
+cmTarget* cmMakefile::AddExecutable(const std::string& exeName,
                                     const std::vector<std::string> &srcs,
                                     bool excludeFromAll)
 {

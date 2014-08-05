@@ -215,7 +215,7 @@ public:
   /**
    * Add an executable to the build.
    */
-  cmTarget* AddExecutable(const char *exename,
+  cmTarget* AddExecutable(const std::string& exename,
                           const std::vector<std::string> &srcs,
                           bool excludeFromAll = false);
 

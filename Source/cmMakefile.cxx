@@ -2180,7 +2180,7 @@ cmMakefile::GetSourceGroup(const std::vector<std::string>&name) const
     // iterate through its children to find match source group
     for(unsigned int i=1; i<name.size(); ++i)
       {
-      sg = sg->LookupChild(name[i].c_str());
+      sg = sg->LookupChild(name[i]);
       if(sg == 0)
         {
         break;
@@ -2231,7 +2231,7 @@ void cmMakefile::AddSourceGroup(const std::vector<std::string>& name,
     {
     // group does not exist nor belong to any existing group
     // add its first component
-    this->SourceGroups.push_back(cmSourceGroup(name[0].c_str(), regex));
+    this->SourceGroups.push_back(cmSourceGroup(name[0], regex));
     sg = this->GetSourceGroup(currentName);
     i = 0; // last component found
     }
@@ -2247,8 +2247,8 @@ void cmMakefile::AddSourceGroup(const std::vector<std::string>& name,
     }
   for(++i; i<=lastElement; ++i)
     {
-    sg->AddChild(cmSourceGroup(name[i].c_str(), 0, sg->GetFullName()));
-    sg = sg->LookupChild(name[i].c_str());
+    sg->AddChild(cmSourceGroup(name[i], 0, sg->GetFullName()));
+    sg = sg->LookupChild(name[i]);
     fullname = sg->GetFullName();
     if(strlen(fullname))
       {
@@ -3236,7 +3236,7 @@ cmMakefile::GetConfigurations(std::vector<std::string>& configs,
  * inherited ones.
  */
 cmSourceGroup*
-cmMakefile::FindSourceGroup(const char* source,
+cmMakefile::FindSourceGroup(const std::string& source,
                             std::vector<cmSourceGroup> &groups) const
 {
   // First search for a group that lists the file explicitly.

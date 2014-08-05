@@ -1466,7 +1466,7 @@ void cmLocalVisualStudio7Generator::WriteVCProjFile(std::ostream& fout,
       this->ModuleDefinitionFile = (*i)->GetFullPath();
       }
     cmSourceGroup* sourceGroup =
-      this->Makefile->FindSourceGroup(source.c_str(), sourceGroups);
+      this->Makefile->FindSourceGroup(source, sourceGroups);
     sourceGroup->AssignSource(*i);
     }
 

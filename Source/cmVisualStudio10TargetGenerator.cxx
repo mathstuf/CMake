@@ -924,7 +924,7 @@ void cmVisualStudio10TargetGenerator::WriteGroups()
     cmSourceFile* sf = *s;
     std::string const& source = sf->GetFullPath();
     cmSourceGroup* sourceGroup =
-      this->Makefile->FindSourceGroup(source.c_str(), sourceGroups);
+      this->Makefile->FindSourceGroup(source, sourceGroups);
     groupsUsed.insert(sourceGroup);
     }
 
@@ -956,7 +956,7 @@ void cmVisualStudio10TargetGenerator::WriteGroups()
   for(ToolSourceMap::const_iterator ti = this->Tools.begin();
       ti != this->Tools.end(); ++ti)
     {
-    this->WriteGroupSources(ti->first.c_str(), ti->second, sourceGroups);
+    this->WriteGroupSources(ti->first, ti->second, sourceGroups);
     }
 
   // Added files are images and the manifest.
@@ -1161,7 +1161,7 @@ WriteGroupSources(const char* name,
     cmSourceFile const* sf = s->SourceFile;
     std::string const& source = sf->GetFullPath();
     cmSourceGroup* sourceGroup =
-      this->Makefile->FindSourceGroup(source.c_str(), sourceGroups);
+      this->Makefile->FindSourceGroup(source, sourceGroups);
     const char* filter = sourceGroup->GetFullName();
     this->WriteString("<", 2);
     std::string path = this->ConvertPath(source, s->RelativePath);

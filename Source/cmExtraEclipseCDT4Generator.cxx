@@ -569,7 +569,7 @@ void cmExtraEclipseCDT4Generator::CreateLinksForTargets(
             // Add the file to the list of sources.
             std::string source = (*sfIt)->GetFullPath();
             cmSourceGroup* sourceGroup =
-                       makefile->FindSourceGroup(source.c_str(), sourceGroups);
+                       makefile->FindSourceGroup(source, sourceGroups);
             sourceGroup->AssignSource(*sfIt);
             }
 

@@ -753,7 +753,7 @@ public:
   /**
    * find what source group this source is in
    */
-  cmSourceGroup* FindSourceGroup(const char* source,
+  cmSourceGroup* FindSourceGroup(const std::string& source,
                                  std::vector<cmSourceGroup> &groups) const;
 #endif
 

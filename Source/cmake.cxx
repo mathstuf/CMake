@@ -839,7 +839,7 @@ void cmake::SetArgs(const std::vector<std::string>& args,
     else
       {
       directoriesSet = true;
-      this->SetDirectoriesFromFile(arg.c_str());
+      this->SetDirectoriesFromFile(arg);
       }
     }
   if(!directoriesSet)
@@ -859,7 +859,7 @@ void cmake::SetArgs(const std::vector<std::string>& args,
 }
 
 //----------------------------------------------------------------------------
-void cmake::SetDirectoriesFromFile(const char* arg)
+void cmake::SetDirectoriesFromFile(const std::string& arg)
 {
   // Check if the argument refers to a CMakeCache.txt or
   // CMakeLists.txt file.

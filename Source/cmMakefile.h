@@ -438,14 +438,14 @@ public:
    * and going up until it reaches the HomeDirectory.
    */
   void SetHomeDirectory(const std::string& dir);
-  const char* GetHomeDirectory() const
+  const std::string& GetHomeDirectory() const
     {
-      return this->cmHomeDirectory.c_str();
+      return this->cmHomeDirectory;
     }
   void SetHomeOutputDirectory(const std::string& lib);
-  const char* GetHomeOutputDirectory() const
+  const std::string& GetHomeOutputDirectory() const
     {
-      return this->HomeOutputDirectory.c_str();
+      return this->HomeOutputDirectory;
     }
   //@}
 
@@ -476,9 +476,9 @@ public:
       this->AddDefinition("CMAKE_CURRENT_SOURCE_DIR",
                           this->cmStartDirectory);
     }
-  const char* GetStartDirectory() const
+  const std::string& GetStartDirectory() const
     {
-      return this->cmStartDirectory.c_str();
+      return this->cmStartDirectory;
     }
   void SetStartOutputDirectory(const std::string& lib)
     {
@@ -490,27 +490,27 @@ public:
       this->AddDefinition("CMAKE_CURRENT_BINARY_DIR",
                           this->StartOutputDirectory);
     }
-  const char* GetStartOutputDirectory() const
+  const std::string& GetStartOutputDirectory() const
     {
-      return this->StartOutputDirectory.c_str();
+      return this->StartOutputDirectory;
     }
   //@}
 
-  const char* GetCurrentDirectory() const
+  const std::string& GetCurrentDirectory() const
     {
-      return this->cmStartDirectory.c_str();
+      return this->cmStartDirectory;
     }
-  const char* GetCurrentOutputDirectory() const
+  const std::string& GetCurrentOutputDirectory() const
     {
-      return this->StartOutputDirectory.c_str();
+      return this->StartOutputDirectory;
     }
 
   /* Get the current CMakeLists.txt file that is being processed.  This
    * is just used in order to be able to 'branch' from one file to a second
    * transparently */
-  const char* GetCurrentListFile() const
+  const std::string& GetCurrentListFile() const
     {
-      return this->cmCurrentListFile.c_str();
+      return this->cmCurrentListFile;
     }
 
   //@}

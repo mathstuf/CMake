@@ -119,32 +119,32 @@ const char* CCONV cmGetProjectName(void *arg)
 const char* CCONV cmGetHomeDirectory(void *arg)
 {
   cmMakefile *mf = static_cast<cmMakefile *>(arg);
-  return mf->GetHomeDirectory();
+  return mf->GetHomeDirectory().c_str();
 }
 const char* CCONV cmGetHomeOutputDirectory(void *arg)
 {
   cmMakefile *mf = static_cast<cmMakefile *>(arg);
-  return mf->GetHomeOutputDirectory();
+  return mf->GetHomeOutputDirectory().c_str();
 }
 const char* CCONV cmGetStartDirectory(void *arg)
 {
   cmMakefile *mf = static_cast<cmMakefile *>(arg);
-  return mf->GetStartDirectory();
+  return mf->GetStartDirectory().c_str();
 }
 const char* CCONV cmGetStartOutputDirectory(void *arg)
 {
   cmMakefile *mf = static_cast<cmMakefile *>(arg);
-  return mf->GetStartOutputDirectory();
+  return mf->GetStartOutputDirectory().c_str();
 }
 const char* CCONV cmGetCurrentDirectory(void *arg)
 {
   cmMakefile *mf = static_cast<cmMakefile *>(arg);
-  return mf->GetCurrentDirectory();
+  return mf->GetCurrentDirectory().c_str();
 }
 const char* CCONV cmGetCurrentOutputDirectory(void *arg)
 {
   cmMakefile *mf = static_cast<cmMakefile *>(arg);
-  return mf->GetCurrentOutputDirectory();
+  return mf->GetCurrentOutputDirectory().c_str();
 }
 const char* CCONV cmGetDefinition(void *arg,const char*def)
 {

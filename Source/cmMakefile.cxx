@@ -4144,8 +4144,7 @@ void cmMakefile::SetProperty(const std::string& prop,
   if ( prop == "ADDITIONAL_MAKE_CLEAN_FILES" )
     {
     // This property is not inherited
-    if ( strcmp(this->GetCurrentDirectory(),
-                this->GetStartDirectory()) != 0 )
+    if ( this->GetCurrentDirectory() != this->GetStartDirectory() )
       {
       return;
       }

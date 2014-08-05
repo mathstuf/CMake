@@ -132,7 +132,7 @@ bool cmIncludeCommand
 
   std::string fullFilePath;
   bool readit =
-    this->Makefile->ReadListFile( this->Makefile->GetCurrentListFile(),
+    this->Makefile->ReadListFile( this->Makefile->GetCurrentListFile().c_str(),
                                   fname.c_str(), &fullFilePath,
                                   noPolicyScope);
 

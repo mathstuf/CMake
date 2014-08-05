@@ -182,8 +182,8 @@ cmake* cmLocalNinjaGenerator::GetCMakeInstance()
 
 bool cmLocalNinjaGenerator::isRootMakefile() const
 {
-  return (strcmp(this->Makefile->GetCurrentDirectory(),
-                 this->GetCMakeInstance()->GetHomeDirectory()) == 0);
+  return this->Makefile->GetCurrentDirectory() ==
+         this->GetCMakeInstance()->GetHomeDirectory();
 }
 
 void cmLocalNinjaGenerator::WriteBuildFileTop()

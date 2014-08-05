@@ -423,7 +423,7 @@ void cmFindCommon::AddPathInternal(std::string const& in_path,
   const char* relbase = 0;
   if(pathType == CMakePath)
     {
-    relbase = this->Makefile->GetCurrentDirectory();
+    relbase = this->Makefile->GetCurrentDirectory().c_str();
     }
 
   // Convert to clean full path.

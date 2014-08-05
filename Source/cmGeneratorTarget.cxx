@@ -1058,8 +1058,8 @@ bool cmStrictTargetComparison::operator()(cmTarget const* t1,
   int nameResult = strcmp(t1->GetName().c_str(), t2->GetName().c_str());
   if (nameResult == 0)
     {
-    return strcmp(t1->GetMakefile()->GetStartOutputDirectory(),
-                  t2->GetMakefile()->GetStartOutputDirectory()) < 0;
+    return strcmp(t1->GetMakefile()->GetStartOutputDirectory().c_str(),
+                  t2->GetMakefile()->GetStartOutputDirectory().c_str()) < 0;
     }
   return nameResult < 0;
 }

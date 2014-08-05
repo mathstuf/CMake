@@ -174,8 +174,8 @@ void cmExtraSublimeTextGenerator::
           {
           // Only add the global targets from CMAKE_BINARY_DIR,
           // not from the subdirs
-          if (strcmp(makefile->GetStartOutputDirectory(),
-                     makefile->GetHomeOutputDirectory())==0)
+          if (makefile->GetStartOutputDirectory() ==
+              makefile->GetHomeOutputDirectory())
             {
             this->AppendTarget(fout, ti->first, *lg, 0,
                                make, makefile, compiler,

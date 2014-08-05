@@ -113,14 +113,14 @@ class cmake
    * and going up until it reaches the HomeDirectory.
    */
   void SetHomeDirectory(const std::string& dir);
-  const char* GetHomeDirectory() const
+  const std::string& GetHomeDirectory() const
     {
-    return this->cmHomeDirectory.c_str();
+    return this->cmHomeDirectory;
     }
   void SetHomeOutputDirectory(const std::string& lib);
-  const char* GetHomeOutputDirectory() const
+  const std::string& GetHomeOutputDirectory() const
     {
-    return this->HomeOutputDirectory.c_str();
+    return this->HomeOutputDirectory;
     }
   //@}
 
@@ -137,18 +137,18 @@ class cmake
       this->cmStartDirectory = dir;
       cmSystemTools::ConvertToUnixSlashes(this->cmStartDirectory);
     }
-  const char* GetStartDirectory() const
+  const std::string& GetStartDirectory() const
     {
-      return this->cmStartDirectory.c_str();
+      return this->cmStartDirectory;
     }
   void SetStartOutputDirectory(const std::string& lib)
     {
       this->StartOutputDirectory = lib;
       cmSystemTools::ConvertToUnixSlashes(this->StartOutputDirectory);
     }
-  const char* GetStartOutputDirectory() const
+  const std::string& GetStartOutputDirectory() const
     {
-      return this->StartOutputDirectory.c_str();
+      return this->StartOutputDirectory;
     }
   //@}
 

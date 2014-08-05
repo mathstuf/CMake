@@ -973,7 +973,7 @@ bool cmFindPackageCommand::FindAppBundleConfig()
 bool cmFindPackageCommand::ReadListFile(const std::string& f,
                                         PolicyScopeRule psr)
 {
-  if(this->Makefile->ReadListFile(this->Makefile->GetCurrentListFile(),
+  if(this->Makefile->ReadListFile(this->Makefile->GetCurrentListFile().c_str(),
                                   f.c_str(), 0,
                                   !this->PolicyScope || psr == NoPolicyScope))
     {

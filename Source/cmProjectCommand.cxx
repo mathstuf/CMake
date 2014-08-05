@@ -235,9 +235,9 @@ bool cmProjectCommand
   if(include)
     {
     std::string fullFilePath;
-    bool readit =
-      this->Makefile->ReadListFile( this->Makefile->GetCurrentListFile(),
-                                    include);
+    bool readit = this->Makefile->ReadListFile(
+                                  this->Makefile->GetCurrentListFile().c_str(),
+                                  include);
     if(!readit && !cmSystemTools::GetFatalErrorOccured())
       {
       std::string m =

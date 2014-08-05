@@ -295,7 +295,7 @@ bool cmExportCommand::HandlePackage(std::vector<std::string> const& args)
   // We store the current build directory in the registry as a value
   // named by a hash of its own content.  This is deterministic and is
   // unique with high probability.
-  const char* outDir = this->Makefile->GetCurrentOutputDirectory();
+  const std::string& outDir = this->Makefile->GetCurrentOutputDirectory();
   std::string hash = cmSystemTools::ComputeStringMD5(outDir);
 #if defined(_WIN32) && !defined(__CYGWIN__)
   this->StorePackageRegistryWin(package, outDir, hash);

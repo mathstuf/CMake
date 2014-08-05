@@ -649,7 +649,7 @@ void cmLocalGenerator::AddCustomCommandToCreateObject(
     source.GetFullPath(),
     commandLines,
     comment.c_str(),
-    this->Makefile->GetStartOutputDirectory()
+    this->Makefile->GetStartOutputDirectory().c_str()
     );
 }
 
@@ -750,7 +750,7 @@ void cmLocalGenerator::AddBuildTargetRule(const std::string& llang,
     "",
     commandLines,
     comment.c_str(),
-    this->Makefile->GetStartOutputDirectory()
+    this->Makefile->GetStartOutputDirectory().c_str()
     );
   this->Makefile->GetSource(targetFullPath);
   target.Target->AddSource(targetFullPath);
@@ -1607,8 +1607,8 @@ void cmLocalGenerator::GetIncludeDirectories(std::vector<std::string>& dirs,
   // it is requested by the project.
   if(this->Makefile->IsOn("CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE"))
     {
-    const char* topSourceDir = this->Makefile->GetHomeDirectory();
-    const char* topBinaryDir = this->Makefile->GetHomeOutputDirectory();
+    const std::string& topSourceDir = this->Makefile->GetHomeDirectory();
+    const std::string& topBinaryDir = this->Makefile->GetHomeOutputDirectory();
     for(std::vector<std::string>::const_iterator i = includes.begin();
         i != includes.end(); ++i)
       {
@@ -2699,10 +2699,10 @@ const char* cmLocalGenerator::GetRelativeRootPath(RelativeRoot relroot)
 {
   switch (relroot)
     {
-    case HOME:         return this->Makefile->GetHomeDirectory();
-    case START:        return this->Makefile->GetStartDirectory();
-    case HOME_OUTPUT:  return this->Makefile->GetHomeOutputDirectory();
-    case START_OUTPUT: return this->Makefile->GetStartOutputDirectory();
+    case HOME:        return this->Makefile->GetHomeDirectory().c_str();
+    case START:       return this->Makefile->GetStartDirectory().c_str();
+    case HOME_OUTPUT: return this->Makefile->GetHomeOutputDirectory().c_str();
+    case START_OUTPUT:return this->Makefile->GetStartOutputDirectory().c_str();
     default: break;
     }
   return 0;

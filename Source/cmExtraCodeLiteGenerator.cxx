@@ -68,8 +68,8 @@ void cmExtraCodeLiteGenerator::Generate()
     const cmMakefile* mf =it->second[0]->GetMakefile();
     this->ConfigName = GetConfigurationName( mf );
 
-    if (strcmp(mf->GetStartOutputDirectory(),
-               mf->GetHomeOutputDirectory()) == 0)
+    if (mf->GetStartOutputDirectory() ==
+        mf->GetHomeOutputDirectory())
       {
       workspaceOutputDir   = mf->GetStartOutputDirectory();
       workspaceProjectName = mf->GetProjectName();

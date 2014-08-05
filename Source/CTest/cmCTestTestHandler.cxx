@@ -118,8 +118,9 @@ bool cmCTestSubdirCommand
     fname += "/";
     fname += testFilename;
     bool readit =
-      this->Makefile->ReadListFile(this->Makefile->GetCurrentListFile(),
-                                   fname.c_str());
+      this->Makefile->ReadListFile(
+                                  this->Makefile->GetCurrentListFile().c_str(),
+                                  fname.c_str());
     cmSystemTools::ChangeDirectory(cwd);
     if(!readit)
       {
@@ -206,7 +207,7 @@ bool cmCTestAddSubdirectoryCommand
   fname += "/";
   fname += testFilename;
   bool readit =
-    this->Makefile->ReadListFile(this->Makefile->GetCurrentListFile(),
+    this->Makefile->ReadListFile(this->Makefile->GetCurrentListFile().c_str(),
                                  fname.c_str());
   cmSystemTools::ChangeDirectory(cwd);
   if(!readit)

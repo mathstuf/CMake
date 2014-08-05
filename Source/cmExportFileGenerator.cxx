@@ -228,13 +228,14 @@ static bool checkInterfaceDirs(const std::string &prepro,
 {
   const char* installDir =
             target->GetMakefile()->GetSafeDefinition("CMAKE_INSTALL_PREFIX");
-  const char* topSourceDir = target->GetMakefile()->GetHomeDirectory();
-  const char* topBinaryDir = target->GetMakefile()->GetHomeOutputDirectory();
+  const std::string& topSourceDir = target->GetMakefile()->GetHomeDirectory();
+  const std::string& topBinaryDir =
+                              target->GetMakefile()->GetHomeOutputDirectory();
 
   std::vector<std::string> parts;
   cmGeneratorExpression::Split(prepro, parts);
 
-  const bool inSourceBuild = strcmp(topSourceDir, topBinaryDir) == 0;
+  const bool inSourceBuild = topSourceDir == topBinaryDir;
 
   bool hadFatalError = false;
 

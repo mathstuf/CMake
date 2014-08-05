@@ -299,7 +299,7 @@ bool cmAddCustomCommandCommand
   // Convert working directory to a full path.
   if(!working.empty())
     {
-    const char* build_dir = this->Makefile->GetCurrentOutputDirectory();
+    const std::string& build_dir = this->Makefile->GetCurrentOutputDirectory();
     working = cmSystemTools::CollapseFullPath(working, build_dir);
     }
 

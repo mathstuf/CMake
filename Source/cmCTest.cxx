@@ -683,7 +683,7 @@ bool cmCTest::InitializeFromCommand(cmCTestStartCommand* command)
     {
     cmCTestLog(this, OUTPUT, "   Reading ctest configuration file: "
       << fname << std::endl);
-    bool readit = mf->ReadListFile(mf->GetCurrentListFile(),
+    bool readit = mf->ReadListFile(mf->GetCurrentListFile().c_str(),
       fname.c_str() );
     if(!readit)
       {

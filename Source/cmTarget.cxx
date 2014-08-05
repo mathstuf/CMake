@@ -2006,11 +2006,9 @@ void cmTarget::AppendBuildInterfaceIncludes()
 
   if (this->Makefile->IsOn("CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE"))
     {
-    const char *binDir = this->Makefile->GetStartOutputDirectory();
-    const char *srcDir = this->Makefile->GetStartDirectory();
-    const std::string dirs = std::string(binDir ? binDir : "")
-                            + std::string(binDir ? ";" : "")
-                            + std::string(srcDir ? srcDir : "");
+    const std::string& binDir = this->Makefile->GetStartOutputDirectory();
+    const std::string& srcDir = this->Makefile->GetStartDirectory();
+    const std::string dirs = binDir + ";" + srcDir;
     if (!dirs.empty())
       {
       this->AppendProperty("INTERFACE_INCLUDE_DIRECTORIES",

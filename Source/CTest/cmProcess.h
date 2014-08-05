@@ -27,7 +27,7 @@ class cmProcess
 public:
   cmProcess();
   ~cmProcess();
-  const char* GetCommand() { return this->Command.c_str();}
+  const std::string& GetCommand() { return this->Command;}
   void SetCommand(const char* command);
   void SetCommandArguments(std::vector<std::string> const& arg);
   void SetWorkingDirectory(const char* dir) { this->WorkingDirectory = dir;}

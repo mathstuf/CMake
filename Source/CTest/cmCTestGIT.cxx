@@ -477,10 +477,10 @@ private:
     Person(): Name(), EMail(), Time(0), TimeZone(0) {}
   };
 
-  void ParsePerson(const char* str, Person& person)
+  void ParsePerson(const std::string& str, Person& person)
     {
     // Person Name <person@domain.com> 1234567890 +0000
-    const char* c = str;
+    const char* c = str.c_str();
     while(*c && isspace(*c)) { ++c; }
 
     const char* name_first = c;
@@ -544,7 +544,7 @@ private:
     else if(cmHasLiteralPrefix(this->Line, "author "))
       {
       Person author;
-      this->ParsePerson(this->Line.c_str()+7, author);
+      this->ParsePerson(this->Line.substr(7), author);
       this->Rev.Author = author.Name;
       this->Rev.EMail = author.EMail;
       this->Rev.Date = this->FormatDateTime(author);
@@ -552,7 +552,7 @@ private:
     else if(cmHasLiteralPrefix(this->Line, "committer "))
       {
       Person committer;
-      this->ParsePerson(this->Line.c_str()+10, committer);
+      this->ParsePerson(this->Line.substr(10), committer);
       this->Rev.Committer = committer.Name;
       this->Rev.CommitterEMail = committer.EMail;
       this->Rev.CommitDate = this->FormatDateTime(committer);

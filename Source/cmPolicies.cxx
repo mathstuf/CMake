@@ -404,11 +404,11 @@ void cmPolicies::DefinePolicy(cmPolicies::PolicyID iD,
 
 //----------------------------------------------------------------------------
 bool cmPolicies::ApplyPolicyVersion(cmMakefile *mf,
-                                    const char *version)
+                                    const std::string& version)
 {
   std::string ver = "2.4.0";
 
-  if (version && strlen(version) > 0)
+  if (!version.empty())
     {
     ver = version;
     }
@@ -534,9 +534,9 @@ bool cmPolicies::GetPolicyDefault(cmMakefile* mf, std::string const& policy,
   return true;
 }
 
-bool cmPolicies::GetPolicyID(const char *id, cmPolicies::PolicyID &pid)
+bool cmPolicies::GetPolicyID(const std::string& id, cmPolicies::PolicyID &pid)
 {
-  if (!id || strlen(id) < 1)
+  if (id.empty())
     {
     return false;
     }

@@ -497,7 +497,7 @@ bool cmConditionEvaluator::HandleLevel1(cmArgumentList &newArgs,
         cmPolicies::PolicyID pid;
         this->HandlePredicate(
           this->Makefile.GetPolicies()->GetPolicyID(
-            argP1->c_str(), pid),
+            argP1->GetValue(), pid),
             reducible, arg, newArgs, argP1, argP2);
         }
       // does a target exist

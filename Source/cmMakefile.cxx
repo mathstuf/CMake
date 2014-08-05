@@ -4913,7 +4913,7 @@ bool cmMakefile::PolicyOptionalWarningEnabled(std::string const& var)
   return cm->GetDebugOutput() || cm->GetTrace();
 }
 
-bool cmMakefile::SetPolicy(const char *id,
+bool cmMakefile::SetPolicy(const std::string& id,
                            cmPolicies::PolicyStatus status)
 {
   cmPolicies::PolicyID pid;
@@ -5036,8 +5036,7 @@ void cmMakefile::PopPolicyBarrier(bool reportError)
   this->PolicyBarriers.pop_back();
 }
 
-//----------------------------------------------------------------------------
-bool cmMakefile::SetPolicyVersion(const char *version)
+bool cmMakefile::SetPolicyVersion(const std::string& version)
 {
   return this->GetCMakeInstance()->GetPolicies()->
     ApplyPolicyVersion(this,version);

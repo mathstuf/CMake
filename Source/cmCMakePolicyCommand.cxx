@@ -88,7 +88,7 @@ bool cmCMakePolicyCommand::HandleSetMode(std::vector<std::string> const& args)
     return false;
     }
 
-  if(!this->Makefile->SetPolicy(args[1].c_str(), status))
+  if(!this->Makefile->SetPolicy(args[1], status))
     {
     this->SetError("SET failed to set policy.");
     return false;
@@ -111,7 +111,7 @@ bool cmCMakePolicyCommand::HandleGetMode(std::vector<std::string> const& args)
 
   // Lookup the policy number.
   cmPolicies::PolicyID pid;
-  if(!this->Makefile->GetPolicies()->GetPolicyID(id.c_str(), pid))
+  if(!this->Makefile->GetPolicies()->GetPolicyID(id, pid))
     {
     cmOStringStream e;
     e << "GET given policy \"" << id << "\" which is not known to this "
@@ -167,6 +167,6 @@ cmCMakePolicyCommand::HandleVersionMode(std::vector<std::string> const& args)
     this->SetError("VERSION given too many arguments");
     return false;
     }
-  this->Makefile->SetPolicyVersion(args[1].c_str());
+  this->Makefile->SetPolicyVersion(args[1]);
   return true;
 }

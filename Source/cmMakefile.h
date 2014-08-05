@@ -357,9 +357,9 @@ public:
      * Set, Push, Pop policy values for CMake.
      */
   bool SetPolicy(cmPolicies::PolicyID id, cmPolicies::PolicyStatus status);
-  bool SetPolicy(const char *id, cmPolicies::PolicyStatus status);
+  bool SetPolicy(const std::string& id, cmPolicies::PolicyStatus status);
   cmPolicies::PolicyStatus GetPolicyStatus(cmPolicies::PolicyID id) const;
-  bool SetPolicyVersion(const char *version);
+  bool SetPolicyVersion(const std::string& version);
   void RecordPolicies(cmPolicies::PolicyMap& pm);
   //@}
 

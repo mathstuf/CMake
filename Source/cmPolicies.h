@@ -121,7 +121,7 @@ public:
   };
 
   ///! convert a string policy ID into a number
-  bool GetPolicyID(const char *id, /* out */ cmPolicies::PolicyID &pid);
+  bool GetPolicyID(const std::string& id, /* out */ cmPolicies::PolicyID &pid);
   std::string GetPolicyIDString(cmPolicies::PolicyID pid);
 
   ///! Get the default status for a policy
@@ -137,7 +137,7 @@ public:
                     cmPolicies::PolicyStatus status);
 
   ///! Set a policy level for this listfile
-  bool ApplyPolicyVersion(cmMakefile *mf, const char *version);
+  bool ApplyPolicyVersion(cmMakefile *mf, const std::string& version);
 
   ///! return a warning string for a given policy
   std::string GetPolicyWarning(cmPolicies::PolicyID id);

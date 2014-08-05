@@ -75,7 +75,7 @@ int cmCPackCygwinBinaryGenerator::PackageFiles()
   return this->Superclass::PackageFiles();
 }
 
-const char* cmCPackCygwinBinaryGenerator::GetOutputExtension()
+const std::string& cmCPackCygwinBinaryGenerator::GetOutputExtension()
 {
   this->OutputExtension = "-";
   const char* patchNumber =this->GetOption("CPACK_CYGWIN_PATCH_NUMBER");
@@ -88,5 +88,5 @@ const char* cmCPackCygwinBinaryGenerator::GetOutputExtension()
     }
   this->OutputExtension += patchNumber;
   this->OutputExtension += ".tar.bz2";
-  return this->OutputExtension.c_str();
+  return this->OutputExtension;
 }

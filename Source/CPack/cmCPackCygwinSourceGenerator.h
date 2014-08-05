@@ -29,10 +29,10 @@ public:
   cmCPackCygwinSourceGenerator();
   virtual ~cmCPackCygwinSourceGenerator();
 protected:
-  const char* GetPackagingInstallPrefix();
+  const std::string& GetPackagingInstallPrefix();
   virtual int InitializeInternal();
   int PackageFiles();
-  virtual const char* GetOutputExtension();
+  virtual const std::string& GetOutputExtension();
   std::string InstallPrefix;
   std::string OutputExtension;
 };

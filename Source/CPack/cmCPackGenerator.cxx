@@ -1229,11 +1229,11 @@ int cmCPackGenerator::PackageFiles()
 }
 
 //----------------------------------------------------------------------
-const char* cmCPackGenerator::GetInstallPath()
+const std::string& cmCPackGenerator::GetInstallPath()
 {
   if ( !this->InstallPath.empty() )
     {
-    return this->InstallPath.c_str();
+    return this->InstallPath;
     }
 #if defined(_WIN32) && !defined(__CYGWIN__)
   const char* prgfiles = cmsys::SystemTools::GetEnv("ProgramFiles");
@@ -1268,7 +1268,7 @@ const char* cmCPackGenerator::GetInstallPath()
 #else
   this->InstallPath = "/usr/local/";
 #endif
-  return this->InstallPath.c_str();
+  return this->InstallPath;
 }
 
 //----------------------------------------------------------------------

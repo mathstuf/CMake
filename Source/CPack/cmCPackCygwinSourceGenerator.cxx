@@ -158,14 +158,14 @@ int cmCPackCygwinSourceGenerator::PackageFiles()
   return 1;
 }
 
-const char* cmCPackCygwinSourceGenerator::GetPackagingInstallPrefix()
+const std::string& cmCPackCygwinSourceGenerator::GetPackagingInstallPrefix()
 {
   this->InstallPrefix = "/";
   this->InstallPrefix += this->GetOption("CPACK_PACKAGE_FILE_NAME");
-  return this->InstallPrefix.c_str();
+  return this->InstallPrefix;
 }
 
-const char* cmCPackCygwinSourceGenerator::GetOutputExtension()
+const std::string& cmCPackCygwinSourceGenerator::GetOutputExtension()
 {
   this->OutputExtension = "-";
   const char* patch = this->GetOption("CPACK_CYGWIN_PATCH_NUMBER");
@@ -177,6 +177,5 @@ const char* cmCPackCygwinSourceGenerator::GetOutputExtension()
     }
   this->OutputExtension += patch;
   this->OutputExtension += "-src.tar.bz2";
-  return this->OutputExtension.c_str();
+  return this->OutputExtension;
 }
-

@@ -31,7 +31,7 @@ public:
 protected:
   virtual int InitializeInternal();
   int PackageFiles();
-  virtual const char* GetOutputExtension();
+  virtual const std::string& GetOutputExtension();
   std::string OutputExtension;
 };
 

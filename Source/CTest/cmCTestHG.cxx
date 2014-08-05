@@ -185,7 +185,7 @@ private:
   virtual bool ProcessChunk(const char* data, int length)
     {
     this->OutputLogger::ProcessChunk(data, length);
-    this->ParseChunk(data, length);
+    this->ParseChunk(std::string(data, length));
     return true;
     }
 

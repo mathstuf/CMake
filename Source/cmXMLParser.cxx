@@ -34,21 +34,16 @@ cmXMLParser::~cmXMLParser()
 }
 
 //----------------------------------------------------------------------------
-int cmXMLParser::Parse(const char* string)
+int cmXMLParser::Parse(const std::string& string)
 {
   return (int)this->InitializeParser() &&
-    this->ParseChunk(string, strlen(string)) &&
+    this->ParseChunk(string) &&
     this->CleanupParser();
 }
 
-int cmXMLParser::ParseFile(const char* file)
+int cmXMLParser::ParseFile(const std::string& file)
 {
-  if ( !file )
-    {
-    return 0;
-    }
-
-  cmsys::ifstream ifs(file);
+  cmsys::ifstream ifs(file.c_str());
   if ( !ifs )
     {
     return 0;
@@ -56,7 +51,7 @@ int cmXMLParser::ParseFile(const char* file)
 
   cmOStringStream str;
   str << ifs.rdbuf();
-  return this->Parse(str.str().c_str());
+  return this->Parse(str.str());
 }
 
 //----------------------------------------------------------------------------
@@ -82,8 +77,7 @@ int cmXMLParser::InitializeParser()
 }
 
 //----------------------------------------------------------------------------
-int cmXMLParser::ParseChunk(const char* inputString,
-                            std::string::size_type length)
+int cmXMLParser::ParseChunk(const std::string& inputString)
 {
   if ( !this->Parser )
     {
@@ -92,7 +86,7 @@ int cmXMLParser::ParseChunk(const char* inputString,
     return 0;
     }
   int res;
-  res = this->ParseBuffer(inputString, length);
+  res = this->ParseBuffer(inputString);
   if ( res == 0 )
     {
     this->ParseError = 1;
@@ -128,22 +122,16 @@ int cmXMLParser::CleanupParser()
 }
 
 //----------------------------------------------------------------------------
-int cmXMLParser::ParseBuffer(const char* buffer, std::string::size_type count)
+int cmXMLParser::ParseBuffer(const std::string& buffer)
 {
   // Pass the buffer to the expat XML parser.
-  if(!XML_Parse(static_cast<XML_Parser>(this->Parser), buffer,
-                static_cast<int>(count), 0))
+  if(!XML_Parse(static_cast<XML_Parser>(this->Parser), buffer.c_str(),
+                static_cast<int>(buffer.size()), 0))
     {
     this->ReportXmlParseError();
     return 0;
     }
   return 1;
-}
-
-//----------------------------------------------------------------------------
-int cmXMLParser::ParseBuffer(const char* buffer)
-{
-  return this->ParseBuffer(buffer, static_cast<int>(strlen(buffer)));
 }
 
 //----------------------------------------------------------------------------

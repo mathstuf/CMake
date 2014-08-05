@@ -33,10 +33,10 @@ public:
   virtual ~cmXMLParser();
 
   //! Parse given XML string
-  virtual int Parse(const char* string);
+  virtual int Parse(const std::string& string);
 
   //! Parse given XML file
-  virtual int ParseFile(const char* file);
+  virtual int ParseFile(const std::string& file);
 
   /**
    * When parsing fragments of XML or streaming XML, use the following
@@ -47,8 +47,7 @@ public:
    * them.
    */
   virtual int InitializeParser();
-  virtual int ParseChunk(const char* inputString,
-                         std::string::size_type length);
+  virtual int ParseChunk(const std::string& inputString);
   virtual int CleanupParser();
   typedef void (*ReportFunction)(int, const char*, void*);
   void SetErrorCallback(ReportFunction f, void* d)
@@ -101,11 +100,7 @@ protected:
   static int IsSpace(char c);
 
   //! Send the given buffer to the XML parser.
-  virtual int ParseBuffer(const char* buffer,
-                          std::string::size_type length);
-
-  //! Send the given c-style string to the XML parser.
-  int ParseBuffer(const char* buffer);
+  int ParseBuffer(const std::string& buffer);
 
   /** Helps subclasses search for attributes on elements.  */
   static const char* FindAttribute(const char** atts, const char* attribute);

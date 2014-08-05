@@ -1098,7 +1098,7 @@ int cmcmd::ExecuteLinkScript(std::vector<std::string>& args)
 int cmcmd::WindowsCEEnvironment(const char* version, const std::string& name)
 {
 #if defined(CMAKE_HAVE_VS_GENERATORS)
-  cmVisualStudioWCEPlatformParser parser(name.c_str());
+  cmVisualStudioWCEPlatformParser parser(name);
   parser.ParseVersion(version);
   if (parser.Found())
     {

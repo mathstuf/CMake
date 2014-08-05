@@ -172,7 +172,7 @@ cmGlobalGenerator* cmGlobalXCodeGenerator::Factory
   }
   if(!versionFile.empty() && cmSystemTools::FileExists(versionFile))
     {
-    parser.ParseFile(versionFile.c_str());
+    parser.ParseFile(versionFile);
     }
   else if (cmSystemTools::FileExists(
              "/Applications/Xcode.app/Contents/version.plist"))

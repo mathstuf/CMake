@@ -37,7 +37,7 @@ int cmVisualStudioWCEPlatformParser::ParseVersion(const char* version)
   const std::string configFilename =
     this->VcInstallDir + "vcpackages/WCE.VCPlatform.config";
 
-  return this->ParseFile(configFilename.c_str());
+  return this->ParseFile(configFilename);
 }
 
 std::string cmVisualStudioWCEPlatformParser::GetOSVersion() const

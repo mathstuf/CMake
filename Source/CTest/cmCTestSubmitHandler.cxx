@@ -638,7 +638,7 @@ void cmCTestSubmitHandler
   if(output.find("<cdash") != output.npos)
     {
     ResponseParser parser;
-    parser.Parse(output.c_str());
+    parser.Parse(output);
 
     if(parser.Status != ResponseParser::STATUS_OK)
       {

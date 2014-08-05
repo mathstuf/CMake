@@ -164,6 +164,6 @@ cmParseCoberturaCoverage::cmParseCoberturaCoverage(
 bool cmParseCoberturaCoverage::ReadCoverageXML(const std::string& xmlFile)
 {
   cmParseCoberturaCoverage::XMLParser parser(this->CTest, this->Coverage);
-  parser.ParseFile(xmlFile.c_str());
+  parser.ParseFile(xmlFile);
   return true;
 }

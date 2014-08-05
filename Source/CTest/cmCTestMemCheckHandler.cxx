@@ -1134,7 +1134,7 @@ bool cmCTestMemCheckHandler::ProcessMemCheckBoundsCheckerOutput(
         {
         // skip this because BC gets it wrong and we can't parse it
         }
-      else if(!parser.ParseChunk(theLine.c_str(), theLine.size()))
+      else if(!parser.ParseChunk(theLine))
         {
         cmCTestLog(this->CTest, ERROR_MESSAGE,
                    "Error in ParseChunk: " << theLine

@@ -165,6 +165,6 @@ bool cmParseJacocoCoverage::ReadJacocoXML(const std::string& file)
 {
   cmParseJacocoCoverage::XMLParser
     parser(this->CTest, this->Coverage);
-  parser.ParseFile(file.c_str());
+  parser.ParseFile(file);
   return true;
 }

@@ -71,7 +71,7 @@ bool cmExportInstallFileGenerator::GenerateMainFile(std::ostream& os)
 
   // Add code to compute the installation prefix relative to the
   // import file location.
-  const char* installDest = this->IEGen->GetDestination();
+  const std::string& installDest = this->IEGen->GetDestination();
   if(!cmSystemTools::FileIsFullPath(installDest))
     {
     std::string installPrefix =
@@ -503,7 +503,7 @@ void
 cmExportInstallFileGenerator
 ::ComplainAboutImportPrefix(cmInstallTargetGenerator* itgen)
 {
-  const char* installDest = this->IEGen->GetDestination();
+  const std::string& installDest = this->IEGen->GetDestination();
   cmOStringStream e;
   e << "install(EXPORT \""
     << this->IEGen->GetExportSet()->GetName()

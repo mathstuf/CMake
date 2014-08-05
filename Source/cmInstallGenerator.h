@@ -50,8 +50,8 @@ public:
     Indent const& indent = Indent()
     );
 
-  const char* GetDestination() const
-    { return this->Destination.c_str(); }
+  const std::string& GetDestination() const
+    { return this->Destination; }
 
   /** Get the install destination as it should appear in the
       installation script.  */

@@ -79,15 +79,15 @@ void cmSourceGroup::AddGroupFile(const std::string& name)
 }
 
 //----------------------------------------------------------------------------
-const char* cmSourceGroup::GetName() const
+const std::string& cmSourceGroup::GetName() const
 {
-  return this->Name.c_str();
+  return this->Name;
 }
 
 //----------------------------------------------------------------------------
-const char* cmSourceGroup::GetFullName() const
+const std::string& cmSourceGroup::GetFullName() const
 {
-  return this->FullName.c_str();
+  return this->FullName;
 }
 
 //----------------------------------------------------------------------------

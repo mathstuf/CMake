@@ -2242,9 +2242,9 @@ void cmMakefile::AddSourceGroup(const std::vector<std::string>& name,
     }
 
   // build the whole source group path
-  const char* fullname = sg->GetFullName();
+  std::string fullname = sg->GetFullName();
   cmGlobalGenerator* gg = this->LocalGenerator->GetGlobalGenerator();
-  if(strlen(fullname))
+  if(!fullname.empty())
     {
     std::string guidName = "SG_Filter_";
     guidName += fullname;
@@ -2252,10 +2252,10 @@ void cmMakefile::AddSourceGroup(const std::vector<std::string>& name,
     }
   for(++i; i<=lastElement; ++i)
     {
-    sg->AddChild(cmSourceGroup(name[i], 0, sg->GetFullName()));
+    sg->AddChild(cmSourceGroup(name[i], 0, sg->GetFullName().c_str()));
     sg = sg->LookupChild(name[i]);
     fullname = sg->GetFullName();
-    if(strlen(fullname))
+    if(!fullname.empty())
       {
       std::string guidName = "SG_Filter_";
       guidName += fullname;

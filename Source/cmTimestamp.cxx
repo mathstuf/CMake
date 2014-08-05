@@ -30,7 +30,7 @@ std::string cmTimestamp::CurrentTime(
 }
 
 //----------------------------------------------------------------------------
-std::string cmTimestamp::FileModificationTime(const char* path,
+std::string cmTimestamp::FileModificationTime(const std::string& path,
   const std::string& formatString, bool utcFlag)
 {
   if(!cmsys::SystemTools::FileExists(path))

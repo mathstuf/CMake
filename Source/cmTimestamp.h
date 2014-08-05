@@ -26,7 +26,7 @@ public:
 
   std::string CurrentTime(const std::string& formatString, bool utcFlag);
 
-  std::string FileModificationTime(const char* path,
+  std::string FileModificationTime(const std::string& path,
     const std::string& formatString, bool utcFlag);
 
 private:

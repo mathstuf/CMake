@@ -3514,7 +3514,7 @@ bool cmFileCommand::HandleTimestampCommand(
 
   cmTimestamp timestamp;
   std::string result = timestamp.FileModificationTime(
-    filename.c_str(), formatString, utcFlag);
+    filename, formatString, utcFlag);
   this->Makefile->AddDefinition(outputVariable, result);
 
   return true;

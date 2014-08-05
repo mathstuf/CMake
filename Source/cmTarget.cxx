@@ -2820,7 +2820,7 @@ std::string cmTarget::GetCompilePDBDirectory(const std::string& config) const
 }
 
 //----------------------------------------------------------------------------
-const char* cmTarget::GetLocation(const std::string& config) const
+const std::string& cmTarget::GetLocation(const std::string& config) const
 {
   static std::string location;
   if (this->IsImported())
@@ -2831,17 +2831,17 @@ const char* cmTarget::GetLocation(const std::string& config) const
     {
     location = this->GetFullPath(config, false);
     }
-  return location.c_str();
+  return location;
 }
 
 //----------------------------------------------------------------------------
-const char* cmTarget::GetLocationForBuild() const
+const std::string& cmTarget::GetLocationForBuild() const
 {
   static std::string location;
   if(this->IsImported())
     {
     location = this->ImportedGetFullPath("", false);
-    return location.c_str();
+    return location;
     }
 
   // Now handle the deprecated build-time configuration location.
@@ -2864,7 +2864,7 @@ const char* cmTarget::GetLocationForBuild() const
     }
   location += "/";
   location += this->GetFullName("", false);
-  return location.c_str();
+  return location;
 }
 
 //----------------------------------------------------------------------------
@@ -4504,8 +4504,13 @@ std::string cmTarget::GetInstallNameDirForInstallTree() const
 }
 
 //----------------------------------------------------------------------------
-const char* cmTarget::GetOutputTargetType(bool implib) const
+std::string const& cmTarget::GetOutputTargetType(bool implib) const
 {
+  static const std::string typeARCHIVE = "ARCHIVE";
+  static const std::string typeRUNTIME = "RUNTIME";
+  static const std::string typeLIBRARY = "LIBRARY";
+  static const std::string typeNONE = "";
+
   switch(this->GetType())
     {
     case cmTarget::SHARED_LIBRARY:
@@ -4514,49 +4519,49 @@ const char* cmTarget::GetOutputTargetType(bool implib) const
         if(implib)
           {
           // A DLL import library is treated as an archive target.
-          return "ARCHIVE";
+          return typeARCHIVE;
           }
         else
           {
           // A DLL shared library is treated as a runtime target.
-          return "RUNTIME";
+          return typeRUNTIME;
           }
         }
       else
         {
         // For non-DLL platforms shared libraries are treated as
         // library targets.
-        return "LIBRARY";
+        return typeLIBRARY;
         }
     case cmTarget::STATIC_LIBRARY:
       // Static libraries are always treated as archive targets.
-      return "ARCHIVE";
+      return typeARCHIVE;
     case cmTarget::MODULE_LIBRARY:
       if(implib)
         {
         // Module libraries are always treated as library targets.
-        return "ARCHIVE";
+        return typeARCHIVE;
         }
       else
         {
         // Module import libraries are treated as archive targets.
-        return "LIBRARY";
+        return typeLIBRARY;
         }
     case cmTarget::EXECUTABLE:
       if(implib)
         {
         // Executable import libraries are treated as archive targets.
-        return "ARCHIVE";
+        return typeARCHIVE;
         }
       else
         {
         // Executables are always treated as runtime targets.
-        return "RUNTIME";
+        return typeRUNTIME;
         }
     default:
       break;
     }
-  return "";
+  return typeNONE;
 }
 
 //----------------------------------------------------------------------------

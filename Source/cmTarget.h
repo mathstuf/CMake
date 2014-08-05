@@ -377,12 +377,12 @@ public:
 
   /** Get the location of the target in the build tree for the given
       configuration.  */
-  const char* GetLocation(const std::string& config) const;
+  const std::string& GetLocation(const std::string& config) const;
 
   /** Get the location of the target in the build tree with a placeholder
       referencing the configuration in the native build system.  This
       location is suitable for use as the LOCATION target property.  */
-  const char* GetLocationForBuild() const;
+  const std::string& GetLocationForBuild() const;
 
   /** Get the target major and minor version numbers interpreted from
       the VERSION property.  Version 0 is returned if the property is
@@ -709,7 +709,7 @@ private:
                           const char* default_value);
 
   // Returns ARCHIVE, LIBRARY, or RUNTIME based on platform and type.
-  const char* GetOutputTargetType(bool implib) const;
+  const std::string& GetOutputTargetType(bool implib) const;
 
   // Get the target base name.
   std::string GetOutputName(const std::string& config, bool implib) const;

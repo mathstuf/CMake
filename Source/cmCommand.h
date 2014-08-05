@@ -153,14 +153,14 @@ public:
   /**
    * Return the last error string.
    */
-  const char* GetError()
+  const std::string& GetError()
     {
       if(this->Error.length() == 0)
         {
         this->Error = this->GetName();
         this->Error += " unknown error.";
         }
-      return this->Error.c_str();
+      return this->Error;
     }
 
   /**

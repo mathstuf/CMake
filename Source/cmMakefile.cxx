@@ -2748,9 +2748,9 @@ cmake::MessageType cmMakefile::ExpandVariablesInStringOld(
   parser.SetReplaceAtSyntax(replaceAt);
   parser.SetRemoveEmpty(removeEmpty);
   int res = parser.ParseString(source.c_str(), 0);
-  const char* emsg = parser.GetError();
+  const std::string& emsg = parser.GetError();
   cmake::MessageType mtype = cmake::LOG;
-  if ( res && !emsg[0] )
+  if ( res && emsg.empty() )
     {
     source = parser.GetResult();
     }

@@ -46,7 +46,7 @@ public:
 
   int GetResult() { return this->Result; }
 
-  const char* GetError() { return this->ErrorString.c_str(); }
+  const std::string& GetError() { return this->ErrorString; }
 
 private:
   std::string::size_type InputBufferPos;

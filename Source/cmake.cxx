@@ -103,8 +103,8 @@
 
 #include <sys/stat.h> // struct stat
 
-static bool cmakeCheckStampFile(const char* stampName);
-static bool cmakeCheckStampList(const char* stampName);
+static bool cmakeCheckStampFile(const std::string& stampName);
+static bool cmakeCheckStampList(const std::string& stampName);
 
 void cmWarnUnusedCliWarning(const std::string& variable,
   int, void* ctx, const char*, const cmMakefile*)
@@ -1649,14 +1649,14 @@ int cmake::Run(const std::vector<std::string>& args, bool noconfigure)
 
   // If we are given a stamp list file check if it is really out of date.
   if(!this->CheckStampList.empty() &&
-     cmakeCheckStampList(this->CheckStampList.c_str()))
+     cmakeCheckStampList(this->CheckStampList))
     {
     return 0;
     }
 
   // If we are given a stamp file check if it is really out of date.
   if(!this->CheckStampFile.empty() &&
-     cmakeCheckStampFile(this->CheckStampFile.c_str()))
+     cmakeCheckStampFile(this->CheckStampFile))
     {
     return 0;
     }
@@ -2551,7 +2551,7 @@ int cmake::GetSystemInformation(std::vector<std::string>& args)
 }
 
 //----------------------------------------------------------------------------
-static bool cmakeCheckStampFile(const char* stampName)
+static bool cmakeCheckStampFile(const std::string& stampName)
 {
   // The stamp file does not exist.  Use the stamp dependencies to
   // determine whether it is really out of date.  This works in
@@ -2600,11 +2600,11 @@ static bool cmakeCheckStampFile(const char* stampName)
   cmOStringStream stampTempStream;
   stampTempStream << stampName << ".tmp" << cmSystemTools::RandomSeed();
   std::string stampTempString = stampTempStream.str();
-  const char* stampTemp = stampTempString.c_str();
+  const std::string& stampTemp = stampTempString;
   {
   // TODO: Teach cmGeneratedFileStream to use a random temp file (with
   // multiple tries in unlikely case of conflict) and use that here.
-  cmsys::ofstream stamp(stampTemp);
+  cmsys::ofstream stamp(stampTemp.c_str());
   stamp << "# CMake generation timestamp file for this directory.\n";
   }
   if(cmSystemTools::RenameFile(stampTemp, stampName))
@@ -2619,13 +2619,13 @@ static bool cmakeCheckStampFile(const char* stampName)
   else
     {
     cmSystemTools::RemoveFile(stampTemp);
-    cmSystemTools::Error("Cannot restore timestamp ", stampName);
+    cmSystemTools::Error("Cannot restore timestamp ", stampName.c_str());
     return false;
     }
 }
 
 //----------------------------------------------------------------------------
-static bool cmakeCheckStampList(const char* stampList)
+static bool cmakeCheckStampList(const std::string& stampList)
 {
   // If the stamp list does not exist CMake must rerun to generate it.
   if(!cmSystemTools::FileExists(stampList))
@@ -2634,7 +2634,7 @@ static bool cmakeCheckStampList(const char* stampList)
               << "is missing.\n";
     return false;
     }
-  cmsys::ifstream fin(stampList);
+  cmsys::ifstream fin(stampList.c_str());
   if(!fin)
     {
     std::cout << "CMake is re-running because generate.stamp.list "
@@ -2646,7 +2646,7 @@ static bool cmakeCheckStampList(const char* stampList)
   std::string stampName;
   while(cmSystemTools::GetLineFromStream(fin, stampName))
     {
-    if(!cmakeCheckStampFile(stampName.c_str()))
+    if(!cmakeCheckStampFile(stampName))
       {
       return false;
       }

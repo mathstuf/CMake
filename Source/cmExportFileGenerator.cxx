@@ -53,9 +53,9 @@ void cmExportFileGenerator::SetExportFile(const std::string& mainFile)
 }
 
 //----------------------------------------------------------------------------
-const char* cmExportFileGenerator::GetMainExportFileName() const
+const std::string& cmExportFileGenerator::GetMainExportFileName() const
 {
-  return this->MainImportFile.c_str();
+  return this->MainImportFile;
 }
 
 //----------------------------------------------------------------------------

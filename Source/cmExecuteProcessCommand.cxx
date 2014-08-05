@@ -196,7 +196,7 @@ bool cmExecuteProcessCommand
       }
     }
 
-  if ( !this->Makefile->CanIWriteThisFile(output_file.c_str()) )
+  if ( !this->Makefile->CanIWriteThisFile(output_file) )
     {
     std::string e = "attempted to output into a file: " + output_file
       + " into a source directory.";

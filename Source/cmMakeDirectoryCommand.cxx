@@ -20,7 +20,7 @@ bool cmMakeDirectoryCommand
     this->SetError("called with incorrect number of arguments");
     return false;
     }
-    if ( !this->Makefile->CanIWriteThisFile(args[0].c_str()) )
+    if ( !this->Makefile->CanIWriteThisFile(args[0]) )
       {
       std::string e = "attempted to create a directory: " + args[0]
         + " into a source directory.";

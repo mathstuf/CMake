@@ -2268,7 +2268,7 @@ void cmMakefile::AddSourceGroup(const std::vector<std::string>& name,
 
 #endif
 
-void cmMakefile::AddExtraDirectory(const char* dir)
+void cmMakefile::AddExtraDirectory(const std::string& dir)
 {
   this->AuxSourceDirectories.push_back(dir);
 }
@@ -2421,7 +2421,7 @@ const char* cmMakefile::GetSONameFlag(const std::string& language) const
   return GetDefinition(name);
 }
 
-bool cmMakefile::CanIWriteThisFile(const char* fileName) const
+bool cmMakefile::CanIWriteThisFile(const std::string& fileName) const
 {
   if ( !this->IsOn("CMAKE_DISABLE_SOURCE_CHANGES") )
     {
@@ -3495,7 +3495,7 @@ void cmMakefile::SetHomeOutputDirectory(const std::string& lib)
     }
 }
 
-void cmMakefile::SetScriptModeFile(const char* scriptfile)
+void cmMakefile::SetScriptModeFile(const std::string& scriptfile)
 {
   this->AddDefinition("CMAKE_SCRIPT_MODE_FILE", scriptfile);
 }
@@ -3785,7 +3785,7 @@ void cmMakefile::DisplayStatus(const char* message, float s) const
   cm->UpdateProgress(message, s);
 }
 
-std::string cmMakefile::GetModulesFile(const char* filename) const
+std::string cmMakefile::GetModulesFile(const std::string& filename) const
 {
   std::string result;
 

@@ -200,7 +200,7 @@ bool cmFileCommand::HandleWriteCommand(std::vector<std::string> const& args,
     {
     message += *i;
     }
-  if ( !this->Makefile->CanIWriteThisFile(fileName.c_str()) )
+  if ( !this->Makefile->CanIWriteThisFile(fileName) )
     {
     std::string e
       = "attempted to write a file: " + fileName +
@@ -949,7 +949,7 @@ bool cmFileCommand::HandleMakeDirectoryCommand(
       expr += "/" + *i;
       cdir = &expr;
       }
-    if ( !this->Makefile->CanIWriteThisFile(cdir->c_str()) )
+    if ( !this->Makefile->CanIWriteThisFile(*cdir) )
       {
       std::string e = "attempted to create a directory: " + *cdir
         + " into a source directory.";

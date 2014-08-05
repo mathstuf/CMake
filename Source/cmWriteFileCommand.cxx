@@ -43,7 +43,7 @@ bool cmWriteFileCommand
       }
     }
 
-  if ( !this->Makefile->CanIWriteThisFile(fileName.c_str()) )
+  if ( !this->Makefile->CanIWriteThisFile(fileName) )
     {
     std::string e = "attempted to write a file: " + fileName
       + " into a source directory.";

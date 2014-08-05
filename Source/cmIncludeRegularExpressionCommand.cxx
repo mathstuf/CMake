@@ -20,7 +20,7 @@ bool cmIncludeRegularExpressionCommand
     this->SetError("called with incorrect number of arguments");
     return false;
     }
-  this->Makefile->SetIncludeRegularExpression(args[0].c_str());
+  this->Makefile->SetIncludeRegularExpression(args[0]);
 
   if(args.size() > 1)
     {

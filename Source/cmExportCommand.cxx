@@ -101,7 +101,7 @@ bool cmExportCommand
   // Get the file to write.
   if(cmSystemTools::FileIsFullPath(fname))
     {
-    if(!this->Makefile->CanIWriteThisFile(fname.c_str()))
+    if(!this->Makefile->CanIWriteThisFile(fname))
       {
       cmOStringStream e;
       e << "FILE option given filename \"" << fname

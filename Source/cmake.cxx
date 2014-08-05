@@ -509,7 +509,7 @@ void cmake::ReadListFile(const std::vector<std::string>& args,
       {
       std::string file(cmSystemTools::CollapseFullPath(path));
       cmSystemTools::ConvertToUnixSlashes(file);
-      lg->GetMakefile()->SetScriptModeFile(file.c_str());
+      lg->GetMakefile()->SetScriptModeFile(file);
 
       lg->GetMakefile()->SetArgcArgv(args);
       }

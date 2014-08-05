@@ -82,7 +82,7 @@ bool cmIncludeCommand
     // Not a path. Maybe module.
     std::string module = fname;
     module += ".cmake";
-    std::string mfile = this->Makefile->GetModulesFile(module.c_str());
+    std::string mfile = this->Makefile->GetModulesFile(module);
     if ( mfile.size() )
       {
       fname = mfile.c_str();

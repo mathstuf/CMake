@@ -415,7 +415,7 @@ public:
   /**
    * Add an auxiliary directory to the build.
    */
-  void AddExtraDirectory(const char* dir);
+  void AddExtraDirectory(const std::string& dir);
 
 
   /**
@@ -452,7 +452,7 @@ public:
   /**
    * Set CMAKE_SCRIPT_MODE_FILE variable when running a -P script.
    */
-  void SetScriptModeFile(const char* scriptfile);
+  void SetScriptModeFile(const std::string& scriptfile);
 
   /**
    * Set CMAKE_ARGC, CMAKE_ARGV0 ... variables.
@@ -519,7 +519,7 @@ public:
    * Set a regular expression that include files must match
    * in order to be considered as part of the depend information.
    */
-  void SetIncludeRegularExpression(const char* regex)
+  void SetIncludeRegularExpression(const std::string& regex)
     {
       this->IncludeFileRegularExpression = regex;
     }
@@ -667,7 +667,7 @@ public:
   /**
    * Make sure CMake can write this file
    */
-  bool CanIWriteThisFile(const char* fileName) const;
+  bool CanIWriteThisFile(const std::string& fileName) const;
 
 #if defined(CMAKE_BUILD_WITH_CMAKE)
   /**
@@ -849,7 +849,7 @@ public:
   /**
    * Return a location of a file in cmake or custom modules directory
    */
-  std::string GetModulesFile(const char* name) const;
+  std::string GetModulesFile(const std::string& name) const;
 
   ///! Set/Get a property of this directory
   void SetProperty(const std::string& prop, const char *value);

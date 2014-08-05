@@ -57,7 +57,7 @@ bool cmConfigureFileCommand
     this->OutputFile += cmSystemTools::GetFilenameName(inFile);
     }
 
-  if ( !this->Makefile->CanIWriteThisFile(this->OutputFile.c_str()) )
+  if ( !this->Makefile->CanIWriteThisFile(this->OutputFile) )
     {
     std::string e = "attempted to configure a file: " + this->OutputFile
       + " into a source directory.";

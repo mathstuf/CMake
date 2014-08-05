@@ -26,7 +26,7 @@ bool cmAuxSourceDirectoryCommand::InitialPass
 
   std::string sourceListValue;
   std::string templateDirectory = args[0];
-  this->Makefile->AddExtraDirectory(templateDirectory.c_str());
+  this->Makefile->AddExtraDirectory(templateDirectory);
   std::string tdir;
   if(!cmSystemTools::FileIsFullPath(templateDirectory))
     {

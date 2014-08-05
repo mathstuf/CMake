@@ -76,7 +76,7 @@ void cmLBDepend::DependWalk(cmDependInformation* info)
         }
 
       // Add this file and all its dependencies.
-      this->AddDependency(info, includeFile.c_str());
+      this->AddDependency(info, includeFile);
       /// add the cxx file if it exists
       std::string cxxFile = includeFile;
       std::string::size_type pos = cxxFile.rfind('.');
@@ -164,7 +164,7 @@ void cmLBDepend::DependWalk(cmDependInformation* info)
           }
         if (found)
           {
-          this->AddDependency(info, cxxFile.c_str());
+          this->AddDependency(info, cxxFile);
           }
         }
       }
@@ -193,7 +193,7 @@ bool cmOutputRequiredFilesCommand
   md.SetMakefile(this->Makefile);
   md.AddSearchPath(this->Makefile->GetStartDirectory());
   // find the depends for a file
-  const cmDependInformation *info = md.FindDependencies(this->File.c_str());
+  const cmDependInformation *info = md.FindDependencies(this->File);
   if (info)
     {
     // write them out

@@ -98,7 +98,8 @@ void cmMakeDepend::SetMakefile(cmMakefile* makefile)
 }
 
 
-const cmDependInformation* cmMakeDepend::FindDependencies(const char* file)
+const cmDependInformation* cmMakeDepend::FindDependencies(
+                                                      const std::string& file)
 {
   cmDependInformation* info = this->GetDependInformation(file,0);
   this->GenerateDependInformation(info);
@@ -117,13 +118,7 @@ void cmMakeDepend::GenerateDependInformation(cmDependInformation* info)
     // Make sure we don't visit the same file more than once.
     info->DependDone = true;
     }
-  const char* path = info->FullPath.c_str();
-  if(!path)
-    {
-    cmSystemTools::Error(
-      "Attempt to find dependencies for file without path!");
-    return;
-    }
+  const std::string& path = info->FullPath;
 
   bool found = false;
 
@@ -153,7 +148,7 @@ void cmMakeDepend::GenerateDependInformation(cmDependInformation* info)
             cFile.GetDepends().begin(); file != cFile.GetDepends().end();
           ++file)
         {
-        this->AddDependency(info, file->c_str());
+        this->AddDependency(info, *file);
         }
 
       // Found dependency information.  We are done.
@@ -201,7 +196,8 @@ void cmMakeDepend::GenerateDependInformation(cmDependInformation* info)
     // Couldn't find any dependency information.
     if(this->ComplainFileRegularExpression.find(info->IncludeName))
       {
-      cmSystemTools::Error("error cannot find dependencies for ", path);
+      cmSystemTools::Error("error cannot find dependencies for ",
+                           path.c_str());
       }
     else
       {
@@ -248,13 +244,14 @@ void cmMakeDepend::DependWalk(cmDependInformation* info)
         }
 
       // Add this file and all its dependencies.
-      this->AddDependency(info, includeFile.c_str());
+      this->AddDependency(info, includeFile);
       }
     }
 }
 
 
-void cmMakeDepend::AddDependency(cmDependInformation* info, const char* file)
+void cmMakeDepend::AddDependency(cmDependInformation* info,
+                                 const std::string& file)
 {
   cmDependInformation* dependInfo =
     this->GetDependInformation(file, info->PathOnly.c_str());
@@ -262,8 +259,9 @@ void cmMakeDepend::AddDependency(cmDependInformation* info, const char* file)
   info->AddDependencies(dependInfo);
 }
 
-cmDependInformation* cmMakeDepend::GetDependInformation(const char* file,
-                                                        const char *extraPath)
+cmDependInformation* cmMakeDepend::GetDependInformation(
+                                                      const std::string& file,
+                                                      const char *extraPath)
 {
   // Get the full path for the file so that lookup is unambiguous.
   std::string fullPath = this->FullPath(file, extraPath);
@@ -290,7 +288,8 @@ cmDependInformation* cmMakeDepend::GetDependInformation(const char* file,
 
 
 // find the full path to fname by searching the this->IncludeDirectories array
-std::string cmMakeDepend::FullPath(const char* fname, const char *extraPath)
+std::string cmMakeDepend::FullPath(const std::string& fname,
+                                   const char *extraPath)
 {
   DirectoryToFileToPathMapType::iterator m;
   if(extraPath)

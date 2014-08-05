@@ -100,7 +100,7 @@ public:
    * Generate dependencies for the file given.  Returns a pointer to
    * the cmDependInformation object for the file.
    */
-  const cmDependInformation* FindDependencies(const char* file);
+  const cmDependInformation* FindDependencies(const std::string& file);
 
 protected:
   /**
@@ -111,7 +111,8 @@ protected:
   /**
    * Add a dependency.  Possibly walk it for more dependencies.
    */
-  virtual void AddDependency(cmDependInformation* info, const char* file);
+  virtual void AddDependency(cmDependInformation* info,
+                             const std::string& file);
 
   /**
    * Fill in the given object with dependency information.  If the
@@ -123,7 +124,7 @@ protected:
    * Get an instance of cmDependInformation corresponding to the given file
    * name.
    */
-  cmDependInformation* GetDependInformation(const char* file,
+  cmDependInformation* GetDependInformation(const std::string& file,
                                             const char *extraPath);
 
   /**
@@ -131,7 +132,7 @@ protected:
    * This uses the include directories.
    * TODO: Cache path conversions to reduce FileExists calls.
    */
-  std::string FullPath(const char *filename, const char *extraPath);
+  std::string FullPath(const std::string& filename, const char *extraPath);
 
   cmMakefile* Makefile;
   bool Verbose;

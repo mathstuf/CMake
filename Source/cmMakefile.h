@@ -321,9 +321,9 @@ public:
   /**
    * Get the name of the project for this build.
    */
-  const char* GetProjectName() const
+  const std::string& GetProjectName() const
     {
-      return this->ProjectName.c_str();
+      return this->ProjectName;
     }
 
   /** Get the configurations to be generated.  */
@@ -523,9 +523,9 @@ public:
     {
       this->IncludeFileRegularExpression = regex;
     }
-  const char* GetIncludeRegularExpression() const
+  const std::string& GetIncludeRegularExpression() const
     {
-      return this->IncludeFileRegularExpression.c_str();
+      return this->IncludeFileRegularExpression;
     }
 
   /**
@@ -536,9 +536,9 @@ public:
     {
       this->ComplainFileRegularExpression = regex;
     }
-  const char* GetComplainRegularExpression() const
+  const std::string& GetComplainRegularExpression() const
     {
-      return this->ComplainFileRegularExpression.c_str();
+      return this->ComplainFileRegularExpression;
     }
 
   /**
@@ -661,8 +661,8 @@ public:
   /**
    * Get a list of preprocessor define flags.
    */
-  const char* GetDefineFlags() const
-    {return this->DefineFlags.c_str();}
+  const std::string& GetDefineFlags() const
+    {return this->DefineFlags;}
 
   /**
    * Make sure CMake can write this file

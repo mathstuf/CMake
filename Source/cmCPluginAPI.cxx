@@ -113,7 +113,7 @@ void CCONV cmAddCacheDefinition(void *arg, const char* name,
 const char* CCONV cmGetProjectName(void *arg)
 {
   cmMakefile *mf = static_cast<cmMakefile *>(arg);
-  return mf->GetProjectName();
+  return mf->GetProjectName().c_str();
 }
 
 const char* CCONV cmGetHomeDirectory(void *arg)

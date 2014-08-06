@@ -87,11 +87,11 @@ int cmCPackOSXX11Generator::PackageFiles()
   std::string resourceFileName = this->GetOption("CPACK_PACKAGE_FILE_NAME");
   resourceFileName += ".rsrc";
 
-  const char* dir = resourcesDirectory.c_str();
-  const char* appdir = appDirectory.c_str();
-  const char* scrDir = scriptDirectory.c_str();
-  const char* contDir = contentsDirectory.c_str();
-  const char* rsrcFile = resourceFileName.c_str();
+  const std::string& dir = resourcesDirectory;
+  const std::string& appdir = appDirectory;
+  const std::string& scrDir = scriptDirectory;
+  const std::string& contDir = contentsDirectory;
+  const std::string& rsrcFile = resourceFileName;
   const char* iconFile = this->GetOption("CPACK_PACKAGE_ICON");
   if ( iconFile )
     {
@@ -126,7 +126,7 @@ int cmCPackOSXX11Generator::PackageFiles()
     !this->CopyResourcePlistFile("OSXX11.main.scpt", scrDir,
       "main.scpt", true ) ||
     !this->CopyResourcePlistFile("OSXScriptLauncher.rsrc", dir,
-      rsrcFile, true) ||
+      rsrcFile.c_str(), true) ||
     !this->CopyResourcePlistFile("OSXScriptLauncher", appdir,
       this->GetOption("CPACK_PACKAGE_FILE_NAME"), true)
   )

@@ -394,7 +394,7 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
       int retval = 0;
       for (std::string::size_type cc = 2; cc < args.size(); cc ++)
         {
-        const char *filename = args[cc].c_str();
+        const std::string& filename = args[cc];
         // Cannot compute md5sum of a directory
         if(cmSystemTools::FileIsDirectory(filename))
           {
@@ -537,7 +537,7 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
     // supporting them.
     else if (args[1] == "create_symlink" && args.size() == 4)
       {
-      const char* destinationFileName = args[3].c_str();
+      const std::string& destinationFileName = args[3];
       if((cmSystemTools::FileExists(destinationFileName) ||
           cmSystemTools::FileIsSymlink(destinationFileName)) &&
          !cmSystemTools::RemoveFile(destinationFileName))

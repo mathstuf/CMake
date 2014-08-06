@@ -21,15 +21,15 @@ bool cmUnsetCommand::InitialPass(std::vector<std::string> const& args,
     return false;
     }
 
-  const char* variable = args[0].c_str();
+  const std::string& variable = args[0];
 
   // unset(ENV{VAR})
-  if (cmHasLiteralPrefix(variable, "ENV{") && strlen(variable) > 5)
+  if (cmHasLiteralPrefix(variable, "ENV{") && variable.size() > 5)
     {
     // what is the variable name
-    char *envVarName = new char [strlen(variable)];
-    strncpy(envVarName,variable+4,strlen(variable)-5);
-    envVarName[strlen(variable)-5] = '\0';
+    char *envVarName = new char [variable.size()];
+    strncpy(envVarName,variable.c_str()+4,variable.size()-5);
+    envVarName[variable.size()-5] = '\0';
 
 #ifdef CMAKE_BUILD_WITH_CMAKE
     cmSystemTools::UnsetEnv(envVarName);

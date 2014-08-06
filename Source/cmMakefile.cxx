@@ -1157,7 +1157,7 @@ cmMakefile::AddCustomCommandOldStyle(const std::string& target,
       oi != outputs.end(); ++oi)
     {
     // Get the name of this output.
-    const char* output = oi->c_str();
+    const std::string& output = *oi;
     cmSourceFile* sf;
 
     // Choose whether to use a main dependency.
@@ -1435,7 +1435,7 @@ bool cmMakefile::ParseDefineFlag(std::string const& def, bool remove)
     }
 
   // Get the definition part after the flag.
-  const char* define = def.c_str() + 2;
+  const std::string define = def.substr(2);
 
   if(remove)
     {

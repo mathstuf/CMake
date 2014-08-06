@@ -215,7 +215,7 @@ void cmScriptGenerator::GenerateScriptActionsPerConfig(std::ostream& os,
           this->ConfigurationTypes->begin();
         i != this->ConfigurationTypes->end(); ++i)
       {
-      const char* config = i->c_str();
+      const std::string& config = *i;
       if(this->GeneratesForConfig(config))
         {
         // Generate a per-configuration block.

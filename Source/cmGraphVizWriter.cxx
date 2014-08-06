@@ -330,7 +330,7 @@ void cmGraphVizWriter::WriteConnections(const std::string& targetName,
        llit != ll->end();
        ++ llit )
     {
-    const char* libName = llit->first.c_str();
+    const std::string& libName = llit->first;
     std::map<std::string, std::string>::const_iterator libNameIt =
                                           this->TargetNamesNodes.find(libName);
 
@@ -490,7 +490,7 @@ int cmGraphVizWriter::CollectAllTargets()
           tit != targets->end();
           ++ tit )
       {
-      const char* realTargetName = tit->first.c_str();
+      const std::string& realTargetName = tit->first;
       if(this->IgnoreThisTarget(realTargetName))
         {
         // Skip ignored targets
@@ -521,7 +521,7 @@ int cmGraphVizWriter::CollectAllExternalLibs(int cnt)
           tit != targets->end();
           ++ tit )
       {
-      const char* realTargetName = tit->first.c_str();
+      const std::string& realTargetName = tit->first;
       if (this->IgnoreThisTarget(realTargetName))
         {
         // Skip ignored targets
@@ -533,7 +533,7 @@ int cmGraphVizWriter::CollectAllExternalLibs(int cnt)
            llit != ll->end();
            ++ llit )
         {
-        const char* libName = llit->first.c_str();
+        const std::string& libName = llit->first;
         if (this->IgnoreThisTarget(libName))
           {
           // Skip ignored targets

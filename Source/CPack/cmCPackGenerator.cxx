@@ -841,7 +841,7 @@ int cmCPackGenerator::InstallProjectViaInstallCMakeProjects(
           }
         // Remember the list of files before installation
         // of the current component (if we are in component install)
-        const char* InstallPrefix = tempInstallDirectory.c_str();
+        const std::string& InstallPrefix = tempInstallDirectory;
         std::vector<std::string> filesBefore;
         std::string findExpr(InstallPrefix);
         if (componentInstall)
@@ -1313,7 +1313,7 @@ int cmCPackGenerator::CleanTemporaryDirectory()
 {
   std::string tempInstallDirectoryWithPostfix
     = this->GetOption("CPACK_TEMPORARY_INSTALL_DIRECTORY");
-  const char* tempInstallDirectory = tempInstallDirectoryWithPostfix.c_str();
+  const std::string& tempInstallDirectory = tempInstallDirectoryWithPostfix;
   if(cmsys::SystemTools::FileExists(tempInstallDirectory))
     {
     cmCPackLogger(cmCPackLog::LOG_OUTPUT,

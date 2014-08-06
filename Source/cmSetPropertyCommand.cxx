@@ -160,7 +160,7 @@ bool cmSetPropertyCommand::HandleGlobalMode()
 
   // Set or append the property.
   cmake* cm = this->Makefile->GetCMakeInstance();
-  const char* name = this->PropertyName.c_str();
+  const std::string& name = this->PropertyName;
   const char *value = this->PropertyValue.c_str();
   if (this->Remove)
     {
@@ -529,7 +529,7 @@ bool cmSetPropertyCommand::HandleInstall(cmInstalledFile* file)
 
   cmMakefile* mf = this->Makefile;
 
-  const char *value = this->PropertyValue.c_str();
+  const std::string& value = this->PropertyValue;
   if (this->Remove)
     {
     file->RemoveProperty(name);

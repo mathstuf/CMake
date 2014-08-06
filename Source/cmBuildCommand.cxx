@@ -39,7 +39,7 @@ bool cmBuildCommand
     }
 
   // The cmake variable in which to store the result.
-  const char* variable = args[0].c_str();
+  const std::string& variable = args[0];
 
   // Parse remaining arguments.
   const char* configuration = 0;
@@ -124,7 +124,7 @@ bool cmBuildCommand
     return false;
     }
 
-  const char* define = args[0].c_str();
+  const std::string& define = args[0];
   const char* cacheValue
     = this->Makefile->GetDefinition(define);
 

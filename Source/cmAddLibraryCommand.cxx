@@ -273,7 +273,7 @@ bool cmAddLibraryCommand
       return false;
       }
 
-    const char *aliasedName = s->c_str();
+    const std::string& aliasedName = *s;
     if(this->Makefile->IsAlias(aliasedName))
       {
       cmOStringStream e;

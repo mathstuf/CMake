@@ -194,7 +194,7 @@ cmVisualStudio10TargetGenerator(cmTarget* target,
   this->BuildFileStream = 0;
   this->IsMissingFiles = false;
   this->DefaultArtifactDir =
-    this->Makefile->GetStartOutputDirectory() + std::string("/") +
+    this->Makefile->GetStartOutputDirectory() + "/" +
     this->LocalGenerator->GetTargetDirectory(*this->Target);
 }
 
@@ -1781,7 +1781,7 @@ bool cmVisualStudio10TargetGenerator::ComputeClOptions(
     baseFlagVar += "_FLAGS";
     flags = this->
       Target->GetMakefile()->GetRequiredDefinition(baseFlagVar);
-    std::string flagVar = baseFlagVar + std::string("_") +
+    std::string flagVar = baseFlagVar + "_" +
       cmSystemTools::UpperCase(configName);
     flags += " ";
     flags += this->
@@ -1930,11 +1930,11 @@ bool cmVisualStudio10TargetGenerator::ComputeRcOptions(
   Options& rcOptions = *pOptions;
 
   std::string CONFIG = cmSystemTools::UpperCase(configName);
-  std::string rcConfigFlagsVar = std::string("CMAKE_RC_FLAGS_") + CONFIG;
+  std::string rcConfigFlagsVar = "CMAKE_RC_FLAGS_" + CONFIG;
   std::string flags =
       std::string(this->Makefile->GetSafeDefinition("CMAKE_RC_FLAGS")) +
-      std::string(" ") +
-      std::string(this->Makefile->GetSafeDefinition(rcConfigFlagsVar));
+      " " +
+      this->Makefile->GetSafeDefinition(rcConfigFlagsVar);
 
   rcOptions.Parse(flags);
   this->RcOptions[configName] = pOptions.release();
@@ -1996,11 +1996,11 @@ bool cmVisualStudio10TargetGenerator::ComputeMasmOptions(
   Options& masmOptions = *pOptions;
 
   std::string CONFIG = cmSystemTools::UpperCase(configName);
-  std::string configFlagsVar = std::string("CMAKE_ASM_MASM_FLAGS_") + CONFIG;
+  std::string configFlagsVar = "CMAKE_ASM_MASM_FLAGS_" + CONFIG;
   std::string flags =
-      std::string(this->Makefile->GetSafeDefinition("CMAKE_ASM_MASM_FLAGS")) +
-      std::string(" ") +
-      std::string(this->Makefile->GetSafeDefinition(configFlagsVar));
+    this->Makefile->GetSafeDefinition("CMAKE_ASM_MASM_FLAGS");
+  flags += " ";
+  flags += this->Makefile->GetSafeDefinition(configFlagsVar);
 
   masmOptions.Parse(flags);
   this->MasmOptions[configName] = pOptions.release();
@@ -2821,7 +2821,7 @@ void cmVisualStudio10TargetGenerator::WriteMissingFilesWP80()
   // this can cause an overwrite problem if projects aren't organized in
   // folders
   std::string manifestFile = this->Makefile->GetStartOutputDirectory() +
-                             std::string("/WMAppManifest.xml");
+                             "/WMAppManifest.xml";
   std::string artifactDir =
     this->LocalGenerator->GetTargetDirectory(*this->Target);
   this->ConvertToWindowsSlash(artifactDir);

@@ -1090,9 +1090,9 @@ protected:
     // Match rules are case-insensitive on some platforms.
 #if defined(_WIN32) || defined(__APPLE__) || defined(__CYGWIN__)
     std::string lower = cmSystemTools::LowerCase(file);
-    const char* file_to_match = lower.c_str();
+    const std::string& file_to_match = lower;
 #else
-    const char* file_to_match = file.c_str();
+    const std::string& file_to_match = file;
 #endif
 
     // Collect properties from all matching rules.
@@ -2591,7 +2591,7 @@ bool cmFileCommand::HandleCMakePathCommand(std::vector<std::string>
   std::vector<cmsys::String> path = cmSystemTools::SplitString(*i,
                                                              pathSep);
   i++;
-  const char* var =  i->c_str();
+  const std::string& var = *i;
   std::string value;
   for(std::vector<cmsys::String>::iterator j = path.begin();
       j != path.end(); ++j)

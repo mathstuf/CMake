@@ -554,7 +554,7 @@ bool cmConditionEvaluator::HandleLevel2(cmArgumentList &newArgs,
         IsKeyword("MATCHES", *argP1))
         {
         def = this->GetVariableOrString(*arg);
-        const char* rex = argP2->c_str();
+        const std::string& rex = argP2->GetValue();
         this->Makefile.ClearMatches();
         cmsys::RegularExpression regEntry;
         if ( !regEntry.compile(rex) )

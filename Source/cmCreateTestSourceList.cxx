@@ -62,7 +62,7 @@ bool cmCreateTestSourceList
 
   // Name of the source list
 
-  const char* sourceList = i->c_str();
+  const std::string& sourceList = *i;
   ++i;
 
   // Name of the test driver

@@ -25,7 +25,7 @@ bool cmCMakeHostSystemInformationCommand
     return false;
     }
 
-  std::string variable = args[current_index + 1];
+  std::string const& variable = args[current_index + 1];
   current_index += 2;
 
   if(args.size() < (current_index + 2) || args[current_index] != "QUERY")

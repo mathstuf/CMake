@@ -226,7 +226,7 @@ static bool isSubDirectory(const std::string& a, const std::string& b)
 static bool checkInterfaceDirs(const std::string &prepro,
                       cmTarget *target)
 {
-  const char* installDir =
+  const std::string& installDir =
             target->GetMakefile()->GetSafeDefinition("CMAKE_INSTALL_PREFIX");
   const std::string& topSourceDir = target->GetMakefile()->GetHomeDirectory();
   const std::string& topBinaryDir =

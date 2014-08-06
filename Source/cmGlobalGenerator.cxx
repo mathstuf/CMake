@@ -399,7 +399,7 @@ cmGlobalGenerator::EnableLanguage(std::vector<std::string>const& languages,
         }
       else
         {
-        const char* lang = li->c_str();
+        const std::string& lang = *li;
         if(this->LanguagesReady.find(lang) == this->LanguagesReady.end())
           {
           cmOStringStream e;
@@ -520,7 +520,7 @@ cmGlobalGenerator::EnableLanguage(std::vector<std::string>const& languages,
   for(std::vector<std::string>::const_iterator l = languages.begin();
       l != languages.end(); ++l)
     {
-    const char* lang = l->c_str();
+    const std::string& lang = *l;
     needSetLanguageEnabledMaps[lang] = false;
     if(*l == "NONE")
       {
@@ -636,7 +636,7 @@ cmGlobalGenerator::EnableLanguage(std::vector<std::string>const& languages,
   for(std::vector<std::string>::const_iterator l = languages.begin();
       l != languages.end(); ++l)
     {
-    const char* lang = l->c_str();
+    const std::string& lang = *l;
     if(*l == "NONE")
       {
       this->SetLanguageEnabled("NONE", mf);
@@ -659,8 +659,7 @@ cmGlobalGenerator::EnableLanguage(std::vector<std::string>const& languages,
         "No " << compilerName << " could be found.\n"
         ;
       }
-    else if(strcmp(lang, "RC") != 0 &&
-            strcmp(lang, "ASM_MASM") != 0)
+    else if(lang != "RC" && lang != "ASM_MASM")
       {
       if(!cmSystemTools::FileIsFullPath(compilerFile))
         {

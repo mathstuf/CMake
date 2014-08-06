@@ -29,7 +29,7 @@ bool cmUseMangledMesaCommand
     this->SetError("called with incorrect number of arguments");
     return false;
     }
-  const char* inputDir = args[0].c_str();
+  const std::string& inputDir = args[0];
   std::string glh = inputDir;
   glh += "/";
   glh += "gl.h";
@@ -41,12 +41,12 @@ bool cmUseMangledMesaCommand
     this->SetError(e);
     return false;
     }
-  const char* destDir = args[1].c_str();
+  const std::string& destDir = args[1];
   std::vector<std::string> files;
   cmSystemTools::Glob(inputDir, "\\.h$", files);
   if(files.size() == 0)
     {
-    cmSystemTools::Error("Could not open Mesa Directory ", inputDir);
+    cmSystemTools::Error("Could not open Mesa Directory ", inputDir.c_str());
     return false;
     }
   cmSystemTools::MakeDirectory(destDir);

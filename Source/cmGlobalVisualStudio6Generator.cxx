@@ -285,7 +285,7 @@ void cmGlobalVisualStudio6Generator::WriteProject(std::ostream& fout,
   for(VSDependSet::const_iterator di = depends.begin();
       di != depends.end(); ++di)
     {
-    const char* name = di->c_str();
+    const std::string& name = *di;
     fout << "Begin Project Dependency\n";
     fout << "Project_Dep_Name " << GetVS6TargetName(name) << "\n";
     fout << "End Project Dependency\n";
@@ -295,7 +295,7 @@ void cmGlobalVisualStudio6Generator::WriteProject(std::ostream& fout,
   UtilityDependsMap::iterator ui = this->UtilityDepends.find(&target);
   if(ui != this->UtilityDepends.end())
     {
-    const char* uname = ui->second.c_str();
+    const std::string& uname = ui->second;
     fout << "Project: \"" << uname << "\"="
          << dir << "\\" << uname << ".dsp - Package Owner=<4>\n\n";
     fout <<

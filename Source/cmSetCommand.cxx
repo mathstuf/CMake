@@ -22,13 +22,13 @@ bool cmSetCommand
     }
 
   // watch for ENV signatures
-  const char* variable = args[0].c_str(); // VAR is always first
-  if (cmHasLiteralPrefix(variable, "ENV{") && strlen(variable) > 5)
+  const std::string& variable = args[0]; // VAR is always first
+  if (cmHasLiteralPrefix(variable, "ENV{") && variable.size() > 5)
     {
     // what is the variable name
-    char *varName = new char [strlen(variable)];
-    strncpy(varName,variable+4,strlen(variable)-5);
-    varName[strlen(variable)-5] = '\0';
+    char *varName = new char [variable.size()];
+    strncpy(varName,variable.c_str()+4,variable.size()-5);
+    varName[variable.size()-5] = '\0';
     std::string putEnvArg = varName;
     putEnvArg += "=";
 

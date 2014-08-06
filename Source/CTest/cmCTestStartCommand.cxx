@@ -32,7 +32,7 @@ bool cmCTestStartCommand
     }
 
   size_t cnt = 0;
-  const char* smodel = args[cnt].c_str();
+  const std::string& smodel = args[cnt];
   const char* src_dir = 0;
   const char* bld_dir = 0;
 

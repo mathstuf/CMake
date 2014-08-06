@@ -564,7 +564,7 @@ void cmLocalGenerator::GenerateTargetManifest()
     for(std::vector<std::string>::iterator ci = configNames.begin();
         ci != configNames.end(); ++ci)
       {
-      const char* config = ci->c_str();
+      const std::string& config = *ci;
       target.GenerateTargetManifest(config);
       }
     }
@@ -1073,7 +1073,7 @@ cmLocalGenerator::ExpandRuleVariable(std::string const& variable,
     for(std::vector<std::string>::iterator i = enabledLanguages.begin();
         i != enabledLanguages.end(); ++i)
       {
-      const char* lang = i->c_str();
+      const std::string& lang = *i;
       std::string actualReplace = ruleReplaceVars[pos];
       // If this is the compiler then look for the extra variable
       // _COMPILER_ARG1 which must be the first argument to the compiler
@@ -1091,25 +1091,21 @@ cmLocalGenerator::ExpandRuleVariable(std::string const& variable,
         compilerArg1 = this->Makefile->GetDefinition(arg1);
         compilerTarget
               = this->Makefile->GetDefinition(
-                std::string("CMAKE_") + lang + "_COMPILER_TARGET");
+                "CMAKE_" + lang + "_COMPILER_TARGET");
         compilerOptionTarget
               = this->Makefile->GetDefinition(
-                std::string("CMAKE_") + lang +
-                                          "_COMPILE_OPTIONS_TARGET");
+                "CMAKE_" + lang + "_COMPILE_OPTIONS_TARGET");
         compilerExternalToolchain
               = this->Makefile->GetDefinition(
-                std::string("CMAKE_") + lang +
-                                    "_COMPILER_EXTERNAL_TOOLCHAIN");
+                "CMAKE_" + lang + "_COMPILER_EXTERNAL_TOOLCHAIN");
         compilerOptionExternalToolchain
               = this->Makefile->GetDefinition(
-                std::string("CMAKE_") + lang +
-                              "_COMPILE_OPTIONS_EXTERNAL_TOOLCHAIN");
+                "CMAKE_" + lang + "_COMPILE_OPTIONS_EXTERNAL_TOOLCHAIN");
         compilerSysroot
               = this->Makefile->GetDefinition("CMAKE_SYSROOT");
         compilerOptionSysroot
               = this->Makefile->GetDefinition(
-                std::string("CMAKE_") + lang +
-                              "_COMPILE_OPTIONS_SYSROOT");
+                "CMAKE_" + lang + "_COMPILE_OPTIONS_SYSROOT");
         }
       if(actualReplace.find("${LANG}") != actualReplace.npos)
         {
@@ -3287,7 +3283,7 @@ cmLocalGenerator
 {
   // Construct the object file name using the full path to the source
   // file which is its only unique identification.
-  const char* fullPath = source.GetFullPath().c_str();
+  const std::string& fullPath = source.GetFullPath();
 
   // Try referencing the source relative to the source tree.
   std::string relFromSource = this->Convert(fullPath, START);

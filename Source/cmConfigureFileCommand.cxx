@@ -23,7 +23,7 @@ bool cmConfigureFileCommand
     return false;
     }
 
-  const char* inFile = args[0].c_str();
+  const std::string& inFile = args[0];
   if(!cmSystemTools::FileIsFullPath(inFile))
     {
     this->InputFile = this->Makefile->GetCurrentDirectory();
@@ -42,7 +42,7 @@ bool cmConfigureFileCommand
     return false;
     }
 
-  const char* outFile = args[1].c_str();
+  const std::string& outFile = args[1];
   if(!cmSystemTools::FileIsFullPath(outFile))
     {
     this->OutputFile = this->Makefile->GetCurrentOutputDirectory();

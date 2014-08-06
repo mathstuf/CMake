@@ -4062,32 +4062,34 @@ void cmTarget::GetFullNameInternal(const std::string& config,
       configPostfix = 0;
       }
     }
-  const char* prefixVar = this->GetPrefixVariableInternal(implib);
-  const char* suffixVar = this->GetSuffixVariableInternal(implib);
+  const char* cPrefixVar = this->GetPrefixVariableInternal(implib);
+  const char* cSuffixVar = this->GetSuffixVariableInternal(implib);
+  const std::string prefixVar = cPrefixVar ? cPrefixVar : "";
+  const std::string suffixVar = cSuffixVar ? cSuffixVar : "";
 
   // Check for language-specific default prefix and suffix.
   std::string ll = this->GetLinkerLanguage(config);
   if(!ll.empty())
     {
-    if(!targetSuffix && suffixVar && *suffixVar)
+    if(!targetSuffix && !suffixVar.empty())
       {
-      std::string langSuff = suffixVar + std::string("_") + ll;
+      std::string langSuff = suffixVar + "_" + ll;
       targetSuffix = this->Makefile->GetDefinition(langSuff);
       }
-    if(!targetPrefix && prefixVar && *prefixVar)
+    if(!targetPrefix && !prefixVar.empty())
       {
-      std::string langPrefix = prefixVar + std::string("_") + ll;
+      std::string langPrefix = prefixVar + "_" + ll;
       targetPrefix = this->Makefile->GetDefinition(langPrefix);
       }
     }
 
   // if there is no prefix on the target use the cmake definition
-  if(!targetPrefix && prefixVar)
+  if(!targetPrefix && cPrefixVar)
     {
     targetPrefix = this->Makefile->GetSafeDefinition(prefixVar);
     }
   // if there is no suffix on the target use the cmake definition
-  if(!targetSuffix && suffixVar)
+  if(!targetSuffix && cSuffixVar)
     {
     targetSuffix = this->Makefile->GetSafeDefinition(suffixVar);
     }

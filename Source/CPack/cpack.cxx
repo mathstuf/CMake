@@ -354,7 +354,7 @@ int main (int argc, char const* const* argv)
         it != generatorsVector.end();
         ++it )
         {
-        const char* gen = it->c_str();
+        const std::string& gen = *it;
         cmMakefile newMF(*globalMF);
         cmMakefile* mf = &newMF;
         cmCPack_Log(&log, cmCPackLog::LOG_VERBOSE,

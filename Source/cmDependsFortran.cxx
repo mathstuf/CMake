@@ -224,10 +224,10 @@ bool cmDependsFortran::Finalize(std::ostream& makeDepends,
   this->LocateModules();
 
   // Get the directory in which stamp files will be stored.
-  const char* stamp_dir = this->TargetDirectory.c_str();
+  const std::string& stamp_dir = this->TargetDirectory;
 
   // Get the directory in which module files will be created.
-  const char* mod_dir;
+  std::string mod_dir;
   cmMakefile* mf = this->LocalGenerator->GetMakefile();
   if(const char* target_mod_dir =
      mf->GetDefinition("CMAKE_Fortran_TARGET_MODULE_DIR"))
@@ -367,7 +367,7 @@ void cmDependsFortran::LocateModules()
 //----------------------------------------------------------------------------
 void cmDependsFortran::MatchLocalModules()
 {
-  const char* stampDir = this->TargetDirectory.c_str();
+  const std::string& stampDir = this->TargetDirectory;
   std::set<std::string> const& provides = this->Internal->TargetProvides;
   for(std::set<std::string>::const_iterator i = provides.begin();
       i != provides.end(); ++i)
@@ -441,7 +441,7 @@ cmDependsFortran
   typedef cmDependsFortranInternals::TargetRequiresMap TargetRequiresMap;
 
   // Get the source file for this object.
-  const char* src = info.Source.c_str();
+  const std::string& src = info.Source;
 
   // Write the include dependencies to the output stream.
   std::string obj_i =

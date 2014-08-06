@@ -189,7 +189,7 @@ cmGlobalVisualStudio71Generator::WriteProject(std::ostream& fout,
   UtilityDependsMap::iterator ui = this->UtilityDepends.find(&t);
   if(ui != this->UtilityDepends.end())
     {
-    const char* uname = ui->second.c_str();
+    const std::string& uname = ui->second;
     fout << "Project(\"{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}\") = \""
          << uname << "\", \""
          << this->ConvertToSolutionPath(dir) << (dir[0]? "\\":"")
@@ -216,7 +216,7 @@ cmGlobalVisualStudio71Generator
   for(VSDependSet::const_iterator di = depends.begin();
       di != depends.end(); ++di)
     {
-    const char* name = di->c_str();
+    const std::string& name = *di;
     std::string guid = this->GetGUID(name);
     if(guid.size() == 0)
       {

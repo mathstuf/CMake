@@ -270,10 +270,10 @@ void cmMakefileTargetGenerator::WriteCommonCodeRules()
 std::string cmMakefileTargetGenerator::GetFlags(const std::string &l)
 {
   ByLanguageMap::iterator i = this->FlagsByLanguage.find(l);
+  const std::string& lang = l;
   if (i == this->FlagsByLanguage.end())
     {
     std::string flags;
-    const char *lang = l.c_str();
 
     // Add language feature flags.
     this->AddFeatureFlags(flags, lang);
@@ -317,10 +317,10 @@ std::string cmMakefileTargetGenerator::GetFlags(const std::string &l)
 std::string cmMakefileTargetGenerator::GetDefines(const std::string &l)
 {
   ByLanguageMap::iterator i = this->DefinesByLanguage.find(l);
+  const std::string& lang = l;
   if (i == this->DefinesByLanguage.end())
     {
     std::set<std::string> defines;
-    const char *lang = l.c_str();
     // Add the export symbol definition for shared library objects.
     if(const char* exportMacro = this->Target->GetExportMacro())
       {
@@ -1036,7 +1036,7 @@ void cmMakefileTargetGenerator::WriteTargetDependRules()
     << "# Targets to which this target links.\n"
     << "set(CMAKE_TARGET_LINKED_INFO_FILES\n";
   std::set<cmTarget const*> emitted;
-  const char* cfg = this->LocalGenerator->ConfigurationName.c_str();
+  const std::string& cfg = this->LocalGenerator->ConfigurationName;
   if(cmComputeLinkInformation* cli = this->Target->GetLinkInformation(cfg))
     {
     cmComputeLinkInformation::ItemVector const& items = cli->GetItems();
@@ -1277,7 +1277,7 @@ void cmMakefileTargetGenerator
   }
 
   // Write rules to drive building any outputs beyond the first.
-  const char* in = o->c_str();
+  const std::string& in = *o;
   for(++o; o != outputs.end(); ++o)
     {
     bool symbolic = false;
@@ -1584,7 +1584,7 @@ std::string cmMakefileTargetGenerator::GetFrameworkFlags(std::string const& l)
     }
 
   std::string flags;
-  const char* cfg = this->LocalGenerator->ConfigurationName.c_str();
+  const std::string& cfg = this->LocalGenerator->ConfigurationName;
   if(cmComputeLinkInformation* cli = this->Target->GetLinkInformation(cfg))
     {
     std::vector<std::string> const& frameworks = cli->GetFrameworkPaths();
@@ -1615,7 +1615,7 @@ void cmMakefileTargetGenerator
     }
 
   // Loop over all library dependencies.
-  const char* cfg = this->LocalGenerator->ConfigurationName.c_str();
+  const std::string& cfg = this->LocalGenerator->ConfigurationName;
   if(cmComputeLinkInformation* cli = this->Target->GetLinkInformation(cfg))
     {
     std::vector<std::string> const& libDeps = cli->GetDepends();

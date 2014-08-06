@@ -923,7 +923,7 @@ void cmComputeLinkInformation::ComputeItemParserInfo()
     reg_static += this->CreateExtensionRegex(this->StaticLinkExtensions,
                                              LinkStatic);
 #ifdef CM_COMPUTE_LINK_INFO_DEBUG
-  fprintf(stderr, "static regex [%s]\n", reg_static.c_str());
+    fprintf(stderr, "static regex [%s]\n", reg_static.c_str());
 #endif
     this->ExtractStaticLibraryName.compile(reg_static);
     }
@@ -936,7 +936,7 @@ void cmComputeLinkInformation::ComputeItemParserInfo()
       this->CreateExtensionRegex(this->SharedLinkExtensions, LinkShared);
     reg_shared += this->SharedRegexString;
 #ifdef CM_COMPUTE_LINK_INFO_DEBUG
-  fprintf(stderr, "shared regex [%s]\n", reg_shared.c_str());
+    fprintf(stderr, "shared regex [%s]\n", reg_shared.c_str());
 #endif
     this->ExtractSharedLibraryName.compile(reg_shared);
     }

@@ -510,7 +510,7 @@ bool cmCacheManager::SaveCache(const std::string& path)
       {
       /*
         // This should be added in, but is not for now.
-      cmSystemTools::Error("Cache entry \"", (*i).first.c_str(),
+      cmSystemTools::Error("Cache entry \"", i->first.c_str(),
                            "\" is uninitialized");
       */
       }

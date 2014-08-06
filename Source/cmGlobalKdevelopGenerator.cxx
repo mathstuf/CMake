@@ -342,7 +342,7 @@ void cmGlobalKdevelopGenerator
   for (std::vector<std::string>::const_iterator it=lines.begin();
        it!=lines.end(); it++)
     {
-    const char* line=(*it).c_str();
+    const char* line=it->c_str();
     // skip these tags as they are always replaced
     if ((strstr(line, "<projectdirectory>")!=0)
         || (strstr(line, "<projectmanagement>")!=0)

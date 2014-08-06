@@ -393,6 +393,7 @@ void cmLocalGenerator::GenerateInstallRules()
   const char* default_config = config.c_str();
   const char* default_order[] = {"RELEASE", "MINSIZEREL",
                                  "RELWITHDEBINFO", "DEBUG", 0};
+  // FIXME: Can default_config ever actually be NULL here?
   for(const char** c = default_order; *c && !default_config; ++c)
     {
     for(std::vector<std::string>::iterator i = configurationTypes.begin();

@@ -206,6 +206,7 @@ int cmCPackGenerator::InstallProject()
   int res = 1;
   if ( !cmsys::SystemTools::MakeDirectory(bareTempInstallDirectory))
     {
+    // FIXME: Is there any way for tempInstallDirectory to be NULL?
     cmCPackLogger(cmCPackLog::LOG_ERROR,
       "Problem creating temporary directory: "
                   << (tempInstallDirectory ? tempInstallDirectory : "(NULL)")

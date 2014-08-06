@@ -1164,6 +1164,7 @@ void cmSystemTools::ExpandListArgument(const std::string& arg,
         } break;
       default:
         {
+        // TODO: strcspn?
         // Just append this character.
         } break;
       }

@@ -54,6 +54,7 @@ private:
   std::string ConvertPath(std::string const& path, bool forceRelative);
   void ConvertToWindowsSlash(std::string& s);
   void WriteString(const char* line, int indentLevel);
+  void WriteString(const std::string& line, int indentLevel);
   void WriteProjectConfigurations();
   void WriteProjectConfigurationValues();
   void WriteMSToolConfigurationValues(std::string const& config);

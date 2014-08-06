@@ -263,6 +263,16 @@ void cmVisualStudio10TargetGenerator::WriteString(const char* line,
   (*this->BuildFileStream ) << line;
 }
 
+void cmVisualStudio10TargetGenerator::WriteString(const std::string& line,
+                                                  int indentLevel)
+{
+  this->BuildFileStream->fill(' ');
+  this->BuildFileStream->width(indentLevel*2 );
+  // write an empty string to get the fill level indent to print
+  (*this->BuildFileStream ) << "";
+  (*this->BuildFileStream ) << line;
+}
+
 #define VS10_USER_PROPS "$(UserRootDir)\\Microsoft.Cpp.$(Platform).user.props"
 
 void cmVisualStudio10TargetGenerator::Generate()
@@ -319,7 +329,7 @@ void cmVisualStudio10TargetGenerator::Generate()
   project_defaults.append(toolsVer +"\" ");
   project_defaults.append(
           "xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">\n");
-  this->WriteString(project_defaults.c_str(),0);
+  this->WriteString(project_defaults,0);
 
   if(this->NsightTegra)
     {
@@ -666,7 +676,7 @@ void cmVisualStudio10TargetGenerator::WriteProjectConfigurationValues()
         break;
       }
     configType += "</ConfigurationType>\n";
-    this->WriteString(configType.c_str(), 2);
+    this->WriteString(configType, 2);
 
     if(this->MSTools)
       {
@@ -702,7 +712,7 @@ void cmVisualStudio10TargetGenerator
     }
   std::string mfcLine = "<UseOfMfc>";
   mfcLine += useOfMfcValue + "</UseOfMfc>\n";
-  this->WriteString(mfcLine.c_str(), 2);
+  this->WriteString(mfcLine, 2);
 
   if((this->Target->GetType() <= cmTarget::OBJECT_LIBRARY &&
       this->ClOptions[config]->UsingUnicode()) ||
@@ -727,7 +737,7 @@ void cmVisualStudio10TargetGenerator
     std::string pts = "<PlatformToolset>";
     pts += toolset;
     pts += "</PlatformToolset>\n";
-    this->WriteString(pts.c_str(), 2);
+    this->WriteString(pts, 2);
     }
   if(this->Target->GetPropertyAsBool("VS_WINRT_COMPONENT") ||
      this->Target->GetPropertyAsBool("VS_WINRT_EXTENSIONS"))
@@ -747,7 +757,7 @@ void cmVisualStudio10TargetGenerator
   std::string ntv = "<NdkToolchainVersion>";
   ntv += toolset? toolset : "Default";
   ntv += "</NdkToolchainVersion>\n";
-  this->WriteString(ntv.c_str(), 2);
+  this->WriteString(ntv, 2);
   if(const char* api = this->Target->GetProperty("ANDROID_API"))
     {
     this->WriteString("<AndroidTargetAPI>", 2);
@@ -951,7 +961,7 @@ void cmVisualStudio10TargetGenerator::WriteGroups()
   project_defaults.append(toolsVer +"\" ");
   project_defaults.append(
         "xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">\n");
-  this->WriteString(project_defaults.c_str(),0);
+  this->WriteString(project_defaults,0);
 
   for(ToolSourceMap::const_iterator ti = this->Tools.begin();
       ti != this->Tools.end(); ++ti)

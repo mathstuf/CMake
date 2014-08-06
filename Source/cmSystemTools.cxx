@@ -1118,6 +1118,7 @@ void cmSystemTools::ExpandListArgument(const std::string& arg,
     return;
     }
   std::string newArg;
+  newArg.reserve(arg.size());
   const char *last = arg.c_str();
   // Break the string at non-escaped semicolons not nested in [].
   int squareNesting = 0;

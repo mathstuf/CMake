@@ -399,7 +399,7 @@ void cmLocalVisualStudio6Generator
   std::string name = sg->GetName();
   if(name != "")
     {
-    this->WriteDSPBeginGroup(fout, name.c_str(), "");
+    this->WriteDSPBeginGroup(fout, name, "");
     }
 
   // Loop through each source in the source group.
@@ -514,7 +514,7 @@ void cmLocalVisualStudio6Generator
       if (command)
         {
         const char* flags = compileFlags.size() ? compileFlags.c_str(): 0;
-        this->WriteCustomRule(fout, source.c_str(), *command, flags);
+        this->WriteCustomRule(fout, source, *command, flags);
         }
       else if(!compileFlags.empty() || !objectNameDir.empty() ||
               excludedFromBuild || !cdmap.empty())

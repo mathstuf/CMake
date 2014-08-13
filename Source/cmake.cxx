@@ -1740,7 +1740,7 @@ int cmake::Run(const std::vector<std::string>& args, bool noconfigure)
       cmGlobalVisualStudioGenerator* gg =
         static_cast<cmGlobalVisualStudioGenerator*>(this->GlobalGenerator);
       gg->CallVisualStudioMacro(cmGlobalVisualStudioGenerator::MacroStop,
-                                this->VSSolutionFile.c_str());
+                                this->VSSolutionFile);
       }
 #endif
     return ret;

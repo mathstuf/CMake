@@ -315,7 +315,7 @@ cmVisualStudioGeneratorOptions
       if(this->Configuration.size())
         {
         this->TargetGenerator->WritePlatformConfigTag(
-          m->first.c_str(),
+          m->first,
           this->Configuration,
           0,
           0, 0, &fout);

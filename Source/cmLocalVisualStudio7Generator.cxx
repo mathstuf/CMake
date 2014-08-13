@@ -972,7 +972,7 @@ void cmLocalVisualStudio7Generator::WriteConfiguration(std::ostream& fout,
   if(targetBuilds && this->Version >= VS8)
     {
     // Check the filesystem type where the target will be written.
-    if(cmLVS6G_IsFAT(target.GetDirectory(configName).c_str()))
+    if(cmLVS6G_IsFAT(target.GetDirectory(configName)))
       {
       // Add a flag telling the manifest tool to use a workaround
       // for FAT32 file systems, which can cause an empty manifest
@@ -1717,7 +1717,7 @@ bool cmLocalVisualStudio7Generator
   std::string name = sg->GetName();
   if(name != "")
     {
-    this->WriteVCProjBeginGroup(fout, name.c_str(), "");
+    this->WriteVCProjBeginGroup(fout, name, "");
     }
 
   // Loop through each source in the source group.
@@ -1738,7 +1738,7 @@ bool cmLocalVisualStudio7Generator
       fout << "\t\t\t\tRelativePath=\"" << d << "\">\n";
       if(cmCustomCommand const* command = (*sf)->GetCustomCommand())
         {
-        this->WriteCustomRule(fout, source.c_str(), *command, fcinfo);
+        this->WriteCustomRule(fout, source, *command, fcinfo);
         }
       else if(!fcinfo.FileConfigMap.empty())
         {

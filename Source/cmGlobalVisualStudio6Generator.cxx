@@ -225,7 +225,7 @@ void cmGlobalVisualStudio6Generator
       std::string dspname = GetVS6TargetName(target->GetName());
       std::string dir = target->GetMakefile()->GetStartOutputDirectory();
       dir = root->Convert(dir, cmLocalGenerator::START_OUTPUT);
-      this->WriteProject(fout, dspname, dir.c_str(), *target);
+      this->WriteProject(fout, dspname, dir, *target);
       }
     }
 
@@ -271,7 +271,7 @@ void cmGlobalVisualStudio6Generator::OutputDSWFile()
 // the libraries it uses are also done here
 void cmGlobalVisualStudio6Generator::WriteProject(std::ostream& fout,
                                                   const std::string& dspname,
-                                                  const char* dir,
+                                                  const std::string& dir,
                                                   cmTarget const& target)
 {
   fout << "#########################################################"

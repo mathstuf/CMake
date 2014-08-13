@@ -456,7 +456,7 @@ void cmGlobalVisualStudio7Generator::WriteTargetsToSolution(
 
       this->WriteExternalProject(fout,
                                  project,
-                                 location.c_str(),
+                                 location,
                                  target->GetProperty("VS_PROJECT_TYPE"),
                                  target->GetUtilities());
       written = true;
@@ -475,7 +475,7 @@ void cmGlobalVisualStudio7Generator::WriteTargetsToSolution(
           {
           dir = ""; // msbuild cannot handle ".\" prefix
           }
-        this->WriteProject(fout, vcprojName, dir.c_str(),
+        this->WriteProject(fout, vcprojName, dir,
                            *target);
         written = true;
         }
@@ -546,7 +546,7 @@ void cmGlobalVisualStudio7Generator::WriteTargetDepends(
       {
       std::string dir = mf->GetStartDirectory();
       this->WriteProjectDepends(fout, vcprojName,
-                                dir.c_str(), *target);
+                                dir, *target);
       }
     }
 }

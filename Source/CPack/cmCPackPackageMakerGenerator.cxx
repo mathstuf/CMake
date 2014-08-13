@@ -189,8 +189,8 @@ int cmCPackPackageMakerGenerator::PackageFiles()
       }
     std::string packageFile = packageFileDir +
       this->GetPackageName(PostFlightComponent);
-    if (!this->GenerateComponentPackage(packageFile.c_str(),
-                                        packageDir.c_str(),
+    if (!this->GenerateComponentPackage(packageFile,
+                                        packageDir,
                                         PostFlightComponent))
       {
       return 0;
@@ -300,8 +300,8 @@ int cmCPackPackageMakerGenerator::PackageFiles()
       std::string packageDir = toplevel;
       packageDir += '/';
       packageDir += compIt->first;
-      if (!this->GenerateComponentPackage(packageFile.c_str(),
-                                          packageDir.c_str(),
+      if (!this->GenerateComponentPackage(packageFile,
+                                          packageDir,
                                           compIt->second))
         {
         return 0;
@@ -347,14 +347,14 @@ int cmCPackPackageMakerGenerator::PackageFiles()
       {
       pkgCmd << " -v";
       }
-    if (!RunPackageMaker(pkgCmd.str().c_str(), packageDirFileName.c_str()))
+    if (!RunPackageMaker(pkgCmd.str(), packageDirFileName))
       return 0;
     }
   else
     {
     // We have built the package in place. Generate the
     // distribution.dist file to describe it for the installer.
-    WriteDistributionFile(packageDirFileName.c_str());
+    WriteDistributionFile(packageDirFileName);
     }
 
   std::string tmpFile = this->GetOption("CPACK_TOPLEVEL_DIRECTORY");
@@ -632,8 +632,8 @@ bool cmCPackPackageMakerGenerator::CopyResourcePlistFile(
 }
 
 //----------------------------------------------------------------------
-bool cmCPackPackageMakerGenerator::RunPackageMaker(const char *command,
-                                                   const char *packageFile)
+bool cmCPackPackageMakerGenerator::RunPackageMaker(const std::string& command,
+                                              const std::string& packageFile)
 {
   std::string tmpFile = this->GetOption("CPACK_TOPLEVEL_DIRECTORY");
   tmpFile += "/PackageMakerOutput.log";
@@ -701,8 +701,8 @@ cmCPackPackageMakerGenerator::GetPackageName(const cmCPackComponent& component)
 //----------------------------------------------------------------------
 bool
 cmCPackPackageMakerGenerator::
-GenerateComponentPackage(const char *packageFile,
-                         const char *packageDir,
+GenerateComponentPackage(const std::string& packageFile,
+                         const std::string& packageDir,
                          const cmCPackComponent& component)
 {
   cmCPackLogger(cmCPackLog::LOG_OUTPUT,
@@ -744,7 +744,7 @@ GenerateComponentPackage(const char *packageFile,
                     moduleVersionSuffix);
     std::string infoFileName = component.Name;
     infoFileName += "-Info.plist";
-    if (!this->CopyResourcePlistFile("Info.plist", infoFileName))
+    if (!this->CopyResourcePlistFile("Info.plist", infoFileName.c_str()))
       {
       return false;
       }
@@ -778,13 +778,13 @@ GenerateComponentPackage(const char *packageFile,
     }
 
   // Run PackageMaker
-  return RunPackageMaker(pkgCmd.str().c_str(), packageFile);
+  return RunPackageMaker(pkgCmd.str(), packageFile);
 }
 
 //----------------------------------------------------------------------
 void
 cmCPackPackageMakerGenerator::
-WriteDistributionFile(const char* metapackageFile)
+WriteDistributionFile(const std::string& metapackageFile)
 {
   std::string distributionTemplate
     = this->FindTemplate("CPack.distribution.dist.in");

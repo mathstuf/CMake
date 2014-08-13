@@ -58,7 +58,8 @@ protected:
   // Run PackageMaker with the given command line, which will (if
   // successful) produce the given package file. Returns true if
   // PackageMaker succeeds, false otherwise.
-  bool RunPackageMaker(const char *command, const char *packageFile);
+  bool RunPackageMaker(const std::string& command,
+                       const std::string& packageFile);
 
   // Retrieve the name of package file that will be generated for this
   // component. The name is just the file name with extension, and
@@ -69,8 +70,8 @@ protected:
   // component.  All of the files within this component are stored in
   // the directory packageDir. Returns true if successful, false
   // otherwise.
-  bool GenerateComponentPackage(const char *packageFile,
-                                const char *packageDir,
+  bool GenerateComponentPackage(const std::string& packageFile,
+                                const std::string& packageDir,
                                 const cmCPackComponent& component);
 
   // Writes a distribution.dist file, which turns a metapackage into a
@@ -78,7 +79,7 @@ protected:
   // inter-component dependencies. metapackageFile is the name of the
   // metapackage for the distribution. Only valid for a
   // component-based install.
-  void WriteDistributionFile(const char* metapackageFile);
+  void WriteDistributionFile(const std::string& metapackageFile);
 
   // Subroutine of WriteDistributionFile that writes out the
   // dependency attributes for inter-component dependencies.

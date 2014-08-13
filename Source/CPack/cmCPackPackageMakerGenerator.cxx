@@ -719,7 +719,7 @@ GenerateComponentPackage(const std::string& packageFile,
     // X packages, which work on Mac OS X 10.3 and newer.
     std::string descriptionFile = this->GetOption("CPACK_TOPLEVEL_DIRECTORY");
     descriptionFile += '/' + component.Name + "-Description.plist";
-    cmsys::ofstream out(descriptionFile.c_str());
+    cmsys::ofstream out(descriptionFile);
     out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << std::endl
         << "<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\""
         << "\"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">" << std::endl

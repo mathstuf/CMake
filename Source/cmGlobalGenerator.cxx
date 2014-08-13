@@ -161,7 +161,7 @@ void cmGlobalGenerator::ResolveLanguageCompiler(const std::string &lang,
       }
     return;
     }
-  const char* name = mf->GetRequiredDefinition(langComp);
+  const std::string& name = mf->GetRequiredDefinition(langComp);
   std::string path;
   if(!cmSystemTools::FileIsFullPath(name))
     {

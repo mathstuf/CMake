@@ -546,10 +546,10 @@ bool cmCTestSubmitHandler::SubmitUsingHTTP(const std::string& localprefix,
         std::string retryCount = this->GetOption("RetryCount") == NULL ?
           "" : this->GetOption("RetryCount");
 
-        int delay = retryDelay == "" ? atoi(this->CTest->GetCTestConfiguration(
-          "CTestSubmitRetryDelay").c_str()) : atoi(retryDelay.c_str());
-        int count = retryCount == "" ? atoi(this->CTest->GetCTestConfiguration(
-          "CTestSubmitRetryCount").c_str()) : atoi(retryCount.c_str());
+        int delay = atoi(retryDelay == "" ? this->CTest->GetCTestConfiguration(
+          "CTestSubmitRetryDelay").c_str() : retryDelay.c_str());
+        int count = atoi(retryCount == "" ? this->CTest->GetCTestConfiguration(
+          "CTestSubmitRetryCount").c_str() : retryCount.c_str());
 
         for(int i = 0; i < count; i++)
           {

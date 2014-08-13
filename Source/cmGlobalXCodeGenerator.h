@@ -94,11 +94,11 @@ private:
   void CreateGroups(cmLocalGenerator* root,
                     std::vector<cmLocalGenerator*>&
                     generators);
-  std::string XCodeEscapePath(const char* p);
-  std::string RelativeToSource(const char* p);
-  std::string RelativeToBinary(const char* p);
-  std::string ConvertToRelativeForXCode(const char* p);
-  std::string ConvertToRelativeForMake(const char* p);
+  std::string XCodeEscapePath(const std::string& p);
+  std::string RelativeToSource(const std::string& p);
+  std::string RelativeToBinary(const std::string& p);
+  std::string ConvertToRelativeForXCode(const std::string& p);
+  std::string ConvertToRelativeForMake(const std::string& p);
   void CreateCustomCommands(cmXCodeObject* buildPhases,
                             cmXCodeObject* sourceBuildPhase,
                             cmXCodeObject* headerBuildPhase,
@@ -115,7 +115,7 @@ private:
                                const & commands,
                                const char* commandFileName);
 
-  void CreateCustomRulesMakefile(const char* makefileBasename,
+  void CreateCustomRulesMakefile(const std::string& makefileBasename,
                                  cmTarget& target,
                                  std::vector<cmCustomCommand> const & commands,
                                  const std::string& configName,
@@ -138,10 +138,12 @@ private:
   const char* GetTargetFileType(cmTarget& cmtarget);
   const char* GetTargetProductType(cmTarget& cmtarget);
   std::string AddConfigurations(cmXCodeObject* target, cmTarget& cmtarget);
-  void AppendOrAddBuildSetting(cmXCodeObject* settings, const char* attr,
-                               const char* value);
-  void AppendBuildSettingAttribute(cmXCodeObject* target, const char* attr,
-                                   const char* value,
+  void AppendOrAddBuildSetting(cmXCodeObject* settings,
+                               const std::string& attr,
+                               const std::string& value);
+  void AppendBuildSettingAttribute(cmXCodeObject* target,
+                                   const std::string& attr,
+                                   const std::string& value,
                                    const std::string& configName);
   cmXCodeObject* CreateUtilityTarget(cmTarget& target);
   void AddDependAndLinkInformation(cmXCodeObject* target);

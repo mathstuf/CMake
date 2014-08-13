@@ -83,7 +83,7 @@ public:
 
   bool IsEmpty() const { return this->Empty; }
 
-  void Add(const char *newString)
+  void Add(const std::string& newString)
     {
     this->Empty = false;
 
@@ -893,7 +893,7 @@ cmGlobalXCodeGenerator::CreateXCodeFileReferenceFromPath(
                         this->CreateString(fileType));
 
   // Store the file path relative to the top of the source tree.
-  std::string path = this->RelativeToSource(fullpath.c_str());
+  std::string path = this->RelativeToSource(fullpath);
   std::string name = cmSystemTools::GetFilenameName(path);
   const char* sourceTree = (cmSystemTools::FileIsFullPath(path)?
                             "<absolute>" : "SOURCE_ROOT");
@@ -1538,7 +1538,7 @@ cmGlobalXCodeGenerator::AddCommandsToBuildPhase(cmXCodeObject* buildphase,
 
 //----------------------------------------------------------------------------
 void  cmGlobalXCodeGenerator
-::CreateCustomRulesMakefile(const char* makefileBasename,
+::CreateCustomRulesMakefile(const std::string& makefileBasename,
                             cmTarget& target,
                             std::vector<cmCustomCommand>
                             const & commands,
@@ -2107,14 +2107,14 @@ void cmGlobalXCodeGenerator::CreateBuildSettings(cmTarget& target,
       frameworkDir = cmSystemTools::CollapseFullPath(frameworkDir);
       if(emitted.insert(frameworkDir).second)
         {
-        fdirs.Add(this->XCodeEscapePath(frameworkDir.c_str()).c_str());
+        fdirs.Add(this->XCodeEscapePath(frameworkDir));
         }
       }
     else
       {
       std::string incpath =
-        this->XCodeEscapePath(i->c_str());
-      dirs.Add(incpath.c_str());
+        this->XCodeEscapePath(*i);
+      dirs.Add(incpath);
       }
     }
   // Add framework search paths needed for linking.
@@ -2126,7 +2126,7 @@ void cmGlobalXCodeGenerator::CreateBuildSettings(cmTarget& target,
       {
       if(emitted.insert(*fdi).second)
         {
-        fdirs.Add(this->XCodeEscapePath(fdi->c_str()).c_str());
+        fdirs.Add(this->XCodeEscapePath(*fdi));
         }
       }
     }
@@ -2261,7 +2261,7 @@ void cmGlobalXCodeGenerator::CreateBuildSettings(cmTarget& target,
       {
       install_name_dir = "";
       extraLinkOptions += " -install_name ";
-      extraLinkOptions += XCodeEscapePath(install_name.c_str());
+      extraLinkOptions += XCodeEscapePath(install_name);
       }
     }
   buildSettings->AddAttribute("INSTALL_PATH",
@@ -2290,7 +2290,7 @@ void cmGlobalXCodeGenerator::CreateBuildSettings(cmTarget& target,
           {
           search_paths += " ";
           }
-        search_paths += this->XCodeEscapePath(runpath.c_str());
+        search_paths += this->XCodeEscapePath(runpath);
         }
       }
     if(!search_paths.empty())
@@ -2740,8 +2740,8 @@ void cmGlobalXCodeGenerator::AddDependTarget(cmXCodeObject* target,
 
 //----------------------------------------------------------------------------
 void cmGlobalXCodeGenerator::AppendOrAddBuildSetting(cmXCodeObject* settings,
-                                                     const char* attribute,
-                                                     const char* value)
+                                                  const std::string& attribute,
+                                                  const std::string& value)
 {
   if(settings)
     {
@@ -2763,8 +2763,8 @@ void cmGlobalXCodeGenerator::AppendOrAddBuildSetting(cmXCodeObject* settings,
 //----------------------------------------------------------------------------
 void cmGlobalXCodeGenerator
 ::AppendBuildSettingAttribute(cmXCodeObject* target,
-                              const char* attribute,
-                              const char* value,
+                              const std::string& attribute,
+                              const std::string& value,
                               const std::string& configName)
 {
   if(this->XcodeVersion < 21)
@@ -2850,11 +2850,11 @@ void cmGlobalXCodeGenerator
         {
         linkObjs += sep;
         sep = " ";
-        linkObjs += this->XCodeEscapePath(oi->c_str());
+        linkObjs += this->XCodeEscapePath(*oi);
         }
       this->AppendBuildSettingAttribute(
         target, this->GetTargetLinkFlagsVar(*cmtarget),
-        linkObjs.c_str(), configName);
+        linkObjs, configName);
       }
 
     // Skip link information for object libraries.
@@ -2897,14 +2897,14 @@ void cmGlobalXCodeGenerator
           // $(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME) to it:
           linkDirs += " ";
           linkDirs += this->XCodeEscapePath(
-            (*libDir + "/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)").c_str());
+            (*libDir + "/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)"));
           }
         linkDirs += " ";
-        linkDirs += this->XCodeEscapePath(libDir->c_str());
+        linkDirs += this->XCodeEscapePath(*libDir);
         }
       }
     this->AppendBuildSettingAttribute(target, "LIBRARY_SEARCH_PATHS",
-                                      linkDirs.c_str(), configName);
+                                      linkDirs, configName);
     }
 
     // now add the link libraries
@@ -2920,7 +2920,7 @@ void cmGlobalXCodeGenerator
       sep = " ";
       if(li->IsPath)
         {
-        linkLibs += this->XCodeEscapePath(li->Value.c_str());
+        linkLibs += this->XCodeEscapePath(li->Value);
         }
       else if (!li->Target
           || li->Target->GetType() != cmTarget::INTERFACE_LIBRARY)
@@ -2934,7 +2934,7 @@ void cmGlobalXCodeGenerator
       }
     this->AppendBuildSettingAttribute(
       target, this->GetTargetLinkFlagsVar(*cmtarget),
-      linkLibs.c_str(), configName);
+      linkLibs, configName);
     }
     }
 }
@@ -3171,7 +3171,7 @@ void cmGlobalXCodeGenerator
       {
       cmXCodeObject* buildStyle =
         this->CreateObject(cmXCodeObject::PBXBuildStyle);
-      const char* name = this->CurrentConfigurationTypes[i].c_str();
+      const std::string& name = this->CurrentConfigurationTypes[i];
       buildStyle->AddAttribute("name", this->CreateString(name));
       buildStyle->SetComment(name);
       cmXCodeObject* sgroup =
@@ -3276,7 +3276,7 @@ void cmGlobalXCodeGenerator
   cmXCodeObject* buildConfigurations =
     this->CreateObject(cmXCodeObject::OBJECT_LIST);
   std::vector<cmXCodeObject*> configs;
-  const char *defaultConfigName = "Debug";
+  std::string defaultConfigName = "Debug";
   if(this->XcodeVersion == 15)
     {
     cmXCodeObject* configDebug =
@@ -3292,7 +3292,7 @@ void cmGlobalXCodeGenerator
     {
     for(unsigned int i = 0; i < this->CurrentConfigurationTypes.size(); ++i)
       {
-      const char* name = this->CurrentConfigurationTypes[i].c_str();
+      const std::string& name = this->CurrentConfigurationTypes[i];
       if (0 == i)
         {
         defaultConfigName = name;
@@ -3735,7 +3735,8 @@ void cmGlobalXCodeGenerator::GetDocumentation(cmDocumentationEntry& entry)
 }
 
 //----------------------------------------------------------------------------
-std::string cmGlobalXCodeGenerator::ConvertToRelativeForMake(const char* p)
+std::string cmGlobalXCodeGenerator::ConvertToRelativeForMake(
+                                                        const std::string& p)
 {
   if ( !this->CurrentMakefile->IsOn("CMAKE_USE_RELATIVE_PATHS") )
     {
@@ -3751,7 +3752,8 @@ std::string cmGlobalXCodeGenerator::ConvertToRelativeForMake(const char* p)
 }
 
 //----------------------------------------------------------------------------
-std::string cmGlobalXCodeGenerator::ConvertToRelativeForXCode(const char* p)
+std::string cmGlobalXCodeGenerator::ConvertToRelativeForXCode(
+                                                        const std::string& p)
 {
   if ( !this->CurrentMakefile->IsOn("CMAKE_USE_RELATIVE_PATHS") )
     {
@@ -3767,7 +3769,7 @@ std::string cmGlobalXCodeGenerator::ConvertToRelativeForXCode(const char* p)
 }
 
 //----------------------------------------------------------------------------
-std::string cmGlobalXCodeGenerator::RelativeToSource(const char* p)
+std::string cmGlobalXCodeGenerator::RelativeToSource(const std::string& p)
 {
   // We force conversion because Xcode breakpoints do not work unless
   // they are in a file named relative to the source tree.
@@ -3776,14 +3778,14 @@ std::string cmGlobalXCodeGenerator::RelativeToSource(const char* p)
 }
 
 //----------------------------------------------------------------------------
-std::string cmGlobalXCodeGenerator::RelativeToBinary(const char* p)
+std::string cmGlobalXCodeGenerator::RelativeToBinary(const std::string& p)
 {
   return this->CurrentLocalGenerator->
     ConvertToRelativePath(this->ProjectOutputDirectoryComponents, p);
 }
 
 //----------------------------------------------------------------------------
-std::string cmGlobalXCodeGenerator::XCodeEscapePath(const char* p)
+std::string cmGlobalXCodeGenerator::XCodeEscapePath(const std::string& p)
 {
   std::string ret = p;
   if(ret.find(' ') != ret.npos)
@@ -3884,7 +3886,7 @@ cmGlobalXCodeGenerator::AppendDefines(BuildObjectListOrString& defs,
     // Append the flag with needed escapes.
     std::string tmp;
     this->AppendFlag(tmp, def);
-    defs.Add(tmp.c_str());
+    defs.Add(tmp);
     }
 }
 

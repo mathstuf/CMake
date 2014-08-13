@@ -97,7 +97,7 @@ public:
     }
   const std::string& GetComment() {return this->Comment;}
   bool HasComment() { return (!this->Comment.empty());}
-  cmXCodeObject* GetObject(const char* name)
+  cmXCodeObject* GetObject(const std::string& name)
     {
       if(this->ObjectAttributes.count(name))
         {

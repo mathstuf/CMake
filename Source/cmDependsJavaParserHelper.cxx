@@ -355,8 +355,7 @@ void cmDependsJavaParserHelper::CleanupParser()
     {
     delete [] *it;
     }
-  this->Allocates.erase(this->Allocates.begin(),
-    this->Allocates.end());
+  this->Allocates.clear();
 }
 
 int cmDependsJavaParserHelper::LexInput(char* buf, int maxlen)

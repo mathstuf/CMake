@@ -307,7 +307,7 @@ void cmCommandArgumentParserHelper::CleanupParser()
     {
     delete [] *sit;
     }
-  this->Variables.erase(this->Variables.begin(), this->Variables.end());
+  this->Variables.clear();
 }
 
 int cmCommandArgumentParserHelper::LexInput(char* buf, int maxlen)

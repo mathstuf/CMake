@@ -786,8 +786,7 @@ void cmLocalVisualStudio6Generator::SetBuildType(BuildType b,
     }
 
   // reset this->Configurations
-  this->Configurations.erase(this->Configurations.begin(),
-                             this->Configurations.end());
+  this->Configurations.clear();
 
   // now add all the configurations possible
   std::string vs6name = GetVS6TargetName(libName);

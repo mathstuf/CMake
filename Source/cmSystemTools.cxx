@@ -1896,13 +1896,13 @@ int cmSystemTools::WaitForLine(cmsysProcess* process, std::string& line,
       if(!out.empty())
         {
         line.append(&out[0], outiter-out.begin());
-        out.erase(out.begin(), out.end());
+        out.clear();
         return cmsysProcess_Pipe_STDOUT;
         }
       else if(!err.empty())
         {
         line.append(&err[0], erriter-err.begin());
-        err.erase(err.begin(), err.end());
+        err.clear();
         return cmsysProcess_Pipe_STDERR;
         }
       else

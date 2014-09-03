@@ -2164,10 +2164,9 @@ void cmGlobalGenerator::CreateDefaultGlobalTargets(cmTargets* targets)
   const char* packageSourceTargetName = this->GetPackageSourceTargetName();
   if ( packageSourceTargetName )
     {
-    cpackCommandLines.erase(cpackCommandLines.begin(),
-                            cpackCommandLines.end());
-    singleLine.erase(singleLine.begin(), singleLine.end());
-    depends.erase(depends.begin(), depends.end());
+    cpackCommandLines.clear();
+    singleLine.clear();
+    depends.clear();
     singleLine.push_back(cmSystemTools::GetCPackCommand());
     singleLine.push_back("--config");
     configFile = mf->GetStartOutputDirectory();;
@@ -2190,10 +2189,9 @@ void cmGlobalGenerator::CreateDefaultGlobalTargets(cmTargets* targets)
   // Test
   if(mf->IsOn("CMAKE_TESTING_ENABLED"))
     {
-    cpackCommandLines.erase(cpackCommandLines.begin(),
-                            cpackCommandLines.end());
-    singleLine.erase(singleLine.begin(), singleLine.end());
-    depends.erase(depends.begin(), depends.end());
+    cpackCommandLines.clear();
+    singleLine.clear();
+    depends.clear();
     singleLine.push_back(cmSystemTools::GetCTestCommand());
     singleLine.push_back("--force-new-ctest-process");
     if(cmakeCfgIntDir && *cmakeCfgIntDir && cmakeCfgIntDir[0] != '.')
@@ -2215,10 +2213,9 @@ void cmGlobalGenerator::CreateDefaultGlobalTargets(cmTargets* targets)
   const char* editCacheTargetName = this->GetEditCacheTargetName();
   if ( editCacheTargetName )
     {
-    cpackCommandLines.erase(cpackCommandLines.begin(),
-                            cpackCommandLines.end());
-    singleLine.erase(singleLine.begin(), singleLine.end());
-    depends.erase(depends.begin(), depends.end());
+    cpackCommandLines.clear();
+    singleLine.clear();
+    depends.clear();
 
     // Use generator preference for the edit_cache rule if it is defined.
     std::string edit_cmd = this->GetEditCacheCommand();
@@ -2252,10 +2249,9 @@ void cmGlobalGenerator::CreateDefaultGlobalTargets(cmTargets* targets)
   const char* rebuildCacheTargetName = this->GetRebuildCacheTargetName();
   if ( rebuildCacheTargetName )
     {
-    cpackCommandLines.erase(cpackCommandLines.begin(),
-                            cpackCommandLines.end());
-    singleLine.erase(singleLine.begin(), singleLine.end());
-    depends.erase(depends.begin(), depends.end());
+    cpackCommandLines.clear();
+    singleLine.clear();
+    depends.clear();
     singleLine.push_back(cmakeCommand);
     singleLine.push_back("-H$(CMAKE_SOURCE_DIR)");
     singleLine.push_back("-B$(CMAKE_BINARY_DIR)");
@@ -2279,9 +2275,8 @@ void cmGlobalGenerator::CreateDefaultGlobalTargets(cmTargets* targets)
     if(!cmakeCfgIntDir || !*cmakeCfgIntDir || cmakeCfgIntDir[0] == '.')
       {
       std::set<std::string>* componentsSet = &this->InstallComponents;
-      cpackCommandLines.erase(cpackCommandLines.begin(),
-        cpackCommandLines.end());
-      depends.erase(depends.begin(), depends.end());
+      cpackCommandLines.clear();
+      depends.clear();
       cmOStringStream ostr;
       if ( componentsSet->size() > 0 )
         {
@@ -2306,10 +2301,9 @@ void cmGlobalGenerator::CreateDefaultGlobalTargets(cmTargets* targets)
           &cpackCommandLines, depends, 0);
       }
     std::string cmd = cmakeCommand;
-    cpackCommandLines.erase(cpackCommandLines.begin(),
-      cpackCommandLines.end());
-    singleLine.erase(singleLine.begin(), singleLine.end());
-    depends.erase(depends.begin(), depends.end());
+    cpackCommandLines.clear();
+    singleLine.clear();
+    depends.clear();
     if ( this->GetPreinstallTargetName() )
       {
       depends.push_back(this->GetPreinstallTargetName());
@@ -2352,8 +2346,7 @@ void cmGlobalGenerator::CreateDefaultGlobalTargets(cmTargets* targets)
 
       localCmdLine.insert(localCmdLine.begin()+1,
                                                "-DCMAKE_INSTALL_LOCAL_ONLY=1");
-      cpackCommandLines.erase(cpackCommandLines.begin(),
-                                                      cpackCommandLines.end());
+      cpackCommandLines.clear();
       cpackCommandLines.push_back(localCmdLine);
 
       (*targets)[install_local] =
@@ -2369,8 +2362,7 @@ void cmGlobalGenerator::CreateDefaultGlobalTargets(cmTargets* targets)
       cmCustomCommandLine stripCmdLine = singleLine;
 
       stripCmdLine.insert(stripCmdLine.begin()+1,"-DCMAKE_INSTALL_DO_STRIP=1");
-      cpackCommandLines.erase(cpackCommandLines.begin(),
-        cpackCommandLines.end());
+      cpackCommandLines.clear();
       cpackCommandLines.push_back(stripCmdLine);
 
       (*targets)[install_strip] =

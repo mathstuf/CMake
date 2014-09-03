@@ -435,7 +435,7 @@ void cmRST::ProcessDirectiveTocTree()
   for(std::vector<std::string>::iterator i = this->MarkupLines.begin();
       i != this->MarkupLines.end(); ++i)
     {
-    if(!i->empty() && i->find_first_of(":") == i->npos)
+    if(!i->empty() && i->find_first_of(':') == i->npos)
       {
       this->ProcessInclude(*i + ".rst", IncludeTocTree);
       }

@@ -386,10 +386,10 @@ int cmCTestScriptHandler::ReadInScript(const std::string& total_script_arg)
   // passed into the scripts as S_ARG
   std::string script = total_script_arg;
   std::string script_arg;
-  if (total_script_arg.find(",") != std::string::npos)
+  if (total_script_arg.find(',') != std::string::npos)
     {
-    script = total_script_arg.substr(0,total_script_arg.find(","));
-    script_arg = total_script_arg.substr(total_script_arg.find(",")+1);
+    script = total_script_arg.substr(0,total_script_arg.find(','));
+    script_arg = total_script_arg.substr(total_script_arg.find(',')+1);
     }
   // make sure the file exists
   if (!cmSystemTools::FileExists(script.c_str()))

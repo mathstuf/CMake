@@ -60,17 +60,17 @@ cmCPackIFWPackage::DependenceStruct::DependenceStruct(
     Compare.Type = CompareGreaterOrEqual;
     Compare.Value = dependence.substr(pos + 2);
     }
-  else if((pos = dependence.find("<")) != std::string::npos)
+  else if((pos = dependence.find('<')) != std::string::npos)
     {
     Compare.Type = CompareLess;
     Compare.Value = dependence.substr(pos + 1);
     }
-  else if((pos = dependence.find("=")) != std::string::npos)
+  else if((pos = dependence.find('=')) != std::string::npos)
     {
     Compare.Type = CompareEqual;
     Compare.Value = dependence.substr(pos + 1);
     }
-  else if((pos = dependence.find(">")) != std::string::npos)
+  else if((pos = dependence.find('>')) != std::string::npos)
     {
     Compare.Type = CompareGreater;
     Compare.Value = dependence.substr(pos + 1);

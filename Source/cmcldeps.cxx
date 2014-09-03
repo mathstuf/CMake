@@ -254,7 +254,7 @@ int main() {
   // needed to suppress filename output of msvc tools
   std::string srcfilename;
   {
-  std::string::size_type pos = srcfile.rfind("\\");
+  std::string::size_type pos = srcfile.rfind('\\');
   if (pos == std::string::npos) {
     srcfilename = srcfile;
   } else {
@@ -276,7 +276,7 @@ int main() {
     clrest = replace(clrest, objfile, objfile + ".dep.obj ");
 
     // rc: src\x\x.rc  ->  cl: /Tc src\x\x.rc
-    if (srcfile.find(" ") != std::string::npos)
+    if (srcfile.find(' ') != std::string::npos)
       srcfile = "\"" + srcfile + "\"";
     clrest = replace(clrest, srcfile, "/Tc " + srcfile);
 
@@ -285,7 +285,7 @@ int main() {
     // call cl in object dir so the .i is generated there
     std::string objdir;
     {
-    std::string::size_type pos = objfile.rfind("\\");
+    std::string::size_type pos = objfile.rfind('\\');
     if (pos != std::string::npos) {
       objdir = objfile.substr(0, pos);
     }

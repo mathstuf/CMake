@@ -413,7 +413,7 @@ bool cmStringCommand::RegexReplace(std::vector<std::string> const& args)
   std::string::size_type l = 0;
   while(l < replace.length())
     {
-    std::string::size_type r = replace.find("\\", l);
+    std::string::size_type r = replace.find('\\', l);
     if(r == std::string::npos)
       {
       r = replace.length();

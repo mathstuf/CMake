@@ -2370,7 +2370,7 @@ void cmGlobalXCodeGenerator::CreateBuildSettings(cmTarget& target,
       if (beginVariant != std::string::npos)
         {
         std::string::size_type endVariant =
-          attribute.find("]", beginVariant+9);
+          attribute.find(']', beginVariant+9);
         if (endVariant != std::string::npos)
           {
           // Compare the variant to the configuration.

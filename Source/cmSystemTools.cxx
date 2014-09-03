@@ -1430,7 +1430,7 @@ cmSystemTools::SaveRestoreEnvironment::~SaveRestoreEnvironment()
     {
     std::string var(*eit);
 
-    std::string::size_type pos = var.find("=");
+    std::string::size_type pos = var.find('=');
     if (pos != std::string::npos)
       {
       var = var.substr(0, pos);

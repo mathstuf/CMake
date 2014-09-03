@@ -1393,7 +1393,7 @@ bool cmMakefile::ParseDefineFlag(std::string const& def, bool remove)
   // combination with '"', '$', or ';'.
   if((this->LocalGenerator->GetGlobalGenerator()->GetName() ==
              "Visual Studio 6") &&
-     (def.find(" ") != def.npos && def.find_first_of("\"$;") != def.npos))
+     (def.find(' ') != def.npos && def.find_first_of("\"$;") != def.npos))
     {
     return false;
     }

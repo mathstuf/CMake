@@ -1975,7 +1975,7 @@ cmLocalVisualStudio6Generator
 {
   // Strip the subdirectory name out of the configuration name.
   std::string config = configuration;
-  std::string::size_type pos = config.find_last_of(" ");
+  std::string::size_type pos = config.find_last_of(' ');
   config = config.substr(pos+1, std::string::npos);
   config = config.substr(0, config.size()-1);
   return config;
@@ -1993,7 +1993,7 @@ cmLocalVisualStudio6Generator
     }
 
   // Now do the VS6-specific check.
-  if(define.find_first_of(" ") != define.npos &&
+  if(define.find_first_of(' ') != define.npos &&
      define.find_first_of("\"$;") != define.npos)
     {
     cmOStringStream e;

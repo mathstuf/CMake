@@ -63,7 +63,7 @@ private:
 static std::string cmSplitExtension(std::string const& in, std::string& base)
 {
   std::string ext;
-  std::string::size_type dot_pos = in.rfind(".");
+  std::string::size_type dot_pos = in.rfind('.');
   if(dot_pos != std::string::npos)
     {
     // Remove the extension first in case &base == &in.
@@ -241,7 +241,7 @@ void cmLocalUnixMakefileGenerator3::GetIndividualFileTargets
     {
     targets.push_back(lo->first);
 
-    std::string::size_type dot_pos = lo->first.rfind(".");
+    std::string::size_type dot_pos = lo->first.rfind('.');
     std::string base = lo->first.substr(0, dot_pos);
     if(lo->second.HasPreprocessRule)
       {
@@ -329,7 +329,7 @@ void cmLocalUnixMakefileGenerator3::WriteLocalMakefile()
     // Add convenience rules for preprocessed and assembly files.
     if(lang_is_c_or_cxx && (do_preprocess_rules || do_assembly_rules))
       {
-      std::string::size_type dot_pos = lo->first.rfind(".");
+      std::string::size_type dot_pos = lo->first.rfind('.');
       std::string base = lo->first.substr(0, dot_pos);
       if(do_preprocess_rules)
         {
@@ -1124,12 +1124,12 @@ cmLocalUnixMakefileGenerator3
       cmSystemTools::ReplaceString(cmd, "/./", "/");
       // Convert the command to a relative path only if the current
       // working directory will be the start-output directory.
-      bool had_slash = cmd.find("/") != cmd.npos;
+      bool had_slash = cmd.find('/') != cmd.npos;
       if(workingDir.empty())
         {
         cmd = this->Convert(cmd,START_OUTPUT);
         }
-      bool has_slash = cmd.find("/") != cmd.npos;
+      bool has_slash = cmd.find('/') != cmd.npos;
       if(had_slash && !has_slash)
         {
         // This command was specified as a path to a file in the
@@ -1155,10 +1155,10 @@ cmLocalUnixMakefileGenerator3
         // must be written {{} instead of just {.  Otherwise some
         // curly braces are removed.  The hack can be skipped if the
         // first curly brace is the last character.
-        std::string::size_type lcurly = cmd.find("{");
+        std::string::size_type lcurly = cmd.find('{');
         if(lcurly != cmd.npos && lcurly < (cmd.size()-1))
           {
-          std::string::size_type rcurly = cmd.find("}");
+          std::string::size_type rcurly = cmd.find('}');
           if(rcurly == cmd.npos || rcurly > lcurly)
             {
             // The first curly is a left curly.  Use the hack.

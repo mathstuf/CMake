@@ -154,7 +154,7 @@ cmDependsFortran
       it = definitions.begin(); it != definitions.end(); ++it)
     {
     std::string def = *it;
-    std::string::size_type assignment = def.find("=");
+    std::string::size_type assignment = def.find('=');
     if(assignment != std::string::npos)
       {
       def = it->substr(0, assignment);

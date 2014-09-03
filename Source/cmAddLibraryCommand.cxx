@@ -209,7 +209,7 @@ bool cmAddLibraryCommand
 
   if (nameOk && !importTarget && !isAlias)
     {
-    nameOk = libName.find(":") == std::string::npos;
+    nameOk = libName.find(':') == std::string::npos;
     }
   if (!nameOk)
     {

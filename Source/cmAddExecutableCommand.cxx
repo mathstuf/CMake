@@ -74,7 +74,7 @@ bool cmAddExecutableCommand
 
   if (nameOk && !importTarget && !isAlias)
     {
-    nameOk = exename.find(":") == std::string::npos;
+    nameOk = exename.find(':') == std::string::npos;
     }
   if (!nameOk)
     {

@@ -657,8 +657,8 @@ cmExportFileGenerator::ResolveTargetsInGeneratorExpression(
     {
     std::string::size_type nameStartPos = pos +
                                             sizeof("$<TARGET_PROPERTY:") - 1;
-    std::string::size_type closePos = input.find(">", nameStartPos);
-    std::string::size_type commaPos = input.find(",", nameStartPos);
+    std::string::size_type closePos = input.find('>', nameStartPos);
+    std::string::size_type commaPos = input.find(',', nameStartPos);
     std::string::size_type nextOpenPos = input.find("$<", nameStartPos);
     if (commaPos == input.npos // Implied 'this' target
         || closePos == input.npos // Imcomplete expression.
@@ -685,7 +685,7 @@ cmExportFileGenerator::ResolveTargetsInGeneratorExpression(
   while((pos = input.find("$<TARGET_NAME:", lastPos)) != input.npos)
     {
     std::string::size_type nameStartPos = pos + sizeof("$<TARGET_NAME:") - 1;
-    std::string::size_type endPos = input.find(">", nameStartPos);
+    std::string::size_type endPos = input.find('>', nameStartPos);
     if (endPos == input.npos)
       {
       errorString = "$<TARGET_NAME:...> expression incomplete";

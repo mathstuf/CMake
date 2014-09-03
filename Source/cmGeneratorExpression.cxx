@@ -382,7 +382,7 @@ void cmGeneratorExpression::Split(const std::string &input,
     std::string preGenex;
     if (!part.empty())
       {
-      std::string::size_type startPos = input.rfind(";", pos);
+      std::string::size_type startPos = input.rfind(';', pos);
       if (startPos == std::string::npos)
         {
         preGenex = part;
@@ -462,7 +462,7 @@ std::string::size_type cmGeneratorExpression::Find(const std::string &input)
 {
   const std::string::size_type openpos = input.find("$<");
   if (openpos != std::string::npos
-      && input.find(">", openpos) != std::string::npos)
+      && input.find('>', openpos) != std::string::npos)
     {
     return openpos;
     }

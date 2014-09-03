@@ -991,7 +991,7 @@ cmLocalGenerator::ExpandRuleVariable(std::string const& variable,
         {
         // Strip the last extension off the target name.
         std::string targetBase = replaceValues.Target;
-        std::string::size_type pos = targetBase.rfind(".");
+        std::string::size_type pos = targetBase.rfind('.');
         if(pos != targetBase.npos)
           {
         return targetBase.substr(0, pos);
@@ -2610,7 +2610,7 @@ void cmLocalGenerator::JoinDefines(const std::set<std::string>& defines,
       {
       // Make the definition appear properly on the command line.  Use
       // -DNAME="value" instead of -D"NAME=value" to help VS6 parser.
-      std::string::size_type eq = defineIt->find("=");
+      std::string::size_type eq = defineIt->find('=');
       def += defineIt->substr(0, eq);
       if(eq != defineIt->npos)
         {
@@ -3345,7 +3345,7 @@ cmLocalGenerator
     if(replaceExt)
       {
       keptSourceExtension = false;
-      std::string::size_type dot_pos = objectName.rfind(".");
+      std::string::size_type dot_pos = objectName.rfind('.');
       if(dot_pos != std::string::npos)
         {
         objectName = objectName.substr(0, dot_pos);
@@ -3380,8 +3380,8 @@ std::string cmLocalGenerator::EscapeForShellOldStyle(const std::string& str)
 #if defined(_WIN32) && !defined(__CYGWIN__)
   // if there are spaces
   std::string temp = str;
-  if (temp.find(" ") != std::string::npos &&
-      temp.find("\"")==std::string::npos)
+  if (temp.find(' ') != std::string::npos &&
+      temp.find('\"')==std::string::npos)
     {
     result = "\"";
     result += str;
@@ -3640,7 +3640,7 @@ bool cmLocalGenerator::CheckDefinition(std::string const& define) const
     }
 
   // Many compilers do not support # in the value so we disable it.
-  if(define.find_first_of("#") != define.npos)
+  if(define.find_first_of('#') != define.npos)
     {
     cmOStringStream e;
     e << "WARNING: Preprocessor definitions containing '#' may not be "

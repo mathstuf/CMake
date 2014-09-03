@@ -55,7 +55,7 @@ bool cmAuxSourceDirectoryCommand::InitialPass
       {
       std::string file = dir.GetFile(static_cast<unsigned long>(i));
       // Split the filename into base and extension
-      std::string::size_type dotpos = file.rfind(".");
+      std::string::size_type dotpos = file.rfind('.');
       if( dotpos != std::string::npos )
         {
         std::string ext = file.substr(dotpos+1);

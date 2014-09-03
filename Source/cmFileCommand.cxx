@@ -2923,7 +2923,7 @@ cmFileCommand::HandleDownloadCommand(std::vector<std::string> const& args)
         this->SetError("DOWNLOAD missing ALGO=value for EXPECTED_HASH.");
         return false;
         }
-      std::string::size_type pos = i->find("=");
+      std::string::size_type pos = i->find('=');
       if(pos == std::string::npos)
         {
         std::string err =

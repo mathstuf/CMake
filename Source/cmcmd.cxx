@@ -212,7 +212,7 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
                     << std::endl;
           return 1;
           }
-        else if(a.find("=") != a.npos)
+        else if(a.find('=') != a.npos)
           {
           // Set environment variable.
           cmSystemTools::PutEnv(a.c_str());

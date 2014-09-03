@@ -160,7 +160,7 @@ bool cmAddCustomTargetCommand
     !cmGlobalGenerator::IsReservedTarget(targetName);
   if (nameOk)
     {
-    nameOk = targetName.find(":") == std::string::npos;
+    nameOk = targetName.find(':') == std::string::npos;
     }
   if (!nameOk)
     {

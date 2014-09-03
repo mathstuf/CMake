@@ -1643,7 +1643,7 @@ void cmTarget::GatherDependenciesForVS6( const cmMakefile& mf,
     std::string depline = deps;
     std::string::size_type start = 0;
     std::string::size_type end;
-    end = depline.find( ";", start );
+    end = depline.find( ';', start );
     while( end != std::string::npos )
       {
       std::string l = depline.substr( start, end-start );
@@ -1670,7 +1670,7 @@ void cmTarget::GatherDependenciesForVS6( const cmMakefile& mf,
           }
         }
       start = end+1; // skip the ;
-      end = depline.find( ";", start );
+      end = depline.find( ';', start );
       }
     // cannot depend on itself
     this->DeleteDependencyForVS6( dep_map, lib, lib);

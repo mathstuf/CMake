@@ -779,9 +779,9 @@ cmMakefileTargetGenerator
     {
     std::vector<std::string> force_depends;
     force_depends.push_back("cmake_force");
-    std::string::size_type dot_pos = relativeObj.rfind(".");
+    std::string::size_type dot_pos = relativeObj.rfind('.');
     std::string relativeObjBase = relativeObj.substr(0, dot_pos);
-    dot_pos = obj.rfind(".");
+    dot_pos = obj.rfind('.');
     std::string objBase = obj.substr(0, dot_pos);
 
     if(do_preprocess_rules)

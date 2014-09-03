@@ -965,7 +965,7 @@ std::string cmCPackWIXGenerator::GetRightmostExtension(
 {
   std::string extension;
 
-  std::string::size_type i = filename.rfind(".");
+  std::string::size_type i = filename.rfind('.');
   if(i != std::string::npos)
     {
     extension = filename.substr(i);

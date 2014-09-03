@@ -289,7 +289,11 @@ static bool checkInterfaceDirs(const std::string &prepro,
         (!inBinary || isSubDirectory(installDir, topBinaryDir)) &&
         (!inSource || isSubDirectory(installDir, topSourceDir));
 
-      if (!shouldContinue)
+      if (shouldContinue)
+        {
+        continue;
+        }
+      else
         {
         switch(target->GetPolicyStatusCMP0052())
           {
@@ -316,10 +320,6 @@ static bool checkInterfaceDirs(const std::string &prepro,
           case cmPolicies::NEW:
             break;
           }
-        }
-      if (shouldContinue)
-        {
-        continue;
         }
       }
     if (inBinary)

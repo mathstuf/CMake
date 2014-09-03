@@ -39,13 +39,21 @@ set(RunCMake_TEST_SOURCE_DIR "${RunCMake_BINARY_DIR}/copy")
 run_cmake(InstallInSrcDir)
 unset(RunCMake_TEST_SOURCE_DIR)
 
-set(RunCMake_TEST_OPTIONS "-DCMAKE_INSTALL_PREFIX=${RunCMake_BINARY_DIR}/InstallInBinDir-build/prefix")
 set(RunCMake_TEST_OPTIONS
   "-DCMAKE_INSTALL_PREFIX=${RunCMake_BINARY_DIR}/InstallInBinDir-build/prefix"
   "-DTEST_FILE=${RunCMake_SOURCE_DIR}/BinaryDirectoryInInterface.cmake"
   )
 set(RunCMake_TEST_BINARY_DIR "${RunCMake_BINARY_DIR}/InstallInBinDir-build")
 run_cmake(InstallInBinDir)
+unset(RunCMake_TEST_BINARY_DIR)
+
+set(RunCMake_TEST_OPTIONS
+  "-DCMAKE_INSTALL_PREFIX=${RunCMake_BINARY_DIR}/InstallInBinDir2-build/prefix"
+  "-Dextradir=/prefix"
+  "-DTEST_FILE=${RunCMake_SOURCE_DIR}/BinaryDirectoryInInterface.cmake"
+  )
+set(RunCMake_TEST_BINARY_DIR "${RunCMake_BINARY_DIR}/InstallInBinDir-build")
+run_cmake(InstallInBinDir2)
 unset(RunCMake_TEST_BINARY_DIR)
 
 configure_file(

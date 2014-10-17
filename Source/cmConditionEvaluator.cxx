@@ -488,7 +488,7 @@ bool cmConditionEvaluator::HandleLevel1(cmArgumentList &newArgs,
       if (this->IsKeyword("COMMAND", *arg) && argP1  != newArgs.end())
         {
         this->HandlePredicate(
-          this->Makefile.CommandExists(argP1->c_str()),
+          this->Makefile.CommandExists(argP1->GetValue()),
           reducible, arg, newArgs, argP1, argP2);
         }
       // does a policy exist

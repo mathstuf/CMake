@@ -269,7 +269,7 @@ IsFunctionBlocked(const cmListFileFunction& lff, cmMakefile &mf,
         name += " " + this->Args[cc];
         }
       name += " )";
-      mf.AddMacro(this->Args[0].c_str(), name.c_str());
+      mf.AddMacro(this->Args[0], name);
       // create a new command and add it to cmake
       cmMacroHelperCommand *f = new cmMacroHelperCommand();
       f->Args = this->Args;

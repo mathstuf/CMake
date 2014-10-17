@@ -299,7 +299,7 @@ void cmMakefile::Print() const
 #endif
 }
 
-bool cmMakefile::CommandExists(const char* name) const
+bool cmMakefile::CommandExists(const std::string& name) const
 {
   return this->GetCMakeInstance()->CommandExists(name);
 }
@@ -3740,12 +3740,9 @@ cmVariableWatch *cmMakefile::GetVariableWatch() const
 }
 #endif
 
-void cmMakefile::AddMacro(const char* name, const char* signature)
+void cmMakefile::AddMacro(const std::string& name,
+                          const std::string& signature)
 {
-  if ( !name || !signature )
-    {
-    return;
-    }
   this->MacrosMap[name] = signature;
 }
 

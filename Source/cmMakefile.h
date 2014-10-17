@@ -770,7 +770,7 @@ public:
                       cmExecutionStatus &status);
 
   /** Check if a command exists. */
-  bool CommandExists(const char* name) const;
+  bool CommandExists(const std::string& name) const;
 
   /**
    * Add a command to this cmake instance
@@ -830,7 +830,7 @@ public:
    * Add a macro to the list of macros. The arguments should be name of the
    * macro and a documentation signature of it
    */
-  void AddMacro(const char* name, const char* signature);
+  void AddMacro(const std::string& name, const std::string& signature);
 
   ///! Add a new cmTest to the list of tests for this makefile.
   cmTest* CreateTest(const std::string& testName);

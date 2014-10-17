@@ -768,10 +768,10 @@ void cmGlobalNinjaGenerator::AddCXXCompileCommand(
     }
 
   std::string sourceFileName = sourceFile;
-  if (!cmSystemTools::FileIsFullPath(sourceFileName.c_str()))
+  if (!cmSystemTools::FileIsFullPath(sourceFileName))
     {
     sourceFileName = cmSystemTools::CollapseFullPath(
-      sourceFileName.c_str(),
+      sourceFileName,
       this->GetCMakeInstance()->GetHomeOutputDirectory());
     }
 
@@ -1051,9 +1051,9 @@ void cmGlobalNinjaGenerator::WriteUnknownExplicitDependencies(std::ostream& os)
     {
     //verify the file is in the build directory
     std::string const absDepPath = cmSystemTools::CollapseFullPath(
-                                     i->c_str(), rootBuildDirectory.c_str());
-    bool const inBuildDir = cmSystemTools::IsSubDirectory(absDepPath.c_str(),
-                                                  rootBuildDirectory.c_str());
+                                     *i, rootBuildDirectory);
+    bool const inBuildDir = cmSystemTools::IsSubDirectory(absDepPath,
+                                                  rootBuildDirectory);
     if(inBuildDir)
       {
       cmNinjaDeps deps(1,*i);

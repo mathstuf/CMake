@@ -48,7 +48,7 @@ void cmOSXBundleGenerator::CreateAppBundle(const std::string& targetName,
   std::string out = outpath;
   out += "/";
   out += this->GT->Target->GetAppBundleDirectory(this->ConfigName, false);
-  cmSystemTools::MakeDirectory(out.c_str());
+  cmSystemTools::MakeDirectory(out);
   this->Makefile->AddCMakeOutputFile(out);
 
   std::string newoutpath = out;
@@ -103,17 +103,17 @@ void cmOSXBundleGenerator::CreateFramework(
   // Make foo.framework/Versions
   std::string versions = contentdir;
   versions += "Versions";
-  cmSystemTools::MakeDirectory(versions.c_str());
+  cmSystemTools::MakeDirectory(versions);
 
   // Make foo.framework/Versions/version
-  cmSystemTools::MakeDirectory(newoutpath.c_str());
+  cmSystemTools::MakeDirectory(newoutpath);
 
   // Current -> version
   oldName = frameworkVersion;
   newName = versions;
   newName += "/Current";
-  cmSystemTools::RemoveFile(newName.c_str());
-  cmSystemTools::CreateSymlink(oldName.c_str(), newName.c_str());
+  cmSystemTools::RemoveFile(newName);
+  cmSystemTools::CreateSymlink(oldName, newName);
   this->Makefile->AddCMakeOutputFile(newName);
 
   // foo -> Versions/Current/foo
@@ -121,8 +121,8 @@ void cmOSXBundleGenerator::CreateFramework(
   oldName += name;
   newName = contentdir;
   newName += name;
-  cmSystemTools::RemoveFile(newName.c_str());
-  cmSystemTools::CreateSymlink(oldName.c_str(), newName.c_str());
+  cmSystemTools::RemoveFile(newName);
+  cmSystemTools::CreateSymlink(oldName, newName);
   this->Makefile->AddCMakeOutputFile(newName);
 
   // Resources -> Versions/Current/Resources
@@ -132,8 +132,8 @@ void cmOSXBundleGenerator::CreateFramework(
     oldName = "Versions/Current/Resources";
     newName = contentdir;
     newName += "Resources";
-    cmSystemTools::RemoveFile(newName.c_str());
-    cmSystemTools::CreateSymlink(oldName.c_str(), newName.c_str());
+    cmSystemTools::RemoveFile(newName);
+    cmSystemTools::CreateSymlink(oldName, newName);
     this->Makefile->AddCMakeOutputFile(newName);
     }
 
@@ -144,8 +144,8 @@ void cmOSXBundleGenerator::CreateFramework(
     oldName = "Versions/Current/Headers";
     newName = contentdir;
     newName += "Headers";
-    cmSystemTools::RemoveFile(newName.c_str());
-    cmSystemTools::CreateSymlink(oldName.c_str(), newName.c_str());
+    cmSystemTools::RemoveFile(newName);
+    cmSystemTools::CreateSymlink(oldName, newName);
     this->Makefile->AddCMakeOutputFile(newName);
     }
 
@@ -156,8 +156,8 @@ void cmOSXBundleGenerator::CreateFramework(
     oldName = "Versions/Current/PrivateHeaders";
     newName = contentdir;
     newName += "PrivateHeaders";
-    cmSystemTools::RemoveFile(newName.c_str());
-    cmSystemTools::CreateSymlink(oldName.c_str(), newName.c_str());
+    cmSystemTools::RemoveFile(newName);
+    cmSystemTools::CreateSymlink(oldName, newName);
     this->Makefile->AddCMakeOutputFile(newName);
     }
 }
@@ -173,7 +173,7 @@ void cmOSXBundleGenerator::CreateCFBundle(const std::string& targetName,
   std::string out = root;
   out += "/";
   out += this->GT->Target->GetCFBundleDirectory(this->ConfigName, false);
-  cmSystemTools::MakeDirectory(out.c_str());
+  cmSystemTools::MakeDirectory(out);
   this->Makefile->AddCMakeOutputFile(out);
 
   // Configure the Info.plist file.  Note that it needs the executable name
@@ -220,7 +220,7 @@ cmOSXBundleGenerator::InitMacOSXContentDirectory(const char* pkgloc)
                                          /*implib*/ false);
   macdir += "/";
   macdir += pkgloc;
-  cmSystemTools::MakeDirectory(macdir.c_str());
+  cmSystemTools::MakeDirectory(macdir);
 
   // Record use of this content location.  Only the first level
   // directory is needed.

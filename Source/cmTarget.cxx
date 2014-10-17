@@ -2184,7 +2184,7 @@ cmTarget::GetIncludeDirectories(const std::string& config) const
 
       cmGeneratorExpression ge;
       cmsys::auto_ptr<cmCompiledGeneratorExpression> cge =
-                ge.Parse(libDir.c_str());
+                ge.Parse(libDir);
       linkInterfaceIncludeDirectoriesEntries
               .push_back(new cmTargetInternals::TargetPropertyEntry(cge));
       }
@@ -5286,7 +5286,7 @@ cmTarget::GetObjectLibrariesCMP0026(std::vector<cmTarget*>& objlibs) const
           {
           continue;
           }
-        cmTarget *objLib = this->Makefile->FindTargetToUse(objLibName.c_str());
+        cmTarget *objLib = this->Makefile->FindTargetToUse(objLibName);
         if(objLib)
           {
           objlibs.push_back(objLib);

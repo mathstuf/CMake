@@ -78,7 +78,7 @@ bool cmIncludeExternalMSProjectCommand
 
     // Create a target instance for this utility.
     cmTarget* target=this->Makefile->AddNewTarget(cmTarget::UTILITY,
-                                                  utility_name.c_str());
+                                                  utility_name);
 
     target->SetProperty("GENERATOR_FILE_NAME", utility_name.c_str());
     target->SetProperty("EXTERNAL_MSPROJECT", path.c_str());
@@ -93,7 +93,7 @@ bool cmIncludeExternalMSProjectCommand
          it != depends.end();
          ++it)
       {
-      target->AddUtility(it->c_str());
+      target->AddUtility(*it);
       }
     }
 #endif

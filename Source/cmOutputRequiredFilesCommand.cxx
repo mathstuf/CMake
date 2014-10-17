@@ -33,7 +33,7 @@ void cmLBDepend::DependWalk(cmDependInformation* info)
   std::string line;
   while(cmSystemTools::GetLineFromStream(fin, line))
     {
-    if(cmHasLiteralPrefix(line.c_str(), "#include"))
+    if(cmHasLiteralPrefix(line, "#include"))
       {
       // if it is an include line then create a string class
       std::string currentline = line;
@@ -86,7 +86,7 @@ void cmLBDepend::DependWalk(cmDependInformation* info)
         cxxFile = root + ".cxx";
         bool found = false;
         // try jumping to .cxx .cpp and .c in order
-        if(cmSystemTools::FileExists(cxxFile.c_str()))
+        if(cmSystemTools::FileExists(cxxFile))
           {
           found = true;
           }
@@ -97,7 +97,7 @@ void cmLBDepend::DependWalk(cmDependInformation* info)
           std::string path = *i;
           path = path + "/";
           path = path + cxxFile;
-          if(cmSystemTools::FileExists(path.c_str()))
+          if(cmSystemTools::FileExists(path))
             {
             found = true;
             }
@@ -105,7 +105,7 @@ void cmLBDepend::DependWalk(cmDependInformation* info)
         if (!found)
           {
           cxxFile = root + ".cpp";
-          if(cmSystemTools::FileExists(cxxFile.c_str()))
+          if(cmSystemTools::FileExists(cxxFile))
             {
             found = true;
             }
@@ -116,7 +116,7 @@ void cmLBDepend::DependWalk(cmDependInformation* info)
             std::string path = *i;
             path = path + "/";
             path = path + cxxFile;
-            if(cmSystemTools::FileExists(path.c_str()))
+            if(cmSystemTools::FileExists(path))
               {
               found = true;
               }
@@ -125,7 +125,7 @@ void cmLBDepend::DependWalk(cmDependInformation* info)
         if (!found)
           {
           cxxFile = root + ".c";
-          if(cmSystemTools::FileExists(cxxFile.c_str()))
+          if(cmSystemTools::FileExists(cxxFile))
             {
             found = true;
             }
@@ -136,7 +136,7 @@ void cmLBDepend::DependWalk(cmDependInformation* info)
             std::string path = *i;
             path = path + "/";
             path = path + cxxFile;
-            if(cmSystemTools::FileExists(path.c_str()))
+            if(cmSystemTools::FileExists(path))
               {
               found = true;
               }
@@ -145,7 +145,7 @@ void cmLBDepend::DependWalk(cmDependInformation* info)
         if (!found)
           {
           cxxFile = root + ".txx";
-          if(cmSystemTools::FileExists(cxxFile.c_str()))
+          if(cmSystemTools::FileExists(cxxFile))
             {
             found = true;
             }
@@ -156,7 +156,7 @@ void cmLBDepend::DependWalk(cmDependInformation* info)
             std::string path = *i;
             path = path + "/";
             path = path + cxxFile;
-            if(cmSystemTools::FileExists(path.c_str()))
+            if(cmSystemTools::FileExists(path))
               {
               found = true;
               }
@@ -197,7 +197,7 @@ bool cmOutputRequiredFilesCommand
   if (info)
     {
     // write them out
-    FILE *fout = cmsys::SystemTools::Fopen(this->OutputFile.c_str(),"w");
+    FILE *fout = cmsys::SystemTools::Fopen(this->OutputFile,"w");
     if(!fout)
       {
       std::string err = "Can not open output file: ";

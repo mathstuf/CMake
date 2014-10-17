@@ -1294,7 +1294,7 @@ int cmCTest::RunTest(std::vector<const char*> argv,
   cmCTestLog(this, HANDLER_VERBOSE_OUTPUT,
              "Test timeout computed to be: " << timeout << "\n");
   if(cmSystemTools::SameFile(
-       argv[0], cmSystemTools::GetCTestCommand().c_str()) &&
+       argv[0], cmSystemTools::GetCTestCommand()) &&
      !this->ForceNewCTestProcess)
     {
     cmCTest inst;
@@ -1725,7 +1725,7 @@ bool cmCTest::SubmitExtraFiles(const VectorOfStrings &files)
     it != files.end();
     ++ it )
     {
-    if ( !cmSystemTools::FileExists(it->c_str()) )
+    if ( !cmSystemTools::FileExists(*it) )
       {
       cmCTestLog(this, ERROR_MESSAGE, "Cannot find extra file: "
         << *it << " to submit."
@@ -2299,7 +2299,7 @@ int cmCTest::Run(std::vector<std::string> &args, std::string* output)
     // attempts are simply ignored since previous ctest versions ignore
     // this too. (As well as many other unknown command line args.)
     //
-    if(arg != "-D" && cmSystemTools::StringStartsWith(arg.c_str(), "-D"))
+    if(arg != "-D" && cmSystemTools::StringStartsWith(arg, "-D"))
       {
       std::string input = arg.substr(2);
       this->AddVariableDefinition(input);

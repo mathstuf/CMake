@@ -70,7 +70,7 @@ static std::string findMatchingHeader(const std::string& absPath,
       ++ext)
     {
     std::string sourceFilePath = absPath + basename + "." + (*ext);
-    if (cmsys::SystemTools::FileExists(sourceFilePath.c_str()))
+    if (cmsys::SystemTools::FileExists(sourceFilePath))
       {
       header = sourceFilePath;
       break;
@@ -78,7 +78,7 @@ static std::string findMatchingHeader(const std::string& absPath,
     if (!mocSubDir.empty())
       {
       sourceFilePath = mocSubDir + basename + "." + (*ext);
-      if (cmsys::SystemTools::FileExists(sourceFilePath.c_str()))
+      if (cmsys::SystemTools::FileExists(sourceFilePath))
         {
         header = sourceFilePath;
         break;
@@ -263,7 +263,7 @@ bool cmQtAutoGenerators::InitializeAutogenTarget(cmTarget* target)
       for (std::vector<std::string>::iterator it = depends.begin();
             it != depends.end(); ++it)
         {
-        if(!makefile->FindTargetToUse(it->c_str()))
+        if(!makefile->FindTargetToUse(*it))
           {
           usePRE_BUILD = false;
           break;
@@ -487,8 +487,7 @@ void cmQtAutoGenerators::SetupSourceFiles(cmTarget const* target)
       ++fileIt)
     {
     cmSourceFile* sf = *fileIt;
-    std::string absFile = cmsys::SystemTools::GetRealPath(
-                                                    sf->GetFullPath().c_str());
+    std::string absFile = cmsys::SystemTools::GetRealPath(sf->GetFullPath());
     bool skipMoc = cmSystemTools::IsOn(sf->GetPropertyForUser("SKIP_AUTOMOC"));
     bool generated = cmSystemTools::IsOn(sf->GetPropertyForUser("GENERATED"));
 
@@ -510,7 +509,7 @@ void cmQtAutoGenerators::SetupSourceFiles(cmTarget const* target)
                                       GetFilenameWithoutLastExtension(absFile);
 
         std::string rcc_output_dir = target->GetSupportDirectory();
-        cmSystemTools::MakeDirectory(rcc_output_dir.c_str());
+        cmSystemTools::MakeDirectory(rcc_output_dir);
         std::string rcc_output_file = rcc_output_dir;
         rcc_output_file += "/qrc_" + basename + ".cpp";
         makefile->AppendProperty("ADDITIONAL_MAKE_CLEAN_FILES",
@@ -765,8 +764,7 @@ void cmQtAutoGenerators::SetupAutoUicTarget(cmTarget const* target,
       ++fileIt)
     {
     cmSourceFile* sf = *fileIt;
-    std::string absFile = cmsys::SystemTools::GetRealPath(
-                                                    sf->GetFullPath().c_str());
+    std::string absFile = cmsys::SystemTools::GetRealPath(sf->GetFullPath());
 
     if (!skipped.insert(absFile).second)
       {
@@ -889,8 +887,7 @@ void cmQtAutoGenerators::SetupAutoRccTarget(cmTarget const* target)
     std::string ext = sf->GetExtension();
     if (ext == "qrc")
       {
-      std::string absFile = cmsys::SystemTools::GetRealPath(
-                                                  sf->GetFullPath().c_str());
+      std::string absFile = cmsys::SystemTools::GetRealPath(sf->GetFullPath());
       bool skip = cmSystemTools::IsOn(sf->GetPropertyForUser("SKIP_AUTORCC"));
 
       if (!skip)
@@ -1013,7 +1010,7 @@ bool cmQtAutoGenerators::ReadAutogenInfoFile(cmMakefile* makefile,
                                       const std::string& config)
 {
   std::string filename(
-      cmSystemTools::CollapseFullPath(targetDirectory.c_str()));
+      cmSystemTools::CollapseFullPath(targetDirectory));
   cmSystemTools::ConvertToUnixSlashes(filename);
   filename += "/AutogenInfo.cmake";
 
@@ -1158,7 +1155,7 @@ bool cmQtAutoGenerators::ReadOldMocDefinitionsFile(cmMakefile* makefile,
                                             const std::string& targetDirectory)
 {
   std::string filename(
-      cmSystemTools::CollapseFullPath(targetDirectory.c_str()));
+      cmSystemTools::CollapseFullPath(targetDirectory));
   cmSystemTools::ConvertToUnixSlashes(filename);
   filename += "/AutomocOldMocDefinitions.cmake";
 
@@ -1176,7 +1173,7 @@ cmQtAutoGenerators::WriteOldMocDefinitionsFile(
                                             const std::string& targetDirectory)
 {
   std::string filename(
-      cmSystemTools::CollapseFullPath(targetDirectory.c_str()));
+      cmSystemTools::CollapseFullPath(targetDirectory));
   cmSystemTools::ConvertToUnixSlashes(filename);
   filename += "/AutomocOldMocDefinitions.cmake";
 
@@ -1222,7 +1219,7 @@ void cmQtAutoGenerators::Init()
       {
       // Go up twice to get to the framework root
       std::vector<std::string> pathComponents;
-      cmsys::SystemTools::SplitPath(path.c_str(), pathComponents);
+      cmsys::SystemTools::SplitPath(path, pathComponents);
       std::string frameworkPath =cmsys::SystemTools::JoinPath(
                              pathComponents.begin(), pathComponents.end() - 2);
       frameworkPaths.insert(frameworkPath);
@@ -1280,7 +1277,7 @@ void cmQtAutoGenerators::Init()
 
 bool cmQtAutoGenerators::RunAutogen(cmMakefile* makefile)
 {
-  if (!cmsys::SystemTools::FileExists(this->OutMocCppFilename.c_str())
+  if (!cmsys::SystemTools::FileExists(this->OutMocCppFilename)
     || (this->OldCompileSettingsStr != this->CurrentCompileSettingsStr))
     {
     this->GenerateAll = true;
@@ -1484,7 +1481,7 @@ void cmQtAutoGenerators::ParseCppFile(const std::string& absFilename,
     }
 
   const std::string absPath = cmsys::SystemTools::GetFilenamePath(
-                   cmsys::SystemTools::GetRealPath(absFilename.c_str())) + '/';
+                   cmsys::SystemTools::GetRealPath(absFilename)) + '/';
   const std::string scannedFileBasename = cmsys::SystemTools::
                                   GetFilenameWithoutLastExtension(absFilename);
   std::string macroName;
@@ -1672,7 +1669,7 @@ void cmQtAutoGenerators::StrictParseCppFile(const std::string& absFilename,
     }
 
   const std::string absPath = cmsys::SystemTools::GetFilenamePath(
-                   cmsys::SystemTools::GetRealPath(absFilename.c_str())) + '/';
+                   cmsys::SystemTools::GetRealPath(absFilename)) + '/';
   const std::string scannedFileBasename = cmsys::SystemTools::
                                   GetFilenameWithoutLastExtension(absFilename);
 
@@ -1802,7 +1799,7 @@ void cmQtAutoGenerators::ParseForUic(const std::string& absFilename,
   std::string::size_type matchOffset = 0;
 
   const std::string realName =
-                   cmsys::SystemTools::GetRealPath(absFilename.c_str());
+                   cmsys::SystemTools::GetRealPath(absFilename);
 
   matchOffset = 0;
   if ((strstr(contentsString.c_str(), "ui_") != NULL)
@@ -1836,14 +1833,14 @@ cmQtAutoGenerators::SearchHeadersForCppFile(const std::string& absFilename,
   const std::string basename =
               cmsys::SystemTools::GetFilenameWithoutLastExtension(absFilename);
   const std::string absPath = cmsys::SystemTools::GetFilenamePath(
-                   cmsys::SystemTools::GetRealPath(absFilename.c_str())) + '/';
+                   cmsys::SystemTools::GetRealPath(absFilename)) + '/';
 
   for(std::vector<std::string>::const_iterator ext = headerExtensions.begin();
       ext != headerExtensions.end();
       ++ext)
     {
     const std::string headerName = absPath + basename + "." + (*ext);
-    if (cmsys::SystemTools::FileExists(headerName.c_str()))
+    if (cmsys::SystemTools::FileExists(headerName))
       {
       absHeaders.insert(headerName);
       break;
@@ -1854,7 +1851,7 @@ cmQtAutoGenerators::SearchHeadersForCppFile(const std::string& absFilename,
       ++ext)
     {
     const std::string privateHeaderName = absPath+basename+"_p."+(*ext);
-    if (cmsys::SystemTools::FileExists(privateHeaderName.c_str()))
+    if (cmsys::SystemTools::FileExists(privateHeaderName))
       {
       absHeaders.insert(privateHeaderName);
       break;
@@ -1904,16 +1901,16 @@ bool cmQtAutoGenerators::GenerateMoc(const std::string& sourceFile,
 {
   const std::string mocFilePath = this->Builddir + mocFileName;
   int sourceNewerThanMoc = 0;
-  bool success = cmsys::SystemTools::FileTimeCompare(sourceFile.c_str(),
-                                                     mocFilePath.c_str(),
+  bool success = cmsys::SystemTools::FileTimeCompare(sourceFile,
+                                                     mocFilePath,
                                                      &sourceNewerThanMoc);
   if (this->GenerateAll || !success || sourceNewerThanMoc >= 0)
     {
     // make sure the directory for the resulting moc file exists
     std::string mocDir = mocFilePath.substr(0, mocFilePath.rfind('/'));
-    if (!cmsys::SystemTools::FileExists(mocDir.c_str(), false))
+    if (!cmsys::SystemTools::FileExists(mocDir, false))
       {
-      cmsys::SystemTools::MakeDirectory(mocDir.c_str());
+      cmsys::SystemTools::MakeDirectory(mocDir);
       }
 
     std::string msg = "Generating ";
@@ -1968,7 +1965,7 @@ bool cmQtAutoGenerators::GenerateMoc(const std::string& sourceFile,
       std::cerr << "AUTOGEN: error: process for " << mocFilePath <<" failed:\n"
                 << output << std::endl;
       this->RunMocFailed = true;
-      cmSystemTools::RemoveFile(mocFilePath.c_str());
+      cmSystemTools::RemoveFile(mocFilePath);
       }
     return true;
     }
@@ -1978,20 +1975,19 @@ bool cmQtAutoGenerators::GenerateMoc(const std::string& sourceFile,
 bool cmQtAutoGenerators::GenerateUi(const std::string& realName,
                                     const std::string& uiFileName)
 {
-  if (!cmsys::SystemTools::FileExists(this->Builddir.c_str(), false))
+  if (!cmsys::SystemTools::FileExists(this->Builddir, false))
     {
-    cmsys::SystemTools::MakeDirectory(this->Builddir.c_str());
+    cmsys::SystemTools::MakeDirectory(this->Builddir);
     }
 
-  const std::string path = cmsys::SystemTools::GetFilenamePath(
-                                                      realName.c_str()) + '/';
+  const std::string path = cmsys::SystemTools::GetFilenamePath(realName) + '/';
 
   std::string ui_output_file = "ui_" + uiFileName + ".h";
   std::string ui_input_file = path + uiFileName + ".ui";
 
   int sourceNewerThanUi = 0;
-  bool success = cmsys::SystemTools::FileTimeCompare(ui_input_file.c_str(),
-                                    (this->Builddir + ui_output_file).c_str(),
+  bool success = cmsys::SystemTools::FileTimeCompare(ui_input_file,
+                                    this->Builddir + ui_output_file,
                                                      &sourceNewerThanUi);
   if (this->GenerateAll || !success || sourceNewerThanUi >= 0)
     {
@@ -2042,7 +2038,7 @@ bool cmQtAutoGenerators::GenerateUi(const std::string& realName,
       std::cerr << "AUTOUIC: error: process for " << ui_output_file <<
                 " failed:\n" << output << std::endl;
       this->RunUicFailed = true;
-      cmSystemTools::RemoveFile(ui_output_file.c_str());
+      cmSystemTools::RemoveFile(ui_output_file);
       return false;
       }
     return true;
@@ -2075,8 +2071,8 @@ bool cmQtAutoGenerators::GenerateQrc()
                                 + ".dir/qrc_" + basename + ".cpp";
 
     int sourceNewerThanQrc = 0;
-    bool success = cmsys::SystemTools::FileTimeCompare(si->c_str(),
-                                                      rcc_output_file.c_str(),
+    bool success = cmsys::SystemTools::FileTimeCompare(*si,
+                                                      rcc_output_file,
                                                       &sourceNewerThanQrc);
     if (this->GenerateAll || !success || sourceNewerThanQrc >= 0)
       {
@@ -2118,7 +2114,7 @@ bool cmQtAutoGenerators::GenerateQrc()
         std::cerr << "AUTORCC: error: process for " << rcc_output_file <<
                   " failed:\n" << output << std::endl;
         this->RunRccFailed = true;
-        cmSystemTools::RemoveFile(rcc_output_file.c_str());
+        cmSystemTools::RemoveFile(rcc_output_file);
         return false;
         }
       }

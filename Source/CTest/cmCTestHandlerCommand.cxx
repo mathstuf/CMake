@@ -137,7 +137,7 @@ bool cmCTestHandlerCommand
     }
   std::string current_dir = cmSystemTools::GetCurrentWorkingDirectory();
   cmSystemTools::ChangeDirectory(
-    this->CTest->GetCTestConfiguration("BuildDirectory").c_str());
+    this->CTest->GetCTestConfiguration("BuildDirectory"));
   int res = handler->ProcessHandler();
   if ( this->Values[ct_RETURN_VALUE] && *this->Values[ct_RETURN_VALUE])
     {

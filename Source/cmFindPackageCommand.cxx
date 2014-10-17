@@ -272,7 +272,7 @@ bool cmFindPackageCommand
         }
       this->Configs.push_back(args[i]);
       }
-    else if(!haveVersion && version.find(args[i].c_str()))
+    else if(!haveVersion && version.find(args[i]))
       {
       haveVersion = true;
       this->Version = args[i];
@@ -627,7 +627,7 @@ bool cmFindPackageCommand::HandlePackageMode()
       cmSystemTools::ConvertToUnixSlashes(dir);
 
       // Treat relative paths with respect to the current source dir.
-      if(!cmSystemTools::FileIsFullPath(dir.c_str()))
+      if(!cmSystemTools::FileIsFullPath(dir))
         {
         dir = "/" + dir;
         dir = this->Makefile->GetCurrentDirectory() + dir;
@@ -1131,7 +1131,7 @@ void cmFindPackageCommand::AddPrefixesCMakeEnvironment()
     // Check the environment variable with the same name as the cache
     // entry.
     std::string env;
-    if(cmSystemTools::GetEnv(this->Variable.c_str(), env) && env.length() > 0)
+    if(cmSystemTools::GetEnv(this->Variable, env) && env.length() > 0)
       {
       cmSystemTools::ConvertToUnixSlashes(env);
       this->AddPathInternal(env, EnvPath);
@@ -1335,7 +1335,7 @@ public:
 void cmFindPackageCommand::LoadPackageRegistryDir(std::string const& dir)
 {
   cmsys::Directory files;
-  if(!files.Load(dir.c_str()))
+  if(!files.Load(dir))
     {
     return;
     }
@@ -1347,7 +1347,7 @@ void cmFindPackageCommand::LoadPackageRegistryDir(std::string const& dir)
     fname += "/";
     fname += files.GetFile(i);
 
-    if(!cmSystemTools::FileIsDirectory(fname.c_str()))
+    if(!cmSystemTools::FileIsDirectory(fname))
       {
       // Hold this file hostage until it behaves.
       cmFindPackageCommandHoldFile holdFile(fname.c_str());
@@ -1372,14 +1372,14 @@ bool cmFindPackageCommand::CheckPackageRegistryEntry(std::istream& is)
   // Parse the content of one package registry entry.
   std::string fname;
   if(cmSystemTools::GetLineFromStream(is, fname) &&
-     cmSystemTools::FileIsFullPath(fname.c_str()))
+     cmSystemTools::FileIsFullPath(fname))
     {
     // The first line in the stream is the full path to a file or
     // directory containing the package.
-    if(cmSystemTools::FileExists(fname.c_str()))
+    if(cmSystemTools::FileExists(fname))
       {
       // The path exists.  Look for the package here.
-      if(!cmSystemTools::FileIsDirectory(fname.c_str()))
+      if(!cmSystemTools::FileIsDirectory(fname))
         {
         fname = cmSystemTools::GetFilenamePath(fname);
         }
@@ -1418,8 +1418,8 @@ void cmFindPackageCommand::AddPrefixesBuilds()
       std::string f = r.str();
       cmSystemTools::ExpandRegistryValues(f);
       cmSystemTools::ConvertToUnixSlashes(f);
-      if(cmSystemTools::FileIsFullPath(f.c_str()) &&
-         cmSystemTools::FileIsDirectory(f.c_str()))
+      if(cmSystemTools::FileIsFullPath(f) &&
+         cmSystemTools::FileIsDirectory(f))
         {
         this->AddPathInternal(f, FullPath);
         }
@@ -1511,7 +1511,7 @@ bool cmFindPackageCommand::FindConfigFile(std::string const& dir,
       {
       fprintf(stderr, "Checking file [%s]\n", file.c_str());
       }
-    if(cmSystemTools::FileExists(file.c_str(), true) &&
+    if(cmSystemTools::FileExists(file, true) &&
        this->CheckVersion(file))
       {
       return true;
@@ -1535,7 +1535,7 @@ bool cmFindPackageCommand::CheckVersion(std::string const& config_file)
   std::string version_file = version_file_base;
   version_file += "-version.cmake";
   if ((haveResult == false)
-       && (cmSystemTools::FileExists(version_file.c_str(), true)))
+       && (cmSystemTools::FileExists(version_file, true)))
     {
     result = this->CheckVersionFile(version_file, version);
     haveResult = true;
@@ -1545,7 +1545,7 @@ bool cmFindPackageCommand::CheckVersion(std::string const& config_file)
   version_file = version_file_base;
   version_file += "Version.cmake";
   if ((haveResult == false)
-       && (cmSystemTools::FileExists(version_file.c_str(), true)))
+       && (cmSystemTools::FileExists(version_file, true)))
     {
     result = this->CheckVersionFile(version_file, version);
     haveResult = true;
@@ -1847,7 +1847,7 @@ private:
     // Construct a list of matches.
     std::vector<std::string> matches;
     cmsys::Directory d;
-    d.Load(parent.c_str());
+    d.Load(parent);
     for(unsigned long i=0; i < d.GetNumberOfFiles(); ++i)
       {
       const char* fname = d.GetFile(i);
@@ -1901,7 +1901,7 @@ private:
     // Construct a list of matches.
     std::vector<std::string> matches;
     cmsys::Directory d;
-    d.Load(parent.c_str());
+    d.Load(parent);
     for(unsigned long i=0; i < d.GetNumberOfFiles(); ++i)
       {
       const char* fname = d.GetFile(i);
@@ -1955,7 +1955,7 @@ private:
     // Look for matching files.
     std::vector<std::string> matches;
     cmsys::Directory d;
-    d.Load(parent.c_str());
+    d.Load(parent);
     for(unsigned long i=0; i < d.GetNumberOfFiles(); ++i)
       {
       const char* fname = d.GetFile(i);
@@ -2007,7 +2007,7 @@ private:
     for(std::vector<std::string>::const_iterator fi = files.begin();
         fi != files.end(); ++fi)
       {
-      if(cmSystemTools::FileIsDirectory(fi->c_str()))
+      if(cmSystemTools::FileIsDirectory(*fi))
         {
         if(this->Consider(*fi, lister))
           {
@@ -2035,7 +2035,7 @@ bool cmFindPackageCommand::SearchPrefix(std::string const& prefix_in)
     }
 
   // Skip this if the prefix does not exist.
-  if(!cmSystemTools::FileIsDirectory(prefix_in.c_str()))
+  if(!cmSystemTools::FileIsDirectory(prefix_in))
     {
     return false;
     }

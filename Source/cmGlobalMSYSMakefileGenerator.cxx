@@ -53,7 +53,7 @@ void cmGlobalMSYSMakefileGenerator
   this->FindMakeProgram(mf);
   std::string makeProgram = mf->GetRequiredDefinition("CMAKE_MAKE_PROGRAM");
   std::vector<std::string> locations;
-  std::string makeloc = cmSystemTools::GetProgramPath(makeProgram.c_str());
+  std::string makeloc = cmSystemTools::GetProgramPath(makeProgram);
   locations.push_back(this->FindMinGW(makeloc));
   locations.push_back(makeloc);
   locations.push_back("/mingw/bin");

@@ -109,7 +109,7 @@ std::string cmGlobalVisualStudio8Generator::FindDevEnvCommand()
     "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\VCExpress\\";
   vsxkey += this->GetIDEVersion();
   vsxkey += ";InstallDir";
-  if(cmSystemTools::ReadRegistryValue(vsxkey.c_str(), vsxcmd,
+  if(cmSystemTools::ReadRegistryValue(vsxkey, vsxcmd,
                                       cmSystemTools::KeyWOW64_32))
     {
     cmSystemTools::ConvertToUnixSlashes(vsxcmd);
@@ -476,7 +476,7 @@ bool cmGlobalVisualStudio8Generator::NeedLinkLibraryDependencies(
         target.GetUtilities().begin();
       ui != target.GetUtilities().end(); ++ui)
     {
-    if(cmTarget* depTarget = this->FindTarget(ui->c_str()))
+    if(cmTarget* depTarget = this->FindTarget(*ui))
       {
       if(depTarget->GetType() != cmTarget::INTERFACE_LIBRARY
           && depTarget->GetProperty("EXTERNAL_MSPROJECT"))

@@ -41,7 +41,7 @@ bool cmGetDirectoryPropertyCommand
       }
     std::string sd = *i;
     // make sure the start dir is a full path
-    if (!cmSystemTools::FileIsFullPath(sd.c_str()))
+    if (!cmSystemTools::FileIsFullPath(sd))
       {
       sd = this->Makefile->GetStartDirectory();
       sd += "/";
@@ -49,7 +49,7 @@ bool cmGetDirectoryPropertyCommand
       }
 
     // The local generators are associated with collapsed paths.
-    sd = cmSystemTools::CollapseFullPath(sd.c_str());
+    sd = cmSystemTools::CollapseFullPath(sd);
 
     // lookup the makefile from the directory name
     cmLocalGenerator *lg =

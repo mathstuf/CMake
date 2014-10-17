@@ -128,7 +128,7 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
     // Copy directory content
     if (args[1] == "copy_directory" && args.size() == 4)
       {
-      if(!cmSystemTools::CopyADirectory(args[2].c_str(), args[3].c_str()))
+      if(!cmSystemTools::CopyADirectory(args[2], args[3]))
         {
         std::cerr << "Error copying directory from \""
                   << args[2] << "\" to \"" << args[3]

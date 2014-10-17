@@ -153,11 +153,11 @@ bool cmMacroHelperCommand::InvokeInitialPass
           variable = "${";
           variable += this->Args[j];
           variable += "}";
-          cmSystemTools::ReplaceString(tmps, variable.c_str(),
-                                       expandedArgs[j-1].c_str());
+          cmSystemTools::ReplaceString(tmps, variable,
+                                       expandedArgs[j-1]);
           }
         // replace argc
-        cmSystemTools::ReplaceString(tmps, "${ARGC}",argcDef.c_str());
+        cmSystemTools::ReplaceString(tmps, "${ARGC}",argcDef);
 
         // repleace ARGN
         if (tmps.find("${ARGN}") != std::string::npos)
@@ -180,7 +180,7 @@ bool cmMacroHelperCommand::InvokeInitialPass
               }
             argnDefInitialized = true;
             }
-          cmSystemTools::ReplaceString(tmps, "${ARGN}", argnDef.c_str());
+          cmSystemTools::ReplaceString(tmps, "${ARGN}", argnDef);
           }
 
         // if the current argument of the current function has ${ARGV in it
@@ -203,14 +203,14 @@ bool cmMacroHelperCommand::InvokeInitialPass
               }
             argvDefInitialized = true;
             }
-          cmSystemTools::ReplaceString(tmps, "${ARGV}", argvDef.c_str());
+          cmSystemTools::ReplaceString(tmps, "${ARGV}", argvDef);
 
           // also replace the ARGV1 ARGV2 ... etc
           for (unsigned int t = 0; t < expandedArgs.size(); ++t)
             {
             sprintf(argvName,"${ARGV%i}",t);
             cmSystemTools::ReplaceString(tmps, argvName,
-                                         expandedArgs[t].c_str());
+                                         expandedArgs[t]);
             }
           }
 

@@ -257,14 +257,14 @@ cmExtraKateGenerator::GenerateFilesString(const cmMakefile* mf) const
 {
   std::string s = mf->GetHomeDirectory();
   s += "/.git";
-  if(cmSystemTools::FileExists(s.c_str()))
+  if(cmSystemTools::FileExists(s))
   {
     return std::string("\"git\": 1 ");
   }
 
   s = mf->GetHomeDirectory();
   s += "/.svn";
-  if(cmSystemTools::FileExists(s.c_str()))
+  if(cmSystemTools::FileExists(s))
   {
     return std::string("\"svn\": 1 ");
   }

@@ -588,7 +588,7 @@ void * CCONV cmAddSource(void *arg, void *arg2)
   for(std::vector<std::string>::iterator i = osf->Depends.begin();
       i != osf->Depends.end(); ++i)
     {
-    rsf->AddDepend(i->c_str());
+    rsf->AddDepend(*i);
     }
 
   // Create the proxy for the real source file.

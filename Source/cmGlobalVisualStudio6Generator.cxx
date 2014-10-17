@@ -101,7 +101,7 @@ std::string cmGlobalVisualStudio6Generator::FindMSDevCommand()
 {
   std::string vscmd;
   std::string vskey = this->GetRegistryBase() + "\\Setup;VsCommonDir";
-  if(cmSystemTools::ReadRegistryValue(vskey.c_str(), vscmd,
+  if(cmSystemTools::ReadRegistryValue(vskey, vscmd,
                                       cmSystemTools::KeyWOW64_32))
     {
     cmSystemTools::ConvertToUnixSlashes(vscmd);
@@ -217,7 +217,7 @@ void cmGlobalVisualStudio6Generator
       {
       std::string project = target->GetName();
       std::string location = expath;
-      this->WriteExternalProject(fout, project.c_str(),
+      this->WriteExternalProject(fout, project,
                                  location.c_str(), target->GetUtilities());
       }
     else
@@ -225,7 +225,7 @@ void cmGlobalVisualStudio6Generator
       std::string dspname = GetVS6TargetName(target->GetName());
       std::string dir = target->GetMakefile()->GetStartOutputDirectory();
       dir = root->Convert(dir.c_str(), cmLocalGenerator::START_OUTPUT);
-      this->WriteProject(fout, dspname.c_str(), dir.c_str(), *target);
+      this->WriteProject(fout, dspname, dir.c_str(), *target);
       }
     }
 
@@ -369,7 +369,7 @@ cmGlobalVisualStudio6Generator::WriteUtilityDepend(cmTarget const* target)
 {
   std::string pname = target->GetName();
   pname += "_UTILITY";
-  pname = GetVS6TargetName(pname.c_str());
+  pname = GetVS6TargetName(pname);
   std::string fname = target->GetMakefile()->GetStartOutputDirectory();
   fname += "/";
   fname += pname;

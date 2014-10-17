@@ -141,18 +141,18 @@ void cmLocalVisualStudio6Generator::OutputDSPFile()
       {
       case cmTarget::STATIC_LIBRARY:
       case cmTarget::OBJECT_LIBRARY:
-        this->SetBuildType(STATIC_LIBRARY, l->first.c_str(), l->second);
+        this->SetBuildType(STATIC_LIBRARY, l->first, l->second);
         break;
       case cmTarget::SHARED_LIBRARY:
       case cmTarget::MODULE_LIBRARY:
-        this->SetBuildType(DLL, l->first.c_str(), l->second);
+        this->SetBuildType(DLL, l->first, l->second);
         break;
       case cmTarget::EXECUTABLE:
-        this->SetBuildType(EXECUTABLE,l->first.c_str(), l->second);
+        this->SetBuildType(EXECUTABLE,l->first, l->second);
         break;
       case cmTarget::UTILITY:
       case cmTarget::GLOBAL_TARGET:
-        this->SetBuildType(UTILITY, l->first.c_str(), l->second);
+        this->SetBuildType(UTILITY, l->first, l->second);
         break;
       case cmTarget::INTERFACE_LIBRARY:
         continue;
@@ -173,12 +173,12 @@ void cmLocalVisualStudio6Generator::OutputDSPFile()
         std::string dir = this->Makefile->GetStartOutputDirectory();
         dir += "/";
         dir += l->first.substr(0, pos);
-        if(!cmSystemTools::MakeDirectory(dir.c_str()))
+        if(!cmSystemTools::MakeDirectory(dir))
           {
           cmSystemTools::Error("Error creating directory: ", dir.c_str());
           }
         }
-      this->CreateSingleDSP(l->first.c_str(),l->second);
+      this->CreateSingleDSP(l->first,l->second);
       }
     }
 }
@@ -209,7 +209,7 @@ void cmLocalVisualStudio6Generator::CreateSingleDSP(const std::string& lname,
     cmSystemTools::Error("Error Writing ", fname.c_str());
     cmSystemTools::ReportLastSystemError("");
     }
-  this->WriteDSPFile(fout,pname.c_str(),target);
+  this->WriteDSPFile(fout,pname,target);
   fout.close();
   // if the dsp file has changed, then write it.
   cmSystemTools::CopyFileIfDifferent(fname.c_str(), realDSP.c_str());
@@ -227,7 +227,7 @@ void cmLocalVisualStudio6Generator::AddDSPBuildRule(cmTarget& tgt)
   std::string makefileIn = this->Makefile->GetStartDirectory();
   makefileIn += "/";
   makefileIn += "CMakeLists.txt";
-  if(!cmSystemTools::FileExists(makefileIn.c_str()))
+  if(!cmSystemTools::FileExists(makefileIn))
     {
     return;
     }
@@ -249,11 +249,11 @@ void cmLocalVisualStudio6Generator::AddDSPBuildRule(cmTarget& tgt)
   cmCustomCommandLines commandLines;
   commandLines.push_back(commandLine);
   const char* no_working_directory = 0;
-  this->Makefile->AddCustomCommandToOutput(dspname.c_str(), listFiles,
-                                           makefileIn.c_str(), commandLines,
+  this->Makefile->AddCustomCommandToOutput(dspname, listFiles,
+                                           makefileIn, commandLines,
                                            comment.c_str(),
                                            no_working_directory, true);
-  if(this->Makefile->GetSource(makefileIn.c_str()))
+  if(this->Makefile->GetSource(makefileIn))
     {
     tgt.AddSource(makefileIn);
     }
@@ -341,12 +341,12 @@ void cmLocalVisualStudio6Generator::WriteDSPFile(std::ostream& fout,
     // must generate it
     if ((*i)->GetPropertyAsBool("__CMAKE_RULE"))
       {
-      if(!cmSystemTools::FileExists(source.c_str()))
+      if(!cmSystemTools::FileExists(source))
         {
         cmSystemTools::ReplaceString(source, "$(IntDir)/", "");
         // Make sure the path exists for the file
         std::string path = cmSystemTools::GetFilenamePath(source);
-        cmSystemTools::MakeDirectory(path.c_str());
+        cmSystemTools::MakeDirectory(path);
 #if defined(_WIN32) || defined(__CYGWIN__)
         cmsys::ofstream sourceFout(source.c_str(),
                            std::ios::binary | std::ios::out
@@ -660,7 +660,7 @@ cmLocalVisualStudio6Generator
       {
       // Lookup the real name of the dependency in case it is a CMake target.
       std::string dep;
-      if(this->GetRealDependency(d->c_str(), config.c_str(), dep))
+      if(this->GetRealDependency(*d, config, dep))
         {
         fout << "\\\n\t" <<
           this->ConvertToOptionallyRelativeOutputPath(dep.c_str());
@@ -794,7 +794,7 @@ void cmLocalVisualStudio6Generator::SetBuildType(BuildType b,
   std::string line;
   while(cmSystemTools::GetLineFromStream(fin, line))
     {
-    cmSystemTools::ReplaceString(line, "OUTPUT_LIBNAME", vs6name.c_str());
+    cmSystemTools::ReplaceString(line, "OUTPUT_LIBNAME", vs6name);
     if (reg.find(line))
       {
       this->Configurations.push_back(line.substr(reg.end()));
@@ -907,7 +907,7 @@ cmLocalVisualStudio6Generator::GetTargetIncludeOptions(cmTarget &target,
         this->ConvertToOptionallyRelativeOutputPath(i->c_str());
       if(useShortPath)
         {
-        cmSystemTools::GetShortPath(tmp.c_str(), tmp);
+        cmSystemTools::GetShortPath(tmp, tmp);
         }
       includeOptions +=  " /I ";
 
@@ -1120,13 +1120,13 @@ void cmLocalVisualStudio6Generator
       // Compute the proper name to use to link this library.
       std::string lib;
       std::string libDebug;
-      cmTarget* tgt = this->GlobalGenerator->FindTarget(j->first.c_str());
+      cmTarget* tgt = this->GlobalGenerator->FindTarget(j->first);
       if(tgt)
         {
         lib = cmSystemTools::GetFilenameWithoutExtension
-          (tgt->GetFullName().c_str());
+          (tgt->GetFullName());
         libDebug = cmSystemTools::GetFilenameWithoutExtension
-          (tgt->GetFullName("Debug").c_str());
+          (tgt->GetFullName("Debug"));
         lib += ".lib";
         libDebug += ".lib";
         }
@@ -1565,22 +1565,22 @@ void cmLocalVisualStudio6Generator
       mfcFlag = "0";
       }
     cmSystemTools::ReplaceString(line, "OUTPUT_LIBNAME_EXPORTS",
-                                 libnameExports.c_str());
+                                 libnameExports);
     cmSystemTools::ReplaceString(line, "CMAKE_MFC_FLAG",
                                  mfcFlag);
     if(target.GetType() == cmTarget::STATIC_LIBRARY ||
        target.GetType() == cmTarget::OBJECT_LIBRARY)
       {
       cmSystemTools::ReplaceString(line, "CM_STATIC_LIB_ARGS_DEBUG",
-                                   staticLibOptionsDebug.c_str());
+                                   staticLibOptionsDebug);
       cmSystemTools::ReplaceString(line, "CM_STATIC_LIB_ARGS_RELEASE",
-                                   staticLibOptionsRelease.c_str());
+                                   staticLibOptionsRelease);
       cmSystemTools::ReplaceString(line, "CM_STATIC_LIB_ARGS_MINSIZEREL",
-                                   staticLibOptionsMinSizeRel.c_str());
+                                   staticLibOptionsMinSizeRel);
       cmSystemTools::ReplaceString(line, "CM_STATIC_LIB_ARGS_RELWITHDEBINFO",
-                                   staticLibOptionsRelWithDebInfo.c_str());
+                                   staticLibOptionsRelWithDebInfo);
       cmSystemTools::ReplaceString(line, "CM_STATIC_LIB_ARGS",
-                                   staticLibOptions.c_str());
+                                   staticLibOptions);
       }
     if(this->Makefile->IsOn("CMAKE_VERBOSE_MAKEFILE"))
       {
@@ -1589,76 +1589,76 @@ void cmLocalVisualStudio6Generator
 
 #ifdef CM_USE_OLD_VS6
     cmSystemTools::ReplaceString(line, "CM_LIBRARIES",
-                                 libOptions.c_str());
+                                 libOptions);
     cmSystemTools::ReplaceString(line, "CM_DEBUG_LIBRARIES",
-                                 libDebugOptions.c_str());
+                                 libDebugOptions);
     cmSystemTools::ReplaceString(line, "CM_OPTIMIZED_LIBRARIES",
-                                 libOptimizedOptions.c_str());
+                                 libOptimizedOptions);
     cmSystemTools::ReplaceString(line, "CM_MULTILINE_LIBRARIES_FOR_DEBUG",
-                                 libMultiLineOptionsForDebug.c_str());
+                                 libMultiLineOptionsForDebug);
     cmSystemTools::ReplaceString(line, "CM_MULTILINE_LIBRARIES",
-                                 libMultiLineOptions.c_str());
+                                 libMultiLineOptions);
     cmSystemTools::ReplaceString(line, "CM_MULTILINE_DEBUG_LIBRARIES",
-                                 libMultiLineDebugOptions.c_str());
+                                 libMultiLineDebugOptions);
     cmSystemTools::ReplaceString(line, "CM_MULTILINE_OPTIMIZED_LIBRARIES",
-                                 libMultiLineOptimizedOptions.c_str());
+                                 libMultiLineOptimizedOptions);
 #endif
 
     // Substitute the rules for custom command. When specifying just the
     // target name for the command the command can be different for
     // different configs
     cmSystemTools::ReplaceString(line, "CMAKE_CUSTOM_RULE_CODE_RELEASE",
-                                 customRuleCodeRelease.c_str());
+                                 customRuleCodeRelease);
     cmSystemTools::ReplaceString(line, "CMAKE_CUSTOM_RULE_CODE_DEBUG",
-                                 customRuleCodeDebug.c_str());
+                                 customRuleCodeDebug);
     cmSystemTools::ReplaceString(line, "CMAKE_CUSTOM_RULE_CODE_MINSIZEREL",
-                                 customRuleCodeMinSizeRel.c_str());
+                                 customRuleCodeMinSizeRel);
     cmSystemTools::ReplaceString(line, "CMAKE_CUSTOM_RULE_CODE_RELWITHDEBINFO",
-                                 customRuleCodeRelWithDebInfo.c_str());
+                                 customRuleCodeRelWithDebInfo);
 
     // Substitute the real output name into the template.
     cmSystemTools::ReplaceString(line, "OUTPUT_NAME_DEBUG",
-                                 outputNameDebug.c_str());
+                                 outputNameDebug);
     cmSystemTools::ReplaceString(line, "OUTPUT_NAME_RELEASE",
-                                 outputNameRelease.c_str());
+                                 outputNameRelease);
     cmSystemTools::ReplaceString(line, "OUTPUT_NAME_MINSIZEREL",
-                                 outputNameMinSizeRel.c_str());
+                                 outputNameMinSizeRel);
     cmSystemTools::ReplaceString(line, "OUTPUT_NAME_RELWITHDEBINFO",
-                                 outputNameRelWithDebInfo.c_str());
-    cmSystemTools::ReplaceString(line, "OUTPUT_NAME", outputName.c_str());
+                                 outputNameRelWithDebInfo);
+    cmSystemTools::ReplaceString(line, "OUTPUT_NAME", outputName);
 
     // Substitute the proper link information into the template.
     cmSystemTools::ReplaceString(line, "CM_MULTILINE_OPTIONS_DEBUG",
-                                 optionsDebug.c_str());
+                                 optionsDebug);
     cmSystemTools::ReplaceString(line, "CM_MULTILINE_OPTIONS_RELEASE",
-                                 optionsRelease.c_str());
+                                 optionsRelease);
     cmSystemTools::ReplaceString(line, "CM_MULTILINE_OPTIONS_MINSIZEREL",
-                                 optionsMinSizeRel.c_str());
+                                 optionsMinSizeRel);
     cmSystemTools::ReplaceString(line, "CM_MULTILINE_OPTIONS_RELWITHDEBINFO",
-                                 optionsRelWithDebInfo.c_str());
+                                 optionsRelWithDebInfo);
 
     cmSystemTools::ReplaceString(line, "BUILD_INCLUDES_DEBUG",
-                                 includeOptionsDebug.c_str());
+                                 includeOptionsDebug);
     cmSystemTools::ReplaceString(line, "BUILD_INCLUDES_RELEASE",
-                                 includeOptionsRelease.c_str());
+                                 includeOptionsRelease);
     cmSystemTools::ReplaceString(line, "BUILD_INCLUDES_MINSIZEREL",
-                                 includeOptionsMinSizeRel.c_str());
+                                 includeOptionsMinSizeRel);
     cmSystemTools::ReplaceString(line, "BUILD_INCLUDES_RELWITHDEBINFO",
-                                 includeOptionsRelWithDebInfo.c_str());
+                                 includeOptionsRelWithDebInfo);
 
     cmSystemTools::ReplaceString(line, "TARGET_VERSION_FLAG",
-                                 targetVersionFlag.c_str());
+                                 targetVersionFlag);
     cmSystemTools::ReplaceString(line, "TARGET_IMPLIB_FLAG_DEBUG",
-                                 targetImplibFlagDebug.c_str());
+                                 targetImplibFlagDebug);
     cmSystemTools::ReplaceString(line, "TARGET_IMPLIB_FLAG_RELEASE",
-                                 targetImplibFlagRelease.c_str());
+                                 targetImplibFlagRelease);
     cmSystemTools::ReplaceString(line, "TARGET_IMPLIB_FLAG_MINSIZEREL",
-                                 targetImplibFlagMinSizeRel.c_str());
+                                 targetImplibFlagMinSizeRel);
     cmSystemTools::ReplaceString(line, "TARGET_IMPLIB_FLAG_RELWITHDEBINFO",
-                                 targetImplibFlagRelWithDebInfo.c_str());
+                                 targetImplibFlagRelWithDebInfo);
 
     std::string vs6name = GetVS6TargetName(libName);
-    cmSystemTools::ReplaceString(line, "OUTPUT_LIBNAME", vs6name.c_str());
+    cmSystemTools::ReplaceString(line, "OUTPUT_LIBNAME", vs6name);
 
 #ifdef CM_USE_OLD_VS6
     // because LIBRARY_OUTPUT_PATH and EXECUTABLE_OUTPUT_PATH
@@ -1678,17 +1678,17 @@ void cmLocalVisualStudio6Generator
     if(targetBuilds || target.GetType() == cmTarget::OBJECT_LIBRARY)
       {
       cmSystemTools::ReplaceString(line, "OUTPUT_DIRECTORY_DEBUG",
-                                   outputDirDebug.c_str());
+                                   outputDirDebug);
       cmSystemTools::ReplaceString(line, "OUTPUT_DIRECTORY_RELEASE",
-                                   outputDirRelease.c_str());
+                                   outputDirRelease);
       cmSystemTools::ReplaceString(line, "OUTPUT_DIRECTORY_MINSIZEREL",
-                                   outputDirMinSizeRel.c_str());
+                                   outputDirMinSizeRel);
       cmSystemTools::ReplaceString(line, "OUTPUT_DIRECTORY_RELWITHDEBINFO",
-                                   outputDirRelWithDebInfo.c_str());
+                                   outputDirRelWithDebInfo);
       if(!outputDirOld.empty())
         {
         cmSystemTools::ReplaceString(line, "OUTPUT_DIRECTORY",
-                                     outputDirOld.c_str());
+                                     outputDirOld);
         }
       }
 
@@ -1806,24 +1806,24 @@ void cmLocalVisualStudio6Generator
     // variable names.   The previous code sets up flags* variables to contain
     // the correct C or CXX flags
     cmSystemTools::ReplaceString(line, "CMAKE_CXX_FLAGS_MINSIZEREL",
-                                 flagsMinSizeRel.c_str());
+                                 flagsMinSizeRel);
     cmSystemTools::ReplaceString(line, "CMAKE_CXX_FLAGS_DEBUG",
-                                 flagsDebug.c_str());
+                                 flagsDebug);
     cmSystemTools::ReplaceString(line, "CMAKE_CXX_FLAGS_RELWITHDEBINFO",
-                                 flagsRelWithDebInfo.c_str());
+                                 flagsRelWithDebInfo);
     cmSystemTools::ReplaceString(line, "CMAKE_CXX_FLAGS_RELEASE",
-                                 flagsRelease.c_str());
-    cmSystemTools::ReplaceString(line, "CMAKE_CXX_FLAGS", flags.c_str());
+                                 flagsRelease);
+    cmSystemTools::ReplaceString(line, "CMAKE_CXX_FLAGS", flags);
 
     cmSystemTools::ReplaceString(line, "COMPILE_DEFINITIONS_MINSIZEREL",
-                                 minsizeDefines.c_str());
+                                 minsizeDefines);
     cmSystemTools::ReplaceString(line, "COMPILE_DEFINITIONS_DEBUG",
-                                 debugDefines.c_str());
+                                 debugDefines);
     cmSystemTools::ReplaceString(line, "COMPILE_DEFINITIONS_RELWITHDEBINFO",
-                                 debugrelDefines.c_str());
+                                 debugrelDefines);
     cmSystemTools::ReplaceString(line, "COMPILE_DEFINITIONS_RELEASE",
-                                 releaseDefines.c_str());
-    cmSystemTools::ReplaceString(line, "COMPILE_DEFINITIONS", defines.c_str());
+                                 releaseDefines);
+    cmSystemTools::ReplaceString(line, "COMPILE_DEFINITIONS", defines);
 
     fout << line.c_str() << std::endl;
     }

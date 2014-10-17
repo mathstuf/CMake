@@ -608,13 +608,13 @@ bool cmMakefile::ReadListFile(const char* filename_in,
     {
     external_abs =
       cmSystemTools::CollapseFullPath(external_in,
-                                      this->cmStartDirectory.c_str());
+                                      this->cmStartDirectory);
     external = external_abs.c_str();
     if (filename_in)
       {
       filename_abs =
         cmSystemTools::CollapseFullPath(filename_in,
-                                        this->cmStartDirectory.c_str());
+                                        this->cmStartDirectory);
       filename = filename_abs.c_str();
       }
     }
@@ -807,7 +807,7 @@ namespace
     bool operator()(const std::string& path) const
       {
       return !(path.find("CMakeTmp") == path.npos &&
-               cmSystemTools::FileExists(path.c_str()));
+               cmSystemTools::FileExists(path));
       }
   };
 }
@@ -1384,7 +1384,7 @@ bool cmMakefile::ParseDefineFlag(std::string const& def, bool remove)
     valid("^[-/]D[A-Za-z_][A-Za-z0-9_]*(=.*)?$");
 
   // Make sure the definition matches.
-  if(!valid.find(def.c_str()))
+  if(!valid.find(def))
     {
     return false;
     }
@@ -1401,7 +1401,7 @@ bool cmMakefile::ParseDefineFlag(std::string const& def, bool remove)
   // Definitions with non-trivial values require a policy check.
   static cmsys::RegularExpression
     trivial("^[-/]D[A-Za-z_][A-Za-z0-9_]*(=[A-Za-z0-9_.]+)?$");
-  if(!trivial.find(def.c_str()))
+  if(!trivial.find(def))
     {
     // This definition has a non-trivial value.
     switch(this->GetPolicyStatus(cmPolicies::CMP0005))
@@ -1666,7 +1666,7 @@ void cmMakefile::AddSubDirectory(const std::string& sub,
 {
   // the source path must be made full if it isn't already
   std::string srcPath = sub;
-  if (!cmSystemTools::FileIsFullPath(srcPath.c_str()))
+  if (!cmSystemTools::FileIsFullPath(srcPath))
     {
     srcPath = this->GetCurrentDirectory();
     srcPath += "/";
@@ -1675,7 +1675,7 @@ void cmMakefile::AddSubDirectory(const std::string& sub,
 
   // binary path must be made full if it isn't already
   std::string binPath = sub;
-  if (!cmSystemTools::FileIsFullPath(binPath.c_str()))
+  if (!cmSystemTools::FileIsFullPath(binPath))
     {
     binPath = this->GetCurrentOutputDirectory();
     binPath += "/";
@@ -1832,7 +1832,7 @@ void cmMakefile::AddCacheDefinition(const std::string& name, const char* value,
         {
         if(!cmSystemTools::IsOff(files[cc].c_str()))
           {
-          files[cc] = cmSystemTools::CollapseFullPath(files[cc].c_str());
+          files[cc] = cmSystemTools::CollapseFullPath(files[cc]);
           }
         if ( cc > 0 )
           {
@@ -1937,11 +1937,11 @@ void cmMakefile::CheckForUnused(const char* reason,
       bt.push_back(lfc);
       }
     if (this->CheckSystemVars ||
-        cmSystemTools::IsSubDirectory(path.c_str(),
+        cmSystemTools::IsSubDirectory(path,
                                       this->GetHomeDirectory()) ||
-        (cmSystemTools::IsSubDirectory(path.c_str(),
+        (cmSystemTools::IsSubDirectory(path,
                                       this->GetHomeOutputDirectory()) &&
-        !cmSystemTools::IsSubDirectory(path.c_str(),
+        !cmSystemTools::IsSubDirectory(path,
                                 cmake::GetCMakeFilesDirectory())))
       {
       cmOStringStream msg;
@@ -2111,7 +2111,7 @@ cmSourceFile *cmMakefile::GetSourceFileWithOutput(
 {
   // If the queried path is not absolute we use the backward compatible
   // linear-time search for an output with a matching suffix.
-  if(!cmSystemTools::FileIsFullPath(name.c_str()))
+  if(!cmSystemTools::FileIsFullPath(name))
     {
     return this->LinearGetSourceFileWithOutput(name);
     }
@@ -2838,7 +2838,7 @@ cmake::MessageType cmMakefile::ExpandVariablesInStringNew(
                 }
               break;
             case ENVIRONMENT:
-              value = cmSystemTools::GetEnv(lookup.c_str());
+              value = cmSystemTools::GetEnv(lookup);
               break;
             case CACHE:
               value = this->GetCacheManager()->GetCacheValue(lookup);
@@ -3556,15 +3556,15 @@ int cmMakefile::TryCompile(const std::string& srcdir,
 {
   this->Internal->IsSourceFileTryCompile = fast;
   // does the binary directory exist ? If not create it...
-  if (!cmSystemTools::FileIsDirectory(bindir.c_str()))
+  if (!cmSystemTools::FileIsDirectory(bindir))
     {
-    cmSystemTools::MakeDirectory(bindir.c_str());
+    cmSystemTools::MakeDirectory(bindir);
     }
 
   // change to the tests directory and run cmake
   // use the cmake object instead of calling cmake
   std::string cwd = cmSystemTools::GetCurrentWorkingDirectory();
-  cmSystemTools::ChangeDirectory(bindir.c_str());
+  cmSystemTools::ChangeDirectory(bindir);
 
   // make sure the same generator is used
   // use this program as the cmake to be run, it should not
@@ -3579,7 +3579,7 @@ int cmMakefile::TryCompile(const std::string& srcdir,
     cmSystemTools::Error(
       "Internal CMake error, TryCompile bad GlobalGenerator");
     // return to the original directory
-    cmSystemTools::ChangeDirectory(cwd.c_str());
+    cmSystemTools::ChangeDirectory(cwd);
     this->Internal->IsSourceFileTryCompile = false;
     return 1;
     }
@@ -3653,7 +3653,7 @@ int cmMakefile::TryCompile(const std::string& srcdir,
     cmSystemTools::Error(
       "Internal CMake error, TryCompile configure of cmake failed");
     // return to the original directory
-    cmSystemTools::ChangeDirectory(cwd.c_str());
+    cmSystemTools::ChangeDirectory(cwd);
     this->Internal->IsSourceFileTryCompile = false;
     return 1;
     }
@@ -3663,7 +3663,7 @@ int cmMakefile::TryCompile(const std::string& srcdir,
     cmSystemTools::Error(
       "Internal CMake error, TryCompile generation of cmake failed");
     // return to the original directory
-    cmSystemTools::ChangeDirectory(cwd.c_str());
+    cmSystemTools::ChangeDirectory(cwd);
     this->Internal->IsSourceFileTryCompile = false;
     return 1;
     }
@@ -3677,7 +3677,7 @@ int cmMakefile::TryCompile(const std::string& srcdir,
                                                            output,
                                                            this);
 
-  cmSystemTools::ChangeDirectory(cwd.c_str());
+  cmSystemTools::ChangeDirectory(cwd);
   this->Internal->IsSourceFileTryCompile = false;
   return ret;
 }
@@ -3783,7 +3783,7 @@ std::string cmMakefile::GetModulesFile(const char* filename) const
       cmSystemTools::ConvertToUnixSlashes(itempl);
       itempl += "/";
       itempl += filename;
-      if(cmSystemTools::FileExists(itempl.c_str()))
+      if(cmSystemTools::FileExists(itempl))
         {
         moduleInCMakeModulePath = itempl;
         break;
@@ -3799,7 +3799,7 @@ std::string cmMakefile::GetModulesFile(const char* filename) const
     moduleInCMakeRoot += "/Modules/";
     moduleInCMakeRoot += filename;
     cmSystemTools::ConvertToUnixSlashes(moduleInCMakeRoot);
-    if(!cmSystemTools::FileExists(moduleInCMakeRoot.c_str()))
+    if(!cmSystemTools::FileExists(moduleInCMakeRoot))
       {
       moduleInCMakeRoot = "";
       }
@@ -3952,12 +3952,12 @@ int cmMakefile::ConfigureFile(const char* infile, const char* outfile,
   this->AddCMakeOutputFile(soutfile);
 
   mode_t perm = 0;
-  cmSystemTools::GetPermissions(sinfile.c_str(), perm);
+  cmSystemTools::GetPermissions(sinfile, perm);
   std::string::size_type pos = soutfile.rfind('/');
   if(pos != std::string::npos)
     {
     std::string path = soutfile.substr(0, pos);
-    cmSystemTools::MakeDirectory(path.c_str());
+    cmSystemTools::MakeDirectory(path);
     }
 
   if(copyonly)
@@ -4034,9 +4034,9 @@ int cmMakefile::ConfigureFile(const char* infile, const char* outfile,
       }
     else
       {
-      cmSystemTools::SetPermissions(soutfile.c_str(), perm);
+      cmSystemTools::SetPermissions(soutfile, perm);
       }
-    cmSystemTools::RemoveFile(tempOutputFile.c_str());
+    cmSystemTools::RemoveFile(tempOutputFile);
     }
   return res;
 }
@@ -4378,7 +4378,7 @@ void cmMakefile::AddCMakeDependFilesFromUser()
   for(std::vector<std::string>::iterator i = deps.begin();
       i != deps.end(); ++i)
     {
-    if(cmSystemTools::FileIsFullPath(i->c_str()))
+    if(cmSystemTools::FileIsFullPath(*i))
       {
       this->AddCMakeDependFile(*i);
       }

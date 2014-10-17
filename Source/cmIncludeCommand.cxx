@@ -77,7 +77,7 @@ bool cmIncludeCommand
     return true;
     }
 
-  if(!cmSystemTools::FileIsFullPath(fname.c_str()))
+  if(!cmSystemTools::FileIsFullPath(fname))
     {
     // Not a path. Maybe module.
     std::string module = fname;
@@ -90,7 +90,7 @@ bool cmIncludeCommand
     }
 
   std::string fname_abs =
-      cmSystemTools::CollapseFullPath(fname.c_str(),
+      cmSystemTools::CollapseFullPath(fname,
                                       this->Makefile->GetStartDirectory());
 
   cmGlobalGenerator *gg = this->Makefile->GetLocalGenerator()

@@ -86,7 +86,7 @@ bool cmExportCommand
   else
     {
     // Make sure the file has a .cmake extension.
-    if(cmSystemTools::GetFilenameLastExtension(this->Filename.GetCString())
+    if(cmSystemTools::GetFilenameLastExtension(this->Filename.GetString())
       != ".cmake")
       {
       cmOStringStream e;
@@ -99,7 +99,7 @@ bool cmExportCommand
     }
 
   // Get the file to write.
-  if(cmSystemTools::FileIsFullPath(fname.c_str()))
+  if(cmSystemTools::FileIsFullPath(fname))
     {
     if(!this->Makefile->CanIWriteThisFile(fname.c_str()))
       {
@@ -207,7 +207,7 @@ bool cmExportCommand
   // Setup export file generation.
   cmExportBuildFileGenerator *ebfg = new cmExportBuildFileGenerator;
   ebfg->SetExportFile(fname.c_str());
-  ebfg->SetNamespace(this->Namespace.GetCString());
+  ebfg->SetNamespace(this->Namespace.GetString());
   ebfg->SetAppendMode(this->Append.IsEnabled());
   if (this->ExportSet)
     {
@@ -276,7 +276,7 @@ bool cmExportCommand::HandlePackage(std::vector<std::string> const& args)
     }
   const char* packageExpr = "^[A-Za-z0-9_.-]+$";
   cmsys::RegularExpression packageRegex(packageExpr);
-  if(!packageRegex.find(package.c_str()))
+  if(!packageRegex.find(package))
     {
     cmOStringStream e;
     e << "PACKAGE given invalid package name \"" << package << "\".  "
@@ -388,10 +388,10 @@ void cmExportCommand::StorePackageRegistryDir(std::string const& package,
   fname += "/.cmake/packages/";
   fname += package;
 #endif
-  cmSystemTools::MakeDirectory(fname.c_str());
+  cmSystemTools::MakeDirectory(fname);
   fname += "/";
   fname += hash;
-  if(!cmSystemTools::FileExists(fname.c_str()))
+  if(!cmSystemTools::FileExists(fname))
     {
     cmGeneratedFileStream entry(fname.c_str(), true);
     if(entry)

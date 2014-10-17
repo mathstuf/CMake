@@ -136,11 +136,11 @@ bool cmOrderDirectoriesConstraint::FileMayConflict(std::string const& dir,
   std::string file = dir;
   file += "/";
   file += name;
-  if(cmSystemTools::FileExists(file.c_str(), true))
+  if(cmSystemTools::FileExists(file, true))
     {
     // The file conflicts only if it is not the same as the original
     // file due to a symlink or hardlink.
-    return !cmSystemTools::SameFile(this->FullPath.c_str(), file.c_str());
+    return !cmSystemTools::SameFile(this->FullPath, file);
     }
 
   // Check if the file will be built by cmake.
@@ -425,7 +425,7 @@ cmOrderDirectories
                        std::string const& removeExtRegex)
 {
   this->LinkExtensions = linkExtensions;
-  this->RemoveLibraryExtension.compile(removeExtRegex.c_str());
+  this->RemoveLibraryExtension.compile(removeExtRegex);
 }
 
 //----------------------------------------------------------------------------

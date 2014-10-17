@@ -216,7 +216,7 @@ static int process( const std::string& srcfilename,
   bool isFirstLine = true; // cl prints always first the source filename
   while (std::getline(ss, line)) {
     if (startsWith(line, prefix)) {
-      std::string inc = trimLeadingSpace(line.substr(prefix.size()).c_str());
+      std::string inc = trimLeadingSpace(line.substr(prefix.size()));
       if (inc[inc.size() - 1] == '\r') // blech, stupid \r\n
         inc = inc.substr(0, inc.size() - 1);
       includes.push_back(inc);

@@ -81,10 +81,10 @@ bool cmExportInstallFileGenerator::GenerateMainFile(std::ostream& os)
     os << "# Compute the installation prefix relative to this file.\n"
        << "get_filename_component(_IMPORT_PREFIX"
        << " \"${CMAKE_CURRENT_LIST_FILE}\" PATH)\n";
-    if(cmHasLiteralPrefix(absDestS.c_str(), "/lib/") ||
-       cmHasLiteralPrefix(absDestS.c_str(), "/lib64/") ||
-       cmHasLiteralPrefix(absDestS.c_str(), "/usr/lib/") ||
-       cmHasLiteralPrefix(absDestS.c_str(), "/usr/lib64/"))
+    if(cmHasLiteralPrefix(absDestS, "/lib/") ||
+       cmHasLiteralPrefix(absDestS, "/lib64/") ||
+       cmHasLiteralPrefix(absDestS, "/usr/lib/") ||
+       cmHasLiteralPrefix(absDestS, "/usr/lib64/"))
       {
       // Handle "/usr move" symlinks created by some Linux distros.
       os <<
@@ -380,7 +380,7 @@ cmExportInstallFileGenerator
   // Construct the installed location of the target.
   std::string dest = itgen->GetDestination();
   std::string value;
-  if(!cmSystemTools::FileIsFullPath(dest.c_str()))
+  if(!cmSystemTools::FileIsFullPath(dest))
     {
     // The target is installed relative to the installation prefix.
     if(this->ImportPrefix.empty())

@@ -408,7 +408,7 @@ std::string cmGlobalVisualStudio10Generator::FindMSBuildCommand()
     "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\MSBuild\\ToolsVersions\\";
   mskey += this->GetToolsVersion();
   mskey += ";MSBuildToolsPath";
-  if(cmSystemTools::ReadRegistryValue(mskey.c_str(), msbuild,
+  if(cmSystemTools::ReadRegistryValue(mskey, msbuild,
                                       cmSystemTools::KeyWOW64_32))
     {
     cmSystemTools::ConvertToUnixSlashes(msbuild);

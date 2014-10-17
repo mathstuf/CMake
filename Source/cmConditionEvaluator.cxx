@@ -460,28 +460,28 @@ bool cmConditionEvaluator::HandleLevel1(cmArgumentList &newArgs,
       if (this->IsKeyword("EXISTS", *arg) && argP1  != newArgs.end())
         {
         this->HandlePredicate(
-          cmSystemTools::FileExists(argP1->c_str()),
+          cmSystemTools::FileExists(argP1->GetValue()),
           reducible, arg, newArgs, argP1, argP2);
         }
       // does a directory with this name exist
       if (this->IsKeyword("IS_DIRECTORY", *arg) && argP1  != newArgs.end())
         {
         this->HandlePredicate(
-          cmSystemTools::FileIsDirectory(argP1->c_str()),
+          cmSystemTools::FileIsDirectory(argP1->GetValue()),
           reducible, arg, newArgs, argP1, argP2);
         }
       // does a symlink with this name exist
       if (this->IsKeyword("IS_SYMLINK", *arg) && argP1  != newArgs.end())
         {
         this->HandlePredicate(
-          cmSystemTools::FileIsSymlink(argP1->c_str()),
+          cmSystemTools::FileIsSymlink(argP1->GetValue()),
           reducible, arg, newArgs, argP1, argP2);
         }
       // is the given path an absolute path ?
       if (this->IsKeyword("IS_ABSOLUTE", *arg) && argP1  != newArgs.end())
         {
         this->HandlePredicate(
-          cmSystemTools::FileIsFullPath(argP1->c_str()),
+          cmSystemTools::FileIsFullPath(argP1->GetValue()),
           reducible, arg, newArgs, argP1, argP2);
         }
       // does a command exist
@@ -516,7 +516,7 @@ bool cmConditionEvaluator::HandleLevel1(cmArgumentList &newArgs,
            argP1->GetValue().operator[](argP1len-1) == '}')
           {
           std::string env = argP1->GetValue().substr(4, argP1len-5);
-          bdef = cmSystemTools::GetEnv(env.c_str())?true:false;
+          bdef = cmSystemTools::GetEnv(env)?true:false;
           }
         else
           {
@@ -673,7 +673,7 @@ bool cmConditionEvaluator::HandleLevel2(cmArgumentList &newArgs,
         {
         int fileIsNewer=0;
         bool success=cmSystemTools::FileTimeCompare(arg->GetValue(),
-            (argP2)->GetValue(),
+            argP2->GetValue(),
             &fileIsNewer);
         this->HandleBinaryOp(
           (success==false || fileIsNewer==1 || fileIsNewer==0),

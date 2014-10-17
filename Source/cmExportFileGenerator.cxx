@@ -266,11 +266,11 @@ static bool checkInterfaceDirs(const std::string &prepro,
           break; // Issue fatal message.
         }
       }
-    if (cmHasLiteralPrefix(li->c_str(), "${_IMPORT_PREFIX}"))
+    if (cmHasLiteralPrefix(*li, "${_IMPORT_PREFIX}"))
       {
       continue;
       }
-    if (!cmSystemTools::FileIsFullPath(li->c_str()))
+    if (!cmSystemTools::FileIsFullPath(*li))
       {
       e << "Target \"" << target->GetName() << "\" "
            "INTERFACE_INCLUDE_DIRECTORIES property contains relative path:\n"
@@ -355,7 +355,7 @@ static void prefixItems(std::string &exportDirs)
     {
     exportDirs += sep;
     sep = ";";
-    if (!cmSystemTools::FileIsFullPath(ei->c_str())
+    if (!cmSystemTools::FileIsFullPath(*ei)
         && ei->find("${_IMPORT_PREFIX}") == std::string::npos)
       {
       exportDirs += "${_IMPORT_PREFIX}/";

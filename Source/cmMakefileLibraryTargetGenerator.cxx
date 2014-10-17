@@ -289,7 +289,7 @@ void cmMakefileLibraryTargetGenerator::WriteLibraryRules
     outpath = this->Makefile->GetStartOutputDirectory();
     outpath += cmake::GetCMakeFilesDirectory();
     outpath += "/CMakeRelink.dir";
-    cmSystemTools::MakeDirectory(outpath.c_str());
+    cmSystemTools::MakeDirectory(outpath);
     outpath += "/";
     if(!targetNameImport.empty())
       {
@@ -299,22 +299,22 @@ void cmMakefileLibraryTargetGenerator::WriteLibraryRules
   else
     {
     outpath = this->Target->GetDirectory(this->ConfigName);
-    cmSystemTools::MakeDirectory(outpath.c_str());
+    cmSystemTools::MakeDirectory(outpath);
     outpath += "/";
     if(!targetNameImport.empty())
       {
       outpathImp = this->Target->GetDirectory(this->ConfigName, true);
-      cmSystemTools::MakeDirectory(outpathImp.c_str());
+      cmSystemTools::MakeDirectory(outpathImp);
       outpathImp += "/";
       }
     }
 
   std::string compilePdbOutputPath =
     this->Target->GetCompilePDBDirectory(this->ConfigName);
-  cmSystemTools::MakeDirectory(compilePdbOutputPath.c_str());
+  cmSystemTools::MakeDirectory(compilePdbOutputPath);
 
   std::string pdbOutputPath = this->Target->GetPDBDirectory(this->ConfigName);
-  cmSystemTools::MakeDirectory(pdbOutputPath.c_str());
+  cmSystemTools::MakeDirectory(pdbOutputPath);
   pdbOutputPath += "/";
 
   std::string targetFullPath = outpath + targetName;

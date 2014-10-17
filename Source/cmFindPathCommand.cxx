@@ -116,7 +116,7 @@ cmFindPathCommand::FindHeaderInFramework(std::string const& file,
       std::string intPath = fpath;
       intPath += "/Headers/";
       intPath += fileName;
-      if(cmSystemTools::FileExists(intPath.c_str()))
+      if(cmSystemTools::FileExists(intPath))
         {
         if(this->IncludeFileInPath)
           {
@@ -136,7 +136,7 @@ cmFindPathCommand::FindHeaderInFramework(std::string const& file,
   std::vector<std::string> files = globIt.GetFiles();
   if(files.size())
     {
-    std::string fheader = cmSystemTools::CollapseFullPath(files[0].c_str());
+    std::string fheader = cmSystemTools::CollapseFullPath(files[0]);
     if(this->IncludeFileInPath)
       {
       return fheader;
@@ -160,7 +160,7 @@ std::string cmFindPathCommand::FindNormalHeader()
       {
       tryPath = *p;
       tryPath += *ni;
-      if(cmSystemTools::FileExists(tryPath.c_str()))
+      if(cmSystemTools::FileExists(tryPath))
         {
         if(this->IncludeFileInPath)
           {

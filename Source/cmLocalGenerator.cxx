@@ -96,7 +96,7 @@ void cmLocalGenerator::Configure()
   // make sure the CMakeFiles dir is there
   std::string filesDir = this->Makefile->GetStartOutputDirectory();
   filesDir += cmake::GetCMakeFilesDirectory();
-  cmSystemTools::MakeDirectory(filesDir.c_str());
+  cmSystemTools::MakeDirectory(filesDir);
 
   // find & read the list file
   this->ReadInputFile();
@@ -172,7 +172,7 @@ void cmLocalGenerator::ReadInputFile()
   // Look for the CMakeLists.txt file.
   std::string currentStart = this->Makefile->GetStartDirectory();
   currentStart += "/CMakeLists.txt";
-  if(cmSystemTools::FileExists(currentStart.c_str(), true))
+  if(cmSystemTools::FileExists(currentStart, true))
     {
     this->Makefile->ReadListFile(currentStart.c_str());
     return;
@@ -221,19 +221,19 @@ void cmLocalGenerator::SetupPathConversions()
   std::string outdir;
   outdir =
     cmSystemTools::CollapseFullPath(this->Makefile->GetHomeDirectory());
-  cmSystemTools::SplitPath(outdir.c_str(), this->HomeDirectoryComponents);
+  cmSystemTools::SplitPath(outdir, this->HomeDirectoryComponents);
   outdir =
     cmSystemTools::CollapseFullPath(this->Makefile->GetStartDirectory());
-  cmSystemTools::SplitPath(outdir.c_str(), this->StartDirectoryComponents);
+  cmSystemTools::SplitPath(outdir, this->StartDirectoryComponents);
 
   outdir = cmSystemTools::CollapseFullPath
     (this->Makefile->GetHomeOutputDirectory());
-  cmSystemTools::SplitPath(outdir.c_str(),
+  cmSystemTools::SplitPath(outdir,
                            this->HomeOutputDirectoryComponents);
 
   outdir = cmSystemTools::CollapseFullPath
     (this->Makefile->GetStartOutputDirectory());
-  cmSystemTools::SplitPath(outdir.c_str(),
+  cmSystemTools::SplitPath(outdir,
                            this->StartOutputDirectoryComponents);
 }
 
@@ -575,7 +575,7 @@ void cmLocalGenerator::AddCustomCommandToCreateObject(const char* ofname,
                                                     cmSourceFile& source,
                                                     cmGeneratorTarget& target)
 {
-  std::string objectDir = cmSystemTools::GetFilenamePath(std::string(ofname));
+  std::string objectDir = cmSystemTools::GetFilenamePath(ofname);
   objectDir = this->Convert(objectDir,START_OUTPUT,SHELL);
   std::string objectFile = this->Convert(ofname,START_OUTPUT,SHELL);
   std::string sourceFile =
@@ -1244,10 +1244,10 @@ cmLocalGenerator::ConvertToOutputForExistingCommon(const std::string& remote,
   // already exists, we can use a short-path to reference it without a
   // space.
   if(this->WindowsShell && result.find(' ') != result.npos &&
-     cmSystemTools::FileExists(remote.c_str()))
+     cmSystemTools::FileExists(remote))
     {
     std::string tmp;
-    if(cmSystemTools::GetShortPath(remote.c_str(), tmp))
+    if(cmSystemTools::GetShortPath(remote, tmp))
       {
       return this->Convert(tmp, NONE, format, true);
       }
@@ -1371,7 +1371,7 @@ std::string cmLocalGenerator::GetIncludeFlags(
       {
       std::string frameworkDir = *i;
       frameworkDir += "/../";
-      frameworkDir = cmSystemTools::CollapseFullPath(frameworkDir.c_str());
+      frameworkDir = cmSystemTools::CollapseFullPath(frameworkDir);
       if(emitted.insert(frameworkDir).second)
         {
         if (sysFwSearchFlag && target &&
@@ -1457,7 +1457,7 @@ void cmLocalGenerator::AddCompileOptions(
     for(std::vector<std::string>::const_iterator i = opts.begin();
         i != opts.end(); ++i)
       {
-      if(r.find(i->c_str()))
+      if(r.find(*i))
         {
         // (Re-)Escape this flag.  COMPILE_FLAGS were already parsed
         // as a command line above, and COMPILE_OPTIONS are escaped.
@@ -1613,10 +1613,10 @@ void cmLocalGenerator::GetIncludeDirectories(std::vector<std::string>& dirs,
       {
       // Emit this directory only if it is a subdirectory of the
       // top-level source or binary tree.
-      if(cmSystemTools::ComparePath(i->c_str(), topSourceDir) ||
-         cmSystemTools::ComparePath(i->c_str(), topBinaryDir) ||
-         cmSystemTools::IsSubDirectory(i->c_str(), topSourceDir) ||
-         cmSystemTools::IsSubDirectory(i->c_str(), topBinaryDir))
+      if(cmSystemTools::ComparePath(*i, topSourceDir) ||
+         cmSystemTools::ComparePath(*i, topBinaryDir) ||
+         cmSystemTools::IsSubDirectory(*i, topSourceDir) ||
+         cmSystemTools::IsSubDirectory(*i, topBinaryDir))
         {
         if(emitted.insert(*i).second)
           {
@@ -1831,7 +1831,7 @@ std::string cmLocalGenerator::ConvertToLinkReference(std::string const& lib,
 
       // Convert the portion of the path with a space to a short path.
       std::string sp;
-      if(cmSystemTools::GetShortPath(lib.substr(0, pos).c_str(), sp))
+      if(cmSystemTools::GetShortPath(lib.substr(0, pos), sp))
         {
         // Append the rest of the path with no space.
         sp += lib.substr(pos);
@@ -2101,7 +2101,7 @@ bool cmLocalGenerator::GetRealDependency(const std::string& inName,
     {
     // make sure it is not just a coincidence that the target name
     // found is part of the inName
-    if(cmSystemTools::FileIsFullPath(inName.c_str()))
+    if(cmSystemTools::FileIsFullPath(inName))
       {
       std::string tLocation;
       if(target->GetType() >= cmTarget::EXECUTABLE &&
@@ -2109,11 +2109,11 @@ bool cmLocalGenerator::GetRealDependency(const std::string& inName,
         {
         tLocation = target->GetLocation(config);
         tLocation = cmSystemTools::GetFilenamePath(tLocation);
-        tLocation = cmSystemTools::CollapseFullPath(tLocation.c_str());
+        tLocation = cmSystemTools::CollapseFullPath(tLocation);
         }
       std::string depLocation = cmSystemTools::GetFilenamePath(
         std::string(inName));
-      depLocation = cmSystemTools::CollapseFullPath(depLocation.c_str());
+      depLocation = cmSystemTools::CollapseFullPath(depLocation);
       if(depLocation != tLocation)
         {
         // it is a full path to a depend that has the same name
@@ -2149,7 +2149,7 @@ bool cmLocalGenerator::GetRealDependency(const std::string& inName,
     }
 
   // The name was not that of a CMake target.  It must name a file.
-  if(cmSystemTools::FileIsFullPath(inName.c_str()))
+  if(cmSystemTools::FileIsFullPath(inName))
     {
     // This is a full path.  Return it as given.
     dep = inName;
@@ -2618,7 +2618,7 @@ void cmLocalGenerator::JoinDefines(const std::set<std::string>& defines,
       if(eq != defineIt->npos)
         {
         def += "=";
-        def += this->EscapeForShell(defineIt->c_str() + eq + 1, true);
+        def += this->EscapeForShell(defineIt->substr(eq + 1), true);
         }
       }
     definesString += itemSeparator;
@@ -2721,29 +2721,29 @@ std::string cmLocalGenerator::Convert(const std::string& source,
     switch (relative)
       {
       case HOME:
-        //result = cmSystemTools::CollapseFullPath(result.c_str());
+        //result = cmSystemTools::CollapseFullPath(result);
         result = this->ConvertToRelativePath(this->HomeDirectoryComponents,
                                              result);
         break;
       case START:
-        //result = cmSystemTools::CollapseFullPath(result.c_str());
+        //result = cmSystemTools::CollapseFullPath(result);
         result = this->ConvertToRelativePath(this->StartDirectoryComponents,
                                              result);
         break;
       case HOME_OUTPUT:
-        //result = cmSystemTools::CollapseFullPath(result.c_str());
+        //result = cmSystemTools::CollapseFullPath(result);
         result =
           this->ConvertToRelativePath(this->HomeOutputDirectoryComponents,
                                       result);
         break;
       case START_OUTPUT:
-        //result = cmSystemTools::CollapseFullPath(result.c_str());
+        //result = cmSystemTools::CollapseFullPath(result);
         result =
           this->ConvertToRelativePath(this->StartOutputDirectoryComponents,
                                       result);
         break;
       case FULL:
-        result = cmSystemTools::CollapseFullPath(result.c_str());
+        result = cmSystemTools::CollapseFullPath(result);
         break;
       case NONE:
         break;
@@ -2807,7 +2807,7 @@ std::string cmLocalGenerator::Convert(RelativeRoot remote,
   if(!local.empty() && (!optional || this->UseRelativePaths))
     {
     std::vector<std::string> components;
-    cmSystemTools::SplitPath(local.c_str(), components);
+    cmSystemTools::SplitPath(local, components);
     std::string result = this->ConvertToRelativePath(components, remotePath);
     return this->ConvertToOutputFormat(result, output);
     }
@@ -2827,7 +2827,7 @@ std::string cmLocalGenerator::FindRelativePathTopSource()
     {
     std::string parentTop = parent->FindRelativePathTopSource();
     if(cmSystemTools::IsSubDirectory(
-         this->Makefile->GetStartDirectory(), parentTop.c_str()))
+         this->Makefile->GetStartDirectory(), parentTop))
       {
       return parentTop;
       }
@@ -2847,7 +2847,7 @@ std::string cmLocalGenerator::FindRelativePathTopBinary()
     {
     std::string parentTop = parent->FindRelativePathTopBinary();
     if(cmSystemTools::IsSubDirectory(
-         this->Makefile->GetStartOutputDirectory(), parentTop.c_str()))
+         this->Makefile->GetStartOutputDirectory(), parentTop))
       {
       return parentTop;
       }
@@ -2900,7 +2900,7 @@ cmLocalGenerator::ConvertToRelativePath(const std::vector<std::string>& local,
   assert(local.size() > 0 && !(local[local.size()-1] == ""));
 
   // If the path is already relative then just return the path.
-  if(!cmSystemTools::FileIsFullPath(in_remote.c_str()))
+  if(!cmSystemTools::FileIsFullPath(in_remote))
     {
     return in_remote;
     }
@@ -2933,12 +2933,12 @@ cmLocalGenerator::ConvertToRelativePath(const std::vector<std::string>& local,
   // Identify the longest shared path component between the remote
   // path and the local path.
   std::vector<std::string> remote;
-  cmSystemTools::SplitPath(in_remote.c_str(), remote);
+  cmSystemTools::SplitPath(in_remote, remote);
   unsigned int common=0;
   while(common < remote.size() &&
         common < local.size() &&
-        cmSystemTools::ComparePath(remote[common].c_str(),
-                                   local[common].c_str()))
+        cmSystemTools::ComparePath(remote[common],
+                                   local[common]))
     {
     ++common;
     }
@@ -3283,13 +3283,13 @@ cmLocalGenerator
   // Try referencing the source relative to the source tree.
   std::string relFromSource = this->Convert(fullPath, START);
   assert(!relFromSource.empty());
-  bool relSource = !cmSystemTools::FileIsFullPath(relFromSource.c_str());
+  bool relSource = !cmSystemTools::FileIsFullPath(relFromSource);
   bool subSource = relSource && relFromSource[0] != '.';
 
   // Try referencing the source relative to the binary tree.
   std::string relFromBinary = this->Convert(fullPath, START_OUTPUT);
   assert(!relFromBinary.empty());
-  bool relBinary = !cmSystemTools::FileIsFullPath(relFromBinary.c_str());
+  bool relBinary = !cmSystemTools::FileIsFullPath(relFromBinary);
   bool subBinary = relBinary && relFromBinary[0] != '.';
 
   // Select a nice-looking reference to the source file to construct
@@ -3315,7 +3315,7 @@ cmLocalGenerator
   // if it is still a full path check for the try compile case
   // try compile never have in source sources, and should not
   // have conflicting source file names in the same target
-  if(cmSystemTools::FileIsFullPath(objectName.c_str()))
+  if(cmSystemTools::FileIsFullPath(objectName))
     {
     if(this->GetGlobalGenerator()->GetCMakeInstance()->GetIsInTryCompile())
       {
@@ -3677,7 +3677,7 @@ void cmLocalGenerator::GenerateAppleInfoPList(cmTarget* target,
   // Find the Info.plist template.
   const char* in = target->GetProperty("MACOSX_BUNDLE_INFO_PLIST");
   std::string inFile = (in && *in)? in : "MacOSXBundleInfo.plist.in";
-  if(!cmSystemTools::FileIsFullPath(inFile.c_str()))
+  if(!cmSystemTools::FileIsFullPath(inFile))
     {
     std::string inMod = this->Makefile->GetModulesFile(inFile.c_str());
     if(!inMod.empty())
@@ -3685,7 +3685,7 @@ void cmLocalGenerator::GenerateAppleInfoPList(cmTarget* target,
       inFile = inMod;
       }
     }
-  if(!cmSystemTools::FileExists(inFile.c_str(), true))
+  if(!cmSystemTools::FileExists(inFile, true))
     {
     cmOStringStream e;
     e << "Target " << target->GetName() << " Info.plist template \""
@@ -3721,7 +3721,7 @@ void cmLocalGenerator::GenerateFrameworkInfoPList(cmTarget* target,
   // Find the Info.plist template.
   const char* in = target->GetProperty("MACOSX_FRAMEWORK_INFO_PLIST");
   std::string inFile = (in && *in)? in : "MacOSXFrameworkInfo.plist.in";
-  if(!cmSystemTools::FileIsFullPath(inFile.c_str()))
+  if(!cmSystemTools::FileIsFullPath(inFile))
     {
     std::string inMod = this->Makefile->GetModulesFile(inFile.c_str());
     if(!inMod.empty())
@@ -3729,7 +3729,7 @@ void cmLocalGenerator::GenerateFrameworkInfoPList(cmTarget* target,
       inFile = inMod;
       }
     }
-  if(!cmSystemTools::FileExists(inFile.c_str(), true))
+  if(!cmSystemTools::FileExists(inFile, true))
     {
     cmOStringStream e;
     e << "Target " << target->GetName() << " Info.plist template \""

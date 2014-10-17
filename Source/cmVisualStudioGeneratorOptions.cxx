@@ -244,7 +244,7 @@ cmVisualStudioGeneratorOptions
       fout << prefix;
       this->TargetGenerator->WritePlatformConfigTag(
         "PreprocessorDefinitions",
-        this->Configuration.c_str(),
+        this->Configuration,
         0,
         0, 0, &fout);
       }
@@ -266,7 +266,7 @@ cmVisualStudioGeneratorOptions
     if(this->Version < cmLocalVisualStudioGenerator::VS10)
       {
       define =
-        this->LocalGenerator->EscapeForShell(di->c_str(), true);
+        this->LocalGenerator->EscapeForShell(*di, true);
       }
     else
       {
@@ -315,7 +315,7 @@ cmVisualStudioGeneratorOptions
         {
         this->TargetGenerator->WritePlatformConfigTag(
           m->first.c_str(),
-          this->Configuration.c_str(),
+          this->Configuration,
           0,
           0, 0, &fout);
         }
@@ -367,7 +367,7 @@ cmVisualStudioGeneratorOptions
         {
         this->TargetGenerator->WritePlatformConfigTag(
           "AdditionalOptions",
-          this->Configuration.c_str(),
+          this->Configuration,
           0,
           0, 0, &fout);
         }

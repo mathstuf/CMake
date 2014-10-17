@@ -97,7 +97,7 @@ void cmMakefileTargetGenerator::CreateRuleFile()
     this->LocalGenerator->GetTargetDirectory(*this->Target);
   this->TargetBuildDirectoryFull =
     this->LocalGenerator->ConvertToFullPath(this->TargetBuildDirectory);
-  cmSystemTools::MakeDirectory(this->TargetBuildDirectoryFull.c_str());
+  cmSystemTools::MakeDirectory(this->TargetBuildDirectoryFull);
 
   // Construct the rule file name.
   this->BuildFileName = this->TargetBuildDirectory;
@@ -234,7 +234,7 @@ void cmMakefileTargetGenerator::WriteCommonCodeRules()
     }
 
   // make sure the depend file exists
-  if (!cmSystemTools::FileExists(dependFileNameFull.c_str()))
+  if (!cmSystemTools::FileExists(dependFileNameFull))
     {
     // Write an empty dependency file.
     cmGeneratedFileStream depFileStream(dependFileNameFull.c_str());
@@ -465,7 +465,7 @@ void cmMakefileTargetGenerator
   // subdirectory under the target's directory.
   std::string dir = cmSystemTools::GetFilenamePath(obj);
   cmSystemTools::MakeDirectory
-    (this->LocalGenerator->ConvertToFullPath(dir).c_str());
+    (this->LocalGenerator->ConvertToFullPath(dir));
 
   // Save this in the target's list of object files.
   this->Objects.push_back(obj);
@@ -1380,7 +1380,7 @@ cmMakefileTargetGenerator
     {
     *this->BuildFileStream << " " << lineContinue << "\n";
     *this->BuildFileStream  <<
-      this->LocalGenerator->ConvertToQuotedOutputPath(i->c_str(),
+      this->LocalGenerator->ConvertToQuotedOutputPath(*i,
                                                       useWatcomQuote);
     }
   *this->BuildFileStream << "\n";
@@ -1404,7 +1404,7 @@ cmMakefileTargetGenerator
       << " " << lineContinue << "\n"
       << this->Makefile->GetSafeDefinition("CMAKE_OBJECT_NAME");
     *this->BuildFileStream  <<
-      this->LocalGenerator->ConvertToQuotedOutputPath(i->c_str(),
+      this->LocalGenerator->ConvertToQuotedOutputPath(*i,
                                                       useWatcomQuote);
     }
   *this->BuildFileStream << "\n" << "\n";
@@ -1577,7 +1577,7 @@ std::string cmMakefileTargetGenerator::GetFrameworkFlags(std::string const& l)
       {
       std::string frameworkDir = *i;
       frameworkDir += "/../";
-      frameworkDir = cmSystemTools::CollapseFullPath(frameworkDir.c_str());
+      frameworkDir = cmSystemTools::CollapseFullPath(frameworkDir);
       emitted.insert(frameworkDir);
       }
     }
@@ -2012,7 +2012,7 @@ const char* cmMakefileTargetGenerator::GetFortranModuleDirectory()
         }
 
       // Make sure the module output directory exists.
-      cmSystemTools::MakeDirectory(this->FortranModuleDirectory.c_str());
+      cmSystemTools::MakeDirectory(this->FortranModuleDirectory);
       }
     this->FortranModuleDirectoryComputed = true;
     }

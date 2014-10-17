@@ -1093,7 +1093,7 @@ bool cmStringCommand
 #else
   cmOStringStream e;
   e << args[0] << " not available during bootstrap";
-  this->SetError(e.str().c_str());
+  this->SetError(e.str());
   return false;
 #endif
 }

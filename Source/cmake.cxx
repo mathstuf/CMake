@@ -1421,7 +1421,7 @@ int cmake::ActualConfigure()
           }
         }
       cmGlobalGenerator* gen
-        = this->CreateGlobalGenerator(installedCompiler.c_str());
+        = this->CreateGlobalGenerator(installedCompiler);
       if(!gen)
         {
         gen = new cmGlobalNMakeMakefileGenerator;

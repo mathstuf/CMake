@@ -223,7 +223,7 @@ bool cmLoadCommandCommand
     }
 
   // Try to find the program.
-  std::string fullPath = cmSystemTools::FindFile(moduleName.c_str(), path);
+  std::string fullPath = cmSystemTools::FindFile(moduleName, path);
   if (fullPath == "")
     {
     cmOStringStream e;

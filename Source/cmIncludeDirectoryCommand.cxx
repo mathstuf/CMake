@@ -149,7 +149,7 @@ void cmIncludeDirectoryCommand::NormalizeInclude(std::string &inc)
     {
     cmSystemTools::ConvertToUnixSlashes(inc);
 
-    if(!cmSystemTools::FileIsFullPath(inc.c_str()))
+    if(!cmSystemTools::FileIsFullPath(inc))
       {
       if(!StartsWithGeneratorExpression(inc))
         {

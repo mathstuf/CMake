@@ -114,12 +114,12 @@ int cmCPackOSXX11Generator::PackageFiles()
 
   if (
     !this->CopyResourcePlistFile("VolumeIcon.icns",
-                                 diskImageDirectory.c_str(),
+                                 diskImageDirectory,
                                  ".VolumeIcon.icns", true ) ||
-    !this->CopyResourcePlistFile("DS_Store", diskImageDirectory.c_str(),
+    !this->CopyResourcePlistFile("DS_Store", diskImageDirectory,
       ".DS_Store", true ) ||
     !this->CopyResourcePlistFile("background.png",
-      diskImageBackgroundImageDir.c_str(), "background.png", true ) ||
+      diskImageBackgroundImageDir, "background.png", true ) ||
     !this->CopyResourcePlistFile("RuntimeScript", dir) ||
     !this->CopyResourcePlistFile("OSXX11.Info.plist", contDir,
       "Info.plist" ) ||

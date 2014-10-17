@@ -1182,11 +1182,11 @@ bool cmSystemTools::SimpleGlob(const std::string& glob,
           }
         fname += d.GetFile(i);
         std::string sfname = d.GetFile(i);
-        if ( type > 0 && cmSystemTools::FileIsDirectory(fname.c_str()) )
+        if ( type > 0 && cmSystemTools::FileIsDirectory(fname) )
           {
           continue;
           }
-        if ( type < 0 && !cmSystemTools::FileIsDirectory(fname.c_str()) )
+        if ( type < 0 && !cmSystemTools::FileIsDirectory(fname) )
           {
           continue;
           }
@@ -1354,8 +1354,8 @@ std::string cmSystemTools::CollapseCombinedPath(std::string const& dir,
 
   std::vector<std::string> dirComponents;
   std::vector<std::string> fileComponents;
-  cmSystemTools::SplitPath(dir.c_str(), dirComponents);
-  cmSystemTools::SplitPath(file.c_str(), fileComponents);
+  cmSystemTools::SplitPath(dir, dirComponents);
+  cmSystemTools::SplitPath(file, fileComponents);
 
   if(fileComponents.empty())
     {

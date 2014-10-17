@@ -28,7 +28,7 @@ int main()
   libName += "example_mod_1";
   libName += kwsys::DynamicLoader::LibExtension();
   kwsys::DynamicLoader::LibraryHandle handle =
-    kwsys::DynamicLoader::OpenLibrary(libName.c_str());
+    kwsys::DynamicLoader::OpenLibrary(libName);
   if(!handle)
     {
     kwsys_ios::cerr << "Could not open plugin \""

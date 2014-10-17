@@ -33,7 +33,7 @@ void cmLinkDirectoriesCommand::AddLinkDir(std::string const& dir)
 {
   std::string unixPath = dir;
   cmSystemTools::ConvertToUnixSlashes(unixPath);
-  if(!cmSystemTools::FileIsFullPath(unixPath.c_str()))
+  if(!cmSystemTools::FileIsFullPath(unixPath))
     {
     bool convertToAbsolute = false;
     cmOStringStream e;

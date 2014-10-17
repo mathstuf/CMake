@@ -205,7 +205,7 @@ struct TagVisitor
       {
       DoAccept<IsSameTag<Tag, CertificatesTag>::Result>::Do(this->Data, sf);
       }
-    else if(this->Header.find(sf->GetFullPath().c_str()))
+    else if(this->Header.find(sf->GetFullPath()))
       {
       DoAccept<IsSameTag<Tag, HeaderSourcesTag>::Result>::Do(this->Data, sf);
       }
@@ -762,7 +762,7 @@ bool cmTargetTraceDependencies::IsUtility(std::string const& dep)
     // If we find the target and the dep was given as a full path,
     // then make sure it was not a full path to something else, and
     // the fact that the name matched a target was just a coincidence.
-    if(cmSystemTools::FileIsFullPath(dep.c_str()))
+    if(cmSystemTools::FileIsFullPath(dep))
       {
       if(t->GetType() >= cmTarget::EXECUTABLE &&
          t->GetType() <= cmTarget::MODULE_LIBRARY)
@@ -772,8 +772,8 @@ bool cmTargetTraceDependencies::IsUtility(std::string const& dep)
         std::string tLocation = t->GetLocationForBuild();
         tLocation = cmSystemTools::GetFilenamePath(tLocation);
         std::string depLocation = cmSystemTools::GetFilenamePath(dep);
-        depLocation = cmSystemTools::CollapseFullPath(depLocation.c_str());
-        tLocation = cmSystemTools::CollapseFullPath(tLocation.c_str());
+        depLocation = cmSystemTools::CollapseFullPath(depLocation);
+        tLocation = cmSystemTools::CollapseFullPath(tLocation);
         if(depLocation == tLocation)
           {
           this->Target->AddUtility(util);

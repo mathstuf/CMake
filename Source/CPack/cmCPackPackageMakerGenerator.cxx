@@ -143,19 +143,19 @@ int cmCPackPackageMakerGenerator::PackageFiles()
     // them executable
     if(preflight)
       {
-      this->CopyInstallScript(resDir.c_str(),
+      this->CopyInstallScript(resDir,
                               preflight,
                               "preflight");
       }
     if(postflight)
       {
-      this->CopyInstallScript(resDir.c_str(),
+      this->CopyInstallScript(resDir,
                               postflight,
                               "postflight");
       }
     if(postupgrade)
       {
-      this->CopyInstallScript(resDir.c_str(),
+      this->CopyInstallScript(resDir,
                               postupgrade,
                               "postupgrade");
       }
@@ -198,7 +198,7 @@ int cmCPackPackageMakerGenerator::PackageFiles()
 
     // copy postflight script into resource directory of .pkg
     std::string resourceDir = packageFile + "/Contents/Resources";
-    this->CopyInstallScript(resourceDir.c_str(),
+    this->CopyInstallScript(resourceDir,
                             postflight,
                             "postflight");
     }
@@ -311,9 +311,9 @@ int cmCPackPackageMakerGenerator::PackageFiles()
   this->SetOption("CPACK_MODULE_VERSION_SUFFIX", "");
 
   // Copy or create all of the resource files we need.
-  if ( !this->CopyCreateResourceFile("License", resDir.c_str())
-       || !this->CopyCreateResourceFile("ReadMe", resDir.c_str())
-       || !this->CopyCreateResourceFile("Welcome", resDir.c_str())
+  if ( !this->CopyCreateResourceFile("License", resDir)
+       || !this->CopyCreateResourceFile("ReadMe", resDir)
+       || !this->CopyCreateResourceFile("Welcome", resDir)
        || !this->CopyResourcePlistFile("Info.plist")
        || !this->CopyResourcePlistFile("Description.plist") )
     {
@@ -744,7 +744,7 @@ GenerateComponentPackage(const char *packageFile,
                     moduleVersionSuffix.c_str());
     std::string infoFileName = component.Name;
     infoFileName += "-Info.plist";
-    if (!this->CopyResourcePlistFile("Info.plist", infoFileName.c_str()))
+    if (!this->CopyResourcePlistFile("Info.plist", infoFileName))
       {
       return false;
       }

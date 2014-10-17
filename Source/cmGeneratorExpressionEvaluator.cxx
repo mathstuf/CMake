@@ -329,7 +329,7 @@ static const struct MakeCIdentifierNode : public cmGeneratorExpressionNode
                        const GeneratorExpressionContent *,
                        cmGeneratorExpressionDAGChecker *) const
   {
-    return cmSystemTools::MakeCidentifier(parameters.front().c_str());
+    return cmSystemTools::MakeCidentifier(parameters.front());
   }
 } makeCIdentifierNode;
 
@@ -907,7 +907,7 @@ static const struct TargetPropertyNode : public cmGeneratorExpressionNode
       propertyName = parameters[1];
       if (!cmGeneratorExpression::IsValidTargetName(targetName))
         {
-        if (!propertyNameValidator.find(propertyName.c_str()))
+        if (!propertyNameValidator.find(propertyName))
           {
           ::reportError(context, content->GetOriginalExpression(),
                         "Target name and property name not supported.");
@@ -1067,7 +1067,7 @@ static const struct TargetPropertyNode : public cmGeneratorExpressionNode
 
     CM_FOR_EACH_TRANSITIVE_PROPERTY_NAME(POPULATE_INTERFACE_PROPERTY_NAME)
       // Note that the above macro terminates with an else
-    /* else */ if (cmHasLiteralPrefix(propertyName.c_str(),
+    /* else */ if (cmHasLiteralPrefix(propertyName,
                            "COMPILE_DEFINITIONS_"))
       {
       cmPolicies::PolicyStatus polSt =
@@ -1253,7 +1253,7 @@ static const struct TargetObjectsNode : public cmGeneratorExpressionNode
 
     std::string tgtName = parameters.front();
     cmGeneratorTarget* gt =
-                context->Makefile->FindGeneratorTargetToUse(tgtName.c_str());
+                context->Makefile->FindGeneratorTargetToUse(tgtName);
     if (!gt)
       {
       cmOStringStream e;

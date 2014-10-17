@@ -231,7 +231,7 @@ cmGlobalVisualStudio11Generator::GetInstalledWindowsCESDKs()
     key += ';';
 
     std::string path;
-    if(cmSystemTools::ReadRegistryValue(key.c_str(),
+    if(cmSystemTools::ReadRegistryValue(key,
                                         path,
                                         cmSystemTools::KeyWOW64_32) &&
         !path.empty())

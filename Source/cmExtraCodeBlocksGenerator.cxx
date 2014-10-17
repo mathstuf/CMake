@@ -276,7 +276,7 @@ void cmExtraCodeBlocksGenerator
                          it->second[0]->GetMakefile()->GetHomeDirectory(),
                          jt->c_str());
       std::vector<std::string> splitted;
-      cmSystemTools::SplitPath(relative.c_str(), splitted, false);
+      cmSystemTools::SplitPath(relative, splitted, false);
       // Split filename from path
       std::string fileName = *(splitted.end()-1);
       splitted.erase(splitted.end() - 1, splitted.end());
@@ -477,7 +477,7 @@ void cmExtraCodeBlocksGenerator
         break;
         }
 
-      if(cmSystemTools::FileExists(hname.c_str()))
+      if(cmSystemTools::FileExists(hname))
         {
         otherFiles.insert(hname);
         break;

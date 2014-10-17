@@ -52,7 +52,7 @@ const char* cmGlobalVisualStudio7Generator::GetIntelProjectVersion()
     std::string intelVersion;
     std::string vskey = this->GetRegistryBase();
     vskey += "\\Packages\\" CM_INTEL_PLUGIN_GUID ";ProductVersion";
-    cmSystemTools::ReadRegistryValue(vskey.c_str(), intelVersion,
+    cmSystemTools::ReadRegistryValue(vskey, intelVersion,
                                      cmSystemTools::KeyWOW64_32);
     unsigned int intelVersionNumber = ~0u;
     sscanf(intelVersion.c_str(), "%u", &intelVersionNumber);
@@ -138,7 +138,7 @@ std::string cmGlobalVisualStudio7Generator::FindDevEnvCommand()
 {
   std::string vscmd;
   std::string vskey = this->GetRegistryBase() + ";InstallDir";
-  if(cmSystemTools::ReadRegistryValue(vskey.c_str(), vscmd,
+  if(cmSystemTools::ReadRegistryValue(vskey, vscmd,
                                       cmSystemTools::KeyWOW64_32))
     {
     cmSystemTools::ConvertToUnixSlashes(vscmd);
@@ -411,7 +411,7 @@ void cmGlobalVisualStudio7Generator::WriteTargetConfigurations(
                                               this->Configurations.end());
       const char* mapping = target->GetProperty("VS_PLATFORM_MAPPING");
       this->WriteProjectConfigurations(
-        fout, target->GetName().c_str(), target->GetType(),
+        fout, target->GetName(), target->GetType(),
         allConfigurations, mapping ? mapping : "");
       }
     else
@@ -455,7 +455,7 @@ void cmGlobalVisualStudio7Generator::WriteTargetsToSolution(
       std::string location = expath;
 
       this->WriteExternalProject(fout,
-                                 project.c_str(),
+                                 project,
                                  location.c_str(),
                                  target->GetProperty("VS_PROJECT_TYPE"),
                                  target->GetUtilities());
@@ -626,7 +626,7 @@ void cmGlobalVisualStudio7Generator::WriteFolders(std::ostream& fout)
     std::string guid = this->GetGUID(fullName.c_str());
 
     cmSystemTools::ReplaceString(fullName, "/", "\\");
-    if (cmSystemTools::StringStartsWith(fullName.c_str(), prefix))
+    if (cmSystemTools::StringStartsWith(fullName, prefix))
       {
       fullName = fullName.substr(skip_prefix);
       }
@@ -1023,7 +1023,7 @@ cmGlobalVisualStudio7Generator::IsPartOfDefaultBuild(
       i != this->Configurations.end(); ++i)
     {
     const char* propertyValue =
-      target->GetFeature("EXCLUDE_FROM_DEFAULT_BUILD", i->c_str());
+      target->GetFeature("EXCLUDE_FROM_DEFAULT_BUILD", *i);
     if(cmSystemTools::IsOff(propertyValue))
       {
       activeConfigs.insert(*i);

@@ -267,7 +267,7 @@ static void prefixItems(const std::string &content, std::string &result,
     {
     result += sep;
     sep = ";";
-    if (!cmSystemTools::FileIsFullPath(ei->c_str())
+    if (!cmSystemTools::FileIsFullPath(*ei)
         && cmGeneratorExpression::Find(*ei) != 0)
       {
       result += prefix;

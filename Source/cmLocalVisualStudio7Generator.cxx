@@ -159,7 +159,7 @@ void cmLocalVisualStudio7Generator::FixGlobalTargets()
       force += "_force";
       if(cmSourceFile* file =
          this->Makefile->AddCustomCommandToOutput(
-           force.c_str(), no_depends, no_main_dependency,
+           force, no_depends, no_main_dependency,
            force_commands, " ", 0, true))
         {
         tgt.AddSource(file->GetFullPath());
@@ -200,7 +200,7 @@ void cmLocalVisualStudio7Generator::WriteProjectFiles()
     // so don't build a projectfile for it
     if(!l->second.GetProperty("EXTERNAL_MSPROJECT"))
       {
-      this->CreateSingleVCProj(l->first.c_str(),l->second);
+      this->CreateSingleVCProj(l->first,l->second);
       }
     }
 }
@@ -212,7 +212,7 @@ void cmLocalVisualStudio7Generator::WriteStampFiles()
   // out of date.
   std::string stampName = this->Makefile->GetStartOutputDirectory();
   stampName += cmake::GetCMakeFilesDirectory();
-  cmSystemTools::MakeDirectory(stampName.c_str());
+  cmSystemTools::MakeDirectory(stampName);
   stampName += "/";
   stampName += "generate.stamp";
   cmsys::ofstream stamp(stampName.c_str());
@@ -298,8 +298,8 @@ cmSourceFile* cmLocalVisualStudio7Generator::CreateVCProjBuildRule()
   std::string makefileIn = this->Makefile->GetStartDirectory();
   makefileIn += "/";
   makefileIn += "CMakeLists.txt";
-  makefileIn = cmSystemTools::CollapseFullPath(makefileIn.c_str());
-  if(!cmSystemTools::FileExists(makefileIn.c_str()))
+  makefileIn = cmSystemTools::CollapseFullPath(makefileIn);
+  if(!cmSystemTools::FileExists(makefileIn))
     {
     return 0;
     }
@@ -327,11 +327,11 @@ cmSourceFile* cmLocalVisualStudio7Generator::CreateVCProjBuildRule()
   const char* no_working_directory = 0;
   std::string fullpathStampName = this->Convert(stampName.c_str(), FULL,
                                             UNCHANGED);
-  this->Makefile->AddCustomCommandToOutput(fullpathStampName.c_str(),
-                                           listFiles, makefileIn.c_str(),
+  this->Makefile->AddCustomCommandToOutput(fullpathStampName,
+                                           listFiles, makefileIn,
                                            commandLines, comment.c_str(),
                                            no_working_directory, true);
-  if(cmSourceFile* file = this->Makefile->GetSource(makefileIn.c_str()))
+  if(cmSourceFile* file = this->Makefile->GetSource(makefileIn))
     {
     return file;
     }
@@ -354,7 +354,7 @@ void cmLocalVisualStudio7Generator::WriteConfigurations(std::ostream& fout,
   for( std::vector<std::string>::iterator i = configs->begin();
        i != configs->end(); ++i)
     {
-    this->WriteConfiguration(fout, i->c_str(), libName, target);
+    this->WriteConfiguration(fout, *i, libName, target);
     }
   fout << "\t</Configurations>\n";
 }
@@ -636,7 +636,7 @@ public:
       this->Stream << this->LG->EscapeForXML("\n");
       }
     std::string script = this->LG->ConstructScript(ccg);
-    this->Stream << this->LG->EscapeForXML(script.c_str());
+    this->Stream << this->LG->EscapeForXML(script);
     }
 private:
   cmLocalVisualStudio7Generator* LG;
@@ -1416,7 +1416,7 @@ cmLocalVisualStudio7Generator
       }
 
     // Switch to a relative path specification if it is shorter.
-    if(cmSystemTools::FileIsFullPath(dir.c_str()))
+    if(cmSystemTools::FileIsFullPath(dir))
       {
       std::string rel = this->Convert(dir.c_str(), START_OUTPUT, UNCHANGED);
       if(rel.size() < dir.size())
@@ -1612,7 +1612,7 @@ cmLocalVisualStudio7GeneratorFCInfo
       lg->GlobalGenerator->GetLanguageFromExtension
       (sf.GetExtension().c_str());
     const std::string& sourceLang = lg->GetSourceFileLanguage(sf);
-    const std::string& linkLanguage = target.GetLinkerLanguage(i->c_str());
+    const std::string& linkLanguage = target.GetLinkerLanguage(*i);
     bool needForceLang = false;
     // source file does not match its extension language
     if(lang != sourceLang)
@@ -1889,21 +1889,21 @@ WriteCustomRule(std::ostream& fout,
       fout << "\t\t\t\t\t<Tool\n"
            << "\t\t\t\t\tName=\"" << compileTool << "\"\n"
            << "\t\t\t\t\tAdditionalOptions=\""
-           << this->EscapeForXML(fc.CompileFlags.c_str()) << "\"/>\n";
+           << this->EscapeForXML(fc.CompileFlags) << "\"/>\n";
       }
 
     std::string comment = this->ConstructComment(ccg);
     std::string script = this->ConstructScript(ccg);
     if(this->FortranProject)
       {
-      cmSystemTools::ReplaceString(script, "$(Configuration)", i->c_str());
+      cmSystemTools::ReplaceString(script, "$(Configuration)", *i);
       }
     fout << "\t\t\t\t\t<Tool\n"
          << "\t\t\t\t\tName=\"" << customTool << "\"\n"
          << "\t\t\t\t\tDescription=\""
-         << this->EscapeForXML(comment.c_str()) << "\"\n"
+         << this->EscapeForXML(comment) << "\"\n"
          << "\t\t\t\t\tCommandLine=\""
-         << this->EscapeForXML(script.c_str()) << "\"\n"
+         << this->EscapeForXML(script) << "\"\n"
          << "\t\t\t\t\tAdditionalDependencies=\"";
     if(ccg.GetDepends().empty())
       {
@@ -1926,7 +1926,7 @@ WriteCustomRule(std::ostream& fout,
         {
         // Get the real name of the dependency in case it is a CMake target.
         std::string dep;
-        if(this->GetRealDependency(d->c_str(), i->c_str(), dep))
+        if(this->GetRealDependency(*d, *i, dep))
           {
           fout << this->ConvertToXMLOutputPath(dep.c_str())
                << ";";

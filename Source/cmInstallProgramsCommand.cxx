@@ -126,12 +126,12 @@ std::string cmInstallProgramsCommand
   ts += "/";
   ts += name;
 
-  if(cmSystemTools::FileExists(tb.c_str()))
+  if(cmSystemTools::FileExists(tb))
     {
     // The file exists in the binary tree.  Use it.
     return tb;
     }
-  else if(cmSystemTools::FileExists(ts.c_str()))
+  else if(cmSystemTools::FileExists(ts))
     {
     // The file exists in the source tree.  Use it.
     return ts;

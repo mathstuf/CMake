@@ -393,7 +393,7 @@ HRESULT FindVisualStudioInstances(
     std::map<std::string, IUnknownPtr>::iterator it;
     for(it = mrot.begin(); it != mrot.end(); ++it)
       {
-      if (cmSystemTools::StringStartsWith(it->first.c_str(),
+      if (cmSystemTools::StringStartsWith(it->first,
         "!VisualStudio.DTE."))
         {
         IDispatchPtr disp(it->second);

@@ -19,17 +19,13 @@
 "               http://www.cmake.org/licensing
 "               This implies that distribution with Vim is allowed
 
-" For version 5.x: Clear all syntax items
-" For version 6.x: Quit when a syntax file was already loaded
-if version < 600
-  syntax clear
-elseif exists("b:current_syntax")
+if exists("b:current_syntax")
   finish
 endif
 
-syn case ignore
 syn match cmakeEscaped /\(\\\\\|\\"\|\\n\|\\t\)/ contained
-syn region cmakeComment start="#" end="$" contains=cmakeTodo
+syn region cmakeComment start="#" end="$" contains=cmakeTodo,@Spell
+syn region cmakeLuaComment start="\[\z(=*\)\[" end="\]\z1\]" contains=cmakeTodo,@Spell
 syn region cmakeRegistry start=/\[/ end=/]/
             \ contained oneline contains=CONTAINED,cmakeTodo,cmakeEscaped
 syn region cmakeVariableValue start=/\${/ end=/}/
@@ -41,48 +37,148 @@ syn region cmakeString start=/"/ end=/"/
 syn region cmakeArguments start=/(/ end=/)/
             \ contains=ALLBUT,cmakeArguments,cmakeTodo
 syn keyword cmakeSystemVariables
-            \ WIN32 UNIX APPLE CYGWIN BORLAND MINGW MSVC MSVC_IDE MSVC60 MSVC70 MSVC71 MSVC80 MSVC90
+            \ APPLE BORLAND CYGWIN MSVC MSVC10 MSVC11 MSVC12 MSVC14 MSVC60
+            \ MSVC70 MSVC71 MSVC80 MSVC90 MSVC_IDE UNIX WIN32 WINCE WINDOWS_PHONE WINDOWS_STORE
 syn keyword cmakeOperators
-            \ ABSOLUTE AND BOOL CACHE COMMAND DEFINED DOC EQUAL EXISTS EXT FALSE GREATER INTERNAL LESS MATCHES NAME NAMES NAME_WE NOT OFF ON OR PATH PATHS PROGRAM STREQUAL STRGREATER STRING STRLESS TRUE
+            \ NOT COMMAND POLICY TARGET EXISTS IS_NEWER_THAN IS_DIRECTORY
+            \ IS_SYMLINK IS_ABSOLUTE MATCHES LESS GREATER EQUAL STRLESS
+            \ STRGREATER STREQUAL VERSION_LESS VERSION_EQUAL VERSION_GREATER
+            \ DEFINED AND OR
             \ contained
-syn keyword cmakeDeprecated ABSTRACT_FILES BUILD_NAME SOURCE_FILES SOURCE_FILES_REMOVE VTK_MAKE_INSTANTIATOR VTK_WRAP_JAVA VTK_WRAP_PYTHON VTK_WRAP_TCL WRAP_EXCLUDE_FILES
-           \ nextgroup=cmakeArguments
-
-" The keywords are generated as:  cmake --help-command-list | tr "\n" " " | tr "[:lower:]" "[:upper:]"
-syn keyword cmakeStatement
-            \ ADD_COMPILE_OPTIONS ADD_CUSTOM_COMMAND ADD_CUSTOM_TARGET ADD_DEFINITIONS ADD_DEPENDENCIES ADD_EXECUTABLE ADD_LIBRARY ADD_SUBDIRECTORY ADD_TEST AUX_SOURCE_DIRECTORY BREAK BUILD_COMMAND BUILD_NAME CMAKE_HOST_SYSTEM_INFORMATION CMAKE_MINIMUM_REQUIRED CMAKE_POLICY CONFIGURE_FILE CREATE_TEST_SOURCELIST CTEST_BUILD CTEST_CONFIGURE CTEST_COVERAGE CTEST_EMPTY_BINARY_DIRECTORY CTEST_MEMCHECK CTEST_READ_CUSTOM_FILES CTEST_RUN_SCRIPT CTEST_SLEEP CTEST_START CTEST_SUBMIT CTEST_TEST CTEST_UPDATE CTEST_UPLOAD DEFINE_PROPERTY ELSE ELSEIF ENABLE_LANGUAGE ENABLE_TESTING ENDFOREACH ENDFUNCTION ENDIF ENDMACRO ENDWHILE EXEC_PROGRAM EXECUTE_PROCESS EXPORT EXPORT_LIBRARY_DEPENDENCIES FILE FIND_FILE FIND_LIBRARY FIND_PACKAGE FIND_PATH FIND_PROGRAM FLTK_WRAP_UI FOREACH FUNCTION GET_CMAKE_PROPERTY GET_DIRECTORY_PROPERTY GET_FILENAME_COMPONENT GET_PROPERTY GET_SOURCE_FILE_PROPERTY GET_TARGET_PROPERTY GET_TEST_PROPERTY IF INCLUDE INCLUDE_DIRECTORIES INCLUDE_EXTERNAL_MSPROJECT INCLUDE_REGULAR_EXPRESSION INSTALL INSTALL_FILES INSTALL_PROGRAMS INSTALL_TARGETS LINK_DIRECTORIES LINK_LIBRARIES LIST LOAD_CACHE LOAD_COMMAND MACRO MAKE_DIRECTORY MARK_AS_ADVANCED MATH MESSAGE OPTION OUTPUT_REQUIRED_FILES PROJECT QT_WRAP_CPP QT_WRAP_UI REMOVE REMOVE_DEFINITIONS RETURN SEPARATE_ARGUMENTS SET SET_DIRECTORY_PROPERTIES SET_PROPERTY SET_SOURCE_FILES_PROPERTIES SET_TARGET_PROPERTIES SET_TESTS_PROPERTIES SITE_NAME SOURCE_GROUP STRING SUBDIR_DEPENDS SUBDIRS TARGET_COMPILE_DEFINITIONS TARGET_COMPILE_FEATURES TARGET_COMPILE_OPTIONS TARGET_INCLUDE_DIRECTORIES TARGET_LINK_LIBRARIES TARGET_SOURCES TRY_COMPILE TRY_RUN UNSET USE_MANGLED_MESA UTILITY_SOURCE VARIABLE_REQUIRES VARIABLE_WATCH WHILE WRITE_FILE
-            \ nextgroup=cmakeArguments
 syn keyword cmakeTodo
             \ TODO FIXME XXX
             \ contained
 
+" The keywords are block-selected from Help/manual/cmake-commands.7.rst.
+syn case ignore
+syn keyword cmakeStatement
+            \ add_compile_options
+            \ add_custom_command
+            \ add_custom_target
+            \ add_definitions
+            \ add_dependencies
+            \ add_executable
+            \ add_library
+            \ add_subdirectory
+            \ add_test
+            \ aux_source_directory
+            \ break
+            \ build_command
+            \ cmake_host_system_information
+            \ cmake_minimum_required
+            \ cmake_policy
+            \ configure_file
+            \ continue
+            \ create_test_sourcelist
+            \ define_property
+            \ elseif
+            \ else
+            \ enable_language
+            \ enable_testing
+            \ endforeach
+            \ endfunction
+            \ endif
+            \ endmacro
+            \ endwhile
+            \ execute_process
+            \ export
+            \ file
+            \ find_file
+            \ find_library
+            \ find_package
+            \ find_path
+            \ find_program
+            \ fltk_wrap_ui
+            \ foreach
+            \ function
+            \ get_cmake_property
+            \ get_directory_property
+            \ get_filename_component
+            \ get_property
+            \ get_source_file_property
+            \ get_target_property
+            \ get_test_property
+            \ if
+            \ include_directories
+            \ include_external_msproject
+            \ include_regular_expression
+            \ include
+            \ install
+            \ link_directories
+            \ list
+            \ load_cache
+            \ load_command
+            \ macro
+            \ mark_as_advanced
+            \ math
+            \ message
+            \ option
+            \ project
+            \ qt_wrap_cpp
+            \ qt_wrap_ui
+            \ remove_definitions
+            \ return
+            \ separate_arguments
+            \ set_directory_properties
+            \ set_property
+            \ set
+            \ set_source_files_properties
+            \ set_target_properties
+            \ set_tests_properties
+            \ site_name
+            \ source_group
+            \ string
+            \ target_compile_definitions
+            \ target_compile_features
+            \ target_compile_options
+            \ target_include_directories
+            \ target_link_libraries
+            \ target_sources
+            \ try_compile
+            \ try_run
+            \ unset
+            \ variable_watch
+            \ while
+            \ contained
+            \ nextgroup=cmakeArguments
+syn keyword cmakeDeprecated
+            \ build_name
+            \ exec_program
+            \ export_library_dependencies
+            \ install_files
+            \ install_programs
+            \ install_targets
+            \ link_libraries
+            \ make_directory
+            \ output_required_files
+            \ remove
+            \ subdir_depends
+            \ subdirs
+            \ use_mangled_mesa
+            \ utility_source
+            \ variable_requires
+            \ write_file
+            \ contained
+            \ nextgroup=cmakeArguments
+syn match cmakeFunction /[a-z0-9_]\+\ze\s*(/
+            \ contains=cmakeStatement,cmakeDeprecated
+            \ nextgroup=cmakeArguments
+
 " Define the default highlighting.
-" For version 5.7 and earlier: only when not done already
-" For version 5.8 and later: only when an item doesn't have highlighting yet
-if version >= 508 || !exists("did_cmake_syntax_inits")
-  if version < 508
-    let did_cmake_syntax_inits = 1
-    command -nargs=+ HiLink hi link <args>
-  else
-    command -nargs=+ HiLink hi def link <args>
-  endif
-
-  HiLink cmakeStatement Statement
-  HiLink cmakeComment Comment
-  HiLink cmakeString String
-  HiLink cmakeVariableValue Type
-  HiLink cmakeRegistry Underlined
-  HiLink cmakeArguments Identifier
-  HiLink cmakeArgument Constant
-  HiLink cmakeEnvironment Special
-  HiLink cmakeOperators Operator
-  HiLink cmakeMacro PreProc
-  HiLink cmakeError Error
-  HiLink cmakeTodo TODO
-  HiLink cmakeEscaped Special
-
-  delcommand HiLink
-endif
+hi def link cmakeStatement       Keyword
+hi def link cmakeDeprecated      WarningMsg
+hi def link cmakeFunction        Function
+hi def link cmakeComment         Comment
+hi def link cmakeLuaComment      Comment
+hi def link cmakeString          String
+hi def link cmakeSystemVariables Define
+hi def link cmakeVariableValue   Constant
+hi def link cmakeRegistry        Underlined
+hi def link cmakeArguments       Identifier
+hi def link cmakeEnvironment     Special
+hi def link cmakeOperators       Conditional
+hi def link cmakeTodo            TODO
+hi def link cmakeEscaped         Special
 
 let b:current_syntax = "cmake"
 

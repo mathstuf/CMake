@@ -1,5 +1,3 @@
-nmap ,hc :call OpenCmakeHelp()<CR>
-
 function! OpenCmakeHelp()
     let s = getline( '.' )
     let i = col( '.' ) - 1
@@ -18,4 +16,4 @@ function! OpenCmakeHelp()
     set readonly
 endfunction
 
-autocmd BufRead,BufNewFile *.cmake,CMakeLists.txt,*.cmake.in nmap <F1> :call OpenCmakeHelp()<CR>
+autocmd Syntax cmake nmap K :call OpenCmakeHelp()<CR>

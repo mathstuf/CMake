@@ -147,10 +147,6 @@ struct TagVisitor
     else if(sf->GetPropertyAsBool("EXTERNAL_OBJECT"))
       {
       DoAccept<IsSameTag<Tag, ExternalObjectsTag>::Result>::Do(this->Data, sf);
-      if(this->IsObjLib)
-        {
-        this->BadObjLibFiles.push_back(sf);
-        }
       }
     else if(!sf->GetLanguage().empty())
       {

@@ -1273,23 +1273,38 @@ static const struct TargetObjectsNode : public cmGeneratorExpressionNode
     gt->GetObjectSources(objectSources, context->Config);
     std::map<cmSourceFile const*, std::string> mapping;
 
+    std::string result;
+    const char* sep = "";
     for(std::vector<cmSourceFile const*>::const_iterator it
         = objectSources.begin(); it != objectSources.end(); ++it)
       {
-      mapping[*it];
+      cmSourceFile const* sf = *it;
+      if (sf->GetPropertyAsBool("EXTERNAL_OBJECT"))
+        {
+        result += sep;
+        result += sf->GetFullPath();
+        sep = ";";
+        }
+      else
+        {
+        mapping[sf];
+        }
       }
 
     gt->LocalGenerator->ComputeObjectFilenames(mapping, gt);
 
     std::string obj_dir = gt->ObjectDirectory;
-    std::string result;
-    const char* sep = "";
     for(std::vector<cmSourceFile const*>::const_iterator it
         = objectSources.begin(); it != objectSources.end(); ++it)
       {
       // Find the object file name corresponding to this source file.
       std::map<cmSourceFile const*, std::string>::const_iterator
         map_it = mapping.find(*it);
+      // Skip object libraries used by this one.
+      if (map_it == mapping.end())
+        {
+        continue;
+        }
       // It must exist because we populated the mapping just above.
       assert(!map_it->second.empty());
       result += sep;

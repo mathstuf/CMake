@@ -234,15 +234,16 @@ void cmComputeTargetDepends::CollectTargetDepends(int depender_index)
       std::string objLib = (*oi)->GetObjectLibrary();
       if (!objLib.empty() && emitted.insert(objLib).second)
         {
-        if(depender->GetType() != cmTarget::EXECUTABLE &&
+        if((depender->GetType() != cmTarget::EXECUTABLE &&
             depender->GetType() != cmTarget::STATIC_LIBRARY &&
             depender->GetType() != cmTarget::SHARED_LIBRARY &&
             depender->GetType() != cmTarget::OBJECT_LIBRARY &&
-            depender->GetType() != cmTarget::MODULE_LIBRARY)
+            depender->GetType() != cmTarget::MODULE_LIBRARY) ||
+            depender->IsImported())
           {
           this->GlobalGenerator->GetCMakeInstance()
             ->IssueMessage(cmake::FATAL_ERROR,
-                            "Only executables and libraries may "
+                            "Only executables and non-IMPORTED libraries may "
                             "reference target objects.",
                             depender->GetBacktrace());
           return;

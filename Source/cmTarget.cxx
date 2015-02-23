@@ -1797,6 +1797,16 @@ void cmTarget::SetProperty(const std::string& prop, const char* value)
     this->Internal->SourceEntries.push_back(
                           new cmTargetInternals::TargetPropertyEntry(cge));
     }
+  else if (this->GetType() == OBJECT_LIBRARY
+      && prop == "INTERFACE_SOURCES"
+      && value && *value) // Don't error if it's empty anyways.
+    {
+    std::ostringstream e;
+    e << "OBJECT_LIBRARY targets may not have INTERFACE_SOURCES.  "
+         "Use $<TARGET_OBJECTS> directly.";
+    this->Makefile->IssueMessage(cmake::FATAL_ERROR, e.str());
+    return;
+    }
   else
     {
     this->Properties.SetProperty(prop, value, cmProperty::TARGET);

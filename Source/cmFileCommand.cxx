@@ -2986,6 +2986,8 @@ cmFileCommand::HandleDownloadCommand(std::vector<std::string> const& args)
   std::string statusVar;
   bool tls_verify = this->Makefile->IsOn("CMAKE_TLS_VERIFY");
   const char* cainfo = this->Makefile->GetDefinition("CMAKE_TLS_CAINFO");
+  const char* client_cert = NULL;
+  const char* client_key = NULL;
   std::string expectedHash;
   std::string hashMatchMSG;
   cmsys::auto_ptr<cmCryptoHash> hash;
@@ -3062,6 +3064,29 @@ cmFileCommand::HandleDownloadCommand(std::vector<std::string> const& args)
       else
         {
         this->SetError("TLS_CAFILE missing file value.");
+        return false;
+        }
+      }
+    else if(*i == "TLS_CLIENTCERT")
+      {
+      ++i;
+      if(i != args.end())
+        {
+        client_cert = i->c_str();
+        }
+      else
+        {
+        this->SetError("TLS_CLIENTCERT missing certificate file value.");
+        return false;
+        }
+      ++i;
+      if(i != args.end())
+        {
+        client_key = i->c_str();
+        }
+      else
+        {
+        this->SetError("TLS_CLIENTCERT missing key file value.");
         return false;
         }
       }
@@ -3207,6 +3232,14 @@ cmFileCommand::HandleDownloadCommand(std::vector<std::string> const& args)
     this->SetError(cainfo_err);
     return false;
     }
+  if (client_cert && *client_cert &&
+      client_key && *client_key)
+    {
+    res = ::curl_easy_setopt(curl, CURLOPT_SSLCERT, client_cert);
+    check_curl_result(res, "Unable to set TLS client certificate: ");
+    res = ::curl_easy_setopt(curl, CURLOPT_SSLKEY, client_key);
+    check_curl_result(res, "Unable to set TLS client key: ");
+    }
 
   cmFileCommandVectorOfChar chunkDebug;
 
@@ -3342,6 +3375,8 @@ cmFileCommand::HandleUploadCommand(std::vector<std::string> const& args)
   std::string statusVar;
   bool tls_verify = this->Makefile->IsOn("CMAKE_TLS_VERIFY");
   const char* cainfo = this->Makefile->GetDefinition("CMAKE_TLS_CAINFO");
+  const char* client_cert = NULL;
+  const char* client_key = NULL;
   bool showProgress = false;
 
   while(i != args.end())
@@ -3415,6 +3450,29 @@ cmFileCommand::HandleUploadCommand(std::vector<std::string> const& args)
       else
         {
         this->SetError("TLS_CAFILE missing file value.");
+        return false;
+        }
+      }
+    else if(*i == "TLS_CLIENTCERT")
+      {
+      ++i;
+      if(i != args.end())
+        {
+        client_cert = i->c_str();
+        }
+      else
+        {
+        this->SetError("TLS_CLIENTCERT missing certificate file value.");
+        return false;
+        }
+      ++i;
+      if(i != args.end())
+        {
+        client_key = i->c_str();
+        }
+      else
+        {
+        this->SetError("TLS_CLIENTCERT missing key file value.");
         return false;
         }
       }
@@ -3492,6 +3550,14 @@ cmFileCommand::HandleUploadCommand(std::vector<std::string> const& args)
     {
     this->SetError(cainfo_err);
     return false;
+    }
+  if (client_cert && *client_cert &&
+      client_key && *client_key)
+    {
+    res = ::curl_easy_setopt(curl, CURLOPT_SSLCERT, client_cert);
+    check_curl_result(res, "Unable to set TLS client certificate: ");
+    res = ::curl_easy_setopt(curl, CURLOPT_SSLKEY, client_key);
+    check_curl_result(res, "Unable to set TLS client key: ");
     }
 
   cmFileCommandVectorOfChar chunkResponse;

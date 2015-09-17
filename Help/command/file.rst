@@ -227,6 +227,9 @@ Options to both ``DOWNLOAD`` and ``UPLOAD`` are:
 ``TLS_CAINFO <file>``
   Specify a custom Certificate Authority file for ``https://`` URLs.
 
+``TLS_CLIENTCERT <certificate_file> <key_file>``
+  Specify a custom client certificate and key file for ``https://`` URLs.
+
 Additional options to ``DOWNLOAD`` are:
 
 ``EXPECTED_HASH ALGO=<value>``

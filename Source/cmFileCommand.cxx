@@ -3340,6 +3340,8 @@ cmFileCommand::HandleUploadCommand(std::vector<std::string> const& args)
   long inactivity_timeout = 0;
   std::string logVar;
   std::string statusVar;
+  bool tls_verify = this->Makefile->IsOn("CMAKE_TLS_VERIFY");
+  const char* cainfo = this->Makefile->GetDefinition("CMAKE_TLS_CAINFO");
   bool showProgress = false;
 
   while(i != args.end())
@@ -3389,6 +3391,32 @@ cmFileCommand::HandleUploadCommand(std::vector<std::string> const& args)
         return false;
         }
       statusVar = *i;
+      }
+    else if(*i == "TLS_VERIFY")
+      {
+      ++i;
+      if(i != args.end())
+        {
+        tls_verify = cmSystemTools::IsOn(i->c_str());
+        }
+      else
+        {
+        this->SetError("TLS_VERIFY missing bool value.");
+        return false;
+        }
+      }
+    else if(*i == "TLS_CAINFO")
+      {
+      ++i;
+      if(i != args.end())
+        {
+        cainfo = i->c_str();
+        }
+      else
+        {
+        this->SetError("TLS_CAFILE missing file value.");
+        return false;
+        }
       }
     else if(*i == "SHOW_PROGRESS")
       {
@@ -3445,6 +3473,26 @@ cmFileCommand::HandleUploadCommand(std::vector<std::string> const& args)
   res = ::curl_easy_setopt(curl, CURLOPT_DEBUGFUNCTION,
                            cmFileCommandCurlDebugCallback);
   check_curl_result(res, "UPLOAD cannot set debug function: ");
+
+  // check to see if TLS verification is requested
+  if(tls_verify)
+    {
+    res = ::curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1);
+    check_curl_result(res, "Unable to set TLS/SSL Verify on: ");
+    }
+  else
+    {
+    res = ::curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
+    check_curl_result(res, "Unable to set TLS/SSL Verify off: ");
+    }
+  // check to see if a CAINFO file has been specified
+  // command arg comes first
+  std::string const& cainfo_err = cmCurlSetCAInfo(curl, cainfo);
+  if (!cainfo_err.empty())
+    {
+    this->SetError(cainfo_err);
+    return false;
+    }
 
   cmFileCommandVectorOfChar chunkResponse;
   cmFileCommandVectorOfChar chunkDebug;

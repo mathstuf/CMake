@@ -6,3 +6,5 @@ file-ssl-support
 * The ``UPLOAD`` and ``DOWNLOAD`` subcommands for :command:`file` learned the
   ``TLS_CLIENTCERT`` argument to specify a client certificate for ``https://``
   connections.
+* :module:`ExternalProject` learned ``TLS_CLIENTCERT`` for use with
+  ``https://`` downloads.

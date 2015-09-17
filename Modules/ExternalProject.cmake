@@ -73,6 +73,8 @@ Create custom targets to build projects in external trees
     Should certificate for https be checked
   ``TLS_CAINFO <file>``
     Path to a certificate authority file
+  ``TLS_CLIENTCERT <certificate_file> <key_file>``
+    Path to a client certificate and key
   ``TIMEOUT <seconds>``
     Time allowed for file download operations
 
@@ -812,7 +814,7 @@ endif()
 
 endfunction(_ep_write_gitupdate_script)
 
-function(_ep_write_downloadfile_script script_filename remote local timeout no_progress hash tls_verify tls_cainfo)
+function(_ep_write_downloadfile_script script_filename remote local timeout no_progress hash tls_verify tls_cainfo tls_clientcert tls_clientkey)
   if(timeout)
     set(timeout_args TIMEOUT ${timeout})
     set(timeout_msg "${timeout} seconds")
@@ -861,6 +863,13 @@ function(_ep_write_downloadfile_script script_filename remote local timeout no_p
   if(tls_cainfo_len GREATER 0)
     set(tls_cainfo "set(CMAKE_TLS_CAINFO \"${tls_cainfo}\")")
   endif()
+  # check for tls_clientcert argument
+  string(LENGTH "${tls_clientcert}" tls_clientcert_len)
+  string(LENGTH "${tls_clientkey}" tls_clientkey_len)
+  if(tls_clientcert_len GREATER 0 AND
+     tls_clientkey_len GREATER 0)
+    set(tls_client_args "TLS_CLIENTCERT \"${tls_clientcert}\" \"${tls_clientkey}\"")
+  endif()
 
   file(WRITE ${script_filename}
 "${hash_check}message(STATUS \"downloading...
@@ -876,6 +885,7 @@ file(DOWNLOAD
   \"${local}\"
   ${show_progress}
   ${timeout_args}
+  ${tls_client_args}
   STATUS status
   LOG log)
 
@@ -1877,8 +1887,19 @@ function(_ep_add_download_command name)
         get_property(no_progress TARGET ${name} PROPERTY _EP_DOWNLOAD_NO_PROGRESS)
         get_property(tls_verify TARGET ${name} PROPERTY _EP_TLS_VERIFY)
         get_property(tls_cainfo TARGET ${name} PROPERTY _EP_TLS_CAINFO)
+        get_property(tls_clientcert_info TARGET ${name} PROPERTY _EP_TLS_CLIENTCERT)
+        set(tls_clientcert)
+        set(tls_clientkey)
+        if (tls_clientcert_info)
+          list(LENGTH tls_clientcert_info tls_clientcert_info_len)
+          if (NOT tls_clientcert_info_len EQUAL 2)
+            message(FATAL_ERROR "TLS_CLIENTCERT expects exactly 2 arguments")
+          endif ()
+          list(GET tls_clientcert_info 0 tls_clientcert)
+          list(GET tls_clientcert_info 1 tls_clientkey)
+        endif ()
         set(download_script "${stamp_dir}/download-${name}.cmake")
-        _ep_write_downloadfile_script("${download_script}" "${url}" "${file}" "${timeout}" "${no_progress}" "${hash}" "${tls_verify}" "${tls_cainfo}")
+        _ep_write_downloadfile_script("${download_script}" "${url}" "${file}" "${timeout}" "${no_progress}" "${hash}" "${tls_verify}" "${tls_cainfo}" "${tls_clientcert}" "${tls_clientkey}")
         set(cmd ${CMAKE_COMMAND} -P "${download_script}"
           COMMAND)
         set(retries 3)
